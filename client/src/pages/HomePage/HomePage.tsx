@@ -688,7 +688,7 @@ const HomePage = () => {
        )}
 
        {/* Title */}
-      <div className="text-center mb-12 md:mb-16">
+      <div className="text-center mt-14 md:mt-0 mb-12 md:mb-16">
         <h1
           className="font-cyber text-4xl md:text-6xl lg:text-7xl font-bold text-neon-cyan pulse-glow glitch-text tracking-widest cursor-pointer select-none"
           onClick={handleTitleClick}
