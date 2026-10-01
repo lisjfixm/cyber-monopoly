@@ -1,0 +1,116 @@
+[
+  {
+    "path": "/"
+  },
+  {
+    "path": "/local-setup"
+  },
+  {
+    "path": "/ai-setup"
+  },
+  {
+    "path": "/mode-select"
+  },
+  {
+    "path": "/game"
+  },
+  {
+    "path": "/online/create"
+  },
+  {
+    "path": "/online/join"
+  },
+  {
+    "path": "/quick-match"
+  },
+  {
+    "path": "/online/rooms"
+  },
+  {
+    "path": "/online/room/:code"
+  },
+  {
+    "path": "/leaderboard"
+  },
+  {
+    "path": "/profile"
+  },
+  {
+    "path": "/battlepass"
+  },
+  {
+    "path": "/ranked"
+  },
+  {
+    "path": "/daily-challenge"
+  },
+  {
+    "path": "/mods"
+  },
+  {
+    "path": "/stats"
+  },
+  {
+    "path": "/story"
+  },
+  {
+    "path": "/tournament"
+  },
+  {
+    "path": "/map-editor"
+  },
+  {
+    "path": "/community-maps"
+  },
+  {
+    "path": "/card-editor"
+  },
+  {
+    "path": "/scenario-editor"
+  },
+  {
+    "path": "/replay"
+  },
+  {
+    "path": "/ai-demo"
+  },
+  {
+    "path": "/friends"
+  },
+  {
+    "path": "/admin"
+  },
+  {
+    "path": "/announcements"
+  },
+  {
+    "path": "/guild"
+  },
+  {
+    "path": "/social"
+  },
+  {
+    "path": "/spectate"
+  },
+  {
+    "path": "/mail"
+  },
+  {
+    "path": "/collection"
+  },
+  {
+    "path": "/codex"
+  },
+  {
+    "path": "/achievements"
+  },
+  {
+    "path": "/report-block"
+  },
+  {
+    "path": "/login"
+  },
+  {
+    "path": "/gm-panel"
+  }
+]
