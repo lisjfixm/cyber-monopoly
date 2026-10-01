@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页社交中心入口存在，点击进入社交中心页面"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "社交中心：打开全局聊天面板，发送文字消息"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "社交中心：聊天面板发送贴纸，贴纸正确显示"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "战队页面正常加载，能看到战队列表和排行榜"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "创建战队流程：弹框填写信息→确认→成功进入战队"
+    }
+  ]
+}

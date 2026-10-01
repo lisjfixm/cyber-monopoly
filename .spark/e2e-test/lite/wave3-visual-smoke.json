@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页加载，主菜单可见"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "社交中心页面加载，8张卡片可见"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "邮件页面加载，三个Tab可见"
+    },
+    {
+      "id": 4,
+      "priority": "p0",
+      "description": "社区地图页面加载，地图列表可见"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "好友中心页面加载，不白屏"
+    },
+    {
+      "id": 6,
+      "priority": "p1",
+      "description": "战队公会页面加载，不白屏"
+    },
+    {
+      "id": 7,
+      "priority": "p1",
+      "description": "观战大厅页面加载，不白屏"
+    },
+    {
+      "id": 8,
+      "priority": "p1",
+      "description": "经典游戏界面加载，棋盘可见"
+    }
+  ]
+}

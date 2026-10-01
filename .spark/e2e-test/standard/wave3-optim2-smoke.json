@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "设置弹窗帮助中心可打开，6个分类Tab可切换，搜索可用"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "人机对战经典模式开局，掷骰移动正常，金币浮动动画出现，游戏不崩"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "命运/机会卡弹窗出现并可关闭"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "设置中新手引导重新观看可点击，引导可跳过"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "社交页懒加载显示骨架屏并正常加载内容"
+    }
+  ]
+}

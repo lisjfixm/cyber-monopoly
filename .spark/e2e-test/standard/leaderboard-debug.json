@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开排行榜页 /leaderboard，等待3秒后断言：页面有可见标题文字（如「排行榜」或「leaderboard」），且控制台无 error 级别报错"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "打开统计页 /stats，等待3秒后断言：页面有可见标题文字（如「數據」或「儀表板」），且控制台无 error 级别报错（对照组）"
+    }
+  ]
+}

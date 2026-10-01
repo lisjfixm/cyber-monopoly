@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页加载，粒子背景可见，底部导航栏存在"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "进入经典游戏页面，棋盘在上，操作面板折叠按钮存在"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "设置弹窗中动画开关存在且可切换"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "好友页面下拉刷新指示器可见"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "社交中心8张卡片正常，底部导航可切换"
+    }
+  ]
+}

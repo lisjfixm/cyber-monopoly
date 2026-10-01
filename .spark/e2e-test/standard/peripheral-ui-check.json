@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开首页 → 依次跳转至成就页/统计页/图鉴页/收藏页/排行榜/剧情模式，每个页面等待 1.5 秒，确认无白屏、页面有内容、控制台无 error"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "从首页依次跳转至：个人资料profile、好友friends、公會guild、郵件mail、戰令battlepass、錦標賽tournament、排位ranked、每日挑戰daily-challenge、公告announcements、回放replay，共10个外围页面，每个等待1秒，确认无白屏无控制台error"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "检查成就页achievement：数出成就卡片总数，确认 >= 49 个（类型定义49个），无空白占位项"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "检查图鉴页codex：查看分頁/分類標籤數量，确认有多个分類且每個分類有内容"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "检查375px移动端布局：切到375px宽，打开首页和模式选择页mode-select，确认内容不溢出屏幕、可滚动浏览"
+    }
+  ]
+}

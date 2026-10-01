@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页→人机对战设置→模式选择→开始游戏，完整走一局经典模式"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "验证游戏内核心交互：掷骰、买地、过路费、命运卡"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "验证闪电战模式能正常开局"
+    }
+  ]
+}

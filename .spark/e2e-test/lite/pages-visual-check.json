@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首頁正常渲染，顯示標題與模式入口按鈕"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "人機對戰設置頁正常渲染，含暱稱輸入與模式選擇入口"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "模式選擇頁顯示 20+ 種模式可選，可滾動"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "圖鑑頁 /codex 能正常開啟與分頁"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "375px 寬度下手機布局無溢出"
+    }
+  ]
+}

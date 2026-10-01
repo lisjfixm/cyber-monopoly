@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页能正常打开，显示赛博大富翁标题和主要菜单按钮"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "成就页能正常打开，显示成就殿堂标题和分类Tab"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "图鉴页能正常打开，显示收藏圖鑑标题和Tab栏"
+    }
+  ]
+}

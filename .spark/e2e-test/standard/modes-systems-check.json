@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"快速模式崩潰復現：選擇職業後崩潰，捕獲具體 console 錯誤"},{"id":2,"priority":"p0","description":"10種新模式初始化驗證：進入遊戲+擲骰不報錯"},{"id":3,"priority":"p1","description":"7個新系統面板驗證：銀行/交易/道具/任務/聯盟/拍賣/技能樹"}]}

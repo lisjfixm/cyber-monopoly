@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p1",
+      "description": "场景编辑器页 /scenario-editor - 验证标题可见、内容非空"
+    },
+    {
+      "id": 2,
+      "priority": "p2",
+      "description": "举报封禁页 /report-block - 验证标题可见、内容非空"
+    },
+    {
+      "id": 3,
+      "priority": "p2",
+      "description": "登录页 /login - 验证标题可见、内容非空"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "快速匹配页 /quick-match - 验证标题可见、内容非空"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "公开房间页 /online/rooms - 验证标题可见、内容非空"
+    }
+  ]
+}

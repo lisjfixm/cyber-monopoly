@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页移动端375px布局：标题、游戏模式卡片、导航不溢出"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "排行榜页移动端375px布局：标题、排行列表不溢出"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "成就页移动端375px布局：标题、分类、成就卡片不溢出"
+    }
+  ]
+}

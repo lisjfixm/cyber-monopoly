@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首頁正常加載，所有主要按鈕為繁體中文，底部Tab導航可見"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "經典遊戲流程：開局→擲骰→買地→結算不崩潰"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "手機視口375px：上下佈局，底部Tab固定，主按鈕可見"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "新手引導彈窗可打開並跳過"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "幫助中心6個Tab可切換"
+    },
+    {
+      "id": 6,
+      "priority": "p1",
+      "description": "動畫開關可切換且影響動畫行為"
+    },
+    {
+      "id": 7,
+      "priority": "p1",
+      "description": "排行榜样式頁可加載（骨架屏→數據）"
+    }
+  ]
+}

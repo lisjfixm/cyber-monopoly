@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"进入人机对战游戏页面，验证棋盘和操作栏加载"},{"id":2,"priority":"p0","description":"点击操作栏中的世界观系统按钮，验证面板弹出"},{"id":3,"priority":"p1","description":"在世界观面板中切换各系统页面，验证无白屏"},{"id":4,"priority":"p1","description":"关闭世界观面板，验证返回游戏界面"}]}

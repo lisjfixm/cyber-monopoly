@@ -1,0 +1,18 @@
+{
+  "name": "赛博大富翁",
+  "short_name": "CyberMonopoly",
+  "description": "赛博朋克风格的多人在线大富翁游戏",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a14",
+  "theme_color": "#00ffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

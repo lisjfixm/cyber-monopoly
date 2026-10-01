@@ -1,0 +1,2397 @@
+:root {
+  --bg-deep: hsl(240, 25%, 5%);
+  --bg-dark: hsl(240, 20%, 8%);
+  --bg-mid: hsl(240, 18%, 12%);
+  --bg-card: hsl(240, 15%, 14%);
+
+  --cyan: hsl(180, 100%, 55%);
+  --cyan-glow: hsl(180, 100%, 65%);
+  --pink: hsl(320, 100%, 60%);
+  --pink-glow: hsl(320, 100%, 72%);
+  --purple: hsl(270, 80%, 65%);
+  --green: hsl(140, 100%, 55%);
+  --red: hsl(0, 100%, 62%);
+  --blue: hsl(210, 100%, 62%);
+  --yellow: hsl(45, 100%, 60%);
+  --orange: hsl(25, 100%, 55%);
+
+  /* Player colors (6 players) - same across all themes */
+  --player-red: hsl(0, 100%, 60%);
+  --player-blue: hsl(210, 100%, 60%);
+  --player-green: hsl(130, 100%, 55%);
+  --player-yellow: hsl(50, 100%, 55%);
+  --player-purple: hsl(280, 100%, 65%);
+  --player-orange: hsl(25, 100%, 55%);
+
+  --text-primary: hsl(180, 15%, 92%);
+  --text-secondary: hsl(220, 8%, 55%);
+  --text-muted: hsl(220, 8%, 40%);
+
+  --border-neon-cyan: hsla(180, 100%, 55%, 0.3);
+  --border-neon-pink: hsla(320, 100%, 60%, 0.3);
+  /* 通用霓虹邊框別名：預設沿用主題的青色邊框，各主題會覆寫 --border-neon-cyan */
+  --border-neon: var(--border-neon-cyan);
+
+  /* Cell colors */
+  --cell-property-bg: hsl(240, 18%, 12%);
+  --cell-property-border: hsla(180, 100%, 55%, 0.3);
+  --cell-start-bg: hsla(140, 100%, 55%, 0.2);
+  --cell-start-border: hsla(140, 100%, 55%, 0.6);
+  --cell-fate-bg: hsla(320, 100%, 60%, 0.15);
+  --cell-fate-border: hsla(320, 100%, 60%, 0.5);
+  --cell-detention-bg: hsla(270, 80%, 65%, 0.2);
+  --cell-detention-border: hsla(270, 80%, 65%, 0.6);
+  --cell-chance-bg: hsla(250, 90%, 60%, 0.15);
+  --cell-chance-border: hsla(250, 90%, 60%, 0.5);
+  --cell-chance-color: hsl(250, 90%, 65%);
+  --cell-minigame-bg: hsla(280, 100%, 65%, 0.18);
+  --cell-minigame-border: hsla(280, 100%, 65%, 0.6);
+  --cell-minigame-color: hsl(280, 100%, 70%);
+  --cell-corner-bg: hsl(240, 18%, 12%);
+  --cell-corner-border: hsla(180, 100%, 55%, 0.25);
+
+  /* Board frame & center */
+  --board-frame-from: hsla(180, 100%, 55%, 0.1);
+  --board-frame-to: hsla(320, 100%, 60%, 0.1);
+  --board-frame-glow: hsla(180, 100%, 55%, 0.2);
+  --board-frame-inner-shadow: hsla(0, 0%, 0%, 0.5);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(240, 25%, 18%, 0.95);
+  --board-center-to: hsla(240, 35%, 10%, 0.98);
+  --board-center-border: hsla(180, 100%, 55%, 0.1);
+  --board-mode-shadow: hsla(180, 100%, 55%, 0.2);
+
+  --background: hsl(240, 25%, 5%);
+  --foreground: hsl(180, 15%, 92%);
+  --card: hsl(240, 15%, 14%);
+  --card-foreground: hsl(180, 15%, 92%);
+  --popover: hsl(240, 18%, 12%);
+  --popover-foreground: hsl(180, 15%, 92%);
+  --primary: hsl(180, 100%, 55%);
+  --primary-foreground: hsl(240, 25%, 5%);
+  --secondary: hsl(320, 100%, 60%);
+  --secondary-foreground: hsl(240, 25%, 5%);
+  --muted: hsl(240, 15%, 20%);
+  --muted-foreground: hsl(220, 8%, 55%);
+  --accent: hsl(270, 80%, 65%);
+  --accent-foreground: hsl(180, 15%, 92%);
+  --destructive: hsl(0, 100%, 62%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(180, 100%, 55%, 0.2);
+  --input: hsla(180, 100%, 55%, 0.15);
+  --ring: hsl(180, 100%, 55%);
+
+  --font-cyber: 'Orbitron', 'Rajdhani', 'Share Tech Mono', system-ui, sans-serif;
+  --font-sans:
+    'LarkHackSafariFont', 'LarkEmojiFont', 'LarkChineseQuote', '-apple-system',
+    'BlinkMacSystemFont', 'Helvetica Neue', 'Tahoma', 'PingFang SC',
+    'Microsoft Yahei', 'Arial', 'Hiragino Sans GB', 'sans-serif',
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --radius: 0.5rem;
+
+  /* ===== Accessibility ===== */
+  --font-scale: 1;
+
+  /* ===== 安全區適配 ===== */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* ===== Theme: Starry (星空宇宙) ===== */
+[data-theme="starry"] {
+  --bg-deep: hsl(220, 50%, 6%);
+  --bg-dark: hsl(220, 40%, 10%);
+  --bg-mid: hsl(220, 35%, 14%);
+  --bg-card: hsl(225, 30%, 18%);
+
+  --cyan: hsl(210, 90%, 65%);
+  --cyan-glow: hsl(210, 90%, 75%);
+  --pink: hsl(45, 100%, 65%);
+  --pink-glow: hsl(45, 100%, 75%);
+  --purple: hsl(260, 70%, 65%);
+  --green: hsl(140, 60%, 55%);
+  --red: hsl(0, 80%, 65%);
+  --blue: hsl(210, 90%, 65%);
+  --yellow: hsl(45, 100%, 65%);
+  --orange: hsl(30, 90%, 60%);
+
+  --text-primary: hsl(210, 20%, 92%);
+  --text-secondary: hsl(220, 10%, 65%);
+  --text-muted: hsl(220, 10%, 45%);
+
+  --border-neon-cyan: hsla(210, 90%, 65%, 0.3);
+  --border-neon-pink: hsla(45, 100%, 65%, 0.3);
+
+  /* Cell colors - starry */
+  --cell-property-bg: hsl(220, 35%, 14%);
+  --cell-property-border: hsla(210, 90%, 65%, 0.2);
+  --cell-start-bg: hsla(45, 100%, 65%, 0.2);
+  --cell-start-border: hsla(45, 100%, 65%, 0.6);
+  --cell-fate-bg: hsla(260, 70%, 65%, 0.15);
+  --cell-fate-border: hsla(260, 70%, 65%, 0.5);
+  --cell-detention-bg: hsla(0, 80%, 65%, 0.15);
+  --cell-detention-border: hsla(0, 80%, 65%, 0.5);
+  --cell-chance-bg: hsla(200, 80%, 65%, 0.15);
+  --cell-chance-border: hsla(200, 80%, 65%, 0.5);
+  --cell-chance-color: hsl(200, 80%, 70%);
+  --cell-minigame-bg: hsla(280, 70%, 65%, 0.18);
+  --cell-minigame-border: hsla(280, 70%, 65%, 0.6);
+  --cell-minigame-color: hsl(280, 70%, 70%);
+  --cell-corner-bg: hsl(220, 40%, 16%);
+  --cell-corner-border: hsla(210, 90%, 65%, 0.25);
+
+  /* Board frame & center - starry */
+  --board-frame-from: hsla(210, 90%, 65%, 0.1);
+  --board-frame-to: hsla(45, 100%, 60%, 0.1);
+  --board-frame-glow: hsla(210, 90%, 65%, 0.2);
+  --board-frame-inner-shadow: hsla(220, 60%, 5%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(220, 40%, 18%, 0.95);
+  --board-center-to: hsla(220, 55%, 10%, 0.98);
+  --board-center-border: hsla(210, 90%, 65%, 0.1);
+  --board-mode-shadow: hsla(210, 90%, 65%, 0.2);
+
+  --background: hsl(220, 50%, 6%);
+  --foreground: hsl(210, 20%, 92%);
+  --card: hsl(225, 30%, 18%);
+  --card-foreground: hsl(210, 20%, 92%);
+  --popover: hsl(220, 40%, 10%);
+  --popover-foreground: hsl(210, 20%, 92%);
+  --primary: hsl(210, 90%, 65%);
+  --primary-foreground: hsl(220, 50%, 6%);
+  --secondary: hsl(45, 100%, 65%);
+  --secondary-foreground: hsl(220, 50%, 6%);
+  --muted: hsl(220, 30%, 22%);
+  --muted-foreground: hsl(220, 10%, 65%);
+  --accent: hsl(260, 70%, 65%);
+  --accent-foreground: hsl(210, 20%, 92%);
+  --destructive: hsl(0, 80%, 65%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(210, 90%, 65%, 0.2);
+  --input: hsla(210, 90%, 65%, 0.15);
+  --ring: hsl(210, 90%, 65%);
+}
+
+/* ===== Theme: Ancient (古风武侠) ===== */
+[data-theme="ancient"] {
+  --bg-deep: hsl(40, 25%, 88%);
+  --bg-dark: hsl(40, 20%, 82%);
+  --bg-mid: hsl(40, 15%, 78%);
+  --bg-card: hsl(45, 25%, 90%);
+
+  --cyan: hsl(0, 70%, 45%);
+  --cyan-glow: hsl(0, 70%, 55%);
+  --pink: hsl(0, 0%, 15%);
+  --pink-glow: hsl(0, 0%, 30%);
+  --purple: hsl(270, 30%, 45%);
+  --green: hsl(140, 30%, 40%);
+  --red: hsl(0, 70%, 45%);
+  --blue: hsl(210, 40%, 45%);
+  --yellow: hsl(45, 70%, 50%);
+  --orange: hsl(25, 60%, 45%);
+
+  --text-primary: hsl(0, 0%, 15%);
+  --text-secondary: hsl(0, 0%, 35%);
+  --text-muted: hsl(0, 0%, 55%);
+
+  --border-neon-cyan: hsla(0, 70%, 45%, 0.3);
+  --border-neon-pink: hsla(0, 0%, 15%, 0.3);
+
+  /* Cell colors - ancient */
+  --cell-property-bg: hsl(40, 20%, 82%);
+  --cell-property-border: hsla(0, 70%, 45%, 0.2);
+  --cell-start-bg: hsla(0, 70%, 45%, 0.15);
+  --cell-start-border: hsla(0, 70%, 45%, 0.5);
+  --cell-fate-bg: hsla(270, 30%, 45%, 0.12);
+  --cell-fate-border: hsla(270, 30%, 45%, 0.4);
+  --cell-detention-bg: hsla(0, 0%, 25%, 0.15);
+  --cell-detention-border: hsla(0, 0%, 25%, 0.4);
+  --cell-chance-bg: hsla(45, 70%, 50%, 0.15);
+  --cell-chance-border: hsla(45, 70%, 50%, 0.4);
+  --cell-chance-color: hsl(45, 70%, 50%);
+  --cell-minigame-bg: hsla(270, 30%, 45%, 0.18);
+  --cell-minigame-border: hsla(270, 30%, 45%, 0.5);
+  --cell-minigame-color: hsl(270, 30%, 50%);
+  --cell-corner-bg: hsl(40, 25%, 86%);
+  --cell-corner-border: hsla(0, 70%, 45%, 0.25);
+
+  /* Board frame & center - ancient */
+  --board-frame-from: hsla(0, 70%, 45%, 0.08);
+  --board-frame-to: hsla(0, 0%, 15%, 0.08);
+  --board-frame-glow: hsla(0, 70%, 45%, 0.15);
+  --board-frame-inner-shadow: hsla(40, 40%, 60%, 0.3);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(45, 30%, 85%, 0.95);
+  --board-center-to: hsla(40, 25%, 78%, 0.98);
+  --board-center-border: hsla(0, 70%, 45%, 0.1);
+  --board-mode-shadow: hsla(0, 70%, 45%, 0.15);
+
+  --background: hsl(40, 25%, 88%);
+  --foreground: hsl(0, 0%, 15%);
+  --card: hsl(45, 25%, 90%);
+  --card-foreground: hsl(0, 0%, 15%);
+  --popover: hsl(40, 20%, 82%);
+  --popover-foreground: hsl(0, 0%, 15%);
+  --primary: hsl(0, 70%, 45%);
+  --primary-foreground: hsl(40, 25%, 95%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(40, 25%, 95%);
+  --muted: hsl(40, 15%, 75%);
+  --muted-foreground: hsl(0, 0%, 35%);
+  --accent: hsl(270, 30%, 45%);
+  --accent-foreground: hsl(40, 25%, 95%);
+  --destructive: hsl(0, 70%, 45%);
+  --destructive-foreground: hsl(40, 25%, 95%);
+  --border: hsla(0, 70%, 45%, 0.2);
+  --input: hsla(0, 70%, 45%, 0.15);
+  --ring: hsl(0, 70%, 45%);
+}
+
+/* ===== Theme: Magic (奇幻魔法) ===== */
+[data-theme="magic"] {
+  --bg-deep: hsl(260, 35%, 7%);
+  --bg-dark: hsl(260, 30%, 12%);
+  --bg-mid: hsl(260, 25%, 16%);
+  --bg-card: hsl(265, 25%, 20%);
+
+  --cyan: hsl(270, 80%, 65%);
+  --cyan-glow: hsl(270, 80%, 75%);
+  --pink: hsl(45, 100%, 60%);
+  --pink-glow: hsl(45, 100%, 72%);
+  --purple: hsl(270, 80%, 65%);
+  --green: hsl(140, 70%, 55%);
+  --red: hsl(0, 85%, 65%);
+  --blue: hsl(210, 80%, 60%);
+  --yellow: hsl(45, 100%, 60%);
+  --orange: hsl(25, 90%, 60%);
+
+  --text-primary: hsl(260, 20%, 92%);
+  --text-secondary: hsl(260, 10%, 65%);
+  --text-muted: hsl(260, 10%, 45%);
+
+  --border-neon-cyan: hsla(270, 80%, 65%, 0.3);
+  --border-neon-pink: hsla(45, 100%, 60%, 0.3);
+
+  /* Cell colors - magic */
+  --cell-property-bg: hsl(260, 25%, 16%);
+  --cell-property-border: hsla(270, 80%, 65%, 0.2);
+  --cell-start-bg: hsla(45, 100%, 60%, 0.2);
+  --cell-start-border: hsla(45, 100%, 60%, 0.6);
+  --cell-fate-bg: hsla(270, 80%, 65%, 0.15);
+  --cell-fate-border: hsla(270, 80%, 65%, 0.5);
+  --cell-detention-bg: hsla(0, 85%, 65%, 0.15);
+  --cell-detention-border: hsla(0, 85%, 65%, 0.5);
+  --cell-chance-bg: hsla(140, 70%, 55%, 0.15);
+  --cell-chance-border: hsla(140, 70%, 55%, 0.5);
+  --cell-chance-color: hsl(140, 70%, 60%);
+  --cell-minigame-bg: hsla(270, 80%, 65%, 0.2);
+  --cell-minigame-border: hsla(270, 80%, 65%, 0.6);
+  --cell-minigame-color: hsl(270, 80%, 75%);
+  --cell-corner-bg: hsl(260, 30%, 20%);
+  --cell-corner-border: hsla(270, 80%, 65%, 0.25);
+
+  /* Board frame & center - magic */
+  --board-frame-from: hsla(270, 80%, 65%, 0.1);
+  --board-frame-to: hsla(45, 100%, 60%, 0.1);
+  --board-frame-glow: hsla(270, 80%, 65%, 0.2);
+  --board-frame-inner-shadow: hsla(260, 50%, 5%, 0.5);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(260, 35%, 22%, 0.95);
+  --board-center-to: hsla(260, 45%, 12%, 0.98);
+  --board-center-border: hsla(270, 80%, 65%, 0.1);
+  --board-mode-shadow: hsla(270, 80%, 65%, 0.2);
+
+  --background: hsl(260, 35%, 7%);
+  --foreground: hsl(260, 20%, 92%);
+  --card: hsl(265, 25%, 20%);
+  --card-foreground: hsl(260, 20%, 92%);
+  --popover: hsl(260, 30%, 12%);
+  --popover-foreground: hsl(260, 20%, 92%);
+  --primary: hsl(270, 80%, 65%);
+  --primary-foreground: hsl(260, 35%, 7%);
+  --secondary: hsl(45, 100%, 60%);
+  --secondary-foreground: hsl(260, 35%, 7%);
+  --muted: hsl(260, 25%, 22%);
+  --muted-foreground: hsl(260, 10%, 65%);
+  --accent: hsl(45, 100%, 60%);
+  --accent-foreground: hsl(260, 20%, 92%);
+  --destructive: hsl(0, 85%, 65%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(270, 80%, 65%, 0.2);
+  --input: hsla(270, 80%, 65%, 0.15);
+  --ring: hsl(270, 80%, 65%);
+}
+
+/* ===== Theme: Ocean (海洋深蓝) ===== */
+[data-theme="ocean"] {
+  --bg-deep: hsl(210, 70%, 6%);
+  --bg-dark: hsl(210, 60%, 10%);
+  --bg-mid: hsl(210, 55%, 14%);
+  --bg-card: hsl(205, 50%, 18%);
+
+  --cyan: hsl(190, 90%, 55%);
+  --cyan-glow: hsl(190, 90%, 70%);
+  --pink: hsl(200, 30%, 90%);
+  --pink-glow: hsl(200, 40%, 95%);
+  --purple: hsl(240, 50%, 65%);
+  --green: hsl(160, 70%, 55%);
+  --red: hsl(0, 75%, 65%);
+  --blue: hsl(210, 80%, 60%);
+  --yellow: hsl(50, 90%, 65%);
+  --orange: hsl(20, 80%, 60%);
+
+  --text-primary: hsl(200, 20%, 92%);
+  --text-secondary: hsl(210, 10%, 65%);
+  --text-muted: hsl(210, 10%, 45%);
+
+  --border-neon-cyan: hsla(190, 90%, 55%, 0.3);
+  --border-neon-pink: hsla(200, 30%, 90%, 0.25);
+
+  /* Cell colors - ocean */
+  --cell-property-bg: hsl(210, 55%, 14%);
+  --cell-property-border: hsla(190, 90%, 55%, 0.2);
+  --cell-start-bg: hsla(190, 90%, 55%, 0.2);
+  --cell-start-border: hsla(190, 90%, 55%, 0.6);
+  --cell-fate-bg: hsla(240, 50%, 65%, 0.15);
+  --cell-fate-border: hsla(240, 50%, 65%, 0.5);
+  --cell-detention-bg: hsla(0, 75%, 65%, 0.15);
+  --cell-detention-border: hsla(0, 75%, 65%, 0.5);
+  --cell-chance-bg: hsla(160, 70%, 55%, 0.15);
+  --cell-chance-border: hsla(160, 70%, 55%, 0.5);
+  --cell-chance-color: hsl(160, 70%, 60%);
+  --cell-minigame-bg: hsla(240, 50%, 65%, 0.2);
+  --cell-minigame-border: hsla(240, 50%, 65%, 0.6);
+  --cell-minigame-color: hsl(240, 50%, 72%);
+  --cell-corner-bg: hsl(210, 60%, 16%);
+  --cell-corner-border: hsla(190, 90%, 55%, 0.25);
+
+  /* Board frame & center - ocean */
+  --board-frame-from: hsla(190, 90%, 55%, 0.1);
+  --board-frame-to: hsla(200, 30%, 90%, 0.08);
+  --board-frame-glow: hsla(190, 90%, 55%, 0.2);
+  --board-frame-inner-shadow: hsla(210, 60%, 5%, 0.5);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(210, 55%, 20%, 0.95);
+  --board-center-to: hsla(210, 70%, 10%, 0.98);
+  --board-center-border: hsla(190, 90%, 55%, 0.1);
+  --board-mode-shadow: hsla(190, 90%, 55%, 0.2);
+
+  --background: hsl(210, 70%, 6%);
+  --foreground: hsl(200, 20%, 92%);
+  --card: hsl(205, 50%, 18%);
+  --card-foreground: hsl(200, 20%, 92%);
+  --popover: hsl(210, 60%, 10%);
+  --popover-foreground: hsl(200, 20%, 92%);
+  --primary: hsl(190, 90%, 55%);
+  --primary-foreground: hsl(210, 70%, 6%);
+  --secondary: hsl(200, 30%, 90%);
+  --secondary-foreground: hsl(210, 70%, 6%);
+  --muted: hsl(210, 45%, 22%);
+  --muted-foreground: hsl(210, 10%, 65%);
+  --accent: hsl(160, 70%, 55%);
+  --accent-foreground: hsl(200, 20%, 92%);
+  --destructive: hsl(0, 75%, 65%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(190, 90%, 55%, 0.2);
+  --input: hsla(190, 90%, 55%, 0.15);
+  --ring: hsl(190, 90%, 55%);
+}
+
+/* ===== Theme: Steampunk (蒸汽朋克) ===== */
+[data-theme="steampunk"] {
+  --bg-deep: hsl(30, 40%, 8%);
+  --bg-dark: hsl(30, 35%, 12%);
+  --bg-mid: hsl(30, 30%, 18%);
+  --bg-card: hsl(28, 25%, 22%);
+
+  --cyan: hsl(30, 56%, 46%);
+  --cyan-glow: hsl(30, 70%, 65%);
+  --pink: hsl(32, 47%, 64%);
+  --pink-glow: hsl(32, 65%, 78%);
+  --purple: hsl(15, 40%, 35%);
+  --green: hsl(80, 30%, 35%);
+  --red: hsl(0, 50%, 45%);
+  --blue: hsl(200, 25%, 45%);
+  --yellow: hsl(40, 70%, 55%);
+  --orange: hsl(20, 60%, 45%);
+
+  --text-primary: hsl(35, 25%, 90%);
+  --text-secondary: hsl(30, 15%, 60%);
+  --text-muted: hsl(30, 10%, 42%);
+
+  --border-neon-cyan: hsla(30, 56%, 46%, 0.3);
+  --border-neon-pink: hsla(32, 47%, 64%, 0.3);
+
+  /* Cell colors - steampunk */
+  --cell-property-bg: hsl(30, 30%, 18%);
+  --cell-property-border: hsla(30, 56%, 46%, 0.25);
+  --cell-start-bg: hsla(32, 47%, 64%, 0.2);
+  --cell-start-border: hsla(32, 47%, 64%, 0.6);
+  --cell-fate-bg: hsla(15, 40%, 35%, 0.18);
+  --cell-fate-border: hsla(15, 40%, 35%, 0.5);
+  --cell-detention-bg: hsla(0, 50%, 45%, 0.15);
+  --cell-detention-border: hsla(0, 50%, 45%, 0.5);
+  --cell-chance-bg: hsla(40, 70%, 55%, 0.15);
+  --cell-chance-border: hsla(40, 70%, 55%, 0.5);
+  --cell-chance-color: hsl(40, 70%, 60%);
+  --cell-minigame-bg: hsla(80, 30%, 35%, 0.18);
+  --cell-minigame-border: hsla(80, 30%, 35%, 0.5);
+  --cell-minigame-color: hsl(80, 30%, 45%);
+  --cell-corner-bg: hsl(30, 35%, 20%);
+  --cell-corner-border: hsla(30, 56%, 46%, 0.25);
+
+  /* Board frame & center - steampunk */
+  --board-frame-from: hsla(30, 56%, 46%, 0.12);
+  --board-frame-to: hsla(32, 47%, 64%, 0.1);
+  --board-frame-glow: hsla(30, 56%, 46%, 0.2);
+  --board-frame-inner-shadow: hsla(30, 50%, 5%, 0.5);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(30, 35%, 22%, 0.95);
+  --board-center-to: hsla(30, 45%, 10%, 0.98);
+  --board-center-border: hsla(30, 56%, 46%, 0.1);
+  --board-mode-shadow: hsla(30, 56%, 46%, 0.2);
+
+  --background: hsl(30, 40%, 8%);
+  --foreground: hsl(35, 25%, 90%);
+  --card: hsl(28, 25%, 22%);
+  --card-foreground: hsl(35, 25%, 90%);
+  --popover: hsl(30, 35%, 12%);
+  --popover-foreground: hsl(35, 25%, 90%);
+  --primary: hsl(30, 56%, 46%);
+  --primary-foreground: hsl(30, 40%, 95%);
+  --secondary: hsl(32, 47%, 64%);
+  --secondary-foreground: hsl(30, 40%, 8%);
+  --muted: hsl(30, 25%, 24%);
+  --muted-foreground: hsl(30, 15%, 60%);
+  --accent: hsl(40, 70%, 55%);
+  --accent-foreground: hsl(30, 40%, 8%);
+  --destructive: hsl(0, 50%, 45%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(30, 56%, 46%, 0.25);
+  --input: hsla(30, 56%, 46%, 0.15);
+  --ring: hsl(30, 56%, 46%);
+}
+
+/* ===== Theme: Wasteland (末日废土) ===== */
+[data-theme="wasteland"] {
+  --bg-deep: hsl(30, 15%, 8%);
+  --bg-dark: hsl(30, 12%, 12%);
+  --bg-mid: hsl(28, 10%, 18%);
+  --bg-card: hsl(25, 8%, 22%);
+
+  --cyan: hsl(40, 42%, 55%);
+  --cyan-glow: hsl(40, 55%, 72%);
+  --pink: hsl(15, 50%, 48%);
+  --pink-glow: hsl(15, 60%, 65%);
+  --purple: hsl(280, 15%, 35%);
+  --green: hsl(80, 20%, 35%);
+  --red: hsl(0, 45%, 50%);
+  --blue: hsl(210, 20%, 45%);
+  --yellow: hsl(45, 50%, 55%);
+  --orange: hsl(25, 55%, 50%);
+
+  --text-primary: hsl(40, 15%, 85%);
+  --text-secondary: hsl(35, 8%, 55%);
+  --text-muted: hsl(30, 6%, 40%);
+
+  --border-neon-cyan: hsla(40, 42%, 55%, 0.25);
+  --border-neon-pink: hsla(15, 50%, 48%, 0.25);
+
+  /* Cell colors - wasteland */
+  --cell-property-bg: hsl(28, 10%, 18%);
+  --cell-property-border: hsla(40, 42%, 55%, 0.2);
+  --cell-start-bg: hsla(40, 42%, 55%, 0.18);
+  --cell-start-border: hsla(40, 42%, 55%, 0.55);
+  --cell-fate-bg: hsla(280, 15%, 35%, 0.15);
+  --cell-fate-border: hsla(280, 15%, 35%, 0.45);
+  --cell-detention-bg: hsla(0, 45%, 50%, 0.15);
+  --cell-detention-border: hsla(0, 45%, 50%, 0.45);
+  --cell-chance-bg: hsla(45, 50%, 55%, 0.15);
+  --cell-chance-border: hsla(45, 50%, 55%, 0.45);
+  --cell-chance-color: hsl(45, 50%, 60%);
+  --cell-minigame-bg: hsla(25, 55%, 50%, 0.18);
+  --cell-minigame-border: hsla(25, 55%, 50%, 0.5);
+  --cell-minigame-color: hsl(25, 55%, 58%);
+  --cell-corner-bg: hsl(28, 12%, 20%);
+  --cell-corner-border: hsla(40, 42%, 55%, 0.2);
+
+  /* Board frame & center - wasteland */
+  --board-frame-from: hsla(40, 42%, 55%, 0.08);
+  --board-frame-to: hsla(15, 50%, 48%, 0.08);
+  --board-frame-glow: hsla(40, 42%, 55%, 0.15);
+  --board-frame-inner-shadow: hsla(30, 30%, 3%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(28, 15%, 20%, 0.95);
+  --board-center-to: hsla(30, 20%, 8%, 0.98);
+  --board-center-border: hsla(40, 42%, 55%, 0.08);
+  --board-mode-shadow: hsla(40, 42%, 55%, 0.15);
+
+  --background: hsl(30, 15%, 8%);
+  --foreground: hsl(40, 15%, 85%);
+  --card: hsl(25, 8%, 22%);
+  --card-foreground: hsl(40, 15%, 85%);
+  --popover: hsl(30, 12%, 12%);
+  --popover-foreground: hsl(40, 15%, 85%);
+  --primary: hsl(40, 42%, 55%);
+  --primary-foreground: hsl(30, 15%, 8%);
+  --secondary: hsl(15, 50%, 48%);
+  --secondary-foreground: hsl(30, 15%, 95%);
+  --muted: hsl(28, 10%, 24%);
+  --muted-foreground: hsl(35, 8%, 55%);
+  --accent: hsl(25, 55%, 50%);
+  --accent-foreground: hsl(30, 15%, 8%);
+  --destructive: hsl(0, 45%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(40, 42%, 55%, 0.2);
+  --input: hsla(40, 42%, 55%, 0.12);
+  --ring: hsl(40, 42%, 55%);
+}
+
+/* ===== Theme: Japanese (日式和风) ===== */
+[data-theme="japanese"] {
+  --bg-deep: hsl(350, 30%, 96%);
+  --bg-dark: hsl(350, 20%, 92%);
+  --bg-mid: hsl(350, 15%, 88%);
+  --bg-card: hsl(350, 25%, 94%);
+
+  --cyan: hsl(350, 100%, 80%);
+  --cyan-glow: hsl(350, 100%, 88%);
+  --pink: hsl(0, 0%, 17%);
+  --pink-glow: hsl(0, 0%, 35%);
+  --purple: hsl(270, 20%, 45%);
+  --green: hsl(140, 30%, 40%);
+  --red: hsl(0, 75%, 50%);
+  --blue: hsl(210, 40%, 45%);
+  --yellow: hsl(45, 70%, 55%);
+  --orange: hsl(20, 70%, 50%);
+
+  --text-primary: hsl(0, 0%, 17%);
+  --text-secondary: hsl(0, 0%, 40%);
+  --text-muted: hsl(0, 0%, 58%);
+
+  --border-neon-cyan: hsla(350, 100%, 80%, 0.4);
+  --border-neon-pink: hsla(0, 0%, 17%, 0.25);
+
+  /* Cell colors - japanese */
+  --cell-property-bg: hsl(350, 20%, 92%);
+  --cell-property-border: hsla(350, 100%, 80%, 0.3);
+  --cell-start-bg: hsla(0, 75%, 50%, 0.12);
+  --cell-start-border: hsla(0, 75%, 50%, 0.5);
+  --cell-fate-bg: hsla(270, 20%, 45%, 0.1);
+  --cell-fate-border: hsla(270, 20%, 45%, 0.35);
+  --cell-detention-bg: hsla(0, 0%, 17%, 0.08);
+  --cell-detention-border: hsla(0, 0%, 17%, 0.3);
+  --cell-chance-bg: hsla(140, 30%, 40%, 0.1);
+  --cell-chance-border: hsla(140, 30%, 40%, 0.35);
+  --cell-chance-color: hsl(140, 30%, 45%);
+  --cell-minigame-bg: hsla(45, 70%, 55%, 0.12);
+  --cell-minigame-border: hsla(45, 70%, 55%, 0.4);
+  --cell-minigame-color: hsl(45, 70%, 55%);
+  --cell-corner-bg: hsl(350, 25%, 90%);
+  --cell-corner-border: hsla(350, 100%, 80%, 0.25);
+
+  /* Board frame & center - japanese */
+  --board-frame-from: hsla(350, 100%, 80%, 0.1);
+  --board-frame-to: hsla(0, 0%, 17%, 0.06);
+  --board-frame-glow: hsla(350, 100%, 80%, 0.15);
+  --board-frame-inner-shadow: hsla(350, 20%, 50%, 0.15);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(350, 30%, 92%, 0.95);
+  --board-center-to: hsla(350, 40%, 86%, 0.98);
+  --board-center-border: hsla(350, 100%, 80%, 0.1);
+  --board-mode-shadow: hsla(350, 100%, 80%, 0.12);
+
+  --background: hsl(350, 30%, 96%);
+  --foreground: hsl(0, 0%, 17%);
+  --card: hsl(350, 25%, 94%);
+  --card-foreground: hsl(0, 0%, 17%);
+  --popover: hsl(350, 20%, 92%);
+  --popover-foreground: hsl(0, 0%, 17%);
+  --primary: hsl(350, 100%, 70%);
+  --primary-foreground: hsl(350, 30%, 98%);
+  --secondary: hsl(0, 0%, 17%);
+  --secondary-foreground: hsl(350, 30%, 96%);
+  --muted: hsl(350, 15%, 85%);
+  --muted-foreground: hsl(0, 0%, 40%);
+  --accent: hsl(0, 75%, 50%);
+  --accent-foreground: hsl(350, 30%, 96%);
+  --destructive: hsl(0, 70%, 45%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(350, 100%, 80%, 0.3);
+  --input: hsla(350, 100%, 80%, 0.2);
+  --ring: hsl(350, 100%, 70%);
+}
+
+/* ===== Theme: Christmas (圣诞节) ===== */
+[data-theme="christmas"] {
+  --bg-deep: hsl(140, 60%, 6%);
+  --bg-dark: hsl(140, 50%, 10%);
+  --bg-mid: hsl(140, 40%, 15%);
+  --bg-card: hsl(145, 35%, 20%);
+
+  --cyan: hsl(350, 73%, 44%);
+  --cyan-glow: hsl(350, 80%, 60%);
+  --pink: hsl(51, 100%, 50%);
+  --pink-glow: hsl(51, 100%, 70%);
+  --purple: hsl(280, 40%, 50%);
+  --green: hsl(140, 70%, 35%);
+  --red: hsl(350, 75%, 50%);
+  --blue: hsl(210, 60%, 55%);
+  --yellow: hsl(51, 100%, 55%);
+  --orange: hsl(25, 80%, 55%);
+
+  --text-primary: hsl(51, 30%, 92%);
+  --text-secondary: hsl(140, 10%, 65%);
+  --text-muted: hsl(140, 8%, 45%);
+
+  --border-neon-cyan: hsla(350, 73%, 44%, 0.3);
+  --border-neon-pink: hsla(51, 100%, 50%, 0.35);
+
+  /* Cell colors - christmas */
+  --cell-property-bg: hsl(140, 40%, 15%);
+  --cell-property-border: hsla(350, 73%, 44%, 0.25);
+  --cell-start-bg: hsla(51, 100%, 50%, 0.2);
+  --cell-start-border: hsla(51, 100%, 50%, 0.6);
+  --cell-fate-bg: hsla(280, 40%, 50%, 0.15);
+  --cell-fate-border: hsla(280, 40%, 50%, 0.5);
+  --cell-detention-bg: hsla(350, 75%, 50%, 0.15);
+  --cell-detention-border: hsla(350, 75%, 50%, 0.5);
+  --cell-chance-bg: hsla(140, 70%, 35%, 0.18);
+  --cell-chance-border: hsla(140, 70%, 35%, 0.5);
+  --cell-chance-color: hsl(140, 70%, 45%);
+  --cell-minigame-bg: hsla(51, 100%, 55%, 0.18);
+  --cell-minigame-border: hsla(51, 100%, 55%, 0.55);
+  --cell-minigame-color: hsl(51, 100%, 65%);
+  --cell-corner-bg: hsl(140, 50%, 18%);
+  --cell-corner-border: hsla(350, 73%, 44%, 0.25);
+
+  /* Board frame & center - christmas */
+  --board-frame-from: hsla(350, 73%, 44%, 0.1);
+  --board-frame-to: hsla(51, 100%, 50%, 0.1);
+  --board-frame-glow: hsla(350, 73%, 44%, 0.2);
+  --board-frame-inner-shadow: hsla(140, 60%, 3%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(140, 45%, 22%, 0.95);
+  --board-center-to: hsla(140, 60%, 8%, 0.98);
+  --board-center-border: hsla(350, 73%, 44%, 0.1);
+  --board-mode-shadow: hsla(350, 73%, 44%, 0.2);
+
+  --background: hsl(140, 60%, 6%);
+  --foreground: hsl(51, 30%, 92%);
+  --card: hsl(145, 35%, 20%);
+  --card-foreground: hsl(51, 30%, 92%);
+  --popover: hsl(140, 50%, 10%);
+  --popover-foreground: hsl(51, 30%, 92%);
+  --primary: hsl(350, 73%, 44%);
+  --primary-foreground: hsl(51, 100%, 95%);
+  --secondary: hsl(51, 100%, 50%);
+  --secondary-foreground: hsl(140, 60%, 6%);
+  --muted: hsl(140, 30%, 24%);
+  --muted-foreground: hsl(140, 10%, 65%);
+  --accent: hsl(140, 70%, 35%);
+  --accent-foreground: hsl(51, 30%, 92%);
+  --destructive: hsl(350, 75%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(350, 73%, 44%, 0.25);
+  --input: hsla(350, 73%, 44%, 0.15);
+  --ring: hsl(350, 73%, 44%);
+}
+
+/* ===== Theme: Halloween (万圣节) ===== */
+[data-theme="halloween"] {
+  --bg-deep: hsl(250, 40%, 5%);
+  --bg-dark: hsl(250, 35%, 9%);
+  --bg-mid: hsl(255, 30%, 14%);
+  --bg-card: hsl(260, 28%, 18%);
+
+  --cyan: hsl(25, 100%, 55%);
+  --cyan-glow: hsl(25, 100%, 70%);
+  --pink: hsl(262, 83%, 66%);
+  --pink-glow: hsl(262, 90%, 80%);
+  --purple: hsl(280, 70%, 60%);
+  --green: hsl(120, 60%, 50%);
+  --red: hsl(0, 80%, 55%);
+  --blue: hsl(210, 70%, 55%);
+  --yellow: hsl(50, 100%, 55%);
+  --orange: hsl(25, 100%, 55%);
+
+  --text-primary: hsl(30, 25%, 92%);
+  --text-secondary: hsl(260, 10%, 60%);
+  --text-muted: hsl(260, 8%, 42%);
+
+  --border-neon-cyan: hsla(25, 100%, 55%, 0.3);
+  --border-neon-pink: hsla(262, 83%, 66%, 0.3);
+
+  /* Cell colors - halloween */
+  --cell-property-bg: hsl(255, 30%, 14%);
+  --cell-property-border: hsla(25, 100%, 55%, 0.25);
+  --cell-start-bg: hsla(25, 100%, 55%, 0.2);
+  --cell-start-border: hsla(25, 100%, 55%, 0.6);
+  --cell-fate-bg: hsla(262, 83%, 66%, 0.15);
+  --cell-fate-border: hsla(262, 83%, 66%, 0.5);
+  --cell-detention-bg: hsla(0, 80%, 55%, 0.15);
+  --cell-detention-border: hsla(0, 80%, 55%, 0.5);
+  --cell-chance-bg: hsla(120, 60%, 50%, 0.15);
+  --cell-chance-border: hsla(120, 60%, 50%, 0.5);
+  --cell-chance-color: hsl(120, 60%, 58%);
+  --cell-minigame-bg: hsla(280, 70%, 60%, 0.18);
+  --cell-minigame-border: hsla(280, 70%, 60%, 0.55);
+  --cell-minigame-color: hsl(280, 70%, 70%);
+  --cell-corner-bg: hsl(255, 35%, 18%);
+  --cell-corner-border: hsla(25, 100%, 55%, 0.25);
+
+  /* Board frame & center - halloween */
+  --board-frame-from: hsla(25, 100%, 55%, 0.1);
+  --board-frame-to: hsla(262, 83%, 66%, 0.1);
+  --board-frame-glow: hsla(25, 100%, 55%, 0.2);
+  --board-frame-inner-shadow: hsla(250, 50%, 2%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(255, 35%, 20%, 0.95);
+  --board-center-to: hsla(250, 50%, 6%, 0.98);
+  --board-center-border: hsla(25, 100%, 55%, 0.1);
+  --board-mode-shadow: hsla(25, 100%, 55%, 0.2);
+
+  --background: hsl(250, 40%, 5%);
+  --foreground: hsl(30, 25%, 92%);
+  --card: hsl(260, 28%, 18%);
+  --card-foreground: hsl(30, 25%, 92%);
+  --popover: hsl(250, 35%, 9%);
+  --popover-foreground: hsl(30, 25%, 92%);
+  --primary: hsl(25, 100%, 55%);
+  --primary-foreground: hsl(250, 40%, 5%);
+  --secondary: hsl(262, 83%, 66%);
+  --secondary-foreground: hsl(250, 40%, 95%);
+  --muted: hsl(255, 25%, 24%);
+  --muted-foreground: hsl(260, 10%, 60%);
+  --accent: hsl(120, 60%, 50%);
+  --accent-foreground: hsl(250, 40%, 5%);
+  --destructive: hsl(0, 80%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(25, 100%, 55%, 0.25);
+  --input: hsla(25, 100%, 55%, 0.15);
+  --ring: hsl(25, 100%, 55%);
+}
+
+/* ===== Theme: Neon Tokyo (霓虹東京) ===== */
+[data-theme="neon-tokyo"] {
+  --bg-deep: hsl(270, 80%, 6%);
+  --bg-dark: hsl(270, 70%, 10%);
+  --bg-mid: hsl(270, 60%, 14%);
+  --bg-card: hsl(275, 55%, 18%);
+
+  --cyan: hsl(190, 100%, 60%);
+  --cyan-glow: hsl(190, 100%, 72%);
+  --pink: hsl(330, 100%, 60%);
+  --pink-glow: hsl(330, 100%, 75%);
+  --purple: hsl(280, 90%, 65%);
+  --green: hsl(140, 90%, 60%);
+  --red: hsl(350, 100%, 62%);
+  --blue: hsl(200, 100%, 62%);
+  --yellow: hsl(50, 100%, 60%);
+  --orange: hsl(20, 100%, 60%);
+
+  --text-primary: hsl(300, 20%, 94%);
+  --text-secondary: hsl(270, 15%, 65%);
+  --text-muted: hsl(270, 10%, 45%);
+
+  --border-neon-cyan: hsla(190, 100%, 60%, 0.3);
+  --border-neon-pink: hsla(330, 100%, 60%, 0.35);
+
+  /* Cell colors - neon-tokyo */
+  --cell-property-bg: hsl(270, 60%, 14%);
+  --cell-property-border: hsla(190, 100%, 60%, 0.25);
+  --cell-start-bg: hsla(330, 100%, 60%, 0.2);
+  --cell-start-border: hsla(330, 100%, 60%, 0.6);
+  --cell-fate-bg: hsla(280, 90%, 65%, 0.15);
+  --cell-fate-border: hsla(280, 90%, 65%, 0.5);
+  --cell-detention-bg: hsla(350, 100%, 62%, 0.15);
+  --cell-detention-border: hsla(350, 100%, 62%, 0.5);
+  --cell-chance-bg: hsla(190, 100%, 60%, 0.15);
+  --cell-chance-border: hsla(190, 100%, 60%, 0.5);
+  --cell-chance-color: hsl(190, 100%, 65%);
+  --cell-minigame-bg: hsla(140, 90%, 60%, 0.18);
+  --cell-minigame-border: hsla(140, 90%, 60%, 0.55);
+  --cell-minigame-color: hsl(140, 90%, 68%);
+  --cell-corner-bg: hsl(270, 70%, 16%);
+  --cell-corner-border: hsla(330, 100%, 60%, 0.25);
+
+  /* Board frame & center - neon-tokyo */
+  --board-frame-from: hsla(330, 100%, 60%, 0.12);
+  --board-frame-to: hsla(190, 100%, 60%, 0.1);
+  --board-frame-glow: hsla(330, 100%, 60%, 0.25);
+  --board-frame-inner-shadow: hsla(270, 80%, 5%, 0.5);
+  --board-frame-border: var(--pink);
+  --board-center-from: hsla(275, 60%, 20%, 0.95);
+  --board-center-to: hsla(270, 80%, 8%, 0.98);
+  --board-center-border: hsla(330, 100%, 60%, 0.1);
+  --board-mode-shadow: hsla(330, 100%, 60%, 0.2);
+
+  --background: hsl(270, 80%, 6%);
+  --foreground: hsl(300, 20%, 94%);
+  --card: hsl(275, 55%, 18%);
+  --card-foreground: hsl(300, 20%, 94%);
+  --popover: hsl(270, 70%, 10%);
+  --popover-foreground: hsl(300, 20%, 94%);
+  --primary: hsl(330, 100%, 60%);
+  --primary-foreground: hsl(270, 80%, 6%);
+  --secondary: hsl(190, 100%, 60%);
+  --secondary-foreground: hsl(270, 80%, 6%);
+  --muted: hsl(270, 50%, 24%);
+  --muted-foreground: hsl(270, 15%, 65%);
+  --accent: hsl(280, 90%, 65%);
+  --accent-foreground: hsl(300, 20%, 94%);
+  --destructive: hsl(350, 100%, 62%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(330, 100%, 60%, 0.25);
+  --input: hsla(330, 100%, 60%, 0.15);
+  --ring: hsl(330, 100%, 60%);
+}
+
+/* ===== Theme: Wasteland Wild (廢土荒野) ===== */
+[data-theme="wasteland-wild"] {
+  --bg-deep: hsl(20, 35%, 5%);
+  --bg-dark: hsl(20, 30%, 9%);
+  --bg-mid: hsl(18, 25%, 14%);
+  --bg-card: hsl(22, 20%, 18%);
+
+  --cyan: hsl(15, 100%, 55%);
+  --cyan-glow: hsl(15, 100%, 68%);
+  --pink: hsl(42, 100%, 55%);
+  --pink-glow: hsl(42, 100%, 68%);
+  --purple: hsl(15, 30%, 35%);
+  --green: hsl(60, 25%, 35%);
+  --red: hsl(0, 75%, 55%);
+  --blue: hsl(200, 20%, 40%);
+  --yellow: hsl(42, 100%, 55%);
+  --orange: hsl(25, 85%, 55%);
+
+  --text-primary: hsl(35, 20%, 88%);
+  --text-secondary: hsl(25, 10%, 55%);
+  --text-muted: hsl(25, 8%, 38%);
+
+  --border-neon-cyan: hsla(15, 100%, 55%, 0.3);
+  --border-neon-pink: hsla(42, 100%, 55%, 0.28);
+
+  /* Cell colors - wasteland-wild */
+  --cell-property-bg: hsl(18, 25%, 14%);
+  --cell-property-border: hsla(15, 100%, 55%, 0.2);
+  --cell-start-bg: hsla(42, 100%, 55%, 0.18);
+  --cell-start-border: hsla(42, 100%, 55%, 0.55);
+  --cell-fate-bg: hsla(25, 85%, 55%, 0.15);
+  --cell-fate-border: hsla(25, 85%, 55%, 0.45);
+  --cell-detention-bg: hsla(0, 75%, 55%, 0.15);
+  --cell-detention-border: hsla(0, 75%, 55%, 0.45);
+  --cell-chance-bg: hsla(60, 25%, 35%, 0.15);
+  --cell-chance-border: hsla(60, 25%, 35%, 0.45);
+  --cell-chance-color: hsl(42, 80%, 60%);
+  --cell-minigame-bg: hsla(15, 30%, 35%, 0.18);
+  --cell-minigame-border: hsla(15, 30%, 35%, 0.5);
+  --cell-minigame-color: hsl(15, 50%, 50%);
+  --cell-corner-bg: hsl(20, 30%, 16%);
+  --cell-corner-border: hsla(15, 100%, 55%, 0.25);
+
+  /* Board frame & center - wasteland-wild */
+  --board-frame-from: hsla(15, 100%, 55%, 0.12);
+  --board-frame-to: hsla(42, 100%, 55%, 0.1);
+  --board-frame-glow: hsla(15, 100%, 55%, 0.2);
+  --board-frame-inner-shadow: hsla(20, 50%, 3%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(22, 30%, 20%, 0.95);
+  --board-center-to: hsla(20, 50%, 6%, 0.98);
+  --board-center-border: hsla(15, 100%, 55%, 0.08);
+  --board-mode-shadow: hsla(15, 100%, 55%, 0.18);
+
+  --background: hsl(20, 35%, 5%);
+  --foreground: hsl(35, 20%, 88%);
+  --card: hsl(22, 20%, 18%);
+  --card-foreground: hsl(35, 20%, 88%);
+  --popover: hsl(20, 30%, 9%);
+  --popover-foreground: hsl(35, 20%, 88%);
+  --primary: hsl(15, 100%, 55%);
+  --primary-foreground: hsl(20, 35%, 5%);
+  --secondary: hsl(42, 100%, 55%);
+  --secondary-foreground: hsl(20, 35%, 5%);
+  --muted: hsl(18, 22%, 24%);
+  --muted-foreground: hsl(25, 10%, 55%);
+  --accent: hsl(25, 85%, 55%);
+  --accent-foreground: hsl(20, 35%, 5%);
+  --destructive: hsl(0, 75%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(15, 100%, 55%, 0.22);
+  --input: hsla(15, 100%, 55%, 0.12);
+  --ring: hsl(15, 100%, 55%);
+}
+
+/* ===== Theme: Space Station (太空站) ===== */
+[data-theme="space-station"] {
+  --bg-deep: hsl(220, 60%, 4%);
+  --bg-dark: hsl(220, 50%, 7%);
+  --bg-mid: hsl(220, 40%, 10%);
+  --bg-card: hsl(215, 35%, 14%);
+
+  --cyan: hsl(200, 80%, 80%);
+  --cyan-glow: hsl(200, 90%, 92%);
+  --pink: hsl(220, 40%, 80%);
+  --pink-glow: hsl(220, 50%, 90%);
+  --purple: hsl(230, 50%, 55%);
+  --green: hsl(160, 50%, 55%);
+  --red: hsl(0, 70%, 60%);
+  --blue: hsl(220, 70%, 60%);
+  --yellow: hsl(50, 60%, 65%);
+  --orange: hsl(30, 60%, 60%);
+
+  --text-primary: hsl(210, 20%, 94%);
+  --text-secondary: hsl(220, 15%, 60%);
+  --text-muted: hsl(220, 10%, 42%);
+
+  --border-neon-cyan: hsla(200, 80%, 80%, 0.3);
+  --border-neon-pink: hsla(220, 40%, 80%, 0.25);
+
+  /* Cell colors - space-station */
+  --cell-property-bg: hsl(220, 40%, 10%);
+  --cell-property-border: hsla(200, 80%, 80%, 0.2);
+  --cell-start-bg: hsla(220, 70%, 60%, 0.2);
+  --cell-start-border: hsla(220, 70%, 60%, 0.6);
+  --cell-fate-bg: hsla(230, 50%, 55%, 0.15);
+  --cell-fate-border: hsla(230, 50%, 55%, 0.5);
+  --cell-detention-bg: hsla(0, 70%, 60%, 0.12);
+  --cell-detention-border: hsla(0, 70%, 60%, 0.45);
+  --cell-chance-bg: hsla(160, 50%, 55%, 0.15);
+  --cell-chance-border: hsla(160, 50%, 55%, 0.45);
+  --cell-chance-color: hsl(200, 80%, 85%);
+  --cell-minigame-bg: hsla(200, 80%, 80%, 0.15);
+  --cell-minigame-border: hsla(200, 80%, 80%, 0.5);
+  --cell-minigame-color: hsl(200, 90%, 88%);
+  --cell-corner-bg: hsl(220, 50%, 12%);
+  --cell-corner-border: hsla(200, 80%, 80%, 0.25);
+
+  /* Board frame & center - space-station */
+  --board-frame-from: hsla(200, 80%, 80%, 0.1);
+  --board-frame-to: hsla(220, 70%, 60%, 0.1);
+  --board-frame-glow: hsla(200, 80%, 80%, 0.2);
+  --board-frame-inner-shadow: hsla(220, 80%, 2%, 0.6);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(215, 45%, 16%, 0.95);
+  --board-center-to: hsla(220, 70%, 5%, 0.98);
+  --board-center-border: hsla(200, 80%, 80%, 0.08);
+  --board-mode-shadow: hsla(200, 80%, 80%, 0.18);
+
+  --background: hsl(220, 60%, 4%);
+  --foreground: hsl(210, 20%, 94%);
+  --card: hsl(215, 35%, 14%);
+  --card-foreground: hsl(210, 20%, 94%);
+  --popover: hsl(220, 50%, 7%);
+  --popover-foreground: hsl(210, 20%, 94%);
+  --primary: hsl(200, 80%, 80%);
+  --primary-foreground: hsl(220, 60%, 4%);
+  --secondary: hsl(220, 70%, 60%);
+  --secondary-foreground: hsl(220, 60%, 4%);
+  --muted: hsl(220, 35%, 20%);
+  --muted-foreground: hsl(220, 15%, 60%);
+  --accent: hsl(230, 50%, 55%);
+  --accent-foreground: hsl(210, 20%, 94%);
+  --destructive: hsl(0, 70%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(200, 80%, 80%, 0.2);
+  --input: hsla(200, 80%, 80%, 0.12);
+  --ring: hsl(200, 80%, 80%);
+}
+
+/* ===== Theme: Virtual Reality (虛擬實境 Matrix) ===== */
+[data-theme="virtual-reality"] {
+  --bg-deep: hsl(120, 100%, 2%);
+  --bg-dark: hsl(120, 80%, 4%);
+  --bg-mid: hsl(130, 60%, 6%);
+  --bg-card: hsl(130, 50%, 8%);
+
+  --cyan: hsl(130, 100%, 50%);
+  --cyan-glow: hsl(130, 100%, 65%);
+  --pink: hsl(120, 100%, 45%);
+  --pink-glow: hsl(120, 100%, 60%);
+  --purple: hsl(150, 40%, 35%);
+  --green: hsl(130, 100%, 50%);
+  --red: hsl(0, 80%, 55%);
+  --blue: hsl(180, 60%, 50%);
+  --yellow: hsl(70, 100%, 55%);
+  --orange: hsl(40, 100%, 55%);
+
+  --text-primary: hsl(120, 40%, 92%);
+  --text-secondary: hsl(130, 20%, 55%);
+  --text-muted: hsl(130, 15%, 35%);
+
+  --border-neon-cyan: hsla(130, 100%, 50%, 0.35);
+  --border-neon-pink: hsla(120, 100%, 45%, 0.3);
+
+  /* Cell colors - virtual-reality */
+  --cell-property-bg: hsl(130, 60%, 6%);
+  --cell-property-border: hsla(130, 100%, 50%, 0.25);
+  --cell-start-bg: hsla(130, 100%, 50%, 0.18);
+  --cell-start-border: hsla(130, 100%, 50%, 0.6);
+  --cell-fate-bg: hsla(150, 40%, 35%, 0.15);
+  --cell-fate-border: hsla(150, 40%, 35%, 0.5);
+  --cell-detention-bg: hsla(0, 80%, 55%, 0.15);
+  --cell-detention-border: hsla(0, 80%, 55%, 0.5);
+  --cell-chance-bg: hsla(70, 100%, 55%, 0.15);
+  --cell-chance-border: hsla(70, 100%, 55%, 0.5);
+  --cell-chance-color: hsl(70, 100%, 60%);
+  --cell-minigame-bg: hsla(180, 60%, 50%, 0.15);
+  --cell-minigame-border: hsla(180, 60%, 50%, 0.5);
+  --cell-minigame-color: hsl(130, 100%, 60%);
+  --cell-corner-bg: hsl(120, 80%, 6%);
+  --cell-corner-border: hsla(130, 100%, 50%, 0.3);
+
+  /* Board frame & center - virtual-reality */
+  --board-frame-from: hsla(130, 100%, 50%, 0.12);
+  --board-frame-to: hsla(120, 100%, 45%, 0.1);
+  --board-frame-glow: hsla(130, 100%, 50%, 0.3);
+  --board-frame-inner-shadow: hsla(120, 100%, 1%, 0.7);
+  --board-frame-border: var(--cyan);
+  --board-center-from: hsla(130, 60%, 10%, 0.95);
+  --board-center-to: hsla(120, 100%, 2%, 0.98);
+  --board-center-border: hsla(130, 100%, 50%, 0.1);
+  --board-mode-shadow: hsla(130, 100%, 50%, 0.25);
+
+  --background: hsl(120, 100%, 2%);
+  --foreground: hsl(120, 40%, 92%);
+  --card: hsl(130, 50%, 8%);
+  --card-foreground: hsl(120, 40%, 92%);
+  --popover: hsl(120, 80%, 4%);
+  --popover-foreground: hsl(120, 40%, 92%);
+  --primary: hsl(130, 100%, 50%);
+  --primary-foreground: hsl(120, 100%, 2%);
+  --secondary: hsl(70, 100%, 55%);
+  --secondary-foreground: hsl(120, 100%, 2%);
+  --muted: hsl(130, 40%, 18%);
+  --muted-foreground: hsl(130, 20%, 55%);
+  --accent: hsl(180, 60%, 50%);
+  --accent-foreground: hsl(120, 100%, 2%);
+  --destructive: hsl(0, 80%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsla(130, 100%, 50%, 0.3);
+  --input: hsla(130, 100%, 50%, 0.15);
+  --ring: hsl(130, 100%, 50%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-cyber: var(--font-cyber);
+  --font-sans: var(--font-sans);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer utilities {
+  .text-neon-cyan {
+    color: var(--cyan);
+    text-shadow:
+      0 0 5px var(--cyan-glow),
+      0 0 10px var(--cyan-glow),
+      0 0 20px var(--cyan);
+  }
+
+  .text-neon-pink {
+    color: var(--pink);
+    text-shadow:
+      0 0 5px var(--pink-glow),
+      0 0 10px var(--pink-glow),
+      0 0 20px var(--pink);
+  }
+
+  .text-neon-green {
+    color: var(--green);
+    text-shadow:
+      0 0 5px var(--green),
+      0 0 10px var(--green),
+      0 0 20px var(--green);
+  }
+
+  .text-neon-purple {
+    color: var(--purple);
+    text-shadow:
+      0 0 5px var(--purple),
+      0 0 10px var(--purple),
+      0 0 20px var(--purple);
+  }
+
+  .shadow-neon-cyan {
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--cyan) 40%, transparent),
+      0 0 16px color-mix(in srgb, var(--cyan) 20%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--cyan) 10%, transparent);
+  }
+
+  .shadow-neon-pink {
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--pink) 40%, transparent),
+      0 0 16px color-mix(in srgb, var(--pink) 20%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--pink) 10%, transparent);
+  }
+
+  .border-neon-cyan {
+    border: 1px solid var(--cyan);
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--cyan) 50%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--cyan) 10%, transparent);
+  }
+
+  .border-neon-pink {
+    border: 1px solid var(--pink);
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--pink) 50%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--pink) 10%, transparent);
+  }
+
+  .font-cyber {
+    font-family: var(--font-cyber);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== 安全區工具類 ===== */
+  .pt-safe-top { padding-top: var(--safe-top); }
+  .pb-safe-bottom { padding-bottom: var(--safe-bottom); }
+  .pl-safe-left { padding-left: var(--safe-left); }
+  .pr-safe-right { padding-right: var(--safe-right); }
+  .safe-area-bottom { padding-bottom: calc(12px + var(--safe-bottom)); }
+
+  .glitch-text {
+    animation: glitch 3s infinite;
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--cyan) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--cyan) 5%, transparent) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cyber-btn {
+    position: relative;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-cyber);
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 5%, transparent);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    clip-path: polygon(
+      10px 0,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+  }
+
+  .cyber-btn:hover {
+    background: color-mix(in srgb, var(--cyan) 15%, transparent);
+    box-shadow: 0 0 15px color-mix(in srgb, var(--cyan) 40%, transparent);
+    text-shadow: 0 0 8px var(--cyan-glow);
+  }
+
+  .cyber-btn:active {
+    transform: scale(0.98);
+  }
+
+  .cyber-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--cyan), 0 0 15px rgba(0, 255, 255, 0.6), inset 0 0 10px rgba(0, 255, 255, 0.1);
+    border-color: var(--cyan);
+  }
+
+  .cyber-btn-pink {
+    border-color: var(--pink);
+    color: var(--pink);
+    background: color-mix(in srgb, var(--pink) 5%, transparent);
+  }
+
+  .cyber-btn-pink:hover {
+    background: color-mix(in srgb, var(--pink) 15%, transparent);
+    box-shadow: 0 0 15px color-mix(in srgb, var(--pink) 40%, transparent);
+    text-shadow: 0 0 8px var(--pink-glow);
+  }
+
+  .cyber-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .cyber-btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    clip-path: polygon(
+      6px 0,
+      100% 0,
+      100% calc(100% - 6px),
+      calc(100% - 6px) 100%,
+      0 100%,
+      0 6px
+    );
+  }
+
+  .cyber-input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: color-mix(in srgb, var(--cyan) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    transition: all 0.2s;
+    outline: none;
+  }
+
+  .cyber-input:focus {
+    border-color: var(--cyan);
+    box-shadow:
+      0 0 12px color-mix(in srgb, var(--cyan) 50%, transparent),
+      0 0 24px color-mix(in srgb, var(--cyan) 20%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--cyan) 10%, transparent);
+    background: color-mix(in srgb, var(--cyan) 10%, transparent);
+  }
+
+  .cyber-input:focus-visible {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow:
+      0 0 0 1px var(--cyan),
+      0 0 15px rgba(0, 255, 255, 0.6),
+      0 0 30px rgba(0, 255, 255, 0.3),
+      inset 0 0 10px rgba(0, 255, 255, 0.1);
+  }
+
+  .cyber-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+  }
+
+  .cyber-input-group:focus-within {
+    border-color: var(--cyan);
+    box-shadow:
+      0 0 12px rgba(0, 255, 255, 0.5),
+      0 0 24px rgba(0, 255, 255, 0.2),
+      inset 0 0 10px rgba(0, 255, 255, 0.08);
+  }
+
+  .cyber-input-group-error {
+    border-color: var(--red);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  }
+
+  .cyber-input-group input {
+    width: 100%;
+    background: transparent;
+    outline: none;
+    color: var(--text-primary);
+  }
+
+  .cyber-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .cyber-card {
+    background: linear-gradient(
+      135deg,
+      var(--bg-card),
+      var(--bg-dark)
+    );
+    border: 1px solid color-mix(in srgb, var(--cyan) 20%, transparent);
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+
+  .cyber-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  }
+
+  /* ===== Theme-specific background effects ===== */
+  .theme-bg-effect {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.6;
+  }
+
+  /* Starry theme - twinkling stars */
+  [data-theme="starry"] .theme-bg-effect {
+    background-image:
+      radial-gradient(1px 1px at 20px 30px, hsl(210, 80%, 90%), transparent),
+      radial-gradient(1px 1px at 40px 70px, hsl(45, 100%, 85%), transparent),
+      radial-gradient(1.5px 1.5px at 90px 40px, hsl(210, 80%, 95%), transparent),
+      radial-gradient(1px 1px at 130px 80px, hsl(45, 100%, 80%), transparent),
+      radial-gradient(1.5px 1.5px at 160px 120px, hsl(200, 70%, 90%), transparent),
+      radial-gradient(1px 1px at 200px 50px, hsl(45, 100%, 75%), transparent),
+      radial-gradient(1px 1px at 50px 160px, hsl(210, 80%, 85%), transparent),
+      radial-gradient(1.5px 1.5px at 250px 180px, hsl(220, 60%, 92%), transparent),
+      radial-gradient(1px 1px at 300px 90px, hsl(45, 100%, 85%), transparent),
+      radial-gradient(1px 1px at 350px 140px, hsl(210, 80%, 88%), transparent),
+      radial-gradient(1.5px 1.5px at 100px 220px, hsl(45, 100%, 70%), transparent),
+      radial-gradient(1px 1px at 280px 250px, hsl(210, 80%, 90%), transparent);
+    background-size: 400px 300px;
+    animation: star-twinkle 4s ease-in-out infinite;
+  }
+
+  /* Ocean theme - wave effect */
+  [data-theme="ocean"] .theme-bg-effect {
+    background:
+      radial-gradient(ellipse at 20% 90%, color-mix(in srgb, var(--cyan) 15%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, color-mix(in srgb, var(--cyan) 10%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 95%, color-mix(in srgb, var(--pink) 8%, transparent) 0%, transparent 40%);
+    animation: ocean-wave 8s ease-in-out infinite;
+  }
+
+  /* Ancient theme - paper texture */
+  [data-theme="ancient"] .theme-bg-effect {
+    background-image:
+      radial-gradient(ellipse at 30% 20%, color-mix(in srgb, hsl(35, 30%, 60%) 20%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, color-mix(in srgb, hsl(30, 25%, 55%) 15%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, color-mix(in srgb, hsl(40, 35%, 65%) 18%, transparent) 0%, transparent 40%);
+    opacity: 0.4;
+  }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes ocean-wave {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-20px) translateY(-5px);
+  }
+}
+
+@keyframes glitch {
+  0%, 100% { text-shadow: 0 0 5px var(--cyan-glow), 0 0 10px var(--cyan-glow); transform: translate(0); }
+  20% { text-shadow: 2px 0 var(--pink), -2px 0 var(--cyan); }
+  40% { text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan); transform: translate(-1px, 1px); }
+  60% { text-shadow: 1px 0 var(--pink), -1px 0 var(--cyan); }
+  80% { text-shadow: -1px 0 var(--pink), 1px 0 var(--cyan); transform: translate(1px, -1px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: brightness(1);
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 20px currentColor;
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+  50% {
+    filter: brightness(1.2);
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+}
+
+@keyframes scanline-shift {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+@keyframes scan-sweep {
+  0%, 100% { transform: translateY(-20vh); opacity: 0.3; }
+  50% { transform: translateY(100vh); opacity: 0.6; }
+}
+
+@keyframes float-particle-cyan {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateY(-30px) translateX(15px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-60px) translateX(-10px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-30px) translateX(20px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-particle-pink {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateY(-20px) translateX(-15px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-50px) translateX(10px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-25px) translateX(-20px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px var(--cyan-glow),
+      0 0 20px var(--cyan-glow),
+      0 0 40px var(--cyan-glow),
+      0 0 80px rgba(0, 255, 255, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow:
+      0 0 15px var(--cyan-glow),
+      0 0 30px var(--cyan-glow),
+      0 0 60px var(--cyan-glow),
+      0 0 100px rgba(0, 255, 255, 0.7);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes sweep-h {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes turn-timer-pulse {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px var(--red)) drop-shadow(0 0 8px var(--red));
+  }
+  50% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 8px var(--red)) drop-shadow(0 0 16px var(--red));
+  }
+}
+
+@keyframes token-glow {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 4px currentColor, 0 0 8px currentColor;
+  }
+  50% {
+    filter: brightness(1.3);
+    box-shadow: 0 0 8px currentColor, 0 0 16px currentColor, 0 0 24px currentColor;
+  }
+}
+
+.token-glow {
+  animation: token-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes dice-roll {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan), inset 0 0 10px var(--cyan);
+  }
+  25% {
+    transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg) scale(1.08);
+    box-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink), inset 0 0 12px var(--pink);
+  }
+  50% {
+    transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg) scale(1);
+    box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan), inset 0 0 10px var(--cyan);
+  }
+  75% {
+    transform: rotateX(540deg) rotateY(270deg) rotateZ(135deg) scale(1.08);
+    box-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink), inset 0 0 12px var(--pink);
+  }
+  100% {
+    transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg) scale(1);
+    box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan), inset 0 0 10px var(--cyan);
+  }
+}
+
+@keyframes dice-land {
+  0% { transform: rotateX(0deg) rotateY(0deg) scale(0.8); opacity: 0.6; }
+  50% { transform: rotateX(10deg) rotateY(15deg) scale(1.25); opacity: 1; }
+  70% { transform: rotateX(-5deg) rotateY(-8deg) scale(0.95); }
+  100% { transform: rotateX(0deg) rotateY(0deg) scale(1.15); opacity: 1; }
+}
+
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 由上方滑入（用於離線提示橫幅等） */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes tutorial-highlight-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--cyan), 0 0 20px color-mix(in srgb, var(--cyan) 50%, transparent), inset 0 0 10px color-mix(in srgb, var(--cyan) 20%, transparent);
+    border-color: var(--cyan);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--cyan), 0 0 50px color-mix(in srgb, var(--cyan) 70%, transparent), inset 0 0 20px color-mix(in srgb, var(--cyan) 40%, transparent);
+    border-color: var(--cyan-glow);
+  }
+}
+
+.tutorial-highlight-glow {
+  animation: tutorial-highlight-pulse 1.8s ease-in-out infinite;
+}
+
+/* ===== 匹配动画 ===== */
+
+@keyframes neon-ring-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.neon-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.neon-ring::before,
+.neon-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.neon-ring::before {
+  border-top-color: var(--cyan);
+  border-right-color: var(--cyan);
+  box-shadow: 0 0 15px var(--cyan), inset 0 0 15px color-mix(in srgb, var(--cyan) 30%, transparent);
+  animation: neon-ring-spin 1.2s linear infinite;
+}
+
+.neon-ring::after {
+  border-bottom-color: var(--pink);
+  border-left-color: var(--pink);
+  box-shadow: 0 0 15px var(--pink), inset 0 0 15px color-mix(in srgb, var(--pink) 30%, transparent);
+  animation: neon-ring-spin 1.8s linear infinite reverse;
+  inset: 12px;
+}
+
+@keyframes match-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--cyan) 50%, transparent),
+                0 0 40px color-mix(in srgb, var(--pink) 30%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 40px color-mix(in srgb, var(--cyan) 80%, transparent),
+                0 0 80px color-mix(in srgb, var(--pink) 50%, transparent);
+  }
+}
+
+.match-card-pulse {
+  animation: match-pulse 2s ease-in-out infinite;
+}
+
+/* 迷你游戏格子脉动 */
+@keyframes minigame-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.06);
+    filter: brightness(1.3);
+  }
+}
+
+/* 天气图标浮动 */
+@keyframes weather-icon-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* 天气条呼吸发光 */
+@keyframes weather-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--weather-color) 35%, transparent),
+                inset 0 0 10px color-mix(in srgb, var(--weather-color) 12%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--weather-color) 55%, transparent),
+                inset 0 0 14px color-mix(in srgb, var(--weather-color) 20%, transparent);
+  }
+}
+
+/* 通脹脈衝發光 */
+@keyframes inflation-pulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--orange) 40%, transparent),
+                inset 0 0 3px color-mix(in srgb, var(--orange) 20%, transparent);
+  }
+  50% {
+    filter: brightness(1.2);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--orange) 60%, transparent),
+                inset 0 0 6px color-mix(in srgb, var(--orange) 30%, transparent);
+  }
+}
+
+/* Modal 彈入動畫 */
+@keyframes modal-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 動態棋盤格子效果脈動 */
+@keyframes cell-effect-pulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 8px var(--cell-effect-color), 0 0 16px var(--cell-effect-color), inset 0 0 6px var(--cell-effect-color);
+  }
+  50% {
+    filter: brightness(1.2);
+    box-shadow: 0 0 12px var(--cell-effect-color), 0 0 24px var(--cell-effect-color), inset 0 0 10px var(--cell-effect-color);
+  }
+}
+
+.cell-effect-pulse {
+  animation: cell-effect-pulse 1.8s ease-in-out infinite;
+}
+
+/* NPC 圖標脈動發光 */
+@keyframes npc-pulse {
+  0%, 100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.3);
+    transform: scale(1.1);
+  }
+}
+
+/* 洪水波紋動畫 */
+@keyframes wave-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-2px) scale(1.05);
+  }
+}
+
+.wave-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 150, 255, 0.3) 0%, rgba(0, 100, 200, 0.5) 50%, rgba(0, 150, 255, 0.3) 100%);
+  animation: wave-pulse 2s ease-in-out infinite;
+  z-index: 15;
+}
+
+.wave-overlay::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 8px rgba(100, 200, 255, 0.8);
+  animation: wave-rise 3s ease-in-out infinite;
+}
+
+.wave-overlay::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 6px rgba(100, 200, 255, 0.6);
+  animation: wave-rise 4s ease-in-out infinite 1s;
+}
+
+@keyframes wave-rise {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 0.9;
+  }
+}
+
+/* 季節圖標浮動 */
+@keyframes season-icon-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.season-icon-float {
+  animation: season-icon-float 3s ease-in-out infinite;
+}
+
+/* 季節顯示進入動畫 */
+@keyframes season-display-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.season-display-enter {
+  animation: season-display-enter 0.4s ease-out;
+}
+
+/* 災難警報閃爍 */
+@keyframes alert-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.alert-blink {
+  animation: alert-blink 1s ease-in-out infinite;
+}
+
+/* 災難彈窗震動 */
+@keyframes disaster-modal-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.disaster-modal-shake {
+  animation: disaster-modal-shake 0.6s ease-out, fade-in 0.2s ease-out;
+}
+
+/* 紅色警戒條紋移動 */
+@keyframes stripe-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 34px 0;
+  }
+}
+
+/* 聲望進度條發光 */
+.reputation-bar-fill {
+  transition: width 0.6s ease-out, background-color 0.3s;
+}
+
+.reputation-bar-fill.low {
+  background: linear-gradient(90deg, var(--red), hsl(15, 100%, 55%));
+  box-shadow: 0 0 6px var(--red), inset 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.reputation-bar-fill.mid {
+  background: linear-gradient(90deg, var(--yellow), hsl(45, 100%, 60%));
+  box-shadow: 0 0 6px var(--yellow), inset 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.reputation-bar-fill.high {
+  background: linear-gradient(90deg, var(--green), hsl(160, 100%, 55%));
+  box-shadow: 0 0 6px var(--green), inset 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* ========== 棋子皮膚樣式 ========== */
+
+.pawn-skin.pawn-skin-default {
+  /* 保持原樣 */
+}
+
+/* 機甲皮膚：六邊形 + 金屬漸層 */
+.pawn-skin.pawn-skin-mecha {
+  border-radius: 0 !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(135deg, #64748b, #1e293b, #475569) !important;
+  border: 1px solid var(--pawn-color, var(--cyan)) !important;
+  box-shadow: 0 0 4px var(--pawn-color, var(--cyan)), 0 0 10px var(--pawn-color, var(--cyan)) !important;
+}
+
+.pawn-skin.pawn-skin-mecha .pawn-skin-number {
+  color: var(--pawn-color, var(--cyan)) !important;
+  text-shadow: 0 0 4px var(--pawn-color, var(--cyan));
+}
+
+.pawn-skin-mecha-overlay {
+  pointer-events: none;
+}
+
+.pawn-skin.pawn-skin-mecha .pawn-skin-mecha-overlay::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 30%;
+  transform: translate(-50%, -50%);
+  background: var(--pawn-color, var(--cyan));
+  border-radius: 1px;
+  box-shadow: 0 0 4px var(--pawn-color, var(--cyan));
+}
+
+/* 幽浮皮膚：橢圓碟身 + 半圓穹頂 */
+.pawn-skin.pawn-skin-ufo {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.pawn-skin-ufo-overlay {
+  pointer-events: none;
+}
+
+.pawn-skin.pawn-skin-ufo .pawn-skin-ufo-overlay::before {
+  content: '';
+  position: absolute;
+  top: 35%;
+  left: 0;
+  width: 100%;
+  height: 35%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #94a3b8, #334155);
+  border: 1px solid var(--pawn-color, var(--cyan));
+  box-shadow: 0 0 4px var(--pawn-color, var(--cyan));
+}
+
+.pawn-skin.pawn-skin-ufo .pawn-skin-ufo-overlay::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  width: 50%;
+  height: 35%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(180deg, var(--pawn-color, var(--cyan)), rgba(0, 255, 255, 0.3));
+  border: 1px solid var(--pawn-color, var(--cyan));
+  border-bottom: none;
+  box-shadow: 0 -2px 6px var(--pawn-color, var(--cyan));
+}
+
+.pawn-skin.pawn-skin-ufo .pawn-skin-number {
+  position: relative;
+  z-index: 2;
+  color: var(--pawn-color, var(--cyan)) !important;
+  text-shadow: 0 0 4px var(--pawn-color, var(--cyan));
+}
+
+/* 龍珠皮膚：圓形 + 發光星芒 */
+.pawn-skin.pawn-skin-dragon {
+  background: radial-gradient(circle at 30% 30%, #fef3c7, #facc15, #b45309) !important;
+  border: 1px solid #facc15 !important;
+  box-shadow: 0 0 6px #facc15, 0 0 12px rgba(250, 204, 21, 0.6) !important;
+}
+
+.pawn-skin.pawn-skin-dragon .pawn-skin-number {
+  color: #7c2d12 !important;
+  font-weight: 900;
+}
+
+.pawn-skin-dragon-overlay {
+  pointer-events: none;
+}
+
+.pawn-skin.pawn-skin-dragon .pawn-skin-dragon-overlay::before {
+  content: '★';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: #dc2626;
+  text-shadow: 0 0 2px #fca5a5;
+  z-index: 1;
+  display: none;
+}
+
+/* ========== 骰子皮膚樣式 ========== */
+
+/* 預設皮膚（保持原樣） */
+.dice-face.dice-skin-default {
+  background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--cyan) 40%, transparent);
+}
+
+.dice-face.dice-skin-default .dice-dot {
+  background-color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow), 0 0 16px var(--cyan);
+}
+
+/* 黃金皮膚 */
+.dice-face.dice-skin-gold {
+  background: linear-gradient(135deg, #fef3c7, #facc15, #d97706);
+  border: 2px solid #b45309;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.dice-face.dice-skin-gold .dice-dot {
+  background-color: #78350f;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 霓虹皮膚 */
+.dice-face.dice-skin-neon {
+  background: linear-gradient(135deg, #0a0a1a, #1a0a2e);
+  border: 2px solid var(--pink);
+  box-shadow: 0 0 20px var(--pink-glow), inset 0 0 15px rgba(255, 0, 180, 0.15);
+}
+
+.dice-face.dice-skin-neon .dice-dot {
+  background-color: var(--pink);
+  box-shadow: 0 0 10px var(--pink-glow), 0 0 20px var(--pink);
+}
+
+/* 像素皮膚 */
+.dice-face.dice-skin-pixel {
+  background: #1e1b4b;
+  border: 4px solid #22c55e;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 #166534;
+  image-rendering: pixelated;
+}
+
+.dice-face.dice-skin-pixel .dice-dot {
+  background-color: #22c55e;
+  border-radius: 0;
+  box-shadow: none;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* 骰子結果時發光效果（各皮膚不同） */
+.dice-face.dice-skin-default.dice-result {
+  box-shadow: 0 0 30px var(--cyan), 0 0 60px color-mix(in srgb, var(--cyan) 50%, transparent);
+}
+
+.dice-face.dice-skin-gold.dice-result {
+  box-shadow: 0 0 30px #facc15, 0 0 60px rgba(250, 204, 21, 0.6);
+}
+
+.dice-face.dice-skin-neon.dice-result {
+  box-shadow: 0 0 30px var(--pink), 0 0 60px rgba(255, 0, 180, 0.5);
+}
+
+.dice-face.dice-skin-pixel.dice-result {
+  box-shadow: 6px 6px 0 #166534, 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
+/* ========== 彈窗彈出動畫 ========== */
+
+@keyframes modal-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ========== 棋子跳躍動畫 ========== */
+@keyframes pawn-jump {
+  0% {
+    transform: translateZ(0) translateY(0) scale(1);
+  }
+  50% {
+    transform: translateZ(-30px) translateY(-12px) scale(1.15);
+  }
+  75% {
+    transform: translateZ(-5px) translateY(2px) scale(0.92);
+  }
+  100% {
+    transform: translateZ(0) translateY(0) scale(1);
+  }
+}
+
+@keyframes pawn-trail {
+  0% { opacity: 0.6; transform: scale(1); filter: blur(4px); }
+  100% { opacity: 0; transform: scale(0.6); filter: blur(8px); }
+}
+
+/* ========== 字體大小縮放 ========== */
+
+html {
+  font-size: calc(16px * var(--font-scale));
+  touch-action: manipulation;
+}
+
+body {
+  touch-action: manipulation;
+}
+
+/* ========== 色盲模式 ========== */
+
+/* 玩家棋子形狀區分 */
+[data-colorblind="true"] .pawn-skin[data-player-index="0"] {
+  border-radius: 50%; /* 圓形 - 玩家1 */
+}
+
+[data-colorblind="true"] .pawn-skin[data-player-index="1"] {
+  border-radius: 2px; /* 方形 - 玩家2 */
+}
+
+[data-colorblind="true"] .pawn-skin[data-player-index="2"] {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* 三角形 - 玩家3 */
+  border-radius: 0;
+}
+
+[data-colorblind="true"] .pawn-skin[data-player-index="3"] {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* 菱形 - 玩家4 */
+  border-radius: 0;
+}
+
+[data-colorblind="true"] .pawn-skin[data-player-index="4"] {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); /* 六邊形 - 玩家5 */
+  border-radius: 0;
+}
+
+[data-colorblind="true"] .pawn-skin[data-player-index="5"] {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); /* 星形 - 玩家6 */
+  border-radius: 0;
+}
+
+/* 色盲模式棋子編號位置微調（適配非圓形） */
+[data-colorblind="true"] .pawn-skin[data-player-index="2"] .pawn-skin-number,
+[data-colorblind="true"] .pawn-skin[data-player-index="3"] .pawn-skin-number,
+[data-colorblind="true"] .pawn-skin[data-player-index="4"] .pawn-skin-number,
+[data-colorblind="true"] .pawn-skin[data-player-index="5"] .pawn-skin-number {
+  transform: translateY(1px);
+}
+
+/* 地產顏色組紋理區分（10組） */
+[data-colorblind="true"] [data-set-id="set1"] .cell-set-bar {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.3) 2px,
+    rgba(255, 255, 255, 0.3) 4px
+  ) !important;
+}
+
+[data-colorblind="true"] [data-set-id="set2"] .cell-set-bar {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.4) 1px,
+    transparent 1px
+  ) !important;
+  background-size: 4px 4px;
+}
+
+[data-colorblind="true"] [data-set-id="set3"] .cell-set-bar {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.3) 2px,
+    rgba(255, 255, 255, 0.3) 4px
+  ) !important;
+}
+
+[data-colorblind="true"] [data-set-id="set4"] .cell-set-bar {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.3) 2px,
+    rgba(255, 255, 255, 0.3) 4px
+  ) !important;
+}
+
+[data-colorblind="true"] [data-set-id="set5"] .cell-set-bar {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.3) 2px,
+    rgba(255, 255, 255, 0.3) 4px
+  ) !important;
+}
+
+[data-colorblind="true"] [data-set-id="set6"] .cell-set-bar {
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.25) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.25) 75%);
+  background-size: 6px 6px;
+  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+}
+
+[data-colorblind="true"] [data-set-id="set7"] .cell-set-bar {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.4) 2px,
+    transparent 2px
+  ) !important;
+  background-size: 6px 6px;
+}
+
+[data-colorblind="true"] [data-set-id="set8"] .cell-set-bar {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+[data-colorblind="true"] [data-set-id="set9"] .cell-set-bar {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.3) 3px,
+    rgba(0, 0, 0, 0.3) 6px
+  ) !important;
+}
+
+[data-colorblind="true"] [data-set-id="set10"] .cell-set-bar {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px);
+  background-size: 6px 4px;
+}
+
+/* 色盲模式霓虹開關提示 */
+[data-colorblind="true"] .colorblind-indicator {
+  display: inline-block;
+}
+
+/* 色盲模式：金額增減圖示前綴 */
+[data-colorblind="true"] .money-gain::before,
+[data-colorblind="true"] .player-money.gain::before {
+  content: "\2191";
+  display: inline-block;
+  margin-right: 0.25em;
+  color: var(--green);
+  font-weight: bold;
+}
+
+[data-colorblind="true"] .money-loss::before,
+[data-colorblind="true"] .player-money.loss::before {
+  content: "\2193";
+  display: inline-block;
+  margin-right: 0.25em;
+  color: var(--red);
+  font-weight: bold;
+}
+
+/* 色盲模式：勝負狀態形狀前綴 */
+[data-colorblind="true"] .status-win::before,
+[data-colorblind="true"] .result-victory::before {
+  content: "\2713";
+  display: inline-block;
+  margin-right: 0.3em;
+  color: var(--green);
+  font-weight: bold;
+}
+
+[data-colorblind="true"] .status-lose::before,
+[data-colorblind="true"] .result-defeat::before,
+[data-colorblind="true"] .status-bankrupt::before {
+  content: "\2717";
+  display: inline-block;
+  margin-right: 0.3em;
+  color: var(--red);
+  font-weight: bold;
+}
+
+/* 色盲模式：禁用按鈕虛線邊框區分 */
+html[data-colorblind="true"] .cyber-btn:disabled {
+  border-style: dashed;
+}
+
+/* ========== 動畫：震動 / 金幣 / 建築 / 卡牌 / 頁面進入 ========== */
+
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 2px); }
+  40% { transform: translate(4px, -2px); }
+  60% { transform: translate(-3px, -3px); }
+  80% { transform: translate(3px, 3px); }
+}
+.screen-shake {
+  animation: screen-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes coin-fly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--coin-fly-x, 0), var(--coin-fly-y, -60px)) scale(0.6); opacity: 0; }
+}
+
+@keyframes build-pop {
+  0% { transform: scale(0) translateY(10px); opacity: 0; }
+  60% { transform: scale(1.2) translateY(-3px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes card-flip-in {
+  0% { transform: rotateY(90deg) scale(0.9); opacity: 0; }
+  100% { transform: rotateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes slide-page-enter {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: slide-page-enter 0.25s ease-out;
+}
+
+[data-animation="off"] .page-enter {
+  animation: none !important;
+}
+
+/* ========== 金錢浮動動畫 ========== */
+@keyframes coin-float-up {
+  0% { opacity: 0; transform: translate(-50%, -50%) translateY(0) scale(0.6); }
+  20% { opacity: 1; transform: translate(-50%, -50%) translateY(-8px) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-40px) scale(1); }
+}
+.coin-float-anim {
+  animation: coin-float-up 800ms ease-out forwards;
+}
+
+/* ========== 畫面震動 ========== */
+@keyframes screen-shake-anim {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, -2px); }
+  20% { transform: translate(4px, 2px); }
+  30% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(-0.5px, 0.5px); }
+}
+.screen-shake {
+  animation: screen-shake-anim 300ms ease-in-out;
+}
+
+/* ========== 動畫開關降級：關閉時所有動畫瞬間完成 ========== */
+[data-animation="off"] * {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* ========== 最小觸控區域：確保可點擊元素不小於 44x44px（移動端） ========== */
+@media (max-width: 767px) {
+  .cyber-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  button {
+    min-height: 44px;
+  }
+}

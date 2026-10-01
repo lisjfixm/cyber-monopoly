@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p1",
+      "description": "锦标赛页 /tournament - 验证标题可见、内容非空"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "地图编辑器页 /map-editor - 验证标题可见、内容非空"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "卡牌编辑器页 /card-editor - 验证标题可见、内容非空"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "Mod 管理器页 /mods - 验证标题可见、内容非空"
+    },
+    {
+      "id": 5,
+      "priority": "p2",
+      "description": "回放页 /replay - 验证标题可见、内容非空"
+    }
+  ]
+}

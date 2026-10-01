@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"首頁渲染正常+無JS錯誤"},{"id":2,"priority":"p0","description":"人機對戰經典模式：從設置頁開始遊戲，進入棋盤可擲骰"},{"id":3,"priority":"p0","description":"人機對戰快速模式：進入棋盤可擲骰"},{"id":4,"priority":"p0","description":"人機對戰瘋狂模式：進入棋盤可擲骰"},{"id":5,"priority":"p1","description":"遊戲中打開各類系統面板（交易/銀行/道具/任務/聯盟/拍賣/技能）"},{"id":6,"priority":"p1","description":"手機端 375px 首頁布局正常"}]}

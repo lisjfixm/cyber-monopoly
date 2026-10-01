@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开模式选择页 /mode-select，验证页面标题可见、23种模式卡片能正常显示并可滚动浏览"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "打开图鉴页 /codex，验证页面标题可见、5个以上分类标签存在且能切换"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "打开 GM 后台页 /gm-panel，验证页面能正常渲染且无白屏"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "打开成就页 /achievements，验证成就殿堂标题可见、9个分类标签存在、至少40个成就卡片"
+    },
+    {
+      "id": 5,
+      "priority": "p2",
+      "description": "打开剧情模式页 /story，验证8关关卡列表能正常显示"
+    }
+  ]
+}

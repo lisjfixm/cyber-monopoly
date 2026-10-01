@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "社交中心→观战大厅，房间列表正常显示"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "观战大厅筛选：排位赛/导师/休闲模式筛选正常切换"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "进入观战房间→总览Tab能看到玩家资产排行"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "观战视角切换：左右切按钮切换不同玩家视角"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "好友中心：5个Tab切换正常，好友列表显示6个以上好友"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开 /social 社交中心，检查控制台错误与页面渲染"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "打开 /login 登录页，检查控制台错误与页面渲染"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "打开 /mode-select 模式选择页，检查渲染内容"
+    }
+  ]
+}

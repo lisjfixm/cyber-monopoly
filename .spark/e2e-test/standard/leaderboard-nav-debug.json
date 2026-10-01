@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开首页，点击排行榜入口（找排行榜/leaderboard相关按钮），跳转后截图确认页面内容"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "直接访问 /leaderboard 路径，等待5秒后截图，查看页面是否有任何可见元素"
+    }
+  ]
+}

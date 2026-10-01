@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "打开首页，页面能正常渲染，不白屏"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "首页能看到签到入口按钮或弹窗，签到UI完整显示"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "签到弹窗中显示7天奖励列表、今日可签到状态，布局不溢出"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "点击签到按钮后按钮状态变化，不出现 404 报错"
+    },
+    {
+      "id": 5,
+      "priority": "p2",
+      "description": "签到成功后显示已签到状态和获得的奖励"
+    }
+  ]
+}

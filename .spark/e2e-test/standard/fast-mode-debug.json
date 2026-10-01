@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"快速模式崩潰診斷：從 ai-setup 進入快速模式遊戲，選擇職業後捕獲完整 console error"},{"id":2,"priority":"p0","description":"經典模式完整一局到勝負：用 GM/調試手段加速讓一名玩家破產，驗證結算畫面"}]}

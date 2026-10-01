@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p1",
+      "description": "管理后台页 /admin - 验证标题可见、内容非空"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "社交中心页 /social - 验证标题可见、内容非空"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "旁观页 /spectate - 验证标题可见、内容非空"
+    },
+    {
+      "id": 4,
+      "priority": "p2",
+      "description": "AI 演示页 /ai-demo - 验证标题可见、内容非空"
+    },
+    {
+      "id": 5,
+      "priority": "p2",
+      "description": "社区地图页 /community-maps - 验证标题可见、内容非空"
+    }
+  ]
+}

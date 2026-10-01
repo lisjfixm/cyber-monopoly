@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"打开首页，主菜单加载完成，显示标题和主要模式按钮"},{"id":2,"priority":"p0","description":"进入人机模式（AI对战），输入昵称选经典模式，成功进入职业选择页"},{"id":3,"priority":"p0","description":"职业选择弹窗：能看到X按钮、返回按钮，点X关闭后回到上一步"},{"id":4,"priority":"p1","description":"选职业确认后进入游戏棋盘，棋盘正常显示，玩家信息面板可见"},{"id":5,"priority":"p1","description":"掷骰后游戏正常推进，不卡死，玩家位置和金钱变化合理"}]}

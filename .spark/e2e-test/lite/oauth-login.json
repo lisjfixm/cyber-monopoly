@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"打開 /login 頁面，驗證無白屏、能看到「登入/註冊」tab、第三方登入區域與按鈕、訪客入口按鈕"},{"id":2,"priority":"p0","description":"打開 / 首頁，驗證無白屏、能看到「賽博大富翁」標題與主功能按鈕"}]}

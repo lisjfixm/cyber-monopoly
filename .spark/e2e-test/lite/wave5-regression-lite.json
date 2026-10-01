@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页 / 渲染正常，导航可见，无白屏"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "数据统计看板 /stats：8张数据卡+图表区域渲染，无白屏无报错"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "成就殿堂 /achievements：分类Tab+成就卡片+进度条渲染正常"
+    },
+    {
+      "id": 4,
+      "priority": "p0",
+      "description": "收藏图鉴 /collection：分类Tab+收集进度条+奖励渲染正常"
+    },
+    {
+      "id": 5,
+      "priority": "p0",
+      "description": "排行榜 /leaderboard：9个榜单Tab+列表+我的排名渲染正常"
+    },
+    {
+      "id": 6,
+      "priority": "p0",
+      "description": "每日挑战 /daily-challenge：4个Tab+任务卡片+签到渲染正常"
+    },
+    {
+      "id": 7,
+      "priority": "p1",
+      "description": "个人资料 /profile：信息卡片+成就点数显示正常"
+    },
+    {
+      "id": 8,
+      "priority": "p1",
+      "description": "人机对战 /ai-setup：模式选择页面渲染正常，无白屏"
+    }
+  ]
+}

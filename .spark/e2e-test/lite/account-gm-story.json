@@ -1,0 +1,1 @@
+{"cases":[{"id":1,"priority":"p0","description":"首頁正常加載，顯示標題「赛博大富翁」與主要按鈕"},{"id":2,"priority":"p1","description":"劇情模式頁面可打開，顯示10個關卡列表"},{"id":3,"priority":"p1","description":"登入註冊頁面可打開，顯示「登入」「註冊」分頁籤"},{"id":4,"priority":"p2","description":"GM面板密碼驗證頁可打開，顯示紅色警告風格"},{"id":5,"priority":"p1","description":"首頁右上角用戶功能選單可打開，顯示遊客狀態"}]}

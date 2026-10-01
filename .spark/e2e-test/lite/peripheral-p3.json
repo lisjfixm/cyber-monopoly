@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p1",
+      "description": "打开個人資料/profile，验证非404"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "打开好友/friends，验证非404"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "打开公會/guild，验证非404"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "打开郵件/mail，验证非404"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "打开公告/announcements，验证非404"
+    }
+  ]
+}

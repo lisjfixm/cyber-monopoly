@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "遊戲頁經典模式加載，棋盤與玩家面板正常渲染"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "遊戲頁快速模式加載，棋盤與玩家面板正常渲染"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "遊戲頁生存模式加載，生命值UI正常顯示"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "遊戲頁黑暗模式加載，對手資訊隱藏效果正常"
+    }
+  ]
+}

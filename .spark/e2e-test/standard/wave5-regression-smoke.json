@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页加载不白屏，导航入口可见（排行榜/每日挑战/统计/成就/收藏/个人资料）"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "数据统计看板 /stats：8张数据卡渲染，胜率折线图+资产饼图不空白，6个分类区块都显示"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "成就殿堂 /achievements：49个成就分8类Tab切换正常，稀有度颜色、进度条显示"
+    },
+    {
+      "id": 4,
+      "priority": "p0",
+      "description": "收藏图鉴 /collection：10个分类Tab切换正常，总收集百分比进度条、收集奖励条目显示"
+    },
+    {
+      "id": 5,
+      "priority": "p0",
+      "description": "排行榜 /leaderboard：9个榜单Tab切换正常，我的排名高亮，周/月榜重置时间+奖励区块"
+    },
+    {
+      "id": 6,
+      "priority": "p0",
+      "description": "每日挑战 /daily-challenge：每日/每周任务进度条+领奖按钮、签到7格、活动日历+限时模式"
+    },
+    {
+      "id": 7,
+      "priority": "p1",
+      "description": "个人资料 /profile：总成就点数显示正常"
+    },
+    {
+      "id": 8,
+      "priority": "p1",
+      "description": "经典游戏 /ai-setup → 人机模式开局、掷骰、买地、结算流程不崩"
+    }
+  ]
+}

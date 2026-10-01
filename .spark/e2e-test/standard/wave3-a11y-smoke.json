@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页正常加载，所有按钮文字为繁體中文"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "设置弹窗可打开，字体大小四档切换（小/中/大/超大）即时生效"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "键盘 Tab 导航：首页主按钮有可见焦点态"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "Esc 键可关闭设置弹窗和帮助中心弹窗"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "色盲模式开关可切换，视觉有明显区分"
+    }
+  ]
+}

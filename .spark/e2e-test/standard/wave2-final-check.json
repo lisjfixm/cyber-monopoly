@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "经典模式基础流程：开局→买地→过路费→不崩溃"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "游戏区格触发迷你游戏弹窗，10种游戏列表可见"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "期货面板、世界观面板、保釋按钮均可打开"
+    }
+  ]
+}

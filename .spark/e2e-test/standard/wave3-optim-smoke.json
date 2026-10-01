@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页正常加载：标题+粒子背景+底部导航栏可见"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "底部导航可切换到社交和我的页面，页面不白屏"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "经典游戏开局：棋盘在上+折叠按钮可见+掷骰子按钮可点"
+    },
+    {
+      "id": 4,
+      "priority": "p0",
+      "description": "掷骰子动画正常，棋子移动，游戏不崩溃"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "设置弹窗动画开关可切换，关闭后页面不崩"
+    }
+  ]
+}

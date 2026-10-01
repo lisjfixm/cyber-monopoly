@@ -1,0 +1,84 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p0",
+      "description": "首页 / ：主菜单按钮完整渲染，无白屏无JS错误"
+    },
+    {
+      "id": 2,
+      "priority": "p0",
+      "description": "模式選擇 /mode-select ：23種模式卡片渲染，可滚动浏览"
+    },
+    {
+      "id": 3,
+      "priority": "p0",
+      "description": "人機對戰 /ai-setup ：昵称输入+模式选择渲染正常"
+    },
+    {
+      "id": 4,
+      "priority": "p0",
+      "description": "劇情模式 /story ：关卡列表渲染正常"
+    },
+    {
+      "id": 5,
+      "priority": "p0",
+      "description": "錦標賽 /tournament ：赛程/报名区域渲染正常"
+    },
+    {
+      "id": 6,
+      "priority": "p0",
+      "description": "排行榜 /leaderboard ：9个榜单Tab+排名列表完整渲染"
+    },
+    {
+      "id": 7,
+      "priority": "p0",
+      "description": "個人資料 /profile ：信息卡片+成就点数渲染正常"
+    },
+    {
+      "id": 8,
+      "priority": "p0",
+      "description": "成就殿堂 /achievements ：8个分类Tab+成就卡片+进度条正常"
+    },
+    {
+      "id": 9,
+      "priority": "p0",
+      "description": "收藏圖鑑 /collection ：10个分类Tab+收集进度条正常（重点）"
+    },
+    {
+      "id": 10,
+      "priority": "p0",
+      "description": "圖鑑 /codex ：图鉴内容渲染，无白屏（重点）"
+    },
+    {
+      "id": 11,
+      "priority": "p0",
+      "description": "數據統計 /stats ：8区块+图表渲染，无空白"
+    },
+    {
+      "id": 12,
+      "priority": "p0",
+      "description": "每日挑戰 /daily-challenge ：任务/签到/活动渲染正常"
+    },
+    {
+      "id": 13,
+      "priority": "p1",
+      "description": "社交中心 /social ：好友/战队/聊天入口渲染正常"
+    },
+    {
+      "id": 14,
+      "priority": "p1",
+      "description": "登錄 /login ：登录表单渲染正常"
+    },
+    {
+      "id": 15,
+      "priority": "p1",
+      "description": "地圖編輯器 /map-editor ：编辑器画布+工具栏渲染正常"
+    },
+    {
+      "id": 16,
+      "priority": "p1",
+      "description": "GM面板 /gm-panel ：管理后台菜单渲染正常"
+    }
+  ]
+}

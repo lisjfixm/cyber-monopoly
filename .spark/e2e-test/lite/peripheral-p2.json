@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "priority": "p1",
+      "description": "打开剧情模式/story，验证非404，有关卡列表内容"
+    },
+    {
+      "id": 2,
+      "priority": "p1",
+      "description": "打开收藏页/collection，验证非404，有收藏内容"
+    },
+    {
+      "id": 3,
+      "priority": "p1",
+      "description": "打开戰令/battlepass，验证非404"
+    },
+    {
+      "id": 4,
+      "priority": "p1",
+      "description": "打开排位/ranked，验证非404"
+    },
+    {
+      "id": 5,
+      "priority": "p1",
+      "description": "打开每日挑戰/daily-challenge，验证非404"
+    }
+  ]
+}
