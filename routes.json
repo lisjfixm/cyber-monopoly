@@ -112,5 +112,11 @@
   },
   {
     "path": "/gm-panel"
+  },
+  {
+    "path": "/lucky-wheel"
+  },
+  {
+    "path": "/gacha"
   }
 ]
