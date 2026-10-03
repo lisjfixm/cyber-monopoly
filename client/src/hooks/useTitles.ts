@@ -50,6 +50,14 @@ export function useTitles() {
     });
   }, []);
 
+  // 直接解鎖稱號（供扭蛋等跨局系統使用）；已擁有時不重複加入
+  const unlockTitle = useCallback((id: TitleId) => {
+    setData((prev: TitleStorageData) => {
+      if (prev.unlocked.includes(id)) return prev;
+      return { ...prev, unlocked: [...prev.unlocked, id] };
+    });
+  }, []);
+
   const checkAndUnlockTitles = useCallback(
     (unlockedAchievements: Set<AchievementId> | AchievementId[]): TitleId[] => {
       const achievementSet = Array.isArray(unlockedAchievements)
@@ -82,6 +90,7 @@ export function useTitles() {
     equippedTitle: data.equipped,
     unlockedTitles: data.unlocked,
     equipTitle,
+    unlockTitle,
     checkAndUnlockTitles,
   };
 }

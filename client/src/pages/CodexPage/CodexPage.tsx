@@ -46,11 +46,16 @@ type TabType =
   | 'minigames'
   | 'rewards';
 
-const MOUNT_NAMES: Record<MountType, { name: string; icon: string }> = {
+// 坐騎名稱表：用 Partial 避免引擎新增 MountType 成員時 tsc 列舉崩潰；
+// 未知坐騎以 key 作為名稱兜底，不白屏。
+const MOUNT_NAMES: Partial<Record<MountType, { name: string; icon: string }>> = {
   flyer: { name: '飛行器', icon: '飛行器' },
   diver: { name: '潛水艇', icon: '潛水艇' },
   rocket: { name: '火箭', icon: '火箭' },
+  hoverboard: { name: '懸浮滑板', icon: '懸浮滑板' },
 };
+
+const MOUNT_ORDER: MountType[] = Object.keys(MOUNT_NAMES) as MountType[];
 
 const CodexPage = () => {
   const navigate = useNavigate();
@@ -71,6 +76,9 @@ const CodexPage = () => {
   } = useCodex('default');
   const progress = getProgress();
   const rewards = getCollectionRewards();
+
+  const safeTotal = progress?.total ?? { percent: 0, unlocked: 0, total: 0 };
+  const totalPercent = Number.isFinite(safeTotal.percent) ? safeTotal.percent : 0;
 
   const tabs: { id: TabType; label: string; icon: typeof Map }[] = [
     { id: 'properties', label: '地塊', icon: Map },
@@ -211,8 +219,8 @@ const CodexPage = () => {
 
   const renderMounts = () => (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {(['flyer', 'diver', 'rocket'] as MountType[]).map((m) => {
-        const mount = MOUNT_NAMES[m];
+      {MOUNT_ORDER.map((m) => {
+        const mount = MOUNT_NAMES[m] ?? { name: m, icon: m };
         const unlocked = isMountUnlocked(m);
         return (
           <div
@@ -581,21 +589,21 @@ const CodexPage = () => {
                 textShadow: '0 0 10px rgba(168, 85, 247, 0.5)',
               }}
             >
-              {progress.total.percent}%
+              {totalPercent}%
             </span>
           </div>
           <div className="w-full h-3 rounded-full bg-bg-mid overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
               style={{
-                width: `${progress.total.percent}%`,
+                width: `${totalPercent}%`,
                 background: 'linear-gradient(90deg, #a855f7, #ff6b9d, #facc15)',
                 boxShadow: '0 0 8px rgba(168, 85, 247, 0.5)',
               }}
             />
           </div>
           <div className="mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-            已解鎖 {progress.total.unlocked} / {progress.total.total} 項
+            已解鎖 {safeTotal.unlocked} / {safeTotal.total} 項
           </div>
         </section>
 

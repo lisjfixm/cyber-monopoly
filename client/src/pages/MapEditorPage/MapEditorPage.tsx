@@ -52,12 +52,22 @@ function createDefaultCells(): CellConfig[] {
   return cells;
 }
 
+function isMapLike(data: unknown): data is CustomMapData {
+  if (typeof data !== 'object' || data === null) return false;
+  const m = data as Record<string, unknown>;
+  return (
+    typeof m.id === 'string' &&
+    typeof m.name === 'string' &&
+    Array.isArray(m.cells)
+  );
+}
+
 function loadSavedMaps(): CustomMapData[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    const parsed = JSON.parse(raw) as CustomMapData[];
-    if (Array.isArray(parsed)) return parsed;
+    const parsed: unknown = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed.filter(isMapLike);
   } catch {
     // ignore
   }

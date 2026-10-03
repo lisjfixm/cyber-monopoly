@@ -4,6 +4,25 @@ import { Lock } from 'lucide-react';
 import { monopoly, ranking } from '@client/src/api';
 import { usePlayerIdentity } from '@client/src/hooks/usePlayerIdentity';
 
+// 判斷是否為離線/無法連線後端的錯誤（靜態部署無後端時觸發）
+function isNetworkError(err: unknown): boolean {
+  if (err && typeof err === 'object') {
+    const e = err as Record<string, unknown>;
+    if (e.isAxiosError && !e.response) return true;
+    const msg = String(e.message ?? '').toLowerCase();
+    return (
+      msg.includes('network') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('timeout') ||
+      msg.includes('連接') ||
+      msg.includes('連線') ||
+      msg.includes('跨網域') ||
+      msg.includes('err_connection')
+    );
+  }
+  return false;
+}
+
 const OnlineJoinPage = () => {
   const navigate = useNavigate();
   const { visitorId } = usePlayerIdentity();
@@ -70,11 +89,17 @@ const OnlineJoinPage = () => {
       );
       navigate(`/online/room/${result.room.roomCode}?player=${result.playerIndex}`);
     } catch (err) {
-      const message = err instanceof Error ? err.message : '加入房間失敗';
-      setError(message);
-    } finally {
       setLoading(false);
+      setError(
+        isNetworkError(err)
+          ? '聯機功能於靜態版不可用，部署後端後即可加入房間。'
+          : err instanceof Error
+            ? err.message
+            : '加入房間失敗',
+      );
+      return;
     }
+    setLoading(false);
   };
 
   const handleBack = () => {

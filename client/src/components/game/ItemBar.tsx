@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import { Shield, Sparkles, Swords, Ticket, Dices, Settings2, Bomb, Ghost, Clock, TreeDeciduous, Eye, Target, RotateCcw, Zap, Radio, Palette, Plane, CreditCard, Satellite, FileText, Package, IdCard } from 'lucide-react';
+import { Shield, Sparkles, Swords, Ticket, Dices, Settings2, Bomb, Ghost, Clock, TreeDeciduous, Eye, Target, RotateCcw, Zap, Radio, Palette, Plane, CreditCard, Satellite, FileText, Package, IdCard, Snowflake, Repeat, Crown, Database, Bug, Magnet, Coins } from 'lucide-react';
 import { ITEMS, ITEM_TYPES, MAX_ITEMS } from '@shared/game-config';
 import type { GameState, ItemState, ItemType, PlayerState } from '@shared/api.interface';
 
@@ -11,7 +11,8 @@ interface ItemBarProps {
   gameState: GameState;
 }
 
-const ITEM_ICON_COMPONENTS: Record<ItemType, typeof Shield> = {
+// 使用 Partial 容納引擎後續新增的道具類型（未知道具以 Package 兜底）
+const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   double_dice: Dices,
   teleport: Sparkles,
   steal_property: Swords,
@@ -36,6 +37,14 @@ const ITEM_ICON_COMPONENTS: Record<ItemType, typeof Shield> = {
   energy_shield: Shield,
   data_courier: Package,
   fake_id: IdCard,
+  freeze_ray: Snowflake,
+  swap_portal: Repeat,
+  golden_passport: Crown,
+  data_backup: Database,
+  loaded_dice: Dices,
+  ransomware: Bug,
+  toll_magnet: Magnet,
+  lucky_coin: Coins,
 };
 
 interface AggregatedItem {
@@ -257,7 +266,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
         {displaySlots.map((agg, idx) => {
           const type = ITEM_TYPES[idx];
           const itemConfig = ITEMS[type];
-          const IconComponent = ITEM_ICON_COMPONENTS[type];
+          const IconComponent = ITEM_ICON_COMPONENTS[type] ?? Package;
           const hasItem = agg !== null && agg.count > 0;
           const isActive =
             (type === 'shield' && player.shieldCharges > 0) ||

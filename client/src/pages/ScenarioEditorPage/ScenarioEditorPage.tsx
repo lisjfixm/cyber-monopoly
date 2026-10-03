@@ -449,7 +449,7 @@ const ScenarioEditorPage = () => {
                       {scenario.description}
                     </div>
                     <div className="text-xs text-[var(--cyan)] mt-1">
-                      ${scenario.startingMoney.toLocaleString()} · {scenario.aiCount}AI · {DIFFICULTY_LABELS[scenario.aiDifficulty] ?? '未知'}
+                      ${(Number(scenario.startingMoney) || 0).toLocaleString()} · {scenario.aiCount}AI · {DIFFICULTY_LABELS[scenario.aiDifficulty] ?? '未知'}
                     </div>
                   </button>
                 ))
@@ -482,7 +482,7 @@ const ScenarioEditorPage = () => {
                 <div className="text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-[var(--text-secondary)]">初始資金</span>
-                    <span className="font-cyber text-neon-cyan">${scenario.startingMoney.toLocaleString()}</span>
+                    <span className="font-cyber text-neon-cyan">${(Number(scenario.startingMoney) || 0).toLocaleString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[var(--text-secondary)]">AI</span>
@@ -506,6 +506,11 @@ const ScenarioEditorPage = () => {
                 </div>
               </button>
             ))}
+            {communityScenarios.length === 0 && (
+              <div className="cyber-card p-8 text-center col-span-full text-sm" style={{ color: 'var(--text-secondary)' }}>
+                社區尚未有劇本，來建立第一個吧！
+              </div>
+            )}
           </div>
         )}
       </div>

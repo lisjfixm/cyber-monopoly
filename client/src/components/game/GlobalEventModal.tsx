@@ -13,6 +13,12 @@ import {
   AlertTriangle,
   TrendingUp,
   Landmark,
+  Atom,
+  Power,
+  CircleDollarSign,
+  Megaphone,
+  BadgePercent,
+  ShieldAlert,
 } from 'lucide-react';
 import { GLOBAL_EVENTS } from '@shared/game-config';
 import type { GlobalEventType } from '@shared/api.interface';
@@ -23,7 +29,8 @@ interface GlobalEventModalProps {
   onClose: () => void;
 }
 
-const EVENT_ICON_MAP: Record<GlobalEventType, typeof AlertTriangle> = {
+// 使用 Partial 容納引擎後續新增的事件類型（未知事件以 AlertTriangle 兜底）
+const EVENT_ICON_MAP: Partial<Record<GlobalEventType, typeof AlertTriangle>> = {
   economic_crisis: TrendingDown,
   tech_boom: Zap,
   neon_festival: PartyPopper,
@@ -36,6 +43,12 @@ const EVENT_ICON_MAP: Record<GlobalEventType, typeof AlertTriangle> = {
   ai_rebellion: Bot,
   investment_hint: TrendingUp,
   bank_crisis: Landmark,
+  quantum_storm: Atom,
+  stock_circuit_breaker: Power,
+  foreign_inflow: CircleDollarSign,
+  ad_storm: Megaphone,
+  subsidy_carnival: BadgePercent,
+  black_market_crackdown: ShieldAlert,
 };
 
 const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClose }) => {

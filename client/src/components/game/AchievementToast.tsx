@@ -43,7 +43,8 @@ interface AchievementToastProps {
   onClose: () => void;
 }
 
-const ACHIEVEMENT_ICON_MAP: Record<AchievementId, typeof Trophy> = {
+// 使用 Partial 容納引擎後續新增的成就（未知成就以 Trophy 兜底）
+const ACHIEVEMENT_ICON_MAP: Partial<Record<AchievementId, typeof Trophy>> = {
   first_win: Trophy,
   property_tycoon: Landmark,
   building_magnate: Building2,

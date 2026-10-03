@@ -101,6 +101,8 @@ export const RANK_TIERS: RankTierConfig[] = [
   },
 ];
 
+import { safeGetJSON, safeSetJSON } from './safeStorage';
+
 const STORAGE_KEY = 'monopoly_ranked_state';
 
 function getCurrentSeason(): string {
@@ -123,18 +125,32 @@ export function getInitialRankedState(): RankedState {
   };
 }
 
+function numOrFallback(v: unknown, fallback: number): number {
+  return typeof v === 'number' && !Number.isNaN(v) && Number.isFinite(v) ? v : fallback;
+}
+
 export function getRankedState(): RankedState {
+  const initial = getInitialRankedState();
+  const season = getCurrentSeason();
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      const initial = getInitialRankedState();
+    const parsed = safeGetJSON<Partial<RankedState> | null>(STORAGE_KEY, null);
+    if (!parsed || typeof parsed !== 'object') {
       saveRankedState(initial);
       return initial;
     }
-    const parsed = JSON.parse(raw) as RankedState;
-    const season = getCurrentSeason();
-    if (parsed.currentSeason !== season) {
-      const resetElo = Math.max(800, Math.floor(parsed.elo * 0.7));
+    // 還原壞數值，避免 NaN 汙染
+    const elo = Math.max(0, numOrFallback(parsed.elo, initial.elo));
+    const restored: RankedState = {
+      elo,
+      wins: Math.max(0, Math.floor(numOrFallback(parsed.wins, 0))),
+      losses: Math.max(0, Math.floor(numOrFallback(parsed.losses, 0))),
+      winStreak: Math.max(0, Math.floor(numOrFallback(parsed.winStreak, 0))),
+      bestWinStreak: Math.max(0, Math.floor(numOrFallback(parsed.bestWinStreak, 0))),
+      currentSeason: typeof parsed.currentSeason === 'string' ? parsed.currentSeason : season,
+      tier: calculateTier(elo),
+    };
+    if (restored.currentSeason !== season) {
+      const resetElo = Math.max(800, Math.floor(elo * 0.7));
       const resetState: RankedState = {
         elo: resetElo,
         wins: 0,
@@ -147,23 +163,15 @@ export function getRankedState(): RankedState {
       saveRankedState(resetState);
       return resetState;
     }
-    if (!parsed.tier) {
-      parsed.tier = calculateTier(parsed.elo);
-      saveRankedState(parsed);
-    }
-    return parsed;
+    saveRankedState(restored);
+    return restored;
   } catch {
-    const initial = getInitialRankedState();
     return initial;
   }
 }
 
 export function saveRankedState(state: RankedState): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // ignore
-  }
+  safeSetJSON(STORAGE_KEY, state);
 }
 
 export function calculateTier(elo: number): RankTier {
@@ -184,8 +192,9 @@ export function getTierProgress(elo: number): {
 } {
   const tier = calculateTier(elo);
   const currentIndex = RANK_TIERS.findIndex((t) => t.tier === tier);
-  const currentTier = RANK_TIERS[currentIndex];
-  const nextTier = currentIndex < RANK_TIERS.length - 1 ? RANK_TIERS[currentIndex + 1] : null;
+  const safeIndex = currentIndex >= 0 ? currentIndex : 0;
+  const currentTier = RANK_TIERS[safeIndex] ?? RANK_TIERS[0];
+  const nextTier = safeIndex < RANK_TIERS.length - 1 ? RANK_TIERS[safeIndex + 1] : null;
 
   if (!nextTier) {
     return {
@@ -215,7 +224,9 @@ export function calculateEloChange(
   won: boolean,
   opponentElo: number,
 ): number {
-  const expected = 1 / (1 + Math.pow(10, (opponentElo - ranked.elo) / 400));
+  const safeElo = Number.isFinite(ranked.elo) ? ranked.elo : 1000;
+  const safeOpponent = Number.isFinite(opponentElo) ? opponentElo : safeElo;
+  const expected = 1 / (1 + Math.pow(10, (safeOpponent - safeElo) / 400));
   const kFactor = 25;
   const baseChange = won
     ? Math.round(kFactor * (1 - expected))

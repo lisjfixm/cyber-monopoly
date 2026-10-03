@@ -25,7 +25,8 @@ export interface Mission {
 
 export type GameMode = "classic" | "fast" | "crazy" | "custom" | "coop2v2" | "battle_royale"
   | "race" | "survival" | "coop_boss" | "treasure" | "emperor" | "dark"
-  | "lightning" | "resource" | "team_deathmatch" | "darknet";
+  | "lightning" | "resource" | "team_deathmatch" | "darknet"
+  | "casino" | "dynasty";
 
 // ========== 劇情模式 ==========
 
@@ -268,7 +269,13 @@ export type GlobalEventType =
   | "space_immigration"
   | "ai_rebellion"
   | "investment_hint"
-  | "bank_crisis";
+  | "bank_crisis"
+  | "quantum_storm"
+  | "stock_circuit_breaker"
+  | "foreign_inflow"
+  | "ad_storm"
+  | "subsidy_carnival"
+  | "black_market_crackdown";
 
 export interface GlobalEvent {
   type: GlobalEventType;
@@ -280,6 +287,9 @@ export interface GlobalEvent {
 export interface GlobalEventMultipliers {
   tollMultiplier?: number;
   propertyPriceMultiplier?: number;
+  cardMoneyMultiplier?: number;
+  incomeMultiplier?: number;
+  stockPriceMultiplier?: number;
 }
 
 // ========== 道具系统 ==========
@@ -308,14 +318,23 @@ export type ItemType =
   | 'electronic_contract'
   | 'energy_shield'
   | 'data_courier'
-  | 'fake_id';
+  | 'fake_id'
+  | 'freeze_ray'
+  | 'swap_portal'
+  | 'golden_passport'
+  | 'data_backup'
+  | 'loaded_dice'
+  | 'ransomware'
+  | 'toll_magnet'
+  | 'lucky_coin';
 
-export type MountType = 'flyer' | 'diver' | 'rocket';
+export type MountType = 'flyer' | 'diver' | 'rocket' | 'hoverboard';
 
 export interface MountState {
   flyerUses: number;
   diverUses: number;
   rocketUses: number;
+  hoverboardUses?: number;
 }
 
 export type EvolutionLevel = 0 | 1 | 2;
@@ -481,7 +500,20 @@ export type AchievementId =
   | "guild_quest_complete"
   | "bankruptcy_comeback"
   | "zero_property_win"
-  | "triple_double_jail";
+  | "triple_double_jail"
+  | "freeze_master"
+  | "lottery_winner"
+  | "item_tycoon"
+  | "dynasty_builder"
+  | "casino_highroller"
+  | "sniper_pro"
+  | "bounty_hunter"
+  | "card_combo_master"
+  | "global_event_survivor"
+  | "set_duke"
+  | "penny_pincher"
+  | "swap_artist"
+  | "quantum_wanderer";
 
 export interface Achievement {
   id: AchievementId;
@@ -529,7 +561,13 @@ export type Profession =
   | "mechanical_alchemist"
   | "shadow_broker"
   | "time_watcher"
-  | "net_ninja";
+  | "net_ninja"
+  | "drone_pilot"
+  | "auctioneer"
+  | "bounty_hunter"
+  | "street_racer"
+  | "media_mogul"
+  | "cyber_sniper";
 
 export type GamePhase =
   | "waiting"
@@ -573,7 +611,12 @@ export type CardEffect =
   | { type: "teleport_to_owned" }
   | { type: "property_downgrade" }
   | { type: "others_pay_bank"; amount: number }
-  | { type: "trade_exchange_money"; amount?: number };
+  | { type: "trade_exchange_money"; amount?: number }
+  | { type: "freeze_opponent"; duration: number }
+  | { type: "swap_position" }
+  | { type: "lottery"; cost: number; prize: number }
+  | { type: "extort"; amount: number }
+  | { type: "universal_tax"; percent: number };
 
 export type SpecialBuildingType = "mall" | "factory" | "lab";
 
@@ -759,8 +802,8 @@ export interface BlackMarketAuctionState {
 
 // ========== 皮膚系統 ==========
 
-export type PawnSkinType = 'default' | 'mecha' | 'ufo' | 'dragon';
-export type DiceSkinType = 'default' | 'gold' | 'neon' | 'pixel';
+export type PawnSkinType = 'default' | 'mecha' | 'ufo' | 'dragon' | 'neon_cat' | 'holo_knight';
+export type DiceSkinType = 'default' | 'gold' | 'neon' | 'pixel' | 'blood' | 'cosmic';
 
 export interface SkinConfig {
   id: string;
@@ -772,7 +815,7 @@ export interface SkinConfig {
 
 // ========== 寵物系統 ==========
 
-export type PetType = 'mechDog' | 'ufo' | 'dragon';
+export type PetType = 'mechDog' | 'ufo' | 'dragon' | 'neon_cat' | 'ghost_hacker';
 
 export interface PetConfig {
   id: PetType;
@@ -800,7 +843,11 @@ export type TitleId =
   | 'undefeated'
   | 'real_estate_god'
   | 'billionaire'
-  | 'codex_master';
+  | 'codex_master'
+  | 'quantum_lord'
+  | 'shadow_tycoon'
+  | 'card_legend'
+  | 'dynasty_founder';
 
 export type TitleEffectType =
   | 'flame'
@@ -865,7 +912,7 @@ export interface PlayerState {
   color: PlayerColor;          // 玩家颜色标识
   isAI: boolean;               // 是否是AI
   aiDifficulty?: "easy" | "normal" | "hard" | "hell";
-  aiPersonality?: "conservative" | "aggressive" | "speculator" | "trader";
+  aiPersonality?: "conservative" | "aggressive" | "speculator" | "trader" | "vengeful" | "gambler";
   isBankrupt: boolean;         // 是否已破产
   health?: number | null;      // 生存模式生命值
   teamId?: TeamId;             // 所属队伍（仅合作模式有值）
@@ -980,6 +1027,39 @@ export interface PlayerState {
   hasBrokenAlliance?: boolean;
   // 聯盟系統：收到的結盟邀請來源玩家索引
   allianceInviteFrom?: number | null;
+  // ===== v2.0 新增 =====
+  // 被凍結回合數（冰凍射線/卡牌）：>0 時下回合跳過
+  frozenTurns?: number;
+  // 數據備份：抵消下一次負面金錢效果（一次性）
+  dataBackupActive?: boolean;
+  // 過路費磁吸：下次過路費收入翻倍
+  tollMagnetActive?: boolean;
+  // 灌鉛骰子：下次擲骰指定總點數（0=未設定）
+  loadedDiceValue?: number;
+  // 賭場模式：本局賭博累計淨盈虧
+  casinoNetWin?: number;
+  // 金融王朝：本回合被動股息已發放標記
+  dynastyDividendPaid?: boolean;
+  // 無人機操縱師：剩餘偵察次數
+  droneScoutUses?: number;
+  // 拍賣師：本局已使用壓價主動次數
+  auctioneerUnderUsed?: number;
+  // 賞金獵人：上一個傷害過自己的玩家（用於復仇）
+  lastHarmedBy?: number | null;
+  // 街頭賽車手：本局已觸發衝刺次數
+  streetRacerDashUsed?: number;
+  // 媒體巨頭：粉絲數（影響廣告收入）
+  mediaFans?: number;
+  // 網路狙擊手：本局已擊殺（強制送監禁）次數
+  cyberSniperShotUsed?: number;
+  // 成就追蹤：本局購買道具數
+  itemsBoughtThisGame?: number;
+  // 成就追蹤：本局被動收入總額
+  passiveIncomeEarned?: number;
+  // 成就追蹤：本局強制拍賣/賣出地產數
+  forcedSalesMade?: number;
+  // 成就追蹤：本局面對手造成的跳過回合數
+  freezesApplied?: number;
 }
 
 // ========== 技能树系统 ==========
@@ -1218,6 +1298,10 @@ export interface GameState {
   blackMarketAuction?: BlackMarketAuctionState | null;
   // 黑市拍賣下次觸發的回合數（絕對回合）
   nextBlackMarketTurn?: number;
+  // 霓虹賭城模式
+  casinoMode?: CasinoModeState | null;
+  // 金融王朝模式
+  dynastyMode?: DynastyModeState | null;
 }
 
 export interface CodexState {
@@ -1226,6 +1310,24 @@ export interface CodexState {
   items: string[];
   pets: string[];
   mounts: string[];
+}
+
+// ========== 霓虹賭城模式 ==========
+
+export interface CasinoModeState {
+  // 每次賭博事件（每輪自動觸發一次小賭局）的進行次數
+  gambleCount: number;
+  // 賭場倍率：過路費與賭博獎勵的波動倍數
+  volatility: number;
+}
+
+// ========== 金融王朝模式 ==========
+
+export interface DynastyModeState {
+  // 每個成套地產每回合被動股息倍率（相對於該組地產 basePrice 之和）
+  dividendRate: number;
+  // 併購強化：成套數量提供的全局過路費加成
+  acquisitionBonus: number;
 }
 
 // ========== 競速模式 ==========
@@ -1854,7 +1956,7 @@ export interface PlayerConfig {
   color: PlayerColor;
   isAI: boolean;
   aiDifficulty?: "easy" | "normal" | "hard" | "hell";
-  aiPersonality?: "conservative" | "aggressive" | "speculator" | "trader";
+  aiPersonality?: "conservative" | "aggressive" | "speculator" | "trader" | "vengeful" | "gambler";
 }
 
 // ===== 快速匹配 =====

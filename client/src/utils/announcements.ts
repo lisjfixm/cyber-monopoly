@@ -22,6 +22,15 @@ const READ_STORAGE_KEY = 'cyber_monopoly_announcements_read';
 // 初始模擬公告數據
 const INITIAL_ANNOUNCEMENTS: Announcement[] = [
   {
+    id: 'ann_v2_0_0',
+    title: '版本更新 v2.0.0：首頁重構與跨局系統上線',
+    content:
+      '賽博大富翁 v2.0.0 重磅更新！\n\n• 首頁全新分層資訊架構，四大玩法卡片一目了然\n• 新增「幸運轉盤」：每日免費轉盤，有機會獲得金幣、碎片與傳說寶箱\n• 新增「霓虹扭蛋」：消耗金幣或碎片抽取皮膚、寵物與稱號，重複自動轉換為碎片\n• 統一賽博霓虹視覺語言，手機觸控與安全區適配全面優化\n• 修復若干已知問題',
+    type: 'update',
+    summary: 'v2.0.0 首頁重構、幸運轉盤與霓虹扭蛋上線！',
+    createdAt: '2026-10-03T10:00:00.000Z',
+  },
+  {
     id: 'ann_v1_3_0',
     title: '版本更新 v1.3.0：幫派系統上線',
     content:

@@ -26,12 +26,22 @@ export interface CustomScenario {
   createdAt: string;
 }
 
+function isScenarioLike(data: unknown): data is CustomScenario {
+  if (typeof data !== 'object' || data === null) return false;
+  const s = data as Record<string, unknown>;
+  return (
+    typeof s.id === 'string' &&
+    typeof s.name === 'string' &&
+    typeof s.description === 'string'
+  );
+}
+
 function readScenarios(key: string): CustomScenario[] {
   try {
     const raw = localStorage.getItem(key);
     if (raw) {
-      const parsed = JSON.parse(raw) as CustomScenario[];
-      if (Array.isArray(parsed)) return parsed;
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed)) return parsed.filter(isScenarioLike);
     }
   } catch {
     // ignore

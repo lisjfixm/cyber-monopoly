@@ -29,6 +29,12 @@ import {
   Eye,
   Clock,
   Swords,
+  Send,
+  Gavel,
+  Crosshair,
+  Rocket,
+  Megaphone,
+  Target,
 } from "lucide-react";
 
 interface ProfessionSelectModalProps {
@@ -42,7 +48,8 @@ interface ProfessionSelectModalProps {
   disabled?: boolean;
 }
 
-const ICON_MAP: Record<Profession, FC<{ className?: string; style?: React.CSSProperties }>> = {
+// 使用 Partial 容納引擎後續新增的職業（未知職業以 Sparkles 兜底）
+const ICON_MAP: Partial<Record<Profession, FC<{ className?: string; style?: React.CSSProperties }>>> = {
   engineer: Wrench,
   banker: Landmark,
   speculator: TrendingUp,
@@ -67,6 +74,12 @@ const ICON_MAP: Record<Profession, FC<{ className?: string; style?: React.CSSPro
   shadow_broker: Eye,
   time_watcher: Clock,
   net_ninja: Swords,
+  drone_pilot: Send,
+  auctioneer: Gavel,
+  bounty_hunter: Crosshair,
+  street_racer: Rocket,
+  media_mogul: Megaphone,
+  cyber_sniper: Target,
 };
 
 const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
@@ -146,7 +159,7 @@ const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
         <div className="px-4 md:px-5 py-4 md:py-5 overflow-y-auto flex-1">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {professions.map((prof) => {
-              const Icon = ICON_MAP[prof.id];
+              const Icon = ICON_MAP[prof.id] ?? Sparkles;
               const isSelected = selectedProfession === prof.id;
               const profColor = prof.color;
 

@@ -55,6 +55,8 @@ const MODE_COLORS: Record<GameMode, string> = {
   resource: 'hsl(140, 100%, 55%)',
   team_deathmatch: 'hsl(0, 100%, 60%)',
   darknet: 'hsl(270, 80%, 55%)',
+  casino: 'hsl(45, 100%, 55%)',
+  dynasty: 'hsl(20, 90%, 55%)',
 };
 
 const MODE_LABELS: Record<GameMode, string> = {
@@ -74,6 +76,8 @@ const MODE_LABELS: Record<GameMode, string> = {
   resource: '資源爭奪',
   team_deathmatch: '團隊死鬥',
   darknet: '暗網',
+  casino: '賭場',
+  dynasty: '王朝',
 };
 
 const STATUS_COLORS: Record<RoomStatus, string> = {
@@ -378,12 +382,20 @@ const PublicRoomsPage = () => {
 
       {/* 房間卡片列表 */}
       <div className="flex-1 px-4 py-4 overflow-auto">
-        {error && (
+        {error && rooms.length > 0 && (
           <div
             className="cyber-card p-4 mb-4 text-sm text-center font-cyber tracking-wider"
             style={{ color: 'var(--red)', borderColor: 'var(--red)' }}
           >
             {error}
+            <button
+              type="button"
+              onClick={() => { void loadRooms(); }}
+              className="ml-3 underline underline-offset-2"
+              style={{ color: 'var(--green)' }}
+            >
+              重試
+            </button>
           </div>
         )}
 
@@ -393,37 +405,68 @@ const PublicRoomsPage = () => {
             載入中...
           </div>
         ) : rooms.length === 0 ? (
-          /* 空狀態 */
+          /* 空狀態：依是否出錯區分「載入失敗」與「真實無房間」 */
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div
               className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
               style={{
-                border: '1px solid var(--border-neon)',
-                boxShadow: '0 0 20px rgba(0, 255, 255, 0.15)',
+                border: `1px solid ${error ? 'var(--red)' : 'var(--border-neon)'}`,
+                boxShadow: error
+                  ? '0 0 20px rgba(255, 0, 0, 0.15)'
+                  : '0 0 20px rgba(0, 255, 255, 0.15)',
               }}
             >
-              <Users size={32} style={{ color: 'var(--cyan)' }} />
+              <Users size={32} style={{ color: error ? 'var(--red)' : 'var(--cyan)' }} />
             </div>
-            <p className="font-cyber text-lg tracking-wider text-[var(--text-primary)] mb-2">
-              暫無公開房間
-            </p>
-            <p className="text-sm text-[var(--text-secondary)] mb-6">
-              建立第一個公開房間吧！
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/online/create')}
-              className="cyber-btn px-6 py-2.5 text-sm font-cyber tracking-wider flex items-center gap-2"
-              style={{
-                borderColor: 'var(--green)',
-                color: 'var(--green)',
-                background: 'rgba(0, 255, 128, 0.1)',
-                boxShadow: '0 0 12px rgba(0, 255, 128, 0.3)',
-              }}
-            >
-              <Plus size={16} />
-              建立房間
-            </button>
+            {error ? (
+              <>
+                <p className="font-cyber text-lg tracking-wider text-[var(--text-primary)] mb-2">
+                  無法載入房間列表
+                </p>
+                <p className="text-sm text-[var(--text-secondary)] mb-1">
+                  聯機功能於靜態版不可用，部署後端後即可查看公開房間。
+                </p>
+                <p className="text-xs text-[var(--text-muted)] mb-6">{error}</p>
+                <button
+                  type="button"
+                  onClick={() => { void loadRooms(); }}
+                  disabled={loading}
+                  className="cyber-btn px-6 py-2.5 text-sm font-cyber tracking-wider flex items-center gap-2"
+                  style={{
+                    borderColor: 'var(--green)',
+                    color: 'var(--green)',
+                    background: 'rgba(0, 255, 128, 0.1)',
+                    boxShadow: '0 0 12px rgba(0, 255, 128, 0.3)',
+                  }}
+                >
+                  <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+                  重試
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="font-cyber text-lg tracking-wider text-[var(--text-primary)] mb-2">
+                  暫無公開房間
+                </p>
+                <p className="text-sm text-[var(--text-secondary)] mb-6">
+                  建立第一個公開房間吧！
+                </p>
+                <button
+                  type="button"
+                  onClick={() => navigate('/online/create')}
+                  className="cyber-btn px-6 py-2.5 text-sm font-cyber tracking-wider flex items-center gap-2"
+                  style={{
+                    borderColor: 'var(--green)',
+                    color: 'var(--green)',
+                    background: 'rgba(0, 255, 128, 0.1)',
+                    boxShadow: '0 0 12px rgba(0, 255, 128, 0.3)',
+                  }}
+                >
+                  <Plus size={16} />
+                  建立房間
+                </button>
+              </>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">

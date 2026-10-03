@@ -1,6 +1,5 @@
 // 自製卡牌與社區卡牌工具
 import type { CardEffect } from '@shared/api.interface';
-import { getAuthorScore } from './reviewStorage';
 
 const LOCAL_KEY = 'cyber_monopoly_custom_cards_local';
 const COMMUNITY_KEY = 'cyber_monopoly_community_cards';
@@ -20,12 +19,22 @@ export interface CustomCard {
   createdAt: string;
 }
 
+function isCardLike(data: unknown): data is CustomCard {
+  if (typeof data !== 'object' || data === null) return false;
+  const c = data as Record<string, unknown>;
+  return (
+    typeof c.id === 'string' &&
+    typeof c.name === 'string' &&
+    typeof c.description === 'string'
+  );
+}
+
 function readCards(key: string): CustomCard[] {
   try {
     const raw = localStorage.getItem(key);
     if (raw) {
-      const parsed = JSON.parse(raw) as CustomCard[];
-      if (Array.isArray(parsed)) return parsed;
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed)) return parsed.filter(isCardLike);
     }
   } catch {
     // ignore
@@ -141,7 +150,6 @@ export function getCommunityCardById(id: string): CustomCard | undefined {
 export function publishCard(card: CustomCard, author: string): string {
   const cards = getCommunityCards();
   const newId = `card_pub_${Date.now()}`;
-  const score = getAuthorScore(author, cards);
   const newCard: CustomCard = {
     ...card,
     id: newId,

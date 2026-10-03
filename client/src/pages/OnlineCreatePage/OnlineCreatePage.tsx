@@ -8,6 +8,25 @@ import { TURN_TIME_OPTIONS } from '@shared/game-config';
 
 const PLAYER_OPTIONS = [2, 4, 6];
 
+// 判斷是否為離線/無法連線後端的錯誤（靜態部署無後端時觸發）
+function isNetworkError(err: unknown): boolean {
+  if (err && typeof err === 'object') {
+    const e = err as Record<string, unknown>;
+    if (e.isAxiosError && !e.response) return true;
+    const msg = String(e.message ?? '').toLowerCase();
+    return (
+      msg.includes('network') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('timeout') ||
+      msg.includes('連接') ||
+      msg.includes('連線') ||
+      msg.includes('跨網域') ||
+      msg.includes('err_connection')
+    );
+  }
+  return false;
+}
+
 const MODE_OPTIONS: { value: GameMode; label: string; desc: string; icon: typeof Zap }[] = [
   { value: 'classic', label: '經典模式', desc: '標準大富翁規則', icon: Users },
   { value: 'fast', label: '快速模式', desc: '低本金·高節奏', icon: Zap },
@@ -70,11 +89,17 @@ const OnlineCreatePage = () => {
       );
       navigate(`/online/room/${room.roomCode}?player=0`);
     } catch (err) {
-      const message = err instanceof Error ? err.message : '建立房間失敗';
-      setError(message);
-    } finally {
       setLoading(false);
+      setError(
+        isNetworkError(err)
+          ? '聯機功能於靜態版不可用，部署後端後即可建立房間。'
+          : err instanceof Error
+            ? err.message
+            : '建立房間失敗',
+      );
+      return;
     }
+    setLoading(false);
   };
 
   const handleBack = () => {

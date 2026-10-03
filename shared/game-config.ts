@@ -427,6 +427,21 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
     itemEffectMultiplier: 1.5,
     darknetFeeRate: 0.1,
   },
+  casino: {
+    initialMoney: 12000,
+    priceMultiplier: 1.0,
+    tollRate: 0.25,
+    startReward: 1500,
+    fateMoneyMultiplier: 1.2,
+    itemEffectMultiplier: 1.2,
+  },
+  dynasty: {
+    initialMoney: 15000,
+    priceMultiplier: 1.0,
+    tollRate: 0.25,
+    startReward: 1500,
+    fateMoneyMultiplier: 1.0,
+  },
 };
 
 export const FATE_CARDS: FateCard[] = [
@@ -639,6 +654,33 @@ export const FATE_CARDS: FateCard[] = [
     description: "本回合你的過路費收入 +30%",
     effect: { type: "toll_boost_turn", percent: 30 },
   },
+  // ===== v2.0 新增命運卡（含全新效果型別） =====
+  { id: 62, name: "冷凍光束", description: "發射冷凍光束，隨機一名對手下回合跳過", effect: { type: "freeze_opponent", duration: 1 } },
+  { id: 63, name: "空間互換", description: "與隨機一名對手互換當前位置", effect: { type: "swap_position" } },
+  { id: 64, name: "數字彩票", description: "花 300 元買彩票：50% 中 1000 元，50% 落空", effect: { type: "lottery", cost: 300, prize: 1000 } },
+  { id: 65, name: "勒索信", description: "向現金最多的對手勒索 400 元", effect: { type: "extort", amount: 400 } },
+  { id: 66, name: "全民稅", description: "包含你在內，所有玩家繳納現金 10% 的社會稅", effect: { type: "universal_tax", percent: 10 } },
+  { id: 67, name: "地下賭城豪客", description: "賭場大獎，獲得 1500 元", effect: { type: "money", amount: 1500 } },
+  {
+    id: 68,
+    name: "量子糾纏",
+    description: "二選一：凍結一名對手 / 自己獲得 800 元",
+    effect: {
+      type: "choice",
+      options: [{ type: "freeze_opponent", duration: 1 }, { type: "money", amount: 800 }],
+      optionLabels: ["凍結對手", "獲得 800 元"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "凍結一名對手", effect: { type: "freeze_opponent", duration: 1 } },
+      { label: "獲得 800 元", effect: { type: "money", amount: 800 } },
+    ],
+  },
+  { id: 69, name: "駭客外快", description: "從銀行獲得 700 元外快", effect: { type: "money", amount: 700 } },
+  { id: 70, name: "系統冷卻", description: "後退 4 格", effect: { type: "backward", steps: 4 } },
+  { id: 71, name: "幸運硬幣連擊", description: "獲得 500 元橫財", effect: { type: "money", amount: 500 } },
+  { id: 72, name: "黑市拍賣通知", description: "隨機將一塊自有地產以 70% 價格強制賣出", effect: { type: "force_sell_property" } },
+  { id: 73, name: "跨維度傳送", description: "隨機傳送到任意格子", effect: { type: "random_teleport" } },
 ];
 
 export const CHANCE_CARDS: ChanceCard[] = [
@@ -830,6 +872,33 @@ export const CHANCE_CARDS: ChanceCard[] = [
       { label: "什麼都不做", effect: { type: "money", amount: 0 } },
     ],
   },
+  // ===== v2.0 新增加會卡 =====
+  { id: 60, name: "冰凍詭計", description: "冷凍隨機一名對手，使其下回合跳過", effect: { type: "freeze_opponent", duration: 1 } },
+  { id: 61, name: "位置交換", description: "與現金最多的對手互換位置", effect: { type: "swap_position" } },
+  { id: 62, name: "賭場對賭", description: "花 500 元賭一把：50% 贏 1200，50% 輸光賭注", effect: { type: "lottery", cost: 500, prize: 1200 } },
+  { id: 63, name: "勒索軟體", description: "向最富有的對手索要 500 元保護費", effect: { type: "extort", amount: 500 } },
+  { id: 64, name: "資本利得稅", description: "全體玩家繳納現金 8% 給銀行（你也在內）", effect: { type: "universal_tax", percent: 8 } },
+  { id: 65, name: "廣告分紅", description: "媒體時段收益，獲得 600 元", effect: { type: "money", amount: 600 } },
+  {
+    id: 66,
+    name: "豪賭時刻",
+    description: "二選一：花 400 元博 1000 元彩票 / 穩拿 300 元",
+    effect: {
+      type: "choice",
+      options: [{ type: "lottery", cost: 400, prize: 1000 }, { type: "money", amount: 300 }],
+      optionLabels: ["博彩票", "穩拿 300"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "花 400 博 1000", effect: { type: "lottery", cost: 400, prize: 1000 } },
+      { label: "穩拿 300 元", effect: { type: "money", amount: 300 } },
+    ],
+  },
+  { id: 67, name: "數位冷凍", description: "隨機一名對手下回合跳過", effect: { type: "freeze_opponent", duration: 1 } },
+  { id: 68, name: "黑市匯款", description: "獲得 900 元黑市匯款", effect: { type: "money", amount: 900 } },
+  { id: 69, name: "位置錯亂", description: "與隨機對手交換位置", effect: { type: "swap_position" } },
+  { id: 70, name: "全民補貼", description: "從每位存活對手處各收 150 元", effect: { type: "collect_from_all", amount: 150 } },
+  { id: 71, name: "強制清算", description: "隨機一塊自有地產以市價 70% 賣出", effect: { type: "force_sell_property" } },
 ];
 
 export const MODE_LABELS: Record<string, string> = {
@@ -849,6 +918,8 @@ export const MODE_LABELS: Record<string, string> = {
   resource: "资源争夺",
   team_deathmatch: "团队死斗",
   darknet: "暗网",
+  casino: "霓虹賭城",
+  dynasty: "金融王朝",
 };
 
 export const DEFAULT_CUSTOM_RULES: CustomGameRules = {
@@ -1141,6 +1212,72 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
       "並額外獲得 1 個隨機道具",
     ],
   },
+  drone_pilot: {
+    id: "drone_pilot",
+    name: "無人機操縱師",
+    icon: "Plane",
+    color: "#38bdf8",
+    description: "空中之眼，全域偵察",
+    skills: [
+      "被動：每回合開始時有 30% 概率獲得 150 元偵察津貼",
+      "主動（每局限 3 次）：部署偵察機，立即獲得 300 元並使下次買地 9 折",
+    ],
+  },
+  auctioneer: {
+    id: "auctioneer",
+    name: "拍賣師",
+    icon: "Gavel",
+    color: "#f59e0b",
+    description: "槌聲一响，利益我有",
+    skills: [
+      "被動：競標時出價永久 95 折（少付 5%）",
+      "主動（每局限 2 次）：壓價拍賣，指定一塊對手地產過路費減半 2 回合",
+    ],
+  },
+  bounty_hunter: {
+    id: "bounty_hunter",
+    name: "賞金獵人",
+    icon: "Crosshair",
+    color: "#ef4444",
+    description: "拿人錢財，替人消災",
+    skills: [
+      "被動：每成功從對手處收取過路費，額外獲得 10% 賞金",
+      "主動：對傷害過自己最多次的對手索取 500 元賞金",
+    ],
+  },
+  street_racer: {
+    id: "street_racer",
+    name: "街頭賽車手",
+    icon: "Flag",
+    color: "#f97316",
+    description: "地板油門，絕不放慢",
+    skills: [
+      "被動：擲出 3 或更低時，本回合移動 +1 格",
+      "主動（每局限 2 次）：氮氣加速，本回合立即額外前進 3 格",
+    ],
+  },
+  media_mogul: {
+    id: "media_mogul",
+    name: "媒體巨頭",
+    icon: "Radio",
+    color: "#a855f7",
+    description: "流量即權力，聲量變現",
+    skills: [
+      "被動：每擁有 1 塊地產獲得 1 粉絲，每粉絲每回合 +2 元被動廣告收入",
+      "主動：投放廣告，所有對手各支付 100 元宣傳費給你",
+    ],
+  },
+  cyber_sniper: {
+    id: "cyber_sniper",
+    name: "網路狙擊手",
+    icon: "Crosshair",
+    color: "#0ea5e9",
+    description: "一擊必殺，遠距離精準打擊",
+    skills: [
+      "被動：攻擊類道具（炸彈/勒索病毒）效果 +50%",
+      "主動（每局限 1 次）：狙擊，直接將一名對手送入監禁室",
+    ],
+  },
 };
 
 export const PLAYER_COLORS: PlayerColor[] = [
@@ -1187,7 +1324,7 @@ export const AI_DIFFICULTY_CONFIG: Record<AIDifficultyKey, {
   hell: { buyProbabilityMultiplier: 1.5, buildProbabilityMultiplier: 2.0, tradeAggression: 2.0, safetyPadRatio: 0.5, preciseTollCalc: true, targetWeakestPlayer: true, assetEstimation: true },
 };
 
-export type AIPersonalityKey = 'conservative' | 'aggressive' | 'speculator' | 'trader';
+export type AIPersonalityKey = 'conservative' | 'aggressive' | 'speculator' | 'trader' | 'vengeful' | 'gambler';
 
 export interface AIPersonalityConfig {
   name: string;
@@ -1251,9 +1388,33 @@ export const AI_PERSONALITY_CONFIG: Record<AIPersonalityKey, AIPersonalityConfig
     preferHighValue: false,
     preferSetComplete: true,
   },
+  vengeful: {
+    name: '復仇者',
+    description: '記恨在心，專門針對傷害過自己的玩家，攻擊性道具偏好極高',
+    color: 'var(--red)',
+    buyBias: 1.1,
+    buildBias: 1.0,
+    tradeBias: 0.7,
+    stockBias: 0.9,
+    auctionBias: 1.1,
+    preferHighValue: false,
+    preferSetComplete: false,
+  },
+  gambler: {
+    name: '賭徒',
+    description: '一擲千金，熱衷高風險高回報，股票/賭博/彩票偏好極高，保守意願低',
+    color: 'var(--yellow)',
+    buyBias: 1.2,
+    buildBias: 0.8,
+    tradeBias: 1.0,
+    stockBias: 2.2,
+    auctionBias: 1.7,
+    preferHighValue: true,
+    preferSetComplete: false,
+  },
 };
 
-const AI_PERSONALITY_KEYS: AIPersonalityKey[] = ['conservative', 'aggressive', 'speculator', 'trader'];
+const AI_PERSONALITY_KEYS: AIPersonalityKey[] = ['conservative', 'aggressive', 'speculator', 'trader', 'vengeful', 'gambler'];
 
 export function getRandomAIPersonality(): AIPersonalityKey {
   return AI_PERSONALITY_KEYS[Math.floor(Math.random() * AI_PERSONALITY_KEYS.length)];
@@ -1519,6 +1680,12 @@ export const GLOBAL_EVENTS: Record<GlobalEventType, GlobalEvent> = {
   ai_rebellion: { type: "ai_rebellion", name: "AI叛乱", description: "随机一位玩家获得一张免费出狱卡", icon: "Bot" },
   investment_hint: { type: "investment_hint", name: "投資熱點", description: "神秘投資者預言某地塊即將漲價，把握良機！", icon: "TrendingUp" },
   bank_crisis: { type: "bank_crisis", name: "銀行危機", description: "銀行倒閉！存款半數蒸發、所有貸款一筆勾銷！", icon: "Landmark" },
+  quantum_storm: { type: "quantum_storm", name: "量子風暴", description: "現實不穩！所有玩家隨機移動 1~4 格，金錢卡效果翻倍", icon: "Atom" },
+  stock_circuit_breaker: { type: "stock_circuit_breaker", name: "股市熔斷", description: "股市熔斷！股價隨機暴跌後暫停波動，持有股票者暫時套牢", icon: "BarChart2" },
+  foreign_inflow: { type: "foreign_inflow", name: "外資流入", description: "國際熱錢湧入！股價全線大漲 25%，持有股票者坐收增值", icon: "Globe" },
+  ad_storm: { type: "ad_storm", name: "廣告風暴", description: "海量廣告轟炸！所有玩家本回合收入 ×1.5", icon: "Megaphone" },
+  subsidy_carnival: { type: "subsidy_carnival", name: "補貼狂歡", description: "政府撒錢！每位存活玩家立即獲得 600 元補貼", icon: "PartyPopper" },
+  black_market_crackdown: { type: "black_market_crackdown", name: "黑市取締", description: "警方突擊黑市！聲望最低者被罰款，交易型玩家受創", icon: "ShieldAlert" },
 };
 
 export const GLOBAL_EVENT_TYPES: GlobalEventType[] = [
@@ -1534,6 +1701,12 @@ export const GLOBAL_EVENT_TYPES: GlobalEventType[] = [
   "ai_rebellion",
   "investment_hint",
   "bank_crisis",
+  "quantum_storm",
+  "stock_circuit_breaker",
+  "foreign_inflow",
+  "ad_storm",
+  "subsidy_carnival",
+  "black_market_crackdown",
 ];
 
 // ========== 成就配置 ==========
@@ -1588,6 +1761,19 @@ export const ACHIEVEMENTS: Record<AchievementId, Achievement> = {
   bankruptcy_comeback: { id: "bankruptcy_comeback", name: "破產逆轉", description: "面臨破產後逆轉獲勝", icon: "RotateCcw", category: "special", rarity: "legendary", points: 60 },
   zero_property_win: { id: "zero_property_win", name: "零地產獲勝", description: "不擁有任何地產卻贏得比賽", icon: "XCircle", category: "special", rarity: "epic", points: 40 },
   triple_double_jail: { id: "triple_double_jail", name: "三連雙骰進監獄", description: "連續三次雙骰被送進禁閉區", icon: "Lock", category: "special", rarity: "rare", points: 20 },
+  freeze_master: { id: "freeze_master", name: "寒冰指揮官", description: "單場冰凍對手 3 次以上", icon: "Snowflake", category: "special", rarity: "rare", points: 20, target: 3 },
+  lottery_winner: { id: "lottery_winner", name: "幸運彩票王", description: "單場中彩票累計盈利 2000 元", icon: "Ticket", category: "wealth", rarity: "epic", points: 30, target: 2000 },
+  item_tycoon: { id: "item_tycoon", name: "道具大亨", description: "單場購買 5 個以上道具", icon: "ShoppingBag", category: "collection", rarity: "rare", points: 20, target: 5 },
+  dynasty_builder: { id: "dynasty_builder", name: "王朝締造者", description: "在金融王朝模式中贏得勝利", icon: "Crown", category: "mode", rarity: "legendary", points: 50 },
+  casino_highroller: { id: "casino_highroller", name: "賭城豪客", description: "在霓虹賭城模式中賭場淨盈利超過 3000 元", icon: "Dices", category: "mode", rarity: "epic", points: 30, target: 3000 },
+  sniper_pro: { id: "sniper_pro", name: "頂尖狙擊手", description: "單場以攻擊道具擊潰對手 3 次", icon: "Crosshair", category: "special", rarity: "epic", points: 30, target: 3 },
+  bounty_hunter: { id: "bounty_hunter", name: "賞金獵人", description: "單場從對手收取過路費累計 5000 元", icon: "Target", category: "wealth", rarity: "rare", points: 25, target: 5000 },
+  card_combo_master: { id: "card_combo_master", name: "卡牌連鎖大師", description: "單場觸發 3 次以上卡牌連鎖", icon: "Layers", category: "special", rarity: "rare", points: 20, target: 3 },
+  global_event_survivor: { id: "global_event_survivor", name: "亂世倖存者", description: "在經歷 5 次以上全球事件後依然獲勝", icon: "Shield", category: "mode", rarity: "epic", points: 30 },
+  set_duke: { id: "set_duke", name: "成套公爵", description: "單場集齊 5 個以上成套地產", icon: "Gem", category: "wealth", rarity: "epic", points: 30, target: 5 },
+  penny_pincher: { id: "penny_pincher", name: "守財奴", description: "單場結束時持有現金超過 30000 元", icon: "PiggyBank", category: "wealth", rarity: "legendary", points: 40, target: 30000 },
+  swap_artist: { id: "swap_artist", name: "交換大師", description: "單場交換位置或資金 3 次以上", icon: "Repeat", category: "special", rarity: "rare", points: 20, target: 3 },
+  quantum_wanderer: { id: "quantum_wanderer", name: "量子漫遊者", description: "單場傳送/跳躍移動 10 次以上", icon: "Atom", category: "special", rarity: "epic", points: 30, target: 10 },
 };
 
 export const ACHIEVEMENT_IDS: AchievementId[] = [
@@ -1813,6 +1999,62 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
     price: 1200,
     icon: "身份證",
   },
+  freeze_ray: {
+    type: "freeze_ray",
+    name: "冰凍射線",
+    description: "指定一名對手，使其下一回合無法行動",
+    price: 1800,
+    icon: "雪花",
+  },
+  swap_portal: {
+    type: "swap_portal",
+    name: "互換傳送門",
+    description: "與指定對手交換當前所在位置",
+    price: 1600,
+    icon: "傳送門",
+  },
+  golden_passport: {
+    type: "golden_passport",
+    name: "金色護照",
+    description: "立即免費出獄（若在監禁中），並清除一次監禁記錄",
+    price: 1400,
+    icon: "護照",
+  },
+  data_backup: {
+    type: "data_backup",
+    name: "數據備份",
+    description: "自動抵消下一次負面金錢效果（一次性護盾）",
+    price: 1500,
+    icon: "備份",
+  },
+  loaded_dice: {
+    type: "loaded_dice",
+    name: "灌鉛骰子",
+    description: "下次擲骰指定總點數（4~10 之間）",
+    price: 1300,
+    icon: "骰子",
+  },
+  ransomware: {
+    type: "ransomware",
+    name: "勒索病毒",
+    description: "向最富有的對手勒索 800 元（若對手現金足夠）",
+    price: 1700,
+    icon: "病毒",
+  },
+  toll_magnet: {
+    type: "toll_magnet",
+    name: "過路費磁吸",
+    description: "下次收取過路費時收入翻倍",
+    price: 1900,
+    icon: "磁鐵",
+  },
+  lucky_coin: {
+    type: "lucky_coin",
+    name: "幸運硬幣",
+    description: "立即獲得一次 50/50 的賭局：50% 賺 1000，50% 賠 500",
+    price: 900,
+    icon: "硬幣",
+  },
 };
 
 export const ITEM_TYPES: ItemType[] = [
@@ -1840,6 +2082,14 @@ export const ITEM_TYPES: ItemType[] = [
   "energy_shield",
   "data_courier",
   "fake_id",
+  "freeze_ray",
+  "swap_portal",
+  "golden_passport",
+  "data_backup",
+  "loaded_dice",
+  "ransomware",
+  "toll_magnet",
+  "lucky_coin",
 ];
 
 export const BAIL_AMOUNT = 500;
@@ -2495,6 +2745,8 @@ export const PAWN_SKINS: Record<PawnSkinType, SkinConfig> = {
   mecha: { id: 'mecha', name: '機甲棋子', type: 'pawn', unlockCondition: '完成10場對戰', rarity: 'rare' },
   ufo: { id: 'ufo', name: '幽浮棋子', type: 'pawn', unlockCondition: '通關劇情模式第5關', rarity: 'epic' },
   dragon: { id: 'dragon', name: '龍珠棋子', type: 'pawn', unlockCondition: '達到鑽石段位', rarity: 'legendary' },
+  neon_cat: { id: 'neon_cat', name: '霓虹貓棋子', type: 'pawn', unlockCondition: '解鎖成就「寒冰指揮官」', rarity: 'rare' },
+  holo_knight: { id: 'holo_knight', name: '光騎士棋子', type: 'pawn', unlockCondition: '金融王朝模式稱帝', rarity: 'epic' },
 };
 
 export const DICE_SKINS: Record<DiceSkinType, SkinConfig> = {
@@ -2502,6 +2754,8 @@ export const DICE_SKINS: Record<DiceSkinType, SkinConfig> = {
   gold: { id: 'gold', name: '黃金骰子', type: 'dice', unlockCondition: '累計獲勝20場', rarity: 'rare' },
   neon: { id: 'neon', name: '霓虹骰子', type: 'dice', unlockCondition: '通關劇情模式第3關', rarity: 'epic' },
   pixel: { id: 'pixel', name: '像素骰子', type: 'dice', unlockCondition: '擁有所有棋子皮膚', rarity: 'legendary' },
+  blood: { id: 'blood', name: '赤紅骰子', type: 'dice', unlockCondition: '解鎖成就「賭城豪客」', rarity: 'epic' },
+  cosmic: { id: 'cosmic', name: '星際骰子', type: 'dice', unlockCondition: '觸發量子風暴事件', rarity: 'legendary' },
 };
 
 // ========== 寵物配置 ==========
@@ -2534,9 +2788,27 @@ export const PETS: Record<PetType, PetConfig> = {
     rarity: 'epic',
     icon: '龍',
   },
+  neon_cat: {
+    id: 'neon_cat',
+    name: '霓虹貓',
+    description: '每回合開始 20% 概率撿到 200 元',
+    passiveEffect: 'coin_find_200',
+    color: '#f472b6',
+    rarity: 'rare',
+    icon: '貓',
+  },
+  ghost_hacker: {
+    id: 'ghost_hacker',
+    name: '鬼魂駭客',
+    description: '被罰款時 15% 概率無效（信用卡款）',
+    passiveEffect: 'fine_immunity_15pct',
+    color: '#818cf8',
+    rarity: 'epic',
+    icon: '鬼魂',
+  },
 };
 
-export const PET_TYPES: PetType[] = ['mechDog', 'ufo', 'dragon'];
+export const PET_TYPES: PetType[] = ['mechDog', 'ufo', 'dragon', 'neon_cat', 'ghost_hacker'];
 
 // ========== 皮膚升級配置 ==========
 
@@ -2699,12 +2971,57 @@ export const TITLES: Record<TitleId, TitleConfig> = {
     color: '#a855f7',
     effect: 'glitch',
   },
+  quantum_lord: {
+    id: 'quantum_lord',
+    name: '量子之主',
+    description: '穿越無數維度的空間支配者',
+    unlockCondition: '解鎖成就「量子漫遊者」',
+    unlockValue: 'quantum_wanderer',
+    icon: '原子',
+    rarity: 'legendary',
+    color: '#0ea5e9',
+    effect: 'pulse',
+  },
+  shadow_tycoon: {
+    id: 'shadow_tycoon',
+    name: '影子巨頭',
+    description: '在暗網與黑市中游刃有餘的傳奇商人',
+    unlockCondition: '單場黑市拍賣獲勝 2 次',
+    unlockValue: 'black_market_wins_2',
+    icon: '面具',
+    rarity: 'epic',
+    color: '#334155',
+    effect: 'glitch',
+  },
+  card_legend: {
+    id: 'card_legend',
+    name: '卡牌傳說',
+    description: '命運與機會之神眷顧的抽卡大師',
+    unlockCondition: '解鎖成就「卡牌連鎖大師」',
+    unlockValue: 'card_combo_master',
+    icon: '卡牌',
+    rarity: 'epic',
+    color: '#ec4899',
+    effect: 'rainbow',
+  },
+  dynasty_founder: {
+    id: 'dynasty_founder',
+    name: '王朝開創者',
+    description: '建立金融王朝並稱霸的傳奇企業家',
+    unlockCondition: '解鎖成就「王朝締造者」',
+    unlockValue: 'dynasty_builder',
+    icon: '皇冠',
+    rarity: 'legendary',
+    color: '#fbbf24',
+    effect: 'gold',
+  },
 };
 
 export const TITLE_IDS: TitleId[] = [
   'tycoon', 'gambler', 'jailbreak', 'trader', 'champion',
   'stock_guru', 'hotel_king', 'newbie', 'fate_favorite',
   'property_newbie', 'undefeated', 'real_estate_god', 'billionaire', 'codex_master',
+  'quantum_lord', 'shadow_tycoon', 'card_legend', 'dynasty_founder',
 ];
 
 // ========== 頭像框配置 ==========

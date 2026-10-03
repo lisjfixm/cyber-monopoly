@@ -154,7 +154,7 @@ const CardEditorPage = () => {
     setCardType(card.cardType);
     setCardName(card.name);
     setDescription(card.description);
-    const eff = card.effect;
+    const eff = card.effect ?? { type: 'money' as const, amount: 0 };
     const knownType = EFFECT_TYPES.some((e) => e.value === eff.type);
     if (!knownType) {
       setEffectType(eff.type);
@@ -444,7 +444,7 @@ const CardEditorPage = () => {
                         {card.name}
                       </div>
                       <div className="text-xs text-[var(--text-secondary)] truncate">
-                        {describeEffect(card.effect)}
+                        {describeEffect(card.effect ?? { type: "money", amount: 0 } as CardEffect)}
                       </div>
                     </button>
                   ))
@@ -504,7 +504,7 @@ const CardEditorPage = () => {
                   </div>
                   <div className="text-xs font-cyber mb-2"
                     style={{ color: card.cardType === 'fate' ? 'var(--purple)' : 'var(--cyan)' }}>
-                    {describeEffect(card.effect)}
+                    {describeEffect(card.effect ?? { type: "money", amount: 0 } as CardEffect)}
                   </div>
                   <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
                     <span>by {card.author}</span>
@@ -517,6 +517,11 @@ const CardEditorPage = () => {
                   </div>
                 </button>
               ))}
+              {filteredCommunity.length === 0 && (
+                <div className="cyber-card p-8 text-center col-span-full text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  社區尚未有這類型的卡牌，來發布第一張吧！
+                </div>
+              )}
             </div>
           </div>
         )}

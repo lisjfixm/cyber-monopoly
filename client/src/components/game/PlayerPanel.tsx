@@ -1,6 +1,7 @@
 import type { FC } from "react";
+import type { LucideIcon } from "lucide-react";
 import { CELLS, PLAYER_COLOR_HEX, PROFESSIONS, LOAN_INTEREST_RATE, AI_PERSONALITY_CONFIG } from "@shared/game-config";
-import type { PlayerState } from "@shared/api.interface";
+import type { PlayerState, Profession } from "@shared/api.interface";
 import {
   Key,
   ShieldCheck,
@@ -35,9 +36,19 @@ import {
   Crown,
   ShoppingBag,
   Pickaxe,
+  Clock,
+  Zap,
+  Radar,
+  Gavel,
+  Crosshair,
+  Flag,
+  Megaphone,
+  Target,
+  Briefcase,
 } from "lucide-react";
 
-const PROFESSION_ICON_MAP = {
+// Partial + 兜底：引擎日後新增職業也不會渲染 undefined 而白屏
+const PROFESSION_ICON_MAP: Partial<Record<Profession, LucideIcon>> = {
   engineer: Wrench,
   banker: Landmark,
   speculator: TrendingUp,
@@ -56,7 +67,19 @@ const PROFESSION_ICON_MAP = {
   black_market_dealer: ShoppingBag,
   cyberborg: Bot,
   blockchain_miner: Pickaxe,
-} as const;
+  cyber_daoist: Zap,
+  data_priest: Sparkles,
+  mechanical_alchemist: FlaskConical,
+  shadow_broker: Eye,
+  time_watcher: Clock,
+  net_ninja: Swords,
+  drone_pilot: Radar,
+  auctioneer: Gavel,
+  bounty_hunter: Crosshair,
+  street_racer: Flag,
+  media_mogul: Megaphone,
+  cyber_sniper: Target,
+};
 
 interface PlayerPanelProps {
   player: PlayerState;
@@ -395,7 +418,7 @@ const PlayerPanel: FC<PlayerPanelProps> = ({
               {(() => {
                 const profConfig = PROFESSIONS[player.profession];
                 if (!profConfig) return null;
-                const ProfIcon = PROFESSION_ICON_MAP[player.profession];
+                const ProfIcon = PROFESSION_ICON_MAP[player.profession] ?? Briefcase;
                 return (
                   <>
                     <ProfIcon

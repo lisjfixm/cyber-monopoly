@@ -253,7 +253,7 @@ const StoryModePage = () => {
                   const completed = isCompleted(level.id);
                   const isCurrent = !completed && unlocked;
                   const isSelected = selectedLevel?.id === level.id;
-                  const diffCfg = difficultyConfig[level.difficulty];
+                  const diffCfg = difficultyConfig[level.difficulty] ?? difficultyConfig.normal;
 
                   return (
                     <button

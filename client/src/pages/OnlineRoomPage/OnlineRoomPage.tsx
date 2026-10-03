@@ -320,7 +320,7 @@ const OnlineRoomPage: React.FC = () => {
 
       // 404 / 403：房间不存在或已被踢，直接停止轮询并显示错误页
       if (status === 404 || status === 403) {
-        setError('房间不存在或已解散');
+        setError('房間不存在或已解散');
         setRoomNotFound(true);
         if (pollRef.current) {
           clearInterval(pollRef.current);
@@ -329,7 +329,7 @@ const OnlineRoomPage: React.FC = () => {
         return;
       }
 
-      setError('获取房间信息失败，请检查网络连接');
+      setError('無法取得房間資訊。聯機功能於靜態版不可用，部署後端後即可使用。');
       consecutiveFailuresRef.current += 1;
 
       // 连续3次失败进入重连状态
@@ -495,7 +495,7 @@ const OnlineRoomPage: React.FC = () => {
       await fetchRoom();
     } catch (err) {
       logger.error('发送聊天消息失败', { error: String(err) });
-      setError('消息发送失败');
+      setError('訊息發送失敗');
     }
   }, [roomCode, myPlayerIndex, audio, fetchRoom]);
 
@@ -507,7 +507,7 @@ const OnlineRoomPage: React.FC = () => {
       await fetchRoom();
     } catch (err) {
       logger.error('判定断线对方负失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     }
   }, [roomCode, myPlayerIndex, fetchRoom]);
 
@@ -704,7 +704,7 @@ const OnlineRoomPage: React.FC = () => {
       }
     } catch (err) {
       logger.error('掷骰子失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
       setIsRolling(false);
@@ -752,7 +752,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('购买操作失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -778,7 +778,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('建造失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -793,7 +793,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('拆除失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -808,7 +808,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('抵押失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -823,7 +823,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('赎回失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -837,7 +837,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('购买保险失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -871,7 +871,7 @@ const OnlineRoomPage: React.FC = () => {
       setTradeTargetIndex(null);
     } catch (err) {
       logger.error('发起交易失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -887,7 +887,7 @@ const OnlineRoomPage: React.FC = () => {
       setShowTradeModal(false);
     } catch (err) {
       logger.error('接受交易失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -903,7 +903,7 @@ const OnlineRoomPage: React.FC = () => {
       setShowTradeModal(false);
     } catch (err) {
       logger.error('拒绝交易失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -922,7 +922,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('选择职业失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -937,7 +937,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('发起拍卖失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -952,7 +952,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('拍卖出价失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -967,7 +967,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('放弃拍卖失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -986,7 +986,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('买入股票失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -1005,7 +1005,7 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
     } catch (err) {
       logger.error('卖出股票失败', { error: String(err) });
-      setError('操作失败，请重试');
+      setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
@@ -1054,7 +1054,7 @@ const OnlineRoomPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-neon-cyan pulse-glow text-xl font-cyber">
-          {isReconnectEntry ? '正在重连...' : '连接中...'}
+          {isReconnectEntry ? '正在重新連線...' : '連線中...'}
         </div>
       </div>
     );
@@ -1128,16 +1128,16 @@ const OnlineRoomPage: React.FC = () => {
         </div>
         <div className="cyber-card border-neon-cyan p-6 md:p-8 w-full max-w-md">
           <h1 className="text-neon-pink font-cyber text-2xl md:text-3xl text-center mb-2 pulse-glow">
-            联机房间
+            聯機房間
           </h1>
           <p className="text-text-secondary text-sm text-center mb-6">
             {isHost ? '等待玩家加入...' : '等待房主開始遊戲...'}
           </p>
 
-          {/* 房间码 */}
+          {/* 房間碼 */}
           <div className="mb-6">
             <div className="text-text-secondary text-xs font-cyber mb-2 flex items-center justify-between">
-              <span>房间码</span>
+              <span>房間碼</span>
               <span className="text-neon-cyan">
                 {playerCount}/{maxPlayers} 人
               </span>

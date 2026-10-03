@@ -207,7 +207,7 @@ export function generateAchievementCard(options: AchievementCardOptions): HTMLCa
   ctx.textBaseline = 'middle';
   // 自動換行
   const maxWidth = CANVAS_SIZE - PADDING * 4;
-  const words = options.description.split('');
+  const words = (options.description || '').split('');
   let line = '';
   let lineY = 600;
   const lineHeight = 40;

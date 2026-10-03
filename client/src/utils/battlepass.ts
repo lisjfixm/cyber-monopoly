@@ -12,6 +12,7 @@ import {
   WEEKLY_QUEST_POOL,
   SEASON_QUESTS,
 } from '@shared/game-config';
+import { safeGetJSON, safeSetJSON } from './safeStorage';
 
 const STORAGE_KEY = 'cyber_monopoly_battlepass_v2';
 
@@ -78,27 +79,55 @@ function createInitialState(): BattlePassState {
 }
 
 export function getBattlePassState(): BattlePassState {
+  const fallback = createInitialState();
+  let state: BattlePassState | null = null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return createInitialState();
-    const state = JSON.parse(raw) as BattlePassState;
-    if (!state.tiers || state.tiers.length === 0) {
-      const newState = createInitialState();
-      saveBattlePassState(newState);
-      return newState;
-    }
-    return state;
+    state = safeGetJSON<BattlePassState | null>(STORAGE_KEY, null);
   } catch {
-    return createInitialState();
+    state = null;
   }
+  if (!state || typeof state !== 'object') return fallback;
+
+  // 深度還原：任一關鍵欄位缺失或壞掉就用預設補齊，避免頁面 map 到 undefined 白屏
+  const sanitized: BattlePassState = {
+    ...fallback,
+    ...state,
+    tiers:
+      Array.isArray(state.tiers) && state.tiers.length > 0
+        ? state.tiers
+        : fallback.tiers,
+    dailyQuests:
+      Array.isArray(state.dailyQuests) && state.dailyQuests.length > 0
+        ? state.dailyQuests
+        : fallback.dailyQuests,
+    weeklyQuests:
+      Array.isArray(state.weeklyQuests) && state.weeklyQuests.length > 0
+        ? state.weeklyQuests
+        : fallback.weeklyQuests,
+    seasonQuests:
+      Array.isArray(state.seasonQuests) && state.seasonQuests.length > 0
+        ? state.seasonQuests
+        : fallback.seasonQuests,
+    currentLevel:
+      typeof state.currentLevel === 'number' && !Number.isNaN(state.currentLevel)
+        ? Math.max(1, Math.min(BATTLE_PASS_MAX_LEVEL, Math.floor(state.currentLevel)))
+        : fallback.currentLevel,
+    currentXP:
+      typeof state.currentXP === 'number' && !Number.isNaN(state.currentXP)
+        ? Math.max(0, state.currentXP)
+        : fallback.currentXP,
+    totalXP:
+      typeof state.totalXP === 'number' && !Number.isNaN(state.totalXP)
+        ? Math.max(0, state.totalXP)
+        : fallback.totalXP,
+    premiumPurchased: state.premiumPurchased === true,
+  };
+  saveBattlePassState(sanitized);
+  return sanitized;
 }
 
 export function saveBattlePassState(state: BattlePassState): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // 存儲失敗時静默處理
-  }
+  safeSetJSON(STORAGE_KEY, state);
 }
 
 export function addExp(state: BattlePassState, exp: number): BattlePassState {
@@ -153,6 +182,7 @@ export function claimTierReward(
 }
 
 export function canClaimQuest(quest: BattlePassQuest): boolean {
+  if (!quest || typeof quest.target !== 'number' || quest.target <= 0) return false;
   return quest.progress >= quest.target && !quest.claimed;
 }
 

@@ -481,7 +481,7 @@ const CommunityMapsPage = () => {
                        </span>
                        <span className="flex items-center gap-1" style={{ color: 'var(--yellow)' }}>
                          <Star size={12} fill="currentColor" />
-                         {map.rating.toFixed(1)}
+                         {(Number(map.rating) || 0).toFixed(1)}
                        </span>
                        <button
                          type="button"
@@ -678,7 +678,7 @@ const CommunityMapsPage = () => {
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1" style={{ color: 'var(--yellow)' }}>
                     <Star size={16} fill="currentColor" />
-                    <span className="font-cyber text-lg">{selectedMap.rating.toFixed(1)}</span>
+                    <span className="font-cyber text-lg">{(Number(selectedMap.rating) || 0).toFixed(1)}</span>
                   </div>
                   <div className="text-xs text-[var(--text-secondary)]">評分</div>
                 </div>

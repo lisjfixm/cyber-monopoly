@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Coins, Globe, MessageCircle } from 'lucide-react';
+import { Coins, Globe, MessageCircle, BarChart3, ShoppingBag, Landmark, Receipt, HandCoins, ClipboardList, Trophy, Store, Flag, SlidersHorizontal } from 'lucide-react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { logger } from '@lark-apaas/client-toolkit/logger';
 import { toast } from 'sonner';
@@ -59,6 +59,7 @@ import DanmakuInput from '@client/src/components/game/DanmakuInput';
 import MentorCard from '@client/src/components/game/MentorCard';
 import MentorInput from '@client/src/components/game/MentorInput';
 import DevToolsPanel from '@client/src/components/game/DevToolsPanel';
+import SystemMenuSheet, { type SystemMenuSection } from '@client/src/components/game/SystemMenuSheet';
 
 import {
   createInitialState,
@@ -142,11 +143,14 @@ import {
   quantumJump,
   sellItemToPlayer,
   adjustDiceResult,
+  priestSacrifice,
+  timeWatcherExtraTurn,
+  useProfessionSkill as castProfessionSkill,
   getAvailableProfessionSkills,
   getToll,
   tryAIUseProfessionSkill,
 } from '@shared/game-engine';
-import { CELLS, GAME_MODES, MODE_LABELS, PROFESSIONS, PLAYER_COLORS, PLAYER_COLOR_HEX, DEFAULT_PLAYER_NAMES, ITEMS, MAX_ITEMS, LOAN_MAX, LOAN_INTEREST_RATE, INSURANCE_RATE, SKILL_IDS, STOCKS, STORY_LEVELS, BAIL_AMOUNT } from '@shared/game-config';
+import { CELLS, GAME_MODES, MODE_LABELS, PROFESSIONS, PLAYER_COLORS, PLAYER_COLOR_HEX, DEFAULT_PLAYER_NAMES, ITEMS, MAX_ITEMS, LOAN_MAX, LOAN_INTEREST_RATE, INSURANCE_RATE, SKILL_IDS, STOCKS, STORY_LEVELS, BAIL_AMOUNT, ACHIEVEMENT_IDS } from '@shared/game-config';
 import type { StoryLevelConfig } from '@shared/api.interface';
 import type {
   GameState,
@@ -365,6 +369,8 @@ const GamePage: React.FC = () => {
   const [showUndoConfirm, setShowUndoConfirm] = useState(false);
   const [showWorldviewPanel, setShowWorldviewPanel] = useState(false);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
+  // 次級系統分組抽屜
+  const [showSystemMenu, setShowSystemMenu] = useState(false);
 
   // 職業技能彈窗
   const [showHackModal, setShowHackModal] = useState(false);
@@ -545,6 +551,8 @@ const GamePage: React.FC = () => {
   const rollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tradeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAnimatingRef = useRef(false);
+  // 同步守衛：防止 onClick + onTouchStart 同 tick 連續觸發造成重複擲骰
+  const isRollingGuardRef = useRef(false);
 
   const clearAllTimers = useCallback(() => {
     if (aiTimerRef.current) clearTimeout(aiTimerRef.current);
@@ -656,6 +664,7 @@ const GamePage: React.FC = () => {
     setProfessionSelectIndex(0);
     setPendingProfession(undefined);
     setIsRolling(false);
+    isRollingGuardRef.current = false;
     setTradeTargetIndex(-1);
    }, [mode, buildPlayerConfigs, clearAllTimers, isStoryMode, storyLevel]);
 
@@ -786,6 +795,9 @@ const GamePage: React.FC = () => {
   const handleRollDice = useCallback(() => {
     if (!gameState || isRolling) return;
     if (gameState.phase !== 'rolling') return;
+    // 同步守衛：同 tick 內第二次呼叫直接忽略（觸控/點擊雙觸發）
+    if (isRollingGuardRef.current) return;
+    isRollingGuardRef.current = true;
 
     // 反作弊：記錄點擊頻率
     recordAntiCheatClick();
@@ -801,6 +813,7 @@ const GamePage: React.FC = () => {
     if (rollTimerRef.current) clearTimeout(rollTimerRef.current);
     rollTimerRef.current = setTimeout(() => {
       setIsRolling(false);
+      isRollingGuardRef.current = false;
     }, 1500);
   }, [gameState, isRolling, audio]);
 
@@ -836,6 +849,7 @@ const GamePage: React.FC = () => {
   const onDiceComplete = useCallback(() => {
     if (!gameState) {
       setIsRolling(false);
+      isRollingGuardRef.current = false;
       return;
     }
     const dice = diceValues;
@@ -848,6 +862,7 @@ const GamePage: React.FC = () => {
     if (player.isInDetention || totalSteps <= 0) {
       const newState = processMove(current, dice);
       setIsRolling(false);
+      isRollingGuardRef.current = false;
       isAnimatingRef.current = false;
       advanceTurn(newState);
       return;
@@ -883,6 +898,7 @@ const GamePage: React.FC = () => {
           return processMove(resetForEngine, dice);
         });
         setIsRolling(false);
+        isRollingGuardRef.current = false;
         isAnimatingRef.current = false;
       }
     };
@@ -2495,10 +2511,6 @@ const GamePage: React.FC = () => {
         miniState.auctionPlayerPassed = false;
         const firstItem = miniState.auctionItems[0];
         if (firstItem) {
-          setTimeout(() => {
-            const aiInitial = firstItem.minBid + Math.floor(Math.random() * 200);
-            // will be set via state update below
-          }, 800);
           miniState.auctionAiBid = firstItem.minBid + Math.floor(Math.random() * 200);
         }
         miniState.auctionAiThinking = false;
@@ -3156,6 +3168,70 @@ const GamePage: React.FC = () => {
     isMyTurn &&
     gameState.winner === null;
 
+  // ===== 次級系統分組抽屜內容（收納原本散落在操作列上的眾多次級按鈕）=====
+  const systemMenuSections: SystemMenuSection[] = [
+    {
+      key: 'finance',
+      label: '金融財務',
+      items: [
+        { key: 'stock', label: '股票', icon: BarChart3, color: 'var(--green)', onClick: () => setShowStockPanel(true) },
+        { key: 'loan', label: '貸款', icon: HandCoins, color: 'var(--yellow)', onClick: () => setShowLoanModal(true) },
+        { key: 'bank', label: '存款', icon: Landmark, color: 'var(--green)', onClick: () => setShowBankModal(true) },
+        { key: 'bond', label: '債券', icon: Receipt, color: 'hsl(45, 100%, 60%)', onClick: () => setShowBondModal(true) },
+        ...(gameState.resourceMode
+          ? [{ key: 'resource', label: '資源兌換', icon: BarChart3, color: 'var(--green)', onClick: () => setShowResourceExchange(true) }]
+          : []),
+        { key: 'blackmarket', label: '黑市', icon: Store, color: 'var(--red)', onClick: () => setShowUndergroundMarket(true) },
+      ],
+    },
+    {
+      key: 'growth',
+      label: '成長任務',
+      items: [
+        {
+          key: 'skill',
+          label: '技能樹',
+          icon: SlidersHorizontal,
+          color: 'var(--cyan)',
+          onClick: () => setShowSkillTreeModal(true),
+          badge: (currentPlayer.skillPoints ?? 0) > 0 ? currentPlayer.skillPoints : undefined,
+        },
+        {
+          key: 'mission',
+          label: '任務',
+          icon: ClipboardList,
+          color: hasCompletedMission ? 'var(--green)' : 'var(--pink)',
+          onClick: () => setShowMissionPanel(true),
+          badge: hasCompletedMission ? '!' : undefined,
+        },
+        {
+          key: 'achievement',
+          label: '成就',
+          icon: Trophy,
+          color: 'hsl(45, 100%, 60%)',
+          onClick: () => setShowAchievementModal(true),
+        },
+        { key: 'stats', label: '統計', icon: BarChart3, color: 'var(--pink)', onClick: () => setShowStatsPanel(true) },
+      ],
+    },
+    {
+      key: 'world',
+      label: '道具世界',
+      items: [
+        { key: 'itemshop', label: '道具商店', icon: ShoppingBag, color: 'var(--purple)', onClick: () => setShowItemShop(true) },
+        { key: 'worldview', label: '世界觀', icon: Globe, color: 'var(--purple)', onClick: () => setShowWorldviewPanel(true) },
+      ],
+    },
+    {
+      key: 'system',
+      label: '存檔其他',
+      items: [
+        { key: 'save', label: '保存/讀檔', icon: ShoppingBag, color: 'var(--cyan)', onClick: () => { openSavePanel(); } },
+        { key: 'surrender', label: '投降', icon: Flag, color: 'var(--red)', onClick: () => setShowSurrenderDialog(true), disabled: gameState.winner !== null },
+      ],
+    },
+  ];
+
   return (
     <div className={`min-h-screen p-3 md:p-6 flex flex-col ${screenShake ? 'screen-shake' : ''}`}>
       {/* 顶部模式标签 + 回合信息 */}
@@ -3597,134 +3673,41 @@ const GamePage: React.FC = () => {
                   </button>
                 )}
                 {canRoll && !gameState.pendingTrade && (
-                  <div className="overflow-x-auto pb-2 -mx-1 px-1">
-                    <div className="flex gap-2 min-w-max">
-                      <button
-                        onClick={handleOpenTrade}
-                         className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0"
-                      >
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleOpenTrade}
+                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide"
+                    >
                        交易
                     </button>
                     <button
-                      onClick={() => setShowStockPanel(true)}
-                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide"
-                      style={{
-                        borderColor: 'var(--green)',
-                        color: 'var(--green)',
-                        backgroundColor: 'rgba(0, 255, 128, 0.08)',
-                      }}
-                    >
-                       股票
-                    </button>
-                    <button
-                      onClick={() => setShowItemShop(true)}
-                      className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0"
-                      style={{
-                        borderColor: 'var(--purple)',
-                        color: 'var(--purple)',
-                        backgroundColor: 'rgba(168, 85, 247, 0.08)',
-                      }}
-                    >
-                       道具
-                    </button>
-                    <button
-                      onClick={() => setShowLoanModal(true)}
-                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide"
-                      style={{
-                        borderColor: 'var(--yellow)',
-                        color: 'var(--yellow)',
-                        backgroundColor: 'rgba(250, 204, 21, 0.08)',
-                      }}
-                    >
-                       貸款
-                    </button>
-                    {gameState.resourceMode && (
-                      <button
-                        onClick={() => setShowResourceExchange(true)}
-                        className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0"
-                        style={{
-                          borderColor: 'var(--green)',
-                          color: 'var(--green)',
-                          backgroundColor: 'rgba(0, 255, 128, 0.08)',
-                        }}
-                      >
-                         資源兌換
-                      </button>
-                    )}
-                    <button
-                      onClick={() => setShowBankModal(true)}
-                      className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0"
-                      style={{
-                        borderColor: 'var(--green)',
-                        color: 'var(--green)',
-                        backgroundColor: 'rgba(0, 255, 128, 0.08)',
-                      }}
-                    >
-                       存款
-                    </button>
-                    <button
-                      onClick={() => setShowBondModal(true)}
-                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide"
-                      style={{
-                        borderColor: 'hsl(45, 100%, 60%)',
-                        color: 'hsl(45, 100%, 60%)',
-                        backgroundColor: 'hsla(45, 100%, 60%, 0.08)',
-                      }}
-                    >
-                       債券
-                    </button>
-                    <button
-                      onClick={() => setShowSkillTreeModal(true)}
-                      className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0 relative"
+                      onClick={() => setShowSystemMenu(true)}
+                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide relative"
                       style={{
                         borderColor: 'var(--cyan)',
                         color: 'var(--cyan)',
                         backgroundColor: 'rgba(0, 255, 255, 0.08)',
                       }}
+                      aria-label="開啟系統選單"
                     >
-                       技能
-                      {(currentPlayer.skillPoints ?? 0) > 0 && (
+                      <span className="flex items-center justify-center gap-1.5">
+                        <SlidersHorizontal className="w-4 h-4" />
+                        系統選單
+                      </span>
+                      {/* 有可升級技能 / 可領任務時顯示提示點 */}
+                      {(currentPlayer.skillPoints ?? 0) > 0 || hasCompletedMission ? (
                         <span
                           className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-cyber flex items-center justify-center"
-                          style={{
-                            backgroundColor: '#facc15',
-                            color: '#000',
-                            boxShadow: '0 0 8px #facc15',
-                          }}
+                          style={{ backgroundColor: '#facc15', color: '#000', boxShadow: '0 0 8px #facc15' }}
                         >
-                          {currentPlayer.skillPoints}
+                          !
                         </span>
-                      )}
+                      ) : null}
                     </button>
-                    <button
-                      onClick={() => setShowMissionPanel(true)}
-                      className="cyber-btn flex-1 py-2 text-sm font-cyber tracking-wide"
-                      style={{
-                        borderColor: hasCompletedMission ? 'var(--green)' : 'var(--pink)',
-                        color: hasCompletedMission ? 'var(--green)' : 'var(--pink)',
-                        backgroundColor: hasCompletedMission
-                          ? 'rgba(0, 255, 128, 0.12)'
-                          : 'rgba(255, 107, 157, 0.08)',
-                        boxShadow: hasCompletedMission
-                          ? '0 0 12px rgba(0, 255, 128, 0.5)'
-                          : 'none',
-                        animation: hasCompletedMission ? 'pulse-glow 2s ease-in-out infinite' : 'none',
-                      }}
-                    >
-                       任務
-                    </button>
-                     <button
-                       onClick={() => setShowUndergroundMarket(true)}
-                       className="cyber-btn px-3 py-2 text-sm font-cyber tracking-wide whitespace-nowrap flex-shrink-0"
-                       style={{
-                         borderColor: 'var(--red)',
-                         color: 'var(--red)',
-                         backgroundColor: 'rgba(255, 77, 109, 0.08)',
-                       }}
-                     >
-                         黑市
-                      </button>
-                     {/* 職業主動技能按鈕 */}
+                  </div>
+                )}
+                     {/* 職業主動技能按鈕（上下文相關，保留在主流程附近） */}
+                     <div className="flex flex-wrap gap-2 justify-center">
                      {gameState && isMyTurn && gameState.winner === null && (() => {
                        const skills = getAvailableProfessionSkills(gameState, gameState.currentPlayerIndex);
                        if (skills.length === 0) return null;
@@ -3738,6 +3721,22 @@ const GamePage: React.FC = () => {
                          }
                        };
                        const handleSkillClick = (skillId: string) => {
+                         // 引擎後續新增、由 useProfessionSkill 統一執行的主動技能（引擎已做 ready/守衛）
+                         const NEW_SKILL_IDS = new Set([
+                           'drone_deploy',
+                           'auctioneer_undercut',
+                           'bounty_collect',
+                           'nitro_dash',
+                           'media_blitz',
+                           'snipe_shot',
+                         ]);
+                         if (NEW_SKILL_IDS.has(skillId)) {
+                           if (gameState) {
+                             audio.playSfx('click');
+                             setGameState(castProfessionSkill(gameState, gameState.currentPlayerIndex, skillId));
+                           }
+                           return;
+                         }
                          switch (skillId) {
                            case 'hack_property':
                              setHackSelectedCellId(null);
@@ -3755,6 +3754,14 @@ const GamePage: React.FC = () => {
                              break;
                            case 'dice_adjust':
                              // 機械強化由擲骰區按鈕觸發，這裡不做彈窗
+                             break;
+                           case 'priest_sacrifice':
+                             // 數據獻祭：立即生效（引擎函式）
+                             if (gameState) setGameState(priestSacrifice(gameState, gameState.currentPlayerIndex));
+                             break;
+                           case 'time_watcher_extra':
+                             // 時間回溯：立即額外回合（引擎函式）
+                             if (gameState) setGameState(timeWatcherExtraTurn(gameState, gameState.currentPlayerIndex));
                              break;
                            default:
                              break;
@@ -3789,9 +3796,7 @@ const GamePage: React.FC = () => {
                          );
                        });
                      })()}
-                    </div>
-                   </div>
-                 )}
+                     </div>
                 {gameState.pendingTrade && (
                   <div
                     className="text-center text-xs py-1 px-2 rounded"
@@ -3969,42 +3974,6 @@ const GamePage: React.FC = () => {
                     </div>
                   )}
 
-                {/* 世界觀系統按鈕 */}
-                {canRoll && !gameState.pendingTrade && !isSpectator && gameState.winner === null && (
-                  <div className="mt-2 pt-2 border-t border-white/5">
-                    <button
-                      onClick={() => setShowWorldviewPanel(true)}
-                      className="cyber-btn w-full py-2 text-sm font-cyber tracking-wide"
-                      style={{
-                        borderColor: 'var(--purple)',
-                        color: 'var(--purple)',
-                        boxShadow: '0 0 10px rgba(168, 85, 247, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.1)',
-                      }}
-                    >
-                      <span className="flex items-center justify-center gap-2">
-                        <Globe className="w-4 h-4" />
-                        世界觀系統
-                      </span>
-                    </button>
-                  </div>
-                )}
-
-                {/* 投降按鈕 */}
-                {canRoll && gameState.winner === null && !isSpectator && (
-                  <div className="mt-2 pt-2 border-t border-white/5">
-                    <button
-                      onClick={() => setShowSurrenderDialog(true)}
-                      className="cyber-btn w-full py-1.5 text-xs font-cyber tracking-wide opacity-70 hover:opacity-100 transition-opacity"
-                      style={{
-                        borderColor: 'rgba(255, 77, 109, 0.5)',
-                        color: 'rgba(255, 77, 109, 0.8)',
-                        backgroundColor: 'rgba(255, 77, 109, 0.04)',
-                      }}
-                    >
-                       投降
-                     </button>
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -4422,45 +4391,6 @@ const GamePage: React.FC = () => {
       {/* 表情面板（遊戲中常駐底部左側） */}
       {gameStarted && gameState.winner === null && (
         <EmotePanel currentPlayerIndex={gameState.currentPlayerIndex} />
-      )}
-
-      {/* 成就按钮 + 保存 + 统计按钮（游戏中常驻底部） */}
-      {gameStarted && gameState.winner === null && (
-        <div className="fixed bottom-4 right-4 z-40 flex gap-2 flex-wrap justify-end">
-          <button
-            onClick={openSavePanel}
-            className="cyber-btn px-4 py-2 text-sm font-cyber tracking-wide"
-            style={{
-              borderColor: 'var(--cyan)',
-              color: 'var(--cyan)',
-              backgroundColor: 'rgba(0, 255, 255, 0.08)',
-            }}
-          >
-             保存
-          </button>
-          <button
-            onClick={() => setShowStatsPanel(true)}
-            className="cyber-btn px-4 py-2 text-sm font-cyber tracking-wide"
-            style={{
-              borderColor: 'var(--pink)',
-              color: 'var(--pink)',
-              backgroundColor: 'rgba(255, 107, 157, 0.08)',
-            }}
-          >
-             統計
-          </button>
-          <button
-            onClick={() => setShowAchievementModal(true)}
-            className="cyber-btn px-4 py-2 text-sm font-cyber tracking-wide"
-            style={{
-              borderColor: 'hsl(45, 100%, 60%)',
-              color: 'hsl(45, 100%, 60%)',
-              backgroundColor: 'hsla(45, 100%, 60%, 0.08)',
-            }}
-          >
-              成就 {unlockedAchievements.size}/13
-          </button>
-        </div>
       )}
 
       {/* 存档槽位面板 */}
@@ -5286,6 +5216,13 @@ const GamePage: React.FC = () => {
           onForceChance={() => setShowChanceModal(true)}
         />
       )}
+
+      {/* 次級系統分組抽屜（收納金融/成長/道具/世界觀/存檔等） */}
+      <SystemMenuSheet
+        open={showSystemMenu}
+        onClose={() => setShowSystemMenu(false)}
+        sections={systemMenuSections}
+      />
     </div>
   );
 };

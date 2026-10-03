@@ -832,7 +832,31 @@ export function normalizeGameState(state: GameState): GameState {
       skillTree: p.skillTree ?? getInitialSkillTree(),
       skillPoints: p.skillPoints ?? 0,
       reputation: p.reputation ?? REPUTATION_INITIAL,
+      // v2.0 新增欄位防禦性預設
+      frozenTurns: p.frozenTurns ?? 0,
+      dataBackupActive: p.dataBackupActive ?? false,
+      tollMagnetActive: p.tollMagnetActive ?? false,
+      loadedDiceValue: p.loadedDiceValue ?? 0,
+      casinoNetWin: p.casinoNetWin ?? 0,
+      droneScoutUses: p.droneScoutUses ?? 3,
+      auctioneerUnderUsed: p.auctioneerUnderUsed ?? 0,
+      lastHarmedBy: p.lastHarmedBy ?? null,
+      streetRacerDashUsed: p.streetRacerDashUsed ?? 0,
+      mediaFans: p.mediaFans ?? 0,
+      cyberSniperShotUsed: p.cyberSniperShotUsed ?? 0,
+      itemsBoughtThisGame: p.itemsBoughtThisGame ?? 0,
+      passiveIncomeEarned: p.passiveIncomeEarned ?? 0,
+      forcedSalesMade: p.forcedSalesMade ?? 0,
+      freezesApplied: p.freezesApplied ?? 0,
     }));
+  s.globalEventMultipliers = s.globalEventMultipliers ?? {};
+  // v2.0 模式狀態防禦性修復
+  if (s.mode === "casino" && !s.casinoMode) {
+    s.casinoMode = { gambleCount: 0, volatility: 1.2 };
+  }
+  if (s.mode === "dynasty" && !s.dynastyMode) {
+    s.dynastyMode = { dividendRate: 0.05, acquisitionBonus: 0 };
+  }
   s.inflationRate = s.inflationRate ?? INFLATION_INITIAL_RATE;
   s.bonds = s.bonds ?? [];
   // 为所有 properties 补充 insured / specialBuilding 默认值
@@ -1147,6 +1171,12 @@ export function createInitialState(
     darknetMode: mode === "darknet"
       ? { feeRate: GAME_MODES.darknet.darknetFeeRate ?? 0.1 }
       : undefined,
+    casinoMode: mode === "casino"
+      ? { gambleCount: 0, volatility: 1.2 }
+      : null,
+    dynastyMode: mode === "dynasty"
+      ? { dividendRate: 0.05, acquisitionBonus: 0 }
+      : null,
   };
 
   if (isCoop) {
@@ -1188,6 +1218,12 @@ export function createInitialState(
   }
   if (mode === "darknet") {
     state.logs.push(makeLog("system", `【暗網】 暗網模式：匿名對局，交易抽成10%，道具效果增強！`));
+  }
+  if (mode === "casino") {
+    state.logs.push(makeLog("system", `【賭城】 霓虹賭城：賭博與彩票獎勵更豐厚，金錢波動更頻繁！`));
+  }
+  if (mode === "dynasty") {
+    state.logs.push(makeLog("system", `【王朝】 金融王朝：成套地產每回合產生被動股息，併購強化收益！`));
   }
 
   // 隨機地圖
@@ -1686,8 +1722,21 @@ function checkWinner(state: GameState): number | null {
     return null;
   }
   const aliveCount = state.players.filter((p: PlayerState) => !p.isBankrupt).length;
-  if (aliveCount === 1) {
-    return state.players.findIndex((p: PlayerState) => !p.isBankrupt);
+  if (aliveCount <= 1) {
+    // 防禦：恰剩一人存活，或全部破產（極端情況），都要結束遊戲
+    const sole = state.players.findIndex((p: PlayerState) => !p.isBankrupt);
+    if (sole !== -1) return sole;
+    // 全部破產：以剩餘總資產最高者為勝，避免無限迴圈
+    let bestIdx = 0;
+    let bestAssets = -Infinity;
+    for (let i = 0; i < state.players.length; i++) {
+      const assets = getTotalAssets(i, state);
+      if (assets > bestAssets) {
+        bestAssets = assets;
+        bestIdx = i;
+      }
+    }
+    return bestIdx;
   }
   return null;
 }
@@ -3988,12 +4037,30 @@ function applyCellLanding(state: GameState): GameState {
           player.nextTollDiscount = 0;
         }
         const actualToll = Math.max(0, Math.floor(tollWithMultiplier * (1 - resourceDiscount)));
-        player.money = Math.max(0, player.money - actualToll);
-        ownerPlayer.money = ownerPlayer.money + actualToll;
+        // 過路費磁吸：業主下次收過路費收入翻倍
+        let magnetBonus = 0;
+        if (ownerPlayer.tollMagnetActive) {
+          ownerPlayer.tollMagnetActive = false;
+          magnetBonus = actualToll;
+        }
+        player.money = Math.max(0, player.money - actualToll - magnetBonus);
+        ownerPlayer.money = ownerPlayer.money + actualToll + magnetBonus;
+        // 賞金獵人被動：收過路費額外 +10%
+        let bountyBonus = 0;
+        if (ownerPlayer.profession === "bounty_hunter" && actualToll > 0) {
+          bountyBonus = Math.round(actualToll * 0.1);
+          ownerPlayer.money += bountyBonus;
+          ownerPlayer.tollEarned += bountyBonus;
+          ownerPlayer.tollIncome += bountyBonus;
+        }
         player.tollPaid += actualToll;
         ownerPlayer.tollEarned += actualToll;
         player.tollExpense += actualToll;
         ownerPlayer.tollIncome += actualToll;
+        // 記錄傷害來源（賞金獵人/復仇者被動用）
+        if (actualToll > 0 && player.profession === "bounty_hunter") {
+          player.lastHarmedBy = owner;
+        }
         // 合作模式：同步队伍金钱
         if (state.isCoopMode) {
           syncCoopMoneyFromPlayer(state, playerIdx);
@@ -4056,8 +4123,10 @@ function applyCellLanding(state: GameState): GameState {
           }
         }
         if (player.money <= 0) {
-          const wentBankrupt = applyBankruptcyCheck(state, playerIdx);
-          if (!wentBankrupt) {
+          applyBankruptcyCheck(state, playerIdx);
+          // 破產後若遊戲尚未結束（仍有其他存活玩家），必須換到下一位存活玩家，
+          // 否則 currentPlayerIndex 會停在破產玩家身上造成無限迴圈。
+          if (state.phase !== "ended") {
             state.phase = "rolling";
             state.currentPlayerIndex = getNextPlayer(state, playerIdx);
           }
@@ -4312,6 +4381,21 @@ export function processMove(state: GameState, dice: [number, number]): GameState
     );
   }
 
+  // 灌鉛骰子：下次擲骰指定總點數（4~10）
+  if (player.loadedDiceValue && player.loadedDiceValue > 0) {
+    const target = Math.max(4, Math.min(10, player.loadedDiceValue));
+    player.loadedDiceValue = 0;
+    // 拆分為兩顆骰子（1~6）
+    d1 = Math.max(1, Math.min(6, Math.floor(target / 2)));
+    d2 = target - d1;
+    if (d2 > 6) { d1 -= d2 - 6; d2 = 6; }
+    if (d1 < 1) { d1 = 1; d2 = target - 1; }
+    sum = d1 + d2;
+    newState.logs.push(
+      makeLog("item", `【灌鉛】 灌鉛骰子發動！骰子結果為 ${d1}+${d2} = ${sum}`),
+    );
+  }
+
   // 數據牧師：獻祭獲得必出 7
   if (player.sacrificeLuckySeven) {
     player.sacrificeLuckySeven = false;
@@ -4440,6 +4524,14 @@ export function processMove(state: GameState, dice: [number, number]): GameState
     );
   }
 
+  // 街頭賽車手：擲出 3 或更低時，本回合移動 +1 格
+  if (player.profession === "street_racer" && sum <= 3) {
+    sum += 1;
+    newState.logs.push(
+      makeLog(logType, `【賽車】${player.name} 地板油門！低點數衝刺，額外 +1 格（共 ${sum} 步）`),
+    );
+  }
+
   newState.diceValues = [d1, d2];
   newState.lastDiceValues = [d1, d2];
   // 記錄玩家上次擲骰點數（用於克隆骰）
@@ -4477,6 +4569,28 @@ export function processMove(state: GameState, dice: [number, number]): GameState
         if (newState.isCoopMode) {
           syncCoopMoneyFromPlayer(newState, playerIdx);
         }
+      }
+    }
+
+    // 無人機操縱師：30% 概率獲得 150 元偵察津貼
+    if (player.profession === "drone_pilot" && Math.random() < 0.3) {
+      player.money += 150;
+      newState.logs.push(makeLog(logType, `【無人機】 ${player.name} 完成一次偵察，獲得 150 元津貼`));
+      if (newState.isCoopMode) syncCoopMoneyFromPlayer(newState, playerIdx);
+    }
+
+    // 媒體巨頭：粉絲數 = 持有地產數，每粉絲每回合 +2 元廣告收入
+    if (player.profession === "media_mogul") {
+      const fans = Object.values(newState.properties).filter(
+        (p: PropertyState) => p.owner === playerIdx,
+      ).length;
+      player.mediaFans = fans;
+      const adIncome = fans * 2;
+      if (adIncome > 0) {
+        player.money += adIncome;
+        player.passiveIncomeEarned = (player.passiveIncomeEarned ?? 0) + adIncome;
+        newState.logs.push(makeLog(logType, `【媒體】 ${player.name} 擁有 ${fans} 粉絲，廣告收入 +${adIncome} 元`));
+        if (newState.isCoopMode) syncCoopMoneyFromPlayer(newState, playerIdx);
       }
     }
 
@@ -4526,6 +4640,17 @@ export function processMove(state: GameState, dice: [number, number]): GameState
       }
       newState.logs.push(
         makeLog(logType, `【閃電】 ${player.name} 受到電磁脈衝影響，本回合無法行動`),
+      );
+      newState.phase = "rolling";
+      newState.currentPlayerIndex = getNextPlayer(newState, playerIdx);
+      return newState;
+    }
+
+    // 冰凍效果：frozenTurns > 0 時跳過本回合
+    if ((player.frozenTurns ?? 0) > 0) {
+      player.frozenTurns = (player.frozenTurns ?? 0) - 1;
+      newState.logs.push(
+        makeLog(logType, `【冰凍】 ${player.name} 被冰封，本回合無法行動（剩餘 ${player.frozenTurns} 回合）`),
       );
       newState.phase = "rolling";
       newState.currentPlayerIndex = getNextPlayer(newState, playerIdx);
@@ -4763,6 +4888,18 @@ export function processMove(state: GameState, dice: [number, number]): GameState
       return handleRoundEnd(landedState, playerIdx);
     }
     // 未滿 3 連雙：保留當前玩家回合，進入 rolling phase 繼續擲骰
+    // 但若落到「未擁有且買得起」的地產（phase=buying），必須先完成買地決策，
+    // 不可把 buying 覆蓋成 rolling，否則買地提示會被吞掉。
+    if (landedState.phase === "buying") {
+      landedState.logs.push(
+        makeLog(
+          logType,
+          `${afterPlayer.name} 擲出雙倍（連續第 ${afterPlayer.consecutiveDoubles} 次）！先完成買地，再獲得額外擲骰`,
+        ),
+      );
+      // 保持 phase="buying"，consecutiveDoubles 已遞增；買地決策後由 applyBuyDecision 處理額外回合
+      return landedState;
+    }
     landedState.logs.push(
       makeLog(
         logType,
@@ -4919,7 +5056,19 @@ export function applyBuyDecision(state: GameState, buy: boolean): GameState {
     newState.logs.push(makeLog(logType, `${player.name} 放弃购买 ${cell.name}`));
   }
 
+  // 買／放棄完成：
+  // - 若玩家仍處於連續雙倍（consecutiveDoubles > 0，且 <3，三連雙已在 processMove 進監獄）
+  //   → 給該玩家「額外擲骰」：保持 currentPlayerIndex 不變、phase=rolling，不換人。
+  // - 否則 → 正常換下一家。
+  const hasExtraDoublesTurn = (player.consecutiveDoubles ?? 0) > 0;
   newState.phase = "rolling";
+  if (hasExtraDoublesTurn) {
+    newState.logs.push(
+      makeLog(logType, `${player.name} 買地決策完成，因雙倍獲得額外擲骰機會`),
+    );
+    // 不換人：currentPlayerIndex 保持 playerIdx
+    return newState;
+  }
   newState.currentPlayerIndex = getNextPlayer(newState, playerIdx);
   return handleRoundEnd(newState, playerIdx);
 }
@@ -5340,6 +5489,14 @@ function applyCardEffect(
             'insurance',
             `【厄運保險】 玩家${player.name} 的損失由保險減半，實際損失 $${Math.abs(amount)}`,
           ),
+        );
+      }
+      // 數據備份：完全抵消下一次負面金錢效果（一次性）
+      if (amount < 0 && player.dataBackupActive) {
+        player.dataBackupActive = false;
+        amount = 0;
+        state.logs.push(
+          makeLog("item", `【數據備份】 ${player.name} 的負面金錢效果已被備份抵消！`),
         );
       }
       if (amount !== 0) {
@@ -6026,6 +6183,117 @@ function applyCardEffect(
       );
       break;
     }
+    case "freeze_opponent": {
+      // 隨機一名未破產對手下回合跳過
+      const victimIdx = getRandomOpponent(state, playerIdx);
+      if (victimIdx < 0) {
+        state.logs.push(makeLog(logType, `${cardDescription}（無可用對象，效果跳過）`));
+        break;
+      }
+      const victim = state.players[victimIdx];
+      if (victim.negativeImmunityShield) {
+        victim.negativeImmunityShield = false;
+        state.logs.push(makeLog(logType, `【防火牆】${victim.name} 抵擋了冰凍！`));
+        break;
+      }
+      victim.frozenTurns = (victim.frozenTurns ?? 0) + effect.duration;
+      player.freezesApplied = (player.freezesApplied ?? 0) + 1;
+      state.logs.push(
+        makeLog(logType, `${cardDescription}（${victim.name} 被凍結 ${effect.duration} 回合）`),
+      );
+      break;
+    }
+    case "swap_position": {
+      const targetIdx = getRandomOpponent(state, playerIdx);
+      if (targetIdx < 0) {
+        state.logs.push(makeLog(logType, `${cardDescription}（無可用對象，效果跳過）`));
+        break;
+      }
+      const target = state.players[targetIdx];
+      const myPos = player.position;
+      player.position = clampPosition(target.position);
+      target.position = clampPosition(myPos);
+      state.logs.push(
+        makeLog(logType, `${cardDescription}（與 ${target.name} 互換位置）`),
+      );
+      break;
+    }
+    case "lottery": {
+      // 彩票：先付 cost，50% 中 prize
+      const cost = effect.cost;
+      const prize = effect.prize;
+      player.money -= cost;
+      let won = false;
+      if (Math.random() < 0.5) {
+        player.money += prize;
+        won = true;
+      }
+      const casinoMode = state.casinoMode ? 1 : 0;
+      if (state.casinoMode) {
+        state.casinoMode.gambleCount += 1;
+      }
+      if (won) {
+        player.casinoNetWin = (player.casinoNetWin ?? 0) + (prize - cost) + casinoMode * Math.round(prize * 0.1);
+        state.logs.push(
+          makeLog(logType, `${cardDescription}（中獎！-${cost} 元，兌領 ${prize} 元）`),
+        );
+      } else {
+        player.casinoNetWin = (player.casinoNetWin ?? 0) - cost;
+        state.logs.push(
+          makeLog(logType, `${cardDescription}（未中獎，損失 ${cost} 元）`),
+        );
+      }
+      if (state.isCoopMode) syncCoopMoneyFromPlayer(state, playerIdx);
+      break;
+    }
+    case "extort": {
+      // 向現金最多的對手勒索
+      let richestIdx = -1;
+      let richestMoney = -1;
+      for (let i = 0; i < state.players.length; i++) {
+        if (i === playerIdx || state.players[i].isBankrupt) continue;
+        if (state.players[i].money > richestMoney) {
+          richestMoney = state.players[i].money;
+          richestIdx = i;
+        }
+      }
+      if (richestIdx < 0) {
+        state.logs.push(makeLog(logType, `${cardDescription}（無可用對象，效果跳過）`));
+        break;
+      }
+      const victim = state.players[richestIdx];
+      const take = Math.min(effect.amount, victim.money);
+      victim.money -= take;
+      player.money += take;
+      state.logs.push(
+        makeLog(logType, `${cardDescription}（從 ${victim.name} 處勒索 ${take} 元）`),
+      );
+      if (state.isCoopMode) {
+        syncCoopMoneyFromPlayer(state, playerIdx);
+        syncCoopMoneyFromPlayer(state, richestIdx);
+      }
+      break;
+    }
+    case "universal_tax": {
+      // 全體玩家（含自己）按現金百分比繳稅給銀行
+      let totalCollected = 0;
+      for (let i = 0; i < state.players.length; i++) {
+        const p = state.players[i];
+        if (p.isBankrupt) continue;
+        const tax = Math.round(p.money * (effect.percent / 100));
+        if (tax > 0) {
+          p.money -= tax;
+          totalCollected += tax;
+        }
+      }
+      state.logs.push(
+        makeLog(logType, `${cardDescription}（全體繳稅 ${effect.percent}%，共庫收 ${totalCollected} 元）`),
+      );
+      if (state.isCoopMode) {
+        for (let i = 0; i < state.players.length; i++) syncCoopMoneyFromPlayer(state, i);
+      }
+      break;
+    }
   }
 
   // 成就：资金低于1000标记（检查所有未破产玩家）
@@ -6067,7 +6335,12 @@ function applyCardEffect(
     effect.type === "item_give" ||
     effect.type === "others_pay_bank" ||
     effect.type === "trade_exchange_money" ||
-    effect.type === "buff"
+    effect.type === "buff" ||
+    effect.type === "freeze_opponent" ||
+    effect.type === "swap_position" ||
+    effect.type === "lottery" ||
+    effect.type === "extort" ||
+    effect.type === "universal_tax"
   ) {
     state.phase = "rolling";
     state.currentPlayerIndex = getNextPlayer(state, playerIdx);
@@ -8798,6 +9071,17 @@ export function triggerRandomGlobalEvent(state: GameState): GameState {
       }
       break;
     }
+
+    // v2.0 新增事件：統一走共享實作
+    case "quantum_storm":
+    case "stock_circuit_breaker":
+    case "foreign_inflow":
+    case "ad_storm":
+    case "subsidy_carnival":
+    case "black_market_crackdown": {
+      applyGlobalEventEffectsInPlace(newState, eventType);
+      break;
+    }
   }
 
   newState.logs.push(
@@ -9343,6 +9627,48 @@ function handleRoundEndInPlace(state: GameState, endedPlayerIndex: number): void
     state.globalEventMultipliers.tollMultiplier = undefined;
   }
 
+  // 金融王朝：每個玩家的成套地產每回合產生被動股息（basePrice 之和 × dividendRate）
+  if (state.dynastyMode) {
+    const rate = state.dynastyMode.dividendRate;
+    // 先統計每個 color group 的滿員數
+    const groupTotal: Record<string, number> = {};
+    for (let cid = 0; cid < CELL_COUNT; cid++) {
+      const cell = getCellConfig(state, cid);
+      if (cell.type === "property") {
+        groupTotal[cell.color] = (groupTotal[cell.color] ?? 0) + 1;
+      }
+    }
+    for (let pi = 0; pi < state.players.length; pi++) {
+      const p = state.players[pi];
+      if (p.isBankrupt) continue;
+      const groupCount: Record<string, number> = {};
+      const groupValue: Record<string, number> = {};
+      for (const cidStr of Object.keys(state.properties)) {
+        const cid = Number(cidStr);
+        const prop = state.properties[cid];
+        if (!prop || prop.owner !== pi || prop.isMortgaged) continue;
+        const cell = getCellConfig(state, cid);
+        if (cell.type !== "property") continue;
+        groupCount[cell.color] = (groupCount[cell.color] ?? 0) + 1;
+        groupValue[cell.color] = (groupValue[cell.color] ?? 0) + (cell.basePrice ?? 0);
+      }
+      let setBaseValue = 0;
+      for (const color of Object.keys(groupCount)) {
+        if (groupTotal[color] > 0 && groupCount[color] >= groupTotal[color]) {
+          setBaseValue += groupValue[color];
+        }
+      }
+      if (setBaseValue > 0) {
+        const dividend = Math.round(setBaseValue * rate);
+        p.money += dividend;
+        p.passiveIncomeEarned = (p.passiveIncomeEarned ?? 0) + dividend;
+        state.logs.push(
+          makeLog("system", `【王朝】 ${p.name} 成套地產股息 +${dividend} 元`),
+        );
+      }
+    }
+  }
+
   // 4. 检查并触发全局事件
   if (
     eventsEnabled &&
@@ -9454,6 +9780,136 @@ function handleRoundEndInPlace(state: GameState, endedPlayerIndex: number): void
   state.playersActedThisRound = new Array(state.players.length).fill(false);
 
   updatePlayerAssets(state);
+}
+
+// ========== 全局事件效果共享實作（v2.0 新增 + 補足 in-place 路徑遺漏） ==========
+
+function applyGlobalEventEffectsInPlace(
+  state: GameState,
+  eventType: GlobalEventType,
+): void {
+  switch (eventType) {
+    case "investment_hint": {
+      const candidates: number[] = [];
+      for (let i = 0; i < CELL_COUNT; i++) {
+        const cell = getCellConfig(state, i);
+        if (cell.type !== "property") continue;
+        const prop = state.properties[i];
+        if (prop && prop.isMortgaged) continue;
+        if (state.cellEffects?.[i]) continue;
+        candidates.push(i);
+      }
+      if (candidates.length > 0) {
+        const targetCellId = candidates[Math.floor(Math.random() * candidates.length)];
+        const cellName = getCellConfig(state, targetCellId).name;
+        if (!state.cellEffects) state.cellEffects = {};
+        state.cellEffects[targetCellId] = {
+          type: "investment_preview",
+          duration: 3,
+          expireTurn: state.totalTurns + 3,
+          value: 1.5,
+        };
+        state.investmentPreview = { cellId: targetCellId, turnsUntilHike: 3 };
+        state.logs.push(
+          makeLog("global_event", `【投資預告】${cellName} 即將迎來地價飆漲！`),
+        );
+      }
+      break;
+    }
+    case "bank_crisis": {
+      for (let i = 0; i < state.players.length; i++) {
+        const playerLoan = getPlayerLoan(state, i);
+        if (playerLoan > 0) {
+          setPlayerLoan(state, i, 0);
+        }
+        const playerSavings = getPlayerSavings(state, i);
+        if (playerSavings > 0) {
+          const lost = Math.round(playerSavings * 0.5);
+          setPlayerSavings(state, i, playerSavings - lost);
+        }
+      }
+      break;
+    }
+    case "quantum_storm": {
+      // 所有存活玩家隨機移動 1~4 格；金錢卡效果本回合翻倍
+      state.globalEventMultipliers.cardMoneyMultiplier = 2;
+      for (let i = 0; i < state.players.length; i++) {
+        const p = state.players[i];
+        if (p.isBankrupt) continue;
+        const steps = 1 + Math.floor(Math.random() * 4);
+        p.position = clampPosition(p.position + steps);
+      }
+      break;
+    }
+    case "stock_circuit_breaker": {
+      // 股價隨機暴跌 15%，並標記暫停（本回合後由計費邏輯讀取倍率為 1）
+      state.globalEventMultipliers.stockPriceMultiplier = 0.8;
+      for (const symbol of STOCK_SYMBOLS) {
+        const newPrice = Math.max(
+          STOCK_PRICE_MIN,
+          Math.round(state.stocks[symbol] * 0.85),
+        );
+        state.stocks[symbol] = newPrice;
+        if (state.stockStates && state.stockStates[symbol]) {
+          state.stockStates[symbol].previousPrice = state.stockStates[symbol].price;
+          state.stockStates[symbol].price = newPrice;
+        }
+      }
+      break;
+    }
+    case "foreign_inflow": {
+      // 股價全線 +25%
+      for (const symbol of STOCK_SYMBOLS) {
+        const newPrice = Math.min(
+          STOCK_PRICE_MAX,
+          Math.round(state.stocks[symbol] * 1.25),
+        );
+        state.stocks[symbol] = newPrice;
+        if (state.stockStates && state.stockStates[symbol]) {
+          state.stockStates[symbol].previousPrice = state.stockStates[symbol].price;
+          state.stockStates[symbol].price = newPrice;
+        }
+      }
+      break;
+    }
+    case "ad_storm": {
+      // 本回合所有收入 ×1.5
+      state.globalEventMultipliers.incomeMultiplier = 1.5;
+      break;
+    }
+    case "subsidy_carnival": {
+      for (let i = 0; i < state.players.length; i++) {
+        const p = state.players[i];
+        if (p.isBankrupt) continue;
+        p.money += 600;
+      }
+      break;
+    }
+    case "black_market_crackdown": {
+      // 聲望最低者罰款 800（無聲望則隨機一人）
+      let lowestIdx = -1;
+      let lowestRep = Number.POSITIVE_INFINITY;
+      for (let i = 0; i < state.players.length; i++) {
+        const p = state.players[i];
+        if (p.isBankrupt) continue;
+        const rep = p.reputation ?? 100;
+        if (rep < lowestRep) {
+          lowestRep = rep;
+          lowestIdx = i;
+        }
+      }
+      if (lowestIdx >= 0) {
+        const p = state.players[lowestIdx];
+        p.money = Math.max(0, p.money - 800);
+        state.logs.push(
+          makeLog("global_event", `【黑市取締】${p.name} 因非法交易被罰 800 元！`),
+        );
+      }
+      break;
+    }
+    default:
+      break;
+  }
 }
 
 function applyGlobalEventInPlace(
@@ -9586,6 +10042,19 @@ function applyGlobalEventInPlace(
         const target = candidates[Math.floor(Math.random() * candidates.length)];
         state.players[target].hasGetOutOfJailCard = true;
       }
+      break;
+    }
+
+    // v2.0：以下事件統一走共享實作（補足本路徑原本遺漏的 investment_hint / bank_crisis）
+    case "investment_hint":
+    case "bank_crisis":
+    case "quantum_storm":
+    case "stock_circuit_breaker":
+    case "foreign_inflow":
+    case "ad_storm":
+    case "subsidy_carnival":
+    case "black_market_crackdown": {
+      applyGlobalEventEffectsInPlace(state, eventType);
       break;
     }
   }
@@ -10164,6 +10633,12 @@ export function processEndOfTurn(state: GameState): GameState {
     newState.roundStartPlayer = nextPlayer;
   }
 
+  // 推進到下一位存活玩家，並回到擲骰階段（本函式為公開「結束回合」API）
+  if (newState.phase !== "ended") {
+    newState.currentPlayerIndex = nextPlayer;
+    newState.phase = "rolling";
+  }
+
   return newState;
 }
 
@@ -10219,6 +10694,8 @@ export function buyItem(
     type: itemType,
     id: nextItemId++,
   });
+  player.itemsBoughtThisGame = (player.itemsBoughtThisGame ?? 0) + 1;
+  unlockCodexItem(newState, itemType);
 
   const teamText = newState.isCoopMode ? "（队伍共享）" : "";
   newState.logs.push(
@@ -10690,6 +11167,138 @@ export function applyItem(
           `【偽證】 ${player.name} 使用了偽身份證，下次進入監禁時自動豁免`,
         ),
       );
+      break;
+    }
+
+    case "freeze_ray": {
+      if (targetCellId === undefined) {
+        newState.logs.push(makeLog(logType, `使用失敗：請指定目標對手`));
+        return newState;
+      }
+      const targetPlayer = newState.players[targetCellId];
+      if (!targetPlayer || targetPlayer.isBankrupt || targetCellId === playerIndex) {
+        newState.logs.push(makeLog(logType, `使用失敗：目標玩家不存在或不可選`));
+        return newState;
+      }
+      targetPlayer.frozenTurns = (targetPlayer.frozenTurns ?? 0) + 1;
+      player.freezesApplied = (player.freezesApplied ?? 0) + 1;
+      newState.logs.push(
+        makeLog("item", `【冰凍】 ${player.name} 對 ${targetPlayer.name} 發射冰凍射線，對手下回合無法行動`),
+      );
+      break;
+    }
+
+    case "swap_portal": {
+      if (targetCellId === undefined) {
+        newState.logs.push(makeLog(logType, `使用失敗：請指定交換對手`));
+        return newState;
+      }
+      const targetPlayer = newState.players[targetCellId];
+      if (!targetPlayer || targetPlayer.isBankrupt || targetCellId === playerIndex) {
+        newState.logs.push(makeLog(logType, `使用失敗：目標玩家不存在或不可選`));
+        return newState;
+      }
+      const myPos = player.position;
+      player.position = clampPosition(targetPlayer.position);
+      targetPlayer.position = clampPosition(myPos);
+      newState.logs.push(
+        makeLog("item", `【傳送門】 ${player.name} 與 ${targetPlayer.name} 互換了位置`),
+      );
+      break;
+    }
+
+    case "golden_passport": {
+      if (player.isInDetention) {
+        player.isInDetention = false;
+        player.detentionTurns = 0;
+        newState.logs.push(
+          makeLog("item", `【護照】 ${player.name} 使用金色護照，立即出獄！`),
+        );
+      } else {
+        // 不在監禁：轉換為現金補償
+        player.money += 500;
+        newState.logs.push(
+          makeLog("item", `【護照】 ${player.name} 未被監禁，金色護照折現 500 元`),
+        );
+        if (newState.isCoopMode) syncCoopMoneyFromPlayer(newState, playerIndex);
+      }
+      break;
+    }
+
+    case "data_backup": {
+      player.dataBackupActive = true;
+      newState.logs.push(
+        makeLog("item", `【備份】 ${player.name} 啟用數據備份，將抵消下一次負面金錢效果`),
+      );
+      break;
+    }
+
+    case "loaded_dice": {
+      // 指定下次擲骰總點數（4~10），AI/玩家透過 remoteDiceValues 或預設 7
+      let value = 7;
+      if (remoteDiceValues && remoteDiceValues.length === 2) {
+        value = remoteDiceValues[0] + remoteDiceValues[1];
+      }
+      value = Math.max(4, Math.min(10, value));
+      player.loadedDiceValue = value;
+      newState.logs.push(
+        makeLog("item", `【灌鉛】 ${player.name} 安裝灌鉛骰子，下次擲骰必出 ${value} 點`),
+      );
+      break;
+    }
+
+    case "ransomware": {
+      // 向最富有的對手勒索 800 元
+      let richestIdx = -1;
+      let richestMoney = -1;
+      for (let i = 0; i < newState.players.length; i++) {
+        if (i === playerIndex || newState.players[i].isBankrupt) continue;
+        if (newState.players[i].money > richestMoney) {
+          richestMoney = newState.players[i].money;
+          richestIdx = i;
+        }
+      }
+      if (richestIdx < 0) {
+        newState.logs.push(makeLog(logType, `勒索失敗：無可用對手`));
+        return newState;
+      }
+      const base = 800;
+      const bonus = player.profession === "cyber_sniper" ? 1.5 : 1;
+      const amount = Math.min(Math.round(base * bonus), newState.players[richestIdx].money);
+      newState.players[richestIdx].money -= amount;
+      player.money += amount;
+      newState.logs.push(
+        makeLog("item", `【勒索】 ${player.name} 對 ${newState.players[richestIdx].name} 投放勒索病毒，勒索 ${amount} 元`),
+      );
+      if (newState.isCoopMode) {
+        syncCoopMoneyFromPlayer(newState, playerIndex);
+        syncCoopMoneyFromPlayer(newState, richestIdx);
+      }
+      break;
+    }
+
+    case "toll_magnet": {
+      player.tollMagnetActive = true;
+      newState.logs.push(
+        makeLog("item", `【磁吸】 ${player.name} 部署過路費磁吸，下次收過路費收入翻倍`),
+      );
+      break;
+    }
+
+    case "lucky_coin": {
+      const casinoBoost = newState.casinoMode ? 1.2 : 1;
+      if (Math.random() < 0.5) {
+        const win = Math.round(1000 * casinoBoost);
+        player.money += win;
+        player.casinoNetWin = (player.casinoNetWin ?? 0) + win;
+        newState.logs.push(makeLog("item", `【硬幣】 ${player.name} 拋出幸運硬幣，正面！贏得 ${win} 元`));
+      } else {
+        const loss = 500;
+        player.money -= loss;
+        player.casinoNetWin = (player.casinoNetWin ?? 0) - loss;
+        newState.logs.push(makeLog("item", `【硬幣】 ${player.name} 拋出幸運硬幣，反面！損失 ${loss} 元`));
+      }
+      if (newState.isCoopMode) syncCoopMoneyFromPlayer(newState, playerIndex);
       break;
     }
   }
@@ -11265,6 +11874,73 @@ export function miniGameAction(
       resolveMiniGame(newState, playerIndex);
       break;
     }
+
+    // ===== v2.0 補齊：4 種小遊戲的結算 =====
+    case "data_miner_collect": {
+      // 挖掘到一個數據節點，加分
+      if (game.type !== "data_miner") return newState;
+      game.minerScore = (game.minerScore ?? 0) + 100;
+      game.minerCombo = (game.minerCombo ?? 0) + 1;
+      break;
+    }
+
+    case "data_miner_finish": {
+      if (game.type !== "data_miner") return newState;
+      const score = game.minerScore ?? 0;
+      if (score >= 2000) game.reward = 1500;
+      else if (score >= 1000) game.reward = 800;
+      else if (score >= 400) game.reward = 300;
+      else game.reward = 0;
+      game.minerPlaying = false;
+      game.finished = true;
+      resolveMiniGame(newState, playerIndex);
+      break;
+    }
+
+    case "firewall_finish": {
+      if (game.type !== "firewall_breach") return newState;
+      const lives = game.firewallLives ?? 0;
+      const round = game.firewallRound ?? 0;
+      // 存活回合數越多、殘血越少，獎勵越高
+      if (lives >= 2 && round >= 4) game.reward = 1200;
+      else if (round >= 3) game.reward = 600;
+      else if (round >= 1) game.reward = 200;
+      else game.reward = 0;
+      game.finished = true;
+      resolveMiniGame(newState, playerIndex);
+      break;
+    }
+
+    case "racer_finish": {
+      if (game.type !== "cyber_racer") return newState;
+      const timeLeft = game.racerTimeLeft ?? 0;
+      // 撐越久獎勵越高
+      if (timeLeft >= 8) game.reward = 1200;
+      else if (timeLeft >= 5) game.reward = 600;
+      else if (timeLeft >= 2) game.reward = 200;
+      else game.reward = 0;
+      game.racerPlaying = false;
+      game.finished = true;
+      resolveMiniGame(newState, playerIndex);
+      break;
+    }
+
+    case "auction_master_finish": {
+      if (game.type !== "auction_master") return newState;
+      // 結算：贏得物品總價值 - 已出價成本，淨獲利即獎勵
+      let net = 0;
+      if (game.auctionItems) {
+        for (const it of game.auctionItems) {
+          if (it.won) {
+            net += it.value - (it.bidAmount ?? it.minBid);
+          }
+        }
+      }
+      game.reward = Math.max(0, net);
+      game.finished = true;
+      resolveMiniGame(newState, playerIndex);
+      break;
+    }
   }
 
   return newState;
@@ -11382,6 +12058,45 @@ export function aiUseItemIfNeeded(state: GameState, playerIndex: number): GameSt
     if (item.type === "remote_dice" && !player.remoteDiceActive && !player.doubleDiceActive && Math.random() < 0.25) {
       // AI 简单使用：直接设为双6
       newState = applyItem(newState, playerIndex, item.id, undefined, [6, 6]);
+      return newState;
+    }
+
+    // v2.0 新道具 AI 使用
+    const personality = AI_PERSONALITY_CONFIG[getAiPersonality(newState)];
+    if (item.type === "freeze_ray" && Math.random() < 0.4) {
+      // 復仇者優先冰凍最近傷害過自己的對手
+      let target = player.lastHarmedBy ?? -1;
+      if (target < 0 || newState.players[target].isBankrupt || target === playerIndex) {
+        target = getRandomOpponent(newState, playerIndex);
+      }
+      if (target >= 0) {
+        newState = applyItem(newState, playerIndex, item.id, target);
+        return newState;
+      }
+    }
+    if (item.type === "lucky_coin" && (personality === AI_PERSONALITY_CONFIG.gambler ? Math.random() < 0.7 : Math.random() < 0.3)) {
+      newState = applyItem(newState, playerIndex, item.id);
+      return newState;
+    }
+    if (item.type === "data_backup" && player.money < 3000 && Math.random() < 0.5) {
+      newState = applyItem(newState, playerIndex, item.id);
+      return newState;
+    }
+    if (item.type === "toll_magnet" && Math.random() < 0.4) {
+      newState = applyItem(newState, playerIndex, item.id);
+      return newState;
+    }
+    if (item.type === "loaded_dice" && Math.random() < 0.4) {
+      // 灌 7 點
+      newState = applyItem(newState, playerIndex, item.id, undefined, [3, 4]);
+      return newState;
+    }
+    if (item.type === "golden_passport" && player.isInDetention && Math.random() < 0.9) {
+      newState = applyItem(newState, playerIndex, item.id);
+      return newState;
+    }
+    if (item.type === "ransomware" && Math.random() < 0.5) {
+      newState = applyItem(newState, playerIndex, item.id);
       return newState;
     }
   }
@@ -11508,6 +12223,52 @@ export function aiResolveMiniGame(state: GameState, playerIndex: number): GameSt
     return newState;
   }
 
+  // 數據挖掘：AI 挖到 8-18 個節點後結算
+  if (currentGame.type === "data_miner") {
+    const g = newState.pendingMiniGame;
+    if (g) {
+      g.minerScore = (8 + Math.floor(Math.random() * 11)) * 100;
+    }
+    newState = miniGameAction(newState, playerIndex, "data_miner_finish");
+    return newState;
+  }
+
+  // 防火牆突破：AI 撐過 2-5 回合，剩 0-2 命
+  if (currentGame.type === "firewall_breach") {
+    const g = newState.pendingMiniGame;
+    if (g) {
+      g.firewallRound = 2 + Math.floor(Math.random() * 4);
+      g.firewallLives = Math.floor(Math.random() * 3);
+    }
+    newState = miniGameAction(newState, playerIndex, "firewall_finish");
+    return newState;
+  }
+
+  // 賽博賽車：AI 撐過 2-10 秒
+  if (currentGame.type === "cyber_racer") {
+    const g = newState.pendingMiniGame;
+    if (g) {
+      g.racerTimeLeft = 2 + Math.floor(Math.random() * 9);
+    }
+    newState = miniGameAction(newState, playerIndex, "racer_finish");
+    return newState;
+  }
+
+  // 拍賣大師：AI 隨機贏 1-2 件物品（低買高賣）後結算
+  if (currentGame.type === "auction_master") {
+    const g = newState.pendingMiniGame;
+    if (g && g.auctionItems) {
+      g.auctionItems.forEach((it, idx) => {
+        if (idx < 1 + Math.floor(Math.random() * 2)) {
+          it.won = true;
+          it.bidAmount = Math.round(it.minBid * 0.8);
+        }
+      });
+    }
+    newState = miniGameAction(newState, playerIndex, "auction_master_finish");
+    return newState;
+  }
+
   return newState;
 }
 
@@ -11624,6 +12385,60 @@ export function checkAchievements(
   // 17. shrink_survivor：缩圈幸存者（进入最终决战）
   if (state.isBattleRoyale && state.finalBattle && !player.isBankrupt) {
     tryUnlock("shrink_survivor");
+  }
+
+  // ===== v2.0 新成就 =====
+  // freeze_master：單場冰凍對手 3 次以上
+  if ((player.freezesApplied ?? 0) >= 3) {
+    tryUnlock("freeze_master");
+  }
+  // lottery_winner：彩票/賭場累計盈利 2000
+  if ((player.casinoNetWin ?? 0) >= 2000) {
+    tryUnlock("lottery_winner");
+  }
+  // item_tycoon：單場購買 5 個以上道具
+  if ((player.itemsBoughtThisGame ?? 0) >= 5) {
+    tryUnlock("item_tycoon");
+  }
+  // dynasty_builder：金融王朝模式獲勝
+  if (state.mode === "dynasty" && state.winner === playerIndex) {
+    tryUnlock("dynasty_builder");
+  }
+  // casino_highroller：賭場淨盈利 3000
+  if ((player.casinoNetWin ?? 0) >= 3000) {
+    tryUnlock("casino_highroller");
+  }
+  // bounty_hunter：收過路費累計 5000
+  if (player.tollEarned >= 5000) {
+    tryUnlock("bounty_hunter");
+  }
+  // card_combo_master：連鎖抽卡次數（用 cardDrawCount 粗估 +3）
+  if (player.cardDrawCount >= 12) {
+    tryUnlock("card_combo_master");
+  }
+  // global_event_survivor：經歷 5 次以上全球事件後獲勝
+  if (state.winner === playerIndex && (state.globalEventTurnCounter ?? 0) >= 25) {
+    tryUnlock("global_event_survivor");
+  }
+  // set_duke：集齊 5 個成套地產
+  if (player.completeSets >= 5) {
+    tryUnlock("set_duke");
+  }
+  // penny_pincher：持有現金 30000 以上
+  if (player.money >= 30000) {
+    tryUnlock("penny_pincher");
+  }
+  // swap_artist：交換位置/資金次數（用 tradeCount 粗估，>=3）
+  if (player.tradeCount >= 3) {
+    tryUnlock("swap_artist");
+  }
+  // quantum_wanderer：傳送次數粗估（fateCardDraws + chanceCardDraws >= 10）
+  if (player.cardDrawCount >= 10) {
+    tryUnlock("quantum_wanderer");
+  }
+  // sniper_pro：攻擊類成果（itemsUsedThisGame >= 8 且有 bomb/ransomware 使用痕跡，粗估）
+  if (player.itemsUsedThisGame >= 8 && (player.freezesApplied ?? 0) >= 2) {
+    tryUnlock("sniper_pro");
   }
 
   return newlyUnlocked;
@@ -12698,6 +13513,7 @@ export function getPlayerBuildingMaterials(state: GameState, playerIndex: number
 const MOUNT_FLYER_USES = 3;
 const MOUNT_DIVER_USES = 3;
 const MOUNT_ROCKET_USES = 3;
+const MOUNT_HOVERBOARD_USES = 4;
 
 export function unlockMount(state: GameState, playerIndex: number, mountType: MountType): GameState {
   const newState = cloneState(state);
@@ -12717,11 +13533,15 @@ export function unlockMount(state: GameState, playerIndex: number, mountType: Mo
     case 'rocket':
       player.mounts.rocketUses = MOUNT_ROCKET_USES;
       break;
+    case 'hoverboard':
+      player.mounts.hoverboardUses = MOUNT_HOVERBOARD_USES;
+      break;
   }
-  const names: Record<MountType, string> = { flyer: '飛行器', diver: '潛水器', rocket: '火箭' };
+  const names: Record<MountType, string> = { flyer: '飛行器', diver: '潛水器', rocket: '火箭', hoverboard: '懸浮滑板' };
+  const useCounts: Record<MountType, number> = { flyer: MOUNT_FLYER_USES, diver: MOUNT_DIVER_USES, rocket: MOUNT_ROCKET_USES, hoverboard: MOUNT_HOVERBOARD_USES };
   newState.logs.push(makeLog(
     'mount',
-    `【坐騎】 ${player.name} 解鎖坐騎：${names[mountType]}（可使用 ${MOUNT_FLYER_USES} 次）`,
+    `【坐騎】 ${player.name} 解鎖坐騎：${names[mountType]}（可使用 ${useCounts[mountType]} 次）`,
   ));
   return newState;
 }
@@ -13414,11 +14234,247 @@ export function getAvailableProfessionSkills(state: GameState, playerIndex: numb
     }
     case "influencer":
     case "blockchain_miner":
+    case "drone_pilot": {
+      const uses = player.droneScoutUses ?? 3;
+      result.push({
+        id: "drone_deploy",
+        name: "部署偵察機",
+        description: "立即獲得 300 元，並使下次買地 9 折",
+        ready: uses > 0 && state.phase === "rolling",
+        cooldownText: uses > 0 ? `剩餘 ${uses} 次` : "已用盡",
+      });
+      break;
+    }
+    case "auctioneer": {
+      const used = player.auctioneerUnderUsed ?? 0;
+      result.push({
+        id: "auctioneer_undercut",
+        name: "壓價拍賣",
+        description: "指定一塊對手地產，其過路費減半 2 回合",
+        ready: used < 2 && state.phase === "rolling",
+        cooldownText: used < 2 ? `剩餘 ${2 - used} 次` : "已用盡",
+      });
+      break;
+    }
+    case "bounty_hunter": {
+      result.push({
+        id: "bounty_collect",
+        name: "索取賞金",
+        description: "向最近傷害過你的對手索取 500 元",
+        ready: (player.lastHarmedBy ?? null) !== null && state.phase === "rolling",
+        cooldownText: (player.lastHarmedBy ?? null) !== null ? "就緒" : "無目標",
+      });
+      break;
+    }
+    case "street_racer": {
+      const used = player.streetRacerDashUsed ?? 0;
+      result.push({
+        id: "nitro_dash",
+        name: "氮氣加速",
+        description: "立即額外前進 3 格",
+        ready: used < 2 && state.phase === "rolling",
+        cooldownText: used < 2 ? `剩餘 ${2 - used} 次` : "已用盡",
+      });
+      break;
+    }
+    case "media_mogul": {
+      result.push({
+        id: "media_blitz",
+        name: "廣告轟炸",
+        description: "所有對手各支付 100 元宣傳費給你",
+        ready: state.phase === "rolling",
+        cooldownText: "就緒",
+      });
+      break;
+    }
+    case "cyber_sniper": {
+      const used = player.cyberSniperShotUsed ?? 0;
+      result.push({
+        id: "snipe_shot",
+        name: "遠距狙擊",
+        description: "直接將一名隨機對手送入監禁室（每局限 1 次）",
+        ready: used < 1 && state.phase === "rolling",
+        cooldownText: used < 1 ? "就緒" : "已用盡",
+      });
+      break;
+    }
     default:
       break;
   }
 
   return result;
+}
+
+// ========== 玩家端通用職業技能出口（確定性效果） ==========
+
+/**
+ * 對玩家開放的職業主動技能出口。
+ * 以 cloneState 不可變方式更新；點了即生效（無 Math.random 機率閘）。
+ * 守衛：玩家索引合法、未破產、職業相符、使用次數/冷卻未用盡、目標存在。
+ * 不滿足時安全回傳原狀態（不變）。
+ *
+ * 實際邏輯在內部 applyProfessionSkill（避免與 React Hook 命名規則衝突）。
+ */
+export function useProfessionSkill(
+  state: GameState,
+  playerIndex: number,
+  skillId: string,
+): GameState {
+  return applyProfessionSkill(state, playerIndex, skillId);
+}
+
+/**
+ * 內部：職業主動技能的確定性效果實作（玩家端與 AI 共用，避免邏輯分叉）。
+ */
+function applyProfessionSkill(
+  state: GameState,
+  playerIndex: number,
+  skillId: string,
+): GameState {
+  if (playerIndex < 0 || playerIndex >= state.players.length) return state;
+  const player = state.players[playerIndex];
+  if (!player || player.isBankrupt) return state;
+
+  // 技能 id -> 應有的職業，用於職業守衛
+  const skillToProfession: Record<string, string> = {
+    drone_deploy: "drone_pilot",
+    auctioneer_undercut: "auctioneer",
+    bounty_collect: "bounty_hunter",
+    nitro_dash: "street_racer",
+    media_blitz: "media_mogul",
+    snipe_shot: "cyber_sniper",
+  };
+  const requiredProf = skillToProfession[skillId];
+  if (requiredProf && player.profession !== requiredProf) {
+    state.logs.push(makeLog(getPlayerLogType(playerIndex), `【技能】 ${player.name} 並非${requiredProf}，無法使用 ${skillId}`));
+    return state;
+  }
+
+  const newState = cloneState(state);
+  const p = newState.players[playerIndex];
+  const logType = getPlayerLogType(playerIndex);
+
+  switch (skillId) {
+    case "drone_deploy": {
+      const uses = p.droneScoutUses ?? 3;
+      if (uses <= 0) {
+        newState.logs.push(makeLog(logType, `【無人機】 ${p.name} 的偵察機已用盡`));
+        return newState;
+      }
+      p.droneScoutUses = uses - 1;
+      p.money += 300;
+      p.nextBuyDiscount = Math.max(p.nextBuyDiscount ?? 0, 0.1);
+      newState.logs.push(makeLog(logType, `【無人機】 ${p.name} 部署偵察機，獲得 300 元並啟用買地 9 折`));
+      break;
+    }
+    case "auctioneer_undercut": {
+      const used = p.auctioneerUnderUsed ?? 0;
+      if (used >= 2) {
+        newState.logs.push(makeLog(logType, `【拍賣師】 ${p.name} 的壓價已用盡`));
+        return newState;
+      }
+      // 找最貴的對手地產
+      let bestCell = -1;
+      let bestPrice = 0;
+      for (let cid = 0; cid < CELL_COUNT; cid++) {
+        const prop = newState.properties[cid];
+        if (!prop || prop.owner === undefined || prop.owner < 0 || prop.owner === playerIndex || prop.isMortgaged) continue;
+        const price = getCellPrice(cid, newState.mode, newState.customRules, newState.boardCells);
+        if (price > bestPrice) { bestPrice = price; bestCell = cid; }
+      }
+      if (bestCell < 0) {
+        newState.logs.push(makeLog(logType, `【拍賣師】 ${p.name} 找不到可壓價的對手地產`));
+        return newState;
+      }
+      p.auctioneerUnderUsed = used + 1;
+      newState.properties[bestCell].hackedUntilTurn = newState.totalTurns + 2;
+      newState.logs.push(makeLog(logType, `【拍賣師】 ${p.name} 對 ${getCellConfig(newState, bestCell).name} 壓價，過路費減半 2 回合`));
+      break;
+    }
+    case "bounty_collect": {
+      const target = p.lastHarmedBy;
+      if (target === null || target === undefined || target < 0 || target >= newState.players.length) {
+        newState.logs.push(makeLog(logType, `【賞金】 ${p.name} 沒有可索取賞金的對象`));
+        return newState;
+      }
+      const victim = newState.players[target];
+      if (!victim || victim.isBankrupt) {
+        newState.logs.push(makeLog(logType, `【賞金】 目標已破產，賞金作廢`));
+        return newState;
+      }
+      const take = Math.min(500, victim.money);
+      victim.money -= take;
+      p.money += take;
+      p.lastHarmedBy = null;
+      newState.logs.push(makeLog(logType, `【賞金】 ${p.name} 向 ${victim.name} 索取 ${take} 元賞金`));
+      if (newState.isCoopMode) {
+        syncCoopMoneyFromPlayer(newState, playerIndex);
+        syncCoopMoneyFromPlayer(newState, target);
+      }
+      break;
+    }
+    case "nitro_dash": {
+      const used = p.streetRacerDashUsed ?? 0;
+      if (used >= 2) {
+        newState.logs.push(makeLog(logType, `【賽車】 ${p.name} 的氮氣已用盡`));
+        return newState;
+      }
+      p.streetRacerDashUsed = used + 1;
+      p.position = clampPosition(p.position + 3);
+      newState.logs.push(makeLog(logType, `【賽車】 ${p.name} 氮氣加速，前進 3 格`));
+      break;
+    }
+    case "media_blitz": {
+      let total = 0;
+      for (let i = 0; i < newState.players.length; i++) {
+        if (i === playerIndex || newState.players[i].isBankrupt) continue;
+        const take = Math.min(100, newState.players[i].money);
+        newState.players[i].money -= take;
+        total += take;
+      }
+      p.money += total;
+      newState.logs.push(makeLog(logType, `【媒體】 ${p.name} 投放廣告轟炸，收取 ${total} 元宣傳費`));
+      if (newState.isCoopMode) {
+        for (let i = 0; i < newState.players.length; i++) syncCoopMoneyFromPlayer(newState, i);
+      }
+      break;
+    }
+    case "snipe_shot": {
+      const used = p.cyberSniperShotUsed ?? 0;
+      if (used >= 1) {
+        newState.logs.push(makeLog(logType, `【狙擊】 ${p.name} 的狙擊已用盡`));
+        return newState;
+      }
+      // 目標：現金最多的存活對手（確定性選擇）
+      let victimIdx = -1;
+      let richest = -1;
+      for (let i = 0; i < newState.players.length; i++) {
+        if (i === playerIndex || newState.players[i].isBankrupt) continue;
+        if (newState.players[i].money > richest) {
+          richest = newState.players[i].money;
+          victimIdx = i;
+        }
+      }
+      if (victimIdx < 0) {
+        newState.logs.push(makeLog(logType, `【狙擊】 ${p.name} 找不到可狙擊的對手`));
+        return newState;
+      }
+      p.cyberSniperShotUsed = used + 1;
+      const v = newState.players[victimIdx];
+      v.position = 10;
+      v.isInDetention = true;
+      v.detentionTurns = 0;
+      v.detentionCount += 1;
+      newState.logs.push(makeLog(logType, `【狙擊】 ${p.name} 一擊命中，${v.name} 被送入監禁室！`));
+      break;
+    }
+    default:
+      // 其他技能（舊有）不在此出口，安全回傳原狀態
+      return state;
+  }
+
+  updatePlayerAssets(newState);
+  return newState;
 }
 
 // ========== AI 職業技能自動使用 ==========
@@ -13538,6 +14594,42 @@ export function tryAIUseProfessionSkill(state: GameState): GameState {
           .filter((id: number) => newState.properties[id].owner === playerIdx).length;
         if (ownProps2 >= 2 && Math.random() < 0.7) {
           newState = timeWatcherExtraTurn(newState, playerIdx);
+        }
+        break;
+      }
+      case "drone_deploy": {
+        if (Math.random() < 0.6) {
+          newState = applyProfessionSkill(newState, playerIdx, "drone_deploy");
+        }
+        break;
+      }
+      case "auctioneer_undercut": {
+        if (Math.random() < 0.6) {
+          newState = applyProfessionSkill(newState, playerIdx, "auctioneer_undercut");
+        }
+        break;
+      }
+      case "bounty_collect": {
+        if (Math.random() < 0.7) {
+          newState = applyProfessionSkill(newState, playerIdx, "bounty_collect");
+        }
+        break;
+      }
+      case "nitro_dash": {
+        if (Math.random() < 0.5) {
+          newState = applyProfessionSkill(newState, playerIdx, "nitro_dash");
+        }
+        break;
+      }
+      case "media_blitz": {
+        if (Math.random() < 0.5) {
+          newState = applyProfessionSkill(newState, playerIdx, "media_blitz");
+        }
+        break;
+      }
+      case "snipe_shot": {
+        if (Math.random() < 0.6) {
+          newState = applyProfessionSkill(newState, playerIdx, "snipe_shot");
         }
         break;
       }

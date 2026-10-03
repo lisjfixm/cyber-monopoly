@@ -75,6 +75,9 @@ const CollectionPage = () => {
     achievements: unlockedAchievements.size,
   };
 
+  const unlockedCount = Object.values(unlockedCounts).reduce((a, b) => a + b, 0);
+  const totalCount = Object.values(totalCounts).reduce((a, b) => a + b, 0);
+
   const handleBack = () => {
     navigate('/');
   };
@@ -158,14 +161,14 @@ const CollectionPage = () => {
               收藏進度
             </span>
             <span className="text-sm font-cyber" style={{ color: 'var(--cyan)' }}>
-              {Object.values(unlockedCounts).reduce((a, b) => a + b, 0)} / {Object.values(totalCounts).reduce((a, b) => a + b, 0)}
+              {unlockedCount} / {totalCount}
             </span>
           </div>
           <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
-                width: `${(Object.values(unlockedCounts).reduce((a, b) => a + b, 0) / Object.values(totalCounts).reduce((a, b) => a + b, 0)) * 100}%`,
+                width: `${totalCount === 0 ? 0 : Math.min(100, Math.max(0, (unlockedCount / totalCount) * 100))}%`,
                 background: 'linear-gradient(90deg, var(--cyan), var(--pink))',
                 boxShadow: '0 0 8px var(--cyan)',
               }}
@@ -270,7 +273,7 @@ const CollectionPage = () => {
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center relative flex-shrink-0"
                   style={{
-                    border: frame.borderStyle.replace(/\d+px/, '3px'),
+                    border: typeof frame.borderStyle === 'string' ? frame.borderStyle.replace(/\d+px/, '3px') : '3px solid',
                     borderColor: isUnlocked ? frame.color : '#444',
                     boxShadow: isUnlocked ? `0 0 12px ${frame.glowColor ?? frame.color}` : 'none',
                     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -329,7 +332,7 @@ const CollectionPage = () => {
               {Object.values(PAWN_SKINS).map((skin) => {
                 const isUnlocked = unlockedPawnSkins.includes(skin.id as PawnSkinType);
                 const isEquipped = pawnSkin === skin.id;
-                const rarityColor = RARITY_COLORS[skin.rarity];
+                const rarityColor = RARITY_COLORS[skin.rarity] ?? '#9ca3af';
                 return (
                   <div
                     key={skin.id}
@@ -373,7 +376,7 @@ const CollectionPage = () => {
               {Object.values(DICE_SKINS).map((skin) => {
                 const isUnlocked = unlockedDiceSkins.includes(skin.id as DiceSkinType);
                 const isEquipped = diceSkin === skin.id;
-                const rarityColor = RARITY_COLORS[skin.rarity];
+                const rarityColor = RARITY_COLORS[skin.rarity] ?? '#9ca3af';
                 return (
                   <div
                     key={skin.id}

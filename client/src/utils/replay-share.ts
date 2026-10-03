@@ -25,8 +25,16 @@ function loadAllEntries(): SharedReplayEntry[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (e): e is SharedReplayEntry =>
+        typeof e === 'object' &&
+        e !== null &&
+        typeof (e as SharedReplayEntry).shareId === 'string' &&
+        typeof (e as SharedReplayEntry).replay === 'object' &&
+        (e as SharedReplayEntry).replay !== null,
+    );
   } catch (err) {
     logger.error('Failed to load shared replays:', err instanceof Error ? err.message : String(err));
     return [];

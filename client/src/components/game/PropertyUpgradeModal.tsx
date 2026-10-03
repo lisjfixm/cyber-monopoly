@@ -16,7 +16,8 @@ interface PropertyUpgradeModalProps {
 
 const UPGRADE_UNLOCK_LEVEL = 3;
 
-const PATH_ICON_MAP: Record<PropertyUpgradePath, typeof Swords> = {
+// Partial + 兜底：日後新增升級路徑也不渲染 undefined
+const PATH_ICON_MAP: Partial<Record<PropertyUpgradePath, typeof Swords>> = {
   attack: Swords,
   defense: Shield,
   tech: Cpu,
@@ -166,7 +167,7 @@ const PropertyUpgradeModal: FC<PropertyUpgradeModalProps> = ({
         <div className="px-5 py-5 space-y-3 overflow-y-auto">
           {paths.map((pathId) => {
             const config = PROPERTY_UPGRADE_PATHS[pathId];
-            const Icon = PATH_ICON_MAP[pathId];
+            const Icon = PATH_ICON_MAP[pathId] ?? AlertTriangle;
             const color = PATH_COLOR_MAP[pathId];
             const isCurrent = currentUpgradePath === pathId;
             const isSelected = selectedPath === pathId;
@@ -363,7 +364,7 @@ const PropertyUpgradeModal: FC<PropertyUpgradeModalProps> = ({
                   }}
                 >
                   {(() => {
-                    const Icon = PATH_ICON_MAP[selectedPath];
+                    const Icon = PATH_ICON_MAP[selectedPath] ?? AlertTriangle;
                     return <Icon className="w-6 h-6" style={{ color: PATH_COLOR_MAP[selectedPath] }} />;
                   })()}
                 </div>

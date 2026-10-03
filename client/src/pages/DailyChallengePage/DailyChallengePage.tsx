@@ -98,24 +98,24 @@ function TaskCard({
 
       <div className="flex items-center justify-between">
         <div className="flex gap-2 flex-wrap">
-          {task.reward.coins && (
+          {task.reward?.coins ? (
             <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--yellow)' }}>
               <Coins size={12} />
               +{task.reward.coins}
             </div>
-          )}
-          {task.reward.exp && (
+          ) : null}
+          {task.reward?.exp ? (
             <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--green)' }}>
               <Sparkles size={12} />
               +{task.reward.exp} EXP
             </div>
-          )}
-          {task.reward.item && (
+          ) : null}
+          {task.reward?.item ? (
             <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--purple)' }}>
               <Star size={12} />
               {task.reward.item}
             </div>
-          )}
+          ) : null}
         </div>
         {task.status === 'completed' && (
           <button
@@ -287,6 +287,11 @@ const DailyChallengePage = () => {
                   {dailyDoneCount}/{dailyTasks.length}
                 </span>
               </div>
+              {dailyTasks.length === 0 && (
+                <div className="text-center text-sm text-[var(--text-muted)] py-8">
+                  今日尚無任務，稍後再來看看
+                </div>
+              )}
               {dailyTasks.map((task: DailyTask) => (
                 <TaskCard
                   key={task.id}
@@ -325,6 +330,11 @@ const DailyChallengePage = () => {
                 {weeklyDoneCount}/{weeklyTasks.length}
               </span>
             </div>
+            {weeklyTasks.length === 0 && (
+              <div className="text-center text-sm text-[var(--text-muted)] py-8">
+                本週尚無任務，稍後再來看看
+              </div>
+            )}
             {weeklyTasks.map((task: WeeklyTask) => (
               <TaskCard
                 key={task.id}
@@ -441,7 +451,7 @@ const DailyChallengePage = () => {
                         }}
                         title={day.reward}
                       >
-                        {day.reward.split(' ')[0]}
+                        {(day.reward || '').split(' ')[0] || '—'}
                       </div>
                     </div>
                   );
@@ -549,6 +559,11 @@ const DailyChallengePage = () => {
                   活動日曆
                 </h2>
               </div>
+              {activities.length === 0 && (
+                <div className="text-center text-sm text-[var(--text-muted)] py-8">
+                  近期沒有安排活動，敬請期待
+                </div>
+              )}
               {activities.map((act) => (
                 <div
                   key={act.id}

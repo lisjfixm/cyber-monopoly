@@ -40,9 +40,12 @@ export function getAllianceState(): AllianceState {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...EMPTY_STATE };
-    const parsed = JSON.parse(raw) as AllianceState;
-    if (!parsed.alliances || !parsed.invites) return { ...EMPTY_STATE };
-    return parsed;
+    const parsed = JSON.parse(raw) as Partial<AllianceState> | null;
+    if (!parsed || typeof parsed !== 'object') return { ...EMPTY_STATE };
+    return {
+      alliances: Array.isArray(parsed.alliances) ? parsed.alliances : [],
+      invites: Array.isArray(parsed.invites) ? parsed.invites : [],
+    };
   } catch {
     return { ...EMPTY_STATE };
   }

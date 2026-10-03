@@ -239,6 +239,26 @@ const ModeSelectPage = () => {
             icon: '暗網',
             difficulty: '地獄',
           },
+          {
+            key: 'casino',
+            label: '霓虹賭城',
+            config: GAME_MODES.casino,
+            color: 'hsl(50, 100%, 60%)',
+            gradient: 'linear-gradient(135deg, hsl(50, 100%, 55%), hsl(320, 90%, 50%))',
+            description: '賭博獎勵頻繁，金錢大起大落',
+            icon: '賭局',
+            difficulty: '普通',
+          },
+          {
+            key: 'dynasty',
+            label: '金融王朝',
+            config: GAME_MODES.dynasty,
+            color: 'hsl(35, 100%, 55%)',
+            gradient: 'linear-gradient(135deg, hsl(35, 100%, 55%), hsl(210, 90%, 50%))',
+            description: '成套地產每回合被動股息，併購壯大',
+            icon: '王朝',
+            difficulty: '困難',
+          },
        ],
      },
    ];
@@ -306,7 +326,7 @@ const ModeSelectPage = () => {
           選擇遊戲模式
         </h2>
          <p className="text-center text-[var(--text-secondary)] text-sm mb-6 font-cyber tracking-wider">
-           十六種風格 · 不同挑戰
+           十八種風格 · 不同挑戰
          </p>
 
         {/* Players Info */}

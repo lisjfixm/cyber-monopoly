@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Send, UserCog } from 'lucide-react';
 
 const STORAGE_KEY = 'monopoly_mentor_messages';
@@ -30,7 +30,11 @@ function loadMessages(): MentorMessage[] {
 }
 
 function saveMessages(messages: MentorMessage[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  } catch {
+    // 儲存失敗（隱私模式/配額滿）不影響遊戲
+  }
 }
 
 const MentorInput: React.FC<MentorInputProps> = ({
@@ -40,6 +44,13 @@ const MentorInput: React.FC<MentorInputProps> = ({
   const [targetIndex, setTargetIndex] = useState<number>(0);
   const [content, setContent] = useState<string>('');
   const [showTip, setShowTip] = useState<boolean>(false);
+  const tipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
+    };
+  }, []);
 
   const handleSend = (): void => {
     const trimmed = content.trim();
@@ -60,7 +71,8 @@ const MentorInput: React.FC<MentorInputProps> = ({
 
     setContent('');
     setShowTip(true);
-    setTimeout(() => setShowTip(false), 2000);
+    if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
+    tipTimerRef.current = setTimeout(() => setShowTip(false), 2000);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {

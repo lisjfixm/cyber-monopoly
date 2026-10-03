@@ -30,13 +30,18 @@ function loadMessages(): MentorMessage[] {
 }
 
 function saveMessages(messages: MentorMessage[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  } catch {
+    // 儲存失敗（隱私模式/配額滿）不影響遊戲
+  }
 }
 
 const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }) => {
   const [pending, setPending] = useState<MentorMessage | null>(null);
   const [visible, setVisible] = useState(false);
   const lastIdRef = useRef<string | null>(null);
+  const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 輪詢 localStorage 檢查新消息
   const checkNewMessages = useCallback(() => {
@@ -72,7 +77,8 @@ const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }
       );
       saveMessages(updated);
       setVisible(false);
-      setTimeout(() => {
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = setTimeout(() => {
         setPending(null);
         lastIdRef.current = null;
         // 檢查是否還有下一條
@@ -81,6 +87,13 @@ const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }
     },
     [pending, checkNewMessages],
   );
+
+  // 組件卸載時清除待處理的計時器
+  useEffect(() => {
+    return () => {
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    };
+  }, []);
 
   if (!pending || !visible) return null;
 

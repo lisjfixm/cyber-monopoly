@@ -114,7 +114,7 @@ const QuickMatchPage = () => {
 
       if (!status.inQueue && !status.matchedRoomCode) {
         // 被移出队列但未匹配（异常）
-        setError('匹配已断开，请重试');
+        setError('配對連線已中斷，請重試');
         setPhase('config');
         clearTimers();
         hasJoinedRef.current = false;
@@ -161,7 +161,7 @@ const QuickMatchPage = () => {
 
   const startMatching = useCallback(async () => {
     if (!visitorId) {
-      setError('玩家身份初始化中，请稍候');
+      setError('玩家身份初始化中，請稍候');
       return;
     }
     if (!nickname) {
@@ -212,8 +212,11 @@ const QuickMatchPage = () => {
     // 否則 waitedSeconds 仍 >= TIMEOUT_SECONDS，下方 timeout effect 會立刻把 phase 打回 timeout。
     setWaitedSeconds(0);
     setPhase('matching');
-    // 重置超時提示，繼續等待（不重新 join）
-  }, [playSfx]);
+    // 逾時時已清除輪詢計時器；若仍在隊列中（hasJoined），重啟輪詢以恢復配對狀態。
+    if (hasJoinedRef.current && visitorId) {
+      pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
+    }
+  }, [playSfx, visitorId, pollStatus]);
 
   const handleGoCreateRoom = useCallback(() => {
     playSfx('click');
@@ -226,12 +229,13 @@ const QuickMatchPage = () => {
     navigate('/');
   }, [playSfx, navigate]);
 
-  // 超时检测
+  // 超时检测：達到等待上限後停止所有輪詢/計時，避免離線時持續打 API
   useEffect(() => {
     if (phase === 'matching' && waitedSeconds >= TIMEOUT_SECONDS) {
+      clearTimers();
       setPhase('timeout');
     }
-  }, [phase, waitedSeconds]);
+  }, [phase, waitedSeconds, clearTimers]);
 
   const currentMode = MODES.find((m: ModeOption) => m.key === selectedMode) ?? MODES[0];
 
@@ -364,7 +368,7 @@ const QuickMatchPage = () => {
 
             <h2 className="font-cyber text-2xl md:text-3xl tracking-widest mb-1 pulse-glow"
                 style={{ color: phase === 'matched' ? 'var(--green)' : 'var(--cyan)' }}>
-              {phase === 'matched' ? '匹配成功！' : phase === 'timeout' ? '匹配時間較長' : '匹配中...'}
+              {phase === 'matched' ? '配對成功！' : phase === 'timeout' ? '匹配時間較長' : '配對中...'}
             </h2>
             <p className="text-[var(--text-secondary)] text-sm font-cyber tracking-wider mb-6">
               {phase === 'matched'
@@ -390,7 +394,7 @@ const QuickMatchPage = () => {
                    style={{ borderColor: 'rgba(255, 107, 157, 0.15)' }}>
                 <span className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
                   <Users size={14} style={{ color: 'var(--pink)' }} />
-                  人数
+                  人數
                 </span>
                 <span className="font-cyber text-sm tracking-wider" style={{ color: 'var(--pink)' }}>
                   {selectedPlayers} 人
@@ -410,7 +414,7 @@ const QuickMatchPage = () => {
                    style={{ borderColor: 'rgba(255, 200, 0, 0.15)' }}>
                 <span className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
                   <Hash size={14} style={{ color: 'var(--yellow)' }} />
-                  队列位置
+                  排隊位置
                 </span>
                 <span className="font-cyber text-sm tracking-wider" style={{ color: 'var(--yellow)' }}>
                   第 {queuePosition} 位

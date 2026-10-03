@@ -134,9 +134,12 @@ const BattlePassPage: FC = () => {
   useEffect(() => {
     if (trackRef.current) {
       const levelIndex = state.currentLevel - 1;
-      const node = trackRef.current.children[levelIndex] as HTMLElement | undefined;
-      if (node) {
-        trackRef.current.scrollLeft = node.offsetLeft - trackRef.current.clientWidth / 2 + node.clientWidth / 2;
+      const total = trackRef.current.children.length;
+      if (levelIndex >= 0 && levelIndex < total) {
+        const node = trackRef.current.children[levelIndex] as HTMLElement | undefined;
+        if (node) {
+          trackRef.current.scrollLeft = node.offsetLeft - trackRef.current.clientWidth / 2 + node.clientWidth / 2;
+        }
       }
     }
   }, [state.currentLevel]);
@@ -176,7 +179,9 @@ const BattlePassPage: FC = () => {
 
   const expPercent = useMemo(() => {
     if (state.currentLevel >= BATTLE_PASS_MAX_LEVEL) return 100;
-    return (state.currentXP / state.xpToNextLevel) * 100;
+    const denom = state.xpToNextLevel;
+    if (typeof denom !== 'number' || denom <= 0) return 0;
+    return Math.min(100, Math.max(0, (state.currentXP / denom) * 100));
   }, [state.currentLevel, state.currentXP, state.xpToNextLevel]);
 
   const activeQuests = useMemo(() => {
@@ -378,8 +383,9 @@ const BattlePassPage: FC = () => {
             {state.tiers.map((tier) => {
               const isCurrent = tier.level === state.currentLevel;
               const isUnlocked = tier.level <= state.currentLevel;
-              const freeClaimed = tier.claimed.free;
-              const premClaimed = tier.claimed.premium;
+              const freeReward = tier.freeReward ?? { type: 'item', name: '???', value: '' };
+              const freeClaimed = tier.claimed?.free === true;
+              const premClaimed = tier.claimed?.premium === true;
               const isMilestone = tier.level % 5 === 0;
 
               return (
@@ -435,7 +441,7 @@ const BattlePassPage: FC = () => {
                       }}
                     >
                       {(() => {
-                        const Icon = getRewardIcon(tier.freeReward.type);
+                        const Icon = getRewardIcon(freeReward.type);
                         return (
                           <Icon
                             size={16}
@@ -471,7 +477,7 @@ const BattlePassPage: FC = () => {
                   </div>
 
                   <span className="text-[10px] text-center max-w-[80px] truncate" style={{ color: 'var(--text-secondary)' }}>
-                    {tier.freeReward.name}
+                    {freeReward.name}
                   </span>
                 </button>
               );
@@ -642,18 +648,18 @@ const BattlePassPage: FC = () => {
 
               <div className="space-y-3 my-4">
                 <RewardDetailRow
-                  reward={selectedTier.freeReward}
+                  reward={selectedTier.freeReward ?? { type: 'item', name: '???', value: '' }}
                   label="免費通行證"
                   color="var(--cyan)"
-                  claimed={selectedTier.claimed.free}
+                  claimed={selectedTier.claimed?.free === true}
                   canClaim={canClaimTierReward(state, selectedTier.level, false)}
                   onClaim={() => handleClaimTier(selectedTier.level, false)}
                 />
                 <RewardDetailRow
-                  reward={selectedTier.premiumReward}
+                  reward={selectedTier.premiumReward ?? { type: 'item', name: '???', value: '' }}
                   label="豪華通行證"
                   color="var(--yellow)"
-                  claimed={selectedTier.claimed.premium}
+                  claimed={selectedTier.claimed?.premium === true}
                   canClaim={canClaimTierReward(state, selectedTier.level, true)}
                   locked={!state.premiumPurchased}
                   onClaim={() => handleClaimTier(selectedTier.level, true)}

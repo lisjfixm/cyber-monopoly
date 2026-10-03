@@ -16,6 +16,32 @@ import type {
 } from '@shared/api.interface';
 import type { GmOnlineUser } from '@client/src/api/gm';
 
+// 判斷是否為離線/無法連線後端的錯誤（靜態部署無後端時觸發）
+function isNetworkError(err: unknown): boolean {
+  if (err && typeof err === 'object') {
+    const e = err as Record<string, unknown>;
+    if (e.isAxiosError && !e.response) return true;
+    const msg = String(e.message ?? '').toLowerCase();
+    return (
+      msg.includes('network') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('timeout') ||
+      msg.includes('連接') ||
+      msg.includes('連線') ||
+      msg.includes('跨網域') ||
+      msg.includes('err_connection')
+    );
+  }
+  return false;
+}
+
+function errMsg(err: unknown, fallback: string): string {
+  if (isNetworkError(err)) {
+    return 'GM 後端於靜態版不可用，部署後端後即可使用主控台。';
+  }
+  return err instanceof Error ? err.message : fallback;
+}
+
 type GmMenuKey = 'users' | 'announcements' | 'events' | 'online';
 
 const PROVIDER_STYLES: Record<OAuthProvider, { color: string; bg: string; glow: string; label: string }> = {
@@ -233,11 +259,10 @@ const GmLoginView: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       logger.info({ level: 'info', args: ['GM 登入成功'] });
       onSuccess();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '密碼錯誤';
-      setError(msg);
+      setError(errMsg(err, '密碼錯誤'));
       setShake(true);
       setTimeout(() => setShake(false), 500);
-      logger.error({ level: 'error', args: ['GM 登入失敗', msg] });
+      logger.error({ level: 'error', args: ['GM 登入失敗', errMsg(err, '密碼錯誤')] });
     } finally {
       setLoading(false);
     }
@@ -396,7 +421,7 @@ const UsersSection: React.FC = () => {
       const result = await gmApi.searchUsers(keyword);
       setUsers(result);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '搜尋失敗';
+      const msg = errMsg(err, '搜尋失敗');
       setError(msg);
     } finally {
       setLoading(false);
@@ -443,7 +468,7 @@ const UsersSection: React.FC = () => {
       setEditingUser(null);
       showSuccess('使用者資料已更新');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '更新失敗';
+      const msg = errMsg(err, '更新失敗');
       setError(msg);
     }
   };
@@ -486,7 +511,7 @@ const UsersSection: React.FC = () => {
       setRewardReason('');
       showSuccess('獎勵已發放');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '發放失敗';
+      const msg = errMsg(err, '發放失敗');
       setError(msg);
     }
   };
@@ -500,7 +525,7 @@ const UsersSection: React.FC = () => {
       setEditingUser(null);
       showSuccess('使用者數據已重置');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '重置失敗';
+      const msg = errMsg(err, '重置失敗');
       setError(msg);
     }
   };
@@ -965,7 +990,7 @@ const AnnouncementsSection: React.FC = () => {
       const data = await gmApi.getAnnouncements();
       setList(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '載入失敗';
+      const msg = errMsg(err, '載入失敗');
       setError(msg);
     } finally {
       setLoading(false);
@@ -1017,7 +1042,7 @@ const AnnouncementsSection: React.FC = () => {
       setIsNew(false);
       showSuccess('公告已保存');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '保存失敗';
+      const msg = errMsg(err, '保存失敗');
       setError(msg);
     }
   };
@@ -1030,7 +1055,7 @@ const AnnouncementsSection: React.FC = () => {
       setDeleteId(null);
       showSuccess('公告已刪除');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '刪除失敗';
+      const msg = errMsg(err, '刪除失敗');
       setError(msg);
     }
   };
@@ -1045,6 +1070,13 @@ const AnnouncementsSection: React.FC = () => {
       {error && (
         <div className="p-3 rounded text-sm text-center" style={{ background: 'hsl(0, 60%, 15%)', color: 'hsl(0, 80%, 70%)', border: '1px solid hsl(0, 60%, 40%)' }}>
           錯誤 {error}
+          <button
+            type="button"
+            onClick={() => { void loadList(); }}
+            className="ml-3 underline underline-offset-2"
+          >
+            重試
+          </button>
         </div>
       )}
 
@@ -1208,7 +1240,7 @@ const EventsSection: React.FC = () => {
       const data = await gmApi.getEvents();
       setList(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '載入失敗';
+      const msg = errMsg(err, '載入失敗');
       setError(msg);
     } finally {
       setLoading(false);
@@ -1285,7 +1317,7 @@ const EventsSection: React.FC = () => {
       setIsNew(false);
       showSuccess('活動已保存');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '保存失敗';
+      const msg = errMsg(err, '保存失敗');
       setError(msg);
     }
   };
@@ -1298,7 +1330,7 @@ const EventsSection: React.FC = () => {
       setDeleteId(null);
       showSuccess('活動已刪除');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '刪除失敗';
+      const msg = errMsg(err, '刪除失敗');
       setError(msg);
     }
   };
@@ -1313,6 +1345,13 @@ const EventsSection: React.FC = () => {
       {error && (
         <div className="p-3 rounded text-sm text-center" style={{ background: 'hsl(0, 60%, 15%)', color: 'hsl(0, 80%, 70%)', border: '1px solid hsl(0, 60%, 40%)' }}>
           錯誤 {error}
+          <button
+            type="button"
+            onClick={() => { void loadList(); }}
+            className="ml-3 underline underline-offset-2"
+          >
+            重試
+          </button>
         </div>
       )}
 
@@ -1469,7 +1508,7 @@ const OnlineUsersSection: React.FC = () => {
       const data = await gmApi.getOnlineUsers();
       setList(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : '載入失敗';
+      const msg = errMsg(err, '載入失敗');
       setError(msg);
     } finally {
       setLoading(false);

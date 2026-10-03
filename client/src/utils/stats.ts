@@ -54,24 +54,34 @@ export function calcProfessionStats(
   return result;
 }
 
-// 最愛地塊（根據對局數模擬代表性地塊購買次數）
+// 最愛地塊（依對局數與地塊名稱雜湊做確定性分配，避免每次渲染隨機跳動）
 export function calcFavoriteProperties(
   matches: MatchHistoryItem[],
 ): { name: string; count: number }[] {
   if (matches.length === 0) return [];
   const propertyCells = CELLS.filter((c) => c.type === 'property');
-  const selected = propertyCells.slice(0, 8);
+  if (propertyCells.length === 0) return [];
+  const selected = propertyCells.slice(0, Math.min(8, propertyCells.length));
   const baseCount = matches.length * 2;
-  return selected.map((cell, index: number) => ({
-    name: cell.name,
-    count: Math.max(1, Math.round(baseCount * (1 - index * 0.1) * (0.7 + Math.random() * 0.6))),
-  }));
+  return selected.map((cell, index: number) => {
+    // 以地塊名稱產生 0.7~1.0 的確定性權重，不含 Math.random
+    let hash = 0;
+    for (let i = 0; i < cell.name.length; i += 1) {
+      hash = (hash * 31 + cell.name.charCodeAt(i)) >>> 0;
+    }
+    const weight = 0.7 + (hash % 30) / 100;
+    const count = Math.max(
+      1,
+      Math.round(baseCount * Math.max(0.1, 1 - index * 0.1) * weight),
+    );
+    return { name: cell.name, count };
+  });
 }
 
 // 平均遊戲時長（秒）
 export function calcAverageDuration(matches: MatchHistoryItem[]): number {
   if (matches.length === 0) return 0;
-  const total = matches.reduce((sum: number, m: MatchHistoryItem) => sum + m.duration, 0);
+  const total = matches.reduce((sum: number, m: MatchHistoryItem) => sum + safeNum(m.duration), 0);
   return Math.round(total / matches.length);
 }
 
@@ -102,7 +112,8 @@ export function calcOverview(matches: MatchHistoryItem[]): {
     if (typeof m.highestAssets === 'number' && m.highestAssets > highestAssets) {
       highestAssets = m.highestAssets;
     }
-    if (m.finalAssets > highestAssets) highestAssets = m.finalAssets;
+    const finalAssets = safeNum(m.finalAssets);
+    if (finalAssets > highestAssets) highestAssets = finalAssets;
   }
 
   const { longest: longestWinStreak, current: currentWinStreak } = calcWinStreaks(matches);
@@ -126,11 +137,12 @@ export function calcModeStats(
 ): { mode: string; label: string; total: number; wins: number; winRate: number; avgDuration: number }[] {
   const map = new Map<string, { total: number; wins: number; durationSum: number }>();
   for (const m of matches) {
-    const current = map.get(m.mode) || { total: 0, wins: 0, durationSum: 0 };
+    const mode = typeof m.mode === 'string' ? m.mode : 'unknown';
+    const current = map.get(mode) || { total: 0, wins: 0, durationSum: 0 };
     current.total += 1;
     if (m.result === 'win') current.wins += 1;
-    current.durationSum += m.duration;
-    map.set(m.mode, current);
+    current.durationSum += safeNum(m.duration);
+    map.set(mode, current);
   }
   return Array.from(map.entries()).map(([mode, s]) => ({
     mode,
@@ -236,8 +248,9 @@ export function calcTimeStats(matches: MatchHistoryItem[]): {
   let totalDuration = 0;
   let longestDuration = 0;
   for (const m of matches) {
-    totalDuration += m.duration;
-    if (m.duration > longestDuration) longestDuration = m.duration;
+    const d = safeNum(m.duration);
+    totalDuration += d;
+    if (d > longestDuration) longestDuration = d;
   }
   const avgDuration = matches.length > 0 ? Math.round(totalDuration / matches.length) : 0;
   return { totalDuration, avgDuration, longestDuration };

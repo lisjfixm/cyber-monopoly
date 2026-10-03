@@ -157,8 +157,9 @@ const StatsDashboardPage = () => {
       { range: '超長局 (>60分)', min: 3600, max: Infinity, count: 0 },
     ];
     for (const m of matches) {
+      const dur = typeof m.duration === 'number' && Number.isFinite(m.duration) ? m.duration : 0;
       for (const b of buckets) {
-        if (m.duration >= b.min && m.duration < b.max) {
+        if (dur >= b.min && dur < b.max) {
           b.count += 1;
           break;
         }

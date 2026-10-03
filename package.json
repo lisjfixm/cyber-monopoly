@@ -1,6 +1,6 @@
 {
-  "name": "fullstack-nestjs-template",
-  "version": "2.2.5",
+  "name": "cyber-monopoly",
+  "version": "2.0.0",
   "private": true,
   "flags": {
     "supportBusinessUser": true,
@@ -170,7 +170,7 @@
     "rxjs": "^7.8.2",
     "shiki": "^3.21.0",
     "sonner": "^2.0.7",
-    "streamdown": "^1.6.10",
+    "streamdown": "^1.6.11",
     "style-loader": "^4.0.0",
     "stylelint": "^16.11.0",
     "tailwind-merge": "~3.4.0",

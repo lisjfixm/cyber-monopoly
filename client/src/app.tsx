@@ -47,6 +47,8 @@ const LoginPage = React.lazy(() => import('./pages/LoginPage/LoginPage'));
 const GmPanelPage = React.lazy(() => import('./pages/GmPanelPage/GmPanelPage'));
 const SocialCenterPage = React.lazy(() => import('./pages/SocialCenterPage/SocialCenterPage'));
 const SpectatePage = React.lazy(() => import('./pages/SpectatePage/SpectatePage'));
+const LuckyWheelPage = React.lazy(() => import('./pages/LuckyWheelPage/LuckyWheelPage'));
+const GachaPage = React.lazy(() => import('./pages/GachaPage/GachaPage'));
 
 const RoutesComponent = () => {
   useEffect(() => {
@@ -97,6 +99,8 @@ const RoutesComponent = () => {
               <Route path="report-block" element={<ReportBlockPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="gm-panel" element={<GmPanelPage />} />
+              <Route path="lucky-wheel" element={<LuckyWheelPage />} />
+              <Route path="gacha" element={<GachaPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
