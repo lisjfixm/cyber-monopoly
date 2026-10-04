@@ -10,6 +10,11 @@
         "include": "capabilities/**/*.json",
         "outDir": "dist/server",
         "watchAssets": true
+      },
+      {
+        "include": "database/init.sql",
+        "outDir": "dist/server",
+        "watchAssets": false
       }
     ],
     "plugins": [

@@ -1,8 +1,8 @@
 import { APP_FILTER } from '@nestjs/core';
 import { Module } from '@nestjs/common';
-import { PlatformModule } from '@lark-apaas/fullstack-nestjs-core';
 
 import { GlobalExceptionFilter } from './common/filters/exception.filter';
+import { StandaloneCoreModule } from './standalone/standalone.module';
 import { RankingModule } from './modules/ranking/ranking.module';
 import { MonopolyModule } from './modules/monopoly/monopoly.module';
 import { MatchmakingModule } from './modules/matchmaking/matchmaking.module';
@@ -15,8 +15,9 @@ import { ViewModule } from './modules/view/view.module';
 
 @Module({
   imports: [
-    // 平台 Module，提供平台能力
-    PlatformModule.forRoot(),
+    // Standalone core module: ConfigModule, postgres-js + drizzle DB provider,
+    // HttpModule, global ValidationPipe, auto table creation on boot.
+    StandaloneCoreModule,
     // ====== @route-section: business-modules START ======
     // Place all business modules here.Do NOT add fallback modules here.
     RankingModule,

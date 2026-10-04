@@ -1,0 +1,65 @@
+# 賽博大富翁 Standalone 部署：PostgreSQL + NestJS 後端（同時 serve 前端靜態檔）
+#
+# 快速開始：
+#   cp .env.example .env   # 可選：修改密碼 / secret
+#   docker compose up -d --build
+#
+# docker compose 會自動讀取同目錄下的 .env 進行變數替換；
+# 下方 ${VAR:-default} 寫法在沒有 .env 時也能以預設值啟動。
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cyber-monopoly-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cyber}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cyber_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-cyber_monopoly}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cyber} -d ${POSTGRES_DB:-cyber_monopoly}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    # 預設不對外暴露 PostgreSQL，僅供 server 內部網路存取。
+    # 若需本機工具連線除錯，取消下一行註解：
+    # ports:
+    #   - "5432:5432"
+    networks:
+      - cyber-net
+
+  server:
+    build: .
+    container_name: cyber-monopoly-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # 後端同時讀 DATABASE_URL 與 SUDA_DATABASE_URL，這裡兩者都給
+      DATABASE_URL: postgres://${POSTGRES_USER:-cyber}:${POSTGRES_PASSWORD:-cyber_dev_password}@postgres:5432/${POSTGRES_DB:-cyber_monopoly}
+      SUDA_DATABASE_URL: postgres://${POSTGRES_USER:-cyber}:${POSTGRES_PASSWORD:-cyber_dev_password}@postgres:5432/${POSTGRES_DB:-cyber_monopoly}
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 3000
+      NODE_ENV: production
+      # 下列 secret 請務必在正式環境的 .env 中覆蓋
+      ACCOUNT_TOKEN_SECRET: ${ACCOUNT_TOKEN_SECRET:-change_me_account_token_secret}
+      GM_PASSWORD: ${GM_PASSWORD:-}
+      GM_HMAC_SECRET: ${GM_HMAC_SECRET:-}
+    # 若存在 .env 會一併載入（已存在的 environment 變數優先）
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+    networks:
+      - cyber-net
+
+volumes:
+  pgdata:
+
+networks:
+  cyber-net:
+    driver: bridge

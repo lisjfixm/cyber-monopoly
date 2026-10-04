@@ -1,0 +1,51 @@
+# 依賴（容器內重新 npm ci）
+node_modules/
+**/node_modules/
+
+# 建置產物（容器內重新 build）
+dist/
+build/
+
+# Git / CI
+.git/
+.gitignore
+.githooks/
+.github/
+
+# 平台專用快取 / Agent 檔案
+.spark/
+.spark_project
+.agent/
+.npm_cache/
+*.tsbuildinfo
+
+# 環境變數（勿將本機 secrets 烤進映像檔，改由 compose / 平台注入）
+.env
+.env.local
+.env.*.local
+
+# 日誌 / 執行期資料
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.pid
+
+# 壓縮包 / 暫存
+*.zip
+*.tar.gz
+tmp/
+temp/
+coverage/
+
+# 作系統 / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# 交付文件（不需要進映像檔）
+交付說明.md
+BUG_REPORT_PART3.md
