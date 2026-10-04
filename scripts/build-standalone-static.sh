@@ -22,8 +22,42 @@ sed -i \
 sed -i 's|<title>{{appName}}</title>|<title>赛博大富翁</title>|' "$INDEX"
 sed -i 's|rel="icon" href="{{appAvatar}}"|rel="icon" href="./favicon.svg"|' "$INDEX"
 
+# 其餘 hbs 佔位（內嵌 window 設定、__platform__、og/meta 標籤）在靜態環境
+# 也不會被模板引擎填充，統一替換為固定值或空字串，避免殘留 {{...}}
+python3 - "$INDEX" <<'PY'
+import sys
+path = sys.argv[1]
+with open(path, encoding='utf-8') as f:
+    html = f.read()
+desc = '賽博龐克風大富翁桌遊：本地多人、人機對戰、股票黑市、寵物坐騎、新模式與豐富玩法，在霓虹都市中買地收租、稱霸對手。'
+# 先處理三括號 {{{...}}}（HTML 不轉義）
+html = html.replace('{{{appAvatar}}}', './favicon.svg')
+html = html.replace("{{{__platform__}}}", '{}')
+# 雙括號佔位
+repl = {
+    '{{csrfToken}}': '',
+    '{{userId}}': '',
+    '{{tenantId}}': '',
+    '{{appId}}': '',
+    '{{environment}}': '',
+    '{{basename}}': '',
+    '{{currentUrl}}': '',
+    '{{appName}}': '赛博大富翁',
+    '{{appAvatar}}': './favicon.svg',
+    '{{appDescription}}': desc,
+}
+for k, v in repl.items():
+    html = html.replace(k, v)
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(html)
+PY
+
 if grep -q '\.\./' "$INDEX"; then
   echo "✗ 仍有未修正的相對路徑 ../" >&2
+  exit 1
+fi
+if grep -q '{{' "$INDEX"; then
+  echo "✗ 仍有未填充的 hbs 佔位 {{" >&2
   exit 1
 fi
 echo "✓ 靜態建置完成：$INDEX"
