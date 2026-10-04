@@ -57,6 +57,9 @@ const MODE_COLORS: Record<GameMode, string> = {
   darknet: 'hsl(270, 80%, 55%)',
   casino: 'hsl(45, 100%, 55%)',
   dynasty: 'hsl(20, 90%, 55%)',
+  stock_frenzy: 'hsl(170, 100%, 50%)',
+  black_market_race: 'var(--orange)',
+  twin_strike: 'var(--purple)',
 };
 
 const MODE_LABELS: Record<GameMode, string> = {
@@ -78,6 +81,9 @@ const MODE_LABELS: Record<GameMode, string> = {
   darknet: '暗網',
   casino: '賭場',
   dynasty: '王朝',
+  stock_frenzy: '股市狂潮',
+  black_market_race: '黑市軍火賽',
+  twin_strike: '雙子星戰',
 };
 
 const STATUS_COLORS: Record<RoomStatus, string> = {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -42,6 +42,7 @@ import RatingReviewSection from '@client/src/components/RatingReviewSection';
 import UploadMapDialog from '@client/src/components/social/UploadMapDialog';
 import { CELL_COUNT } from '@shared/game-config';
 import PullToRefresh from '@client/src/components/PullToRefresh';
+import { safeGetJSON } from '@client/src/utils/safeStorage';
 import type { CellConfig, CellType, CustomMapData } from '@shared/api.interface';
 
 type SortType = 'hot' | 'newest' | 'rating';
@@ -181,20 +182,19 @@ const CommunityMapsPage = () => {
 
    useEffect(() => {
      refreshMaps();
-     try {
-       const raw = localStorage.getItem('cyber_monopoly_custom_maps');
-       if (raw) {
-         const parsed = JSON.parse(raw) as CustomMapData[];
-         if (Array.isArray(parsed)) setLocalMaps(parsed);
-       }
-     } catch {
-       // ignore
-     }
+     const parsed = safeGetJSON<CustomMapData[]>('cyber_monopoly_custom_maps', []);
+     if (Array.isArray(parsed)) setLocalMaps(parsed);
    }, [refreshMaps]);
+
+   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+   useEffect(() => () => {
+     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+   }, []);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
-    setTimeout(() => setToast(''), 2000);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setToast(''), 2000);
   }, []);
 
   const loadReviews = useCallback((mapId: string) => {

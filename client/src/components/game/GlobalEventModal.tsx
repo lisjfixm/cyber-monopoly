@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import {
   TrendingDown,
   Zap,
@@ -19,6 +20,10 @@ import {
   Megaphone,
   BadgePercent,
   ShieldAlert,
+  Satellite,
+  CloudLightning,
+  Cpu,
+  HandCoins,
 } from 'lucide-react';
 import { GLOBAL_EVENTS } from '@shared/game-config';
 import type { GlobalEventType } from '@shared/api.interface';
@@ -49,18 +54,43 @@ const EVENT_ICON_MAP: Partial<Record<GlobalEventType, typeof AlertTriangle>> = {
   ad_storm: Megaphone,
   subsidy_carnival: BadgePercent,
   black_market_crackdown: ShieldAlert,
+  // v3.0 新增全局事件
+  satellite_airdrop: Satellite,
+  data_thunder: CloudLightning,
+  chip_boom: Cpu,
+  mega_subsidy: HandCoins,
 };
 
 const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClose }) => {
+  // Esc 關閉 + 背景滾動鎖
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen || !eventType) return null;
 
   const event = GLOBAL_EVENTS[eventType];
   const EventIcon = EVENT_ICON_MAP[eventType] ?? AlertTriangle;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+    <div
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={event?.name ?? '全球事件'}
+    >
       <div
-        className="cyber-card w-full max-w-md p-6 md:p-8 text-center relative overflow-hidden global-event-glow max-h-[85vh] flex flex-col"
+        className="cyber-card w-full max-w-md p-6 md:p-8 text-center relative overflow-hidden global-event-glow max-h-[85vh] flex flex-col overflow-y-auto"
         style={{
           borderColor: 'hsl(0, 100%, 60%)',
           boxShadow:
@@ -91,7 +121,7 @@ const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClos
         </div>
 
         {/* Icon */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-4 flex-shrink-0">
           <div
             className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center"
             style={{
@@ -119,7 +149,7 @@ const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClos
             textShadow: '0 0 10px hsl(0, 100%, 60%), 0 0 20px hsl(0, 100%, 60%), 0 0 40px hsl(0, 100%, 60%)',
           }}
         >
-          {event.name}
+          {event?.name ?? eventType}
         </h2>
 
         {/* Description */}
@@ -127,13 +157,14 @@ const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClos
           className="text-sm md:text-base mb-6 leading-relaxed"
           style={{ color: 'var(--text-primary)' }}
         >
-          {event.description}
+          {event?.description ?? '未知事件，請稍後再試。'}
         </p>
 
         {/* Confirm button */}
         <button
+          type="button"
           onClick={onClose}
-          className="cyber-btn w-full py-3 font-cyber tracking-wider"
+          className="cyber-btn w-full py-3 font-cyber tracking-wider min-h-[44px] mt-auto"
           style={{
             borderColor: 'hsl(0, 100%, 60%)',
             color: 'hsl(0, 100%, 60%)',
@@ -154,7 +185,7 @@ const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClos
               inset 0 0 30px hsla(0, 100%, 60%, 0.1);
           }
           50% {
-            boxShadow:
+            box-shadow:
               0 0 50px hsla(0, 100%, 60%, 0.7),
               0 0 100px hsla(0, 100%, 60%, 0.4),
               inset 0 0 40px hsla(0, 100%, 60%, 0.15);
@@ -163,6 +194,11 @@ const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClos
         @keyframes icon-pulse {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .global-event-glow, .global-event-glow * {
+            animation: none !important;
+          }
         }
       `}</style>
     </div>

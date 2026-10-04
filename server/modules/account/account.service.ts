@@ -138,21 +138,30 @@ export class AccountService {
       .limit(1);
 
     if (existing.length > 0) {
-      throw new ConflictException('用户名已被注册');
+      throw new ConflictException('使用者名稱已被註冊');
     }
 
     const passwordHash = hashPassword(password);
     const now = new Date();
 
-    const inserted = await this.db
-      .insert(monopolyAccountTable)
-      .values({
-        username,
-        passwordHash,
-        nickname,
-        lastLoginAt: now,
-      })
-      .returning();
+    let inserted: Array<typeof monopolyAccountTable.$inferSelect>;
+    try {
+      inserted = await this.db
+        .insert(monopolyAccountTable)
+        .values({
+          username,
+          passwordHash,
+          nickname,
+          lastLoginAt: now,
+        })
+        .returning();
+    } catch (err) {
+      // 並發註冊時，唯一索引 (username) 會拋 23505；轉為 409 而非 500
+      if (this.isUniqueViolation(err)) {
+        throw new ConflictException('使用者名稱已被註冊');
+      }
+      throw err;
+    }
 
     if (inserted.length === 0) {
       throw new BadRequestException('注册失败');
@@ -366,5 +375,16 @@ export class AccountService {
     this.logger.log(`存档合并完成: ${account.username}`);
 
     return mapToProfile(updated[0]);
+  }
+
+  // 遞迴剝離 drizzle/postgres 的錯誤包裝，取出 Postgres 原生 code（23505 = 唯一衝突）
+  private isUniqueViolation(error: unknown): boolean {
+    let current: unknown = error;
+    for (let depth = 0; depth < 4 && current && typeof current === 'object'; depth += 1) {
+      const { code, cause } = current as { code?: unknown; cause?: unknown };
+      if (code === '23505') return true;
+      current = cause;
+    }
+    return false;
   }
 }

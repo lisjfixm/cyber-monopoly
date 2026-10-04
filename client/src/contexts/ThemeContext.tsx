@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { safeGetItem, safeSetItem } from '@client/src/utils/safeStorage';
 
 export type ThemeId =
   | 'cyberpunk'
@@ -137,7 +138,7 @@ export const THEMES: ThemeInfo[] = [
 
 function getInitialColorblind(): boolean {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(COLORBLIND_KEY);
+    const saved = safeGetItem(COLORBLIND_KEY);
     return saved === 'true';
   }
   return false;
@@ -145,7 +146,7 @@ function getInitialColorblind(): boolean {
 
 function getInitialFontSize(): 'small' | 'normal' | 'large' | 'xlarge' {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(FONT_SIZE_KEY);
+    const saved = safeGetItem(FONT_SIZE_KEY);
     if (saved === 'small' || saved === 'normal' || saved === 'large' || saved === 'xlarge') {
       return saved;
     }
@@ -155,7 +156,7 @@ function getInitialFontSize(): 'small' | 'normal' | 'large' | 'xlarge' {
 
 function getInitialAnimationEnabled(): boolean {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(ANIMATION_KEY);
+    const saved = safeGetItem(ANIMATION_KEY);
     if (saved !== null) {
       return saved === 'true';
     }
@@ -165,7 +166,7 @@ function getInitialAnimationEnabled(): boolean {
 
 function getInitialTheme(): ThemeId {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = safeGetItem(STORAGE_KEY);
     if (
       saved === 'cyberpunk' ||
       saved === 'starry' ||
@@ -196,7 +197,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(STORAGE_KEY, theme);
+    safeSetItem(STORAGE_KEY, theme);
   }, [theme]);
 
   useEffect(() => {
@@ -205,18 +206,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     } else {
       document.documentElement.removeAttribute('data-colorblind');
     }
-    localStorage.setItem(COLORBLIND_KEY, String(colorblindMode));
+    safeSetItem(COLORBLIND_KEY, String(colorblindMode));
   }, [colorblindMode]);
 
   useEffect(() => {
     const scale = FONT_SCALE_MAP[fontSize];
     document.documentElement.style.setProperty('--font-scale', String(scale));
-    localStorage.setItem(FONT_SIZE_KEY, fontSize);
+    safeSetItem(FONT_SIZE_KEY, fontSize);
   }, [fontSize]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-animation', animationEnabled ? 'on' : 'off');
-    localStorage.setItem(ANIMATION_KEY, String(animationEnabled));
+    safeSetItem(ANIMATION_KEY, String(animationEnabled));
   }, [animationEnabled]);
 
   const setTheme = (newTheme: ThemeId) => {

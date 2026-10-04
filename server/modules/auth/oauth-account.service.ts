@@ -163,14 +163,37 @@ export class OAuthAccountService {
       }
     }
 
-    await this.db.insert(monopolyAccountProvider).values({
-      accountId,
-      provider,
-      providerUserId,
-      email,
-      displayName,
-      boundAt: now,
-    });
+    try {
+      await this.db.insert(monopolyAccountProvider).values({
+        accountId,
+        provider,
+        providerUserId,
+        email,
+        displayName,
+        boundAt: now,
+      });
+    } catch (err) {
+      // 並發回調時，唯一索引 (provider, provider_user_id) 可能衝突；
+      // 此時視為已綁定，重新讀取該綁定對應帳號完成登入
+      if (this.isUniqueViolation(err)) {
+        const rebound = await this.db
+          .select({ accountId: monopolyAccountProvider.accountId })
+          .from(monopolyAccountProvider)
+          .where(
+            and(
+              eq(monopolyAccountProvider.provider, provider),
+              eq(monopolyAccountProvider.providerUserId, providerUserId),
+            ),
+          )
+          .limit(1);
+        if (rebound.length > 0) {
+          accountId = rebound[0].accountId;
+          isNewUser = false;
+        }
+      } else {
+        throw err;
+      }
+    }
 
     const accounts = await this.db
       .select()
@@ -257,14 +280,23 @@ export class OAuthAccountService {
       );
     }
 
-    await this.db.insert(monopolyAccountProvider).values({
-      accountId,
-      provider,
-      providerUserId,
-      email,
-      displayName,
-      boundAt: new Date(),
-    });
+    try {
+      await this.db.insert(monopolyAccountProvider).values({
+        accountId,
+        provider,
+        providerUserId,
+        email,
+        displayName,
+        boundAt: new Date(),
+      });
+    } catch (err) {
+      if (this.isUniqueViolation(err)) {
+        throw new BadRequestException(
+          '該第三方帳號已被綁定，請重新整理後再試',
+        );
+      }
+      throw err;
+    }
 
     this.logger.log(
       `第三方帳號綁定成功: account:${accountId} + ${provider}/${providerUserId}`,
@@ -298,6 +330,17 @@ export class OAuthAccountService {
     await this.db
       .delete(monopolyAccountProvider)
       .where(eq(monopolyAccountProvider.id, bindings[0].id));
+  }
+
+  // 遞迴剝離 drizzle/postgres 的錯誤包裝，取出 Postgres 原生 code（23505 = 唯一衝突）
+  private isUniqueViolation(error: unknown): boolean {
+    let current: unknown = error;
+    for (let depth = 0; depth < 4 && current && typeof current === 'object'; depth += 1) {
+      const { code, cause } = current as { code?: unknown; cause?: unknown };
+      if (code === '23505') return true;
+      current = cause;
+    }
+    return false;
   }
 
   private hashPassword(password: string): string {

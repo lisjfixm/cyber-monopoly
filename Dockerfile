@@ -53,6 +53,11 @@ USER node
 
 EXPOSE 3000
 
+# 健康檢查：standalone 啟動時平台套件首次 require 約需數十秒（離網 metadata 逾時），
+# 故給 90s 啟動寬限期；/health 不依賴資料庫，正常時回 200。
+HEALTHCHECK --interval=10s --timeout=5s --start-period=90s --retries=6 \
+  CMD wget -q -O /dev/null http://127.0.0.1:3000/health || exit 1
+
 # cwd 必須為專案根（/app），因為 main.ts 以
 # join(process.cwd(), 'dist/client') 與 join(process.cwd(), 'dist/server/database/init.sql') 定位資源
 CMD ["node", "dist/server/main.js"]

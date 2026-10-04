@@ -422,6 +422,102 @@ export class GmService {
     return rowToGmUserDetail(updated[0]);
   }
 
+  // ====== GM 派發稱號 / 頭像框 ======
+
+  async grantTitleOrFrame(
+    id: string,
+    dto: { titles?: string[]; avatarFrame?: string },
+  ): Promise<Record<string, unknown>> {
+    const userRows = await this.db
+      .select()
+      .from(monopolyAccount)
+      .where(eq(monopolyAccount.id, id))
+      .limit(1);
+
+    if (userRows.length === 0) {
+      throw new NotFoundException('使用者不存在');
+    }
+
+    const user = userRows[0];
+    const patch: Partial<typeof monopolyAccount.$inferInsert> = {};
+
+    // 派發稱號：去空白、去重、長度白名單校驗後合併進已解鎖稱號
+    if (Array.isArray(dto.titles)) {
+      const cleanTitles = Array.from(
+        new Set(
+          dto.titles
+            .map((t) => String(t).trim())
+            .filter((t) => t.length > 0 && t.length <= 50),
+        ),
+      ).slice(0, 50);
+      if (cleanTitles.length === 0) {
+        throw new BadRequestException('未提供有效的稱號');
+      }
+      const currentTitles = (user.unlockedTitles as string[]) ?? [];
+      patch.unlockedTitles = Array.from(
+        new Set([...currentTitles, ...cleanTitles]),
+      ) as unknown as string[];
+    }
+
+    if (dto.avatarFrame !== undefined) {
+      const frame = String(dto.avatarFrame).trim();
+      if (frame.length === 0 || frame.length > 50) {
+        throw new BadRequestException('頭像框 ID 長度需在 1-50 字元');
+      }
+      patch.avatarFrame = frame;
+    }
+
+    if (Object.keys(patch).length === 0) {
+      throw new BadRequestException('未提供可派發的內容');
+    }
+
+    patch.updatedAt = new Date();
+
+    const updated = await this.db
+      .update(monopolyAccount)
+      .set(patch)
+      .where(eq(monopolyAccount.id, id))
+      .returning();
+
+    await this.writeLog('grant_title_frame', id, {
+      titles: dto.titles,
+      avatarFrame: dto.avatarFrame,
+    });
+
+    return rowToGmUserDetail(updated[0]);
+  }
+
+  // ====== GM 儀表板總覽 ======
+
+  async getDashboard(): Promise<Record<string, number | string>> {
+    const [accountCount] = await this.db
+      .select({ count: count() })
+      .from(monopolyAccount);
+
+    const [bannedCount] = await this.db
+      .select({ count: count() })
+      .from(monopolyAccount)
+      .where(eq(monopolyAccount.isBanned, true));
+
+    const [announcementCount] = await this.db
+      .select({ count: count() })
+      .from(monopolyAnnouncement);
+
+    const activeThreshold = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const [newTodayCount] = await this.db
+      .select({ count: count() })
+      .from(monopolyAccount)
+      .where(gte(monopolyAccount.createdAt, activeThreshold));
+
+    return {
+      totalAccounts: Number(accountCount?.count ?? 0),
+      bannedAccounts: Number(bannedCount?.count ?? 0),
+      activeAnnouncements: Number(announcementCount?.count ?? 0),
+      newAccounts24h: Number(newTodayCount?.count ?? 0),
+      generatedAt: new Date().toISOString(),
+    };
+  }
+
   // ====== 公告列表 ======
 
   async listAnnouncements(): Promise<Announcement[]> {

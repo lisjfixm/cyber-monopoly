@@ -54,6 +54,10 @@ const QuickMatchPage = () => {
   const pollTimerRef = useRef<number | null>(null);
   const secondTimerRef = useRef<number | null>(null);
   const hasJoinedRef = useRef<boolean>(false);
+  // 防止連續點擊重複送出 joinMatch
+  const startingRef = useRef<boolean>(false);
+  // 黑名單跳過提示的短暫計時器，卸載時一併清除
+  const skipTimerRef = useRef<number | null>(null);
 
   const clearTimers = useCallback(() => {
     if (pollTimerRef.current !== null) {
@@ -63,6 +67,10 @@ const QuickMatchPage = () => {
     if (secondTimerRef.current !== null) {
       window.clearInterval(secondTimerRef.current);
       secondTimerRef.current = null;
+    }
+    if (skipTimerRef.current !== null) {
+      window.clearTimeout(skipTimerRef.current);
+      skipTimerRef.current = null;
     }
   }, []);
 
@@ -134,7 +142,9 @@ const QuickMatchPage = () => {
         if (isBlocked(mockOpponent)) {
           setSkipMessage(`對方在黑名單中，已跳過匹配（${mockOpponent}）`);
           // 短暫顯示提示後繼續輪詢
-          window.setTimeout(() => {
+          if (skipTimerRef.current !== null) window.clearTimeout(skipTimerRef.current);
+          skipTimerRef.current = window.setTimeout(() => {
+            skipTimerRef.current = null;
             setSkipMessage('');
           }, 2000);
           pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
@@ -168,12 +178,15 @@ const QuickMatchPage = () => {
       setError('請先設定暱稱');
       return;
     }
+    // 連發保護：若已在送出中，忽略重複點擊
+    if (startingRef.current) return;
 
     setError('');
     setWaitedSeconds(0);
     setQueuePosition(1);
     setPhase('matching');
     playSfx('click');
+    startingRef.current = true;
 
     try {
       const result = await matchmaking.matchmakingApi.joinMatch({
@@ -198,6 +211,8 @@ const QuickMatchPage = () => {
       setError(message);
       setPhase('config');
       hasJoinedRef.current = false;
+    } finally {
+      startingRef.current = false;
     }
   }, [visitorId, nickname, selectedMode, selectedPlayers, playSfx, pollStatus]);
 

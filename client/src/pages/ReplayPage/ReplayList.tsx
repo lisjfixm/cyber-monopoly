@@ -12,7 +12,8 @@ import {
 import { logger } from '@lark-apaas/client-toolkit/logger';
 
 import { MODE_LABELS } from '@shared/game-config';
-import type { ReplayData } from '@shared/api.interface';
+import { safeGetJSON, safeSetJSON } from '@client/src/utils/safeStorage';
+import type { ReplayData, GameState } from '@shared/api.interface';
 import ReplayShareModal from '@client/src/components/game/ReplayShareModal';
 import { uploadReplay } from '@client/src/utils/replay-share';
 
@@ -23,28 +24,46 @@ export interface StoredReplay extends Omit<ReplayData, 'id'> {
   id: string;
 }
 
+// 清洗單筆回放：欄位缺失/型別錯誤時給安全預設，避免渲染期拋錯白屏
+function sanitizeReplay(raw: unknown): StoredReplay | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  if (!Array.isArray(r.log)) return null;
+  const players = Array.isArray(r.players) ? r.players : [];
+  const duration = Number.isFinite(Number(r.duration)) ? Number(r.duration) : 0;
+  const totalTurns = Number.isFinite(Number(r.totalTurns)) ? Number(r.totalTurns) : 0;
+  return {
+    id: typeof r.id === 'string' ? r.id : `replay_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    gameMode: typeof r.gameMode === 'string' ? r.gameMode : 'free_for_all',
+    winner: typeof r.winner === 'string' ? r.winner : '',
+    players: players as StoredReplay['players'],
+    duration,
+    totalTurns,
+    createdAt: typeof r.createdAt === 'string' ? r.createdAt : new Date().toISOString(),
+    log: r.log as StoredReplay['log'],
+    finalState: (r.finalState ?? {}) as GameState,
+  };
+}
+
 export function loadReplays(): StoredReplay[] {
-  try {
-    const raw = localStorage.getItem(REPLAY_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+  const parsed = safeGetJSON<unknown>(REPLAY_STORAGE_KEY, []);
+  if (!Array.isArray(parsed)) return [];
+  return parsed
+    .map((item) => sanitizeReplay(item))
+    .filter((item): item is StoredReplay => item !== null);
 }
 
 export function saveReplays(replays: StoredReplay[]): void {
-  try {
-    localStorage.setItem(REPLAY_STORAGE_KEY, JSON.stringify(replays));
-  } catch (err) {
-    logger.error('Failed to save replays:', err instanceof Error ? err.message : String(err));
+  const ok = safeSetJSON(REPLAY_STORAGE_KEY, replays);
+  if (!ok) {
+    logger.error('Failed to save replays: storage unavailable');
   }
 }
 
 export function formatDuration(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
+  const safeSeconds = Number.isFinite(seconds) && seconds >= 0 ? Math.floor(seconds) : 0;
+  const mins = Math.floor(safeSeconds / 60);
+  const secs = Math.floor(safeSeconds % 60);
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
@@ -84,14 +103,11 @@ const ReplayList = ({ replays, onSelect, onDelete, onImport }: ReplayListProps) 
     }
     try {
       const decoded = JSON.parse(decodeURIComponent(escape(atob(importCode.trim()))));
-      if (!decoded.log || !Array.isArray(decoded.log)) {
+      const sanitized = sanitizeReplay(decoded);
+      if (!sanitized) {
         throw new Error('無效的回放格式');
       }
-      const newReplay: StoredReplay = {
-        ...decoded,
-        id: decoded.id || `imported_${Date.now()}`,
-      };
-      onImport(newReplay);
+      onImport(sanitized);
       setShowImport(false);
       setImportCode('');
     } catch (err) {

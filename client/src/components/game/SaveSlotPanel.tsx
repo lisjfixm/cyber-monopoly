@@ -3,6 +3,18 @@ import type { FC } from 'react';
 import type { SaveSlotInfo } from '@client/src/hooks/useSaveSlots';
 import { getModeLabel } from '@client/src/hooks/useSaveSlots';
 
+// v3.0 新模式本地標籤兜底（shared/MODE_LABELS 若未涵蓋則用此處）
+const LOCAL_MODE_LABELS: Record<string, string> = {
+  stock_frenzy: '股市狂潮',
+  black_market_race: '黑市軍火賽',
+  twin_strike: '雙子星陣營戰',
+};
+
+function resolveModeLabel(mode: string): string {
+  if (LOCAL_MODE_LABELS[mode]) return LOCAL_MODE_LABELS[mode];
+  return getModeLabel(mode);
+}
+
 interface SaveSlotPanelProps {
   isOpen: boolean;
   mode: 'save' | 'load';
@@ -114,7 +126,7 @@ const SaveSlotPanel: FC<SaveSlotPanelProps> = ({
                         </div>
                         <div className="flex items-center gap-1 text-text-secondary">
                           <Play className="w-3 h-3" />
-                          <span>{getModeLabel(slotData.gameMode)}</span>
+                          <span>{resolveModeLabel(slotData.gameMode)}</span>
                         </div>
                         <div className="flex items-center gap-1 text-[var(--red)]">
                           <User className="w-3 h-3" />

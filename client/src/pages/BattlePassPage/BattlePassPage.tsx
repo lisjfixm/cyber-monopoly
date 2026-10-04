@@ -1,5 +1,6 @@
 import { FC, useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   ArrowLeft,
   Check,
@@ -124,6 +125,7 @@ const BattlePassPage: FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [questTab, setQuestTab] = useState<QuestTab>('daily');
   const trackRef = useRef<HTMLDivElement>(null);
+  const claimingRef = useRef<boolean>(false);
   const countdown = useCountdown(state.seasonEndsAt);
 
   const seasonRewardsPreview = useMemo(
@@ -161,15 +163,36 @@ const BattlePassPage: FC = () => {
   }, [state]);
 
   const handleClaimTier = useCallback((level: number, isPremium: boolean) => {
+    if (claimingRef.current) return;
+    if (!canClaimTierReward(state, level, isPremium)) {
+      toast.info('該獎勵目前無法領取');
+      return;
+    }
+    claimingRef.current = true;
     const newState = claimTierReward(state, level, isPremium);
     saveBattlePassState(newState);
     setState(newState);
+    toast.success(`已領取 Lv.${level} ${isPremium ? '豪華' : '免費'}獎勵`);
+    // 解鎖延遲一幀釋放，避免同批次重複點擊
+    setTimeout(() => {
+      claimingRef.current = false;
+    }, 0);
   }, [state]);
 
   const handleClaimQuest = useCallback((questId: string) => {
+    if (claimingRef.current) return;
+    claimingRef.current = true;
     const { state: newState, xpGained } = claimQuest(state, questId);
     saveBattlePassState(newState);
     setState(newState);
+    if (xpGained > 0) {
+      toast.success(`任務完成，獲得 ${xpGained} EXP`);
+    } else {
+      toast.success('獎勵已領取');
+    }
+    setTimeout(() => {
+      claimingRef.current = false;
+    }, 0);
   }, [state]);
 
   const selectedTier = useMemo<BattlePassTier | null>(() => {
@@ -517,13 +540,19 @@ const BattlePassPage: FC = () => {
             </TabsList>
 
             <TabsContent value={questTab} className="mt-0 space-y-2">
-              {activeQuests.map((quest) => (
-                <QuestRow
-                  key={quest.id}
-                  quest={quest}
-                  onClaim={() => handleClaimQuest(quest.id)}
-                />
-              ))}
+              {activeQuests.length === 0 ? (
+                <div className="text-center text-sm font-cyber py-10" style={{ color: 'var(--text-muted)' }}>
+                  目前沒有此分頁的任務，明天再來看看
+                </div>
+              ) : (
+                activeQuests.map((quest) => (
+                  <QuestRow
+                    key={quest.id}
+                    quest={quest}
+                    onClaim={() => handleClaimQuest(quest.id)}
+                  />
+                ))
+              )}
             </TabsContent>
           </Tabs>
         </div>

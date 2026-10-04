@@ -4,10 +4,12 @@ import { toast } from 'sonner';
 import TutorialOverlay from '@client/src/components/game/TutorialOverlay';
 import { TUTORIAL_STEPS } from '@client/src/config/tutorial';
 import { useTutorial } from '@client/src/hooks/useTutorial';
-import { Map } from 'lucide-react';
+import { Map, LineChart, Flame, Users, Scale } from 'lucide-react';
 import { useAchievements } from '@client/src/hooks/useAchievements';
 import { GAME_MODES, PLAYER_COLOR_HEX, DEFAULT_PLAYER_NAMES } from '@shared/game-config';
 import type { GameMode, PlayMode, GameModeConfig } from '@shared/api.interface';
+import { V3_MODES } from '@client/src/components/game/v3/modeMeta';
+import type { V3ModeId } from '@client/src/components/game/v3/modeMeta';
 
 interface ModeOption {
   key: GameMode;
@@ -16,8 +18,14 @@ interface ModeOption {
   color: string;
   description: string;
   icon: string;
+  /** v3 新模式使用 lucide 圖標（優先於文字 icon） */
+  IconComp?: React.ComponentType<{ size?: number; className?: string }>;
   gradient?: string;
   difficulty?: string;
+  /** 需要的玩家數量（undefined 代表自由） */
+  requiredPlayers?: number;
+  /** 選擇後的額外提示（勝利條件 / 陣營說明） */
+  setupHint?: string;
 }
 
 interface ModeGroup {
@@ -166,6 +174,18 @@ const ModeSelectPage = () => {
           description: '4人對抗超強AI',
           icon: '首領',
         },
+        {
+          key: 'twin_strike',
+          label: V3_MODES.twin_strike.label,
+          config: GAME_MODES.twin_strike,
+          color: V3_MODES.twin_strike.color,
+          description: V3_MODES.twin_strike.tagline,
+          icon: '雙子',
+          IconComp: Users,
+          difficulty: V3_MODES.twin_strike.difficulty,
+          requiredPlayers: V3_MODES.twin_strike.requiredPlayers,
+          setupHint: V3_MODES.twin_strike.setupHint,
+        },
       ],
     },
     {
@@ -259,6 +279,28 @@ const ModeSelectPage = () => {
             icon: '王朝',
             difficulty: '困難',
           },
+          {
+            key: 'stock_frenzy',
+            label: V3_MODES.stock_frenzy.label,
+            config: GAME_MODES.stock_frenzy,
+            color: V3_MODES.stock_frenzy.color,
+            description: V3_MODES.stock_frenzy.tagline,
+            icon: '股潮',
+            IconComp: LineChart,
+            difficulty: V3_MODES.stock_frenzy.difficulty,
+            setupHint: V3_MODES.stock_frenzy.setupHint,
+          },
+          {
+            key: 'black_market_race',
+            label: V3_MODES.black_market_race.label,
+            config: GAME_MODES.black_market_race,
+            color: V3_MODES.black_market_race.color,
+            description: V3_MODES.black_market_race.tagline,
+            icon: '軍火',
+            IconComp: Flame,
+            difficulty: V3_MODES.black_market_race.difficulty,
+            setupHint: V3_MODES.black_market_race.setupHint,
+          },
        ],
      },
    ];
@@ -326,7 +368,7 @@ const ModeSelectPage = () => {
           選擇遊戲模式
         </h2>
          <p className="text-center text-[var(--text-secondary)] text-sm mb-6 font-cyber tracking-wider">
-           十八種風格 · 不同挑戰
+           二十一種風格 · 不同挑戰
          </p>
 
         {/* Players Info */}
@@ -430,8 +472,14 @@ const ModeSelectPage = () => {
                        const isSelected = selectedMode === mode.key;
                        const borderColor = isSelected ? mode.color : `${mode.color}30`;
                        const glowColor = mode.color;
-                       // 團隊死鬥需要至少4人
-                       const disabled = mode.key === 'team_deathmatch' && playerCount < 4;
+                       // 需要固定人數的模式（如 team_deathmatch / twin_strike 2v2）人數不符時停用
+                       const needPlayers = mode.requiredPlayers ?? (mode.key === 'team_deathmatch' ? 4 : undefined);
+                       const disabled = needPlayers !== undefined && playerCount !== needPlayers;
+                       const disabledTitle = needPlayers !== undefined
+                         ? (mode.key === 'twin_strike'
+                             ? `雙子星陣營戰需剛好 ${needPlayers} 人（2v2），請返回調整為 ${needPlayers} 人`
+                             : `需要 ${needPlayers} 人以上（2v2）`)
+                         : undefined;
                        const difficultyColor =
                          mode.difficulty === '地獄'
                            ? 'var(--red)'
@@ -445,7 +493,7 @@ const ModeSelectPage = () => {
                            key={mode.key}
                            type="button"
                            onClick={() => !disabled && handleSelect(mode.key)}
-                           title={disabled ? '需要4人以上（2v2）' : undefined}
+                           title={disabled ? disabledTitle : mode.setupHint}
                            className={`cyber-card p-3 md:p-4 text-left transition-all hover:scale-[1.03] flex flex-col items-center text-center min-h-0 ${
                              disabled ? 'opacity-50 grayscale cursor-not-allowed hover:scale-100' : ''
                            }`}
@@ -460,14 +508,15 @@ const ModeSelectPage = () => {
                            }}
                          >
                           <div
-                            className="text-2xl md:text-3xl mb-1.5 md:mb-2 flex-shrink-0"
+                            className="text-2xl md:text-3xl mb-1.5 md:mb-2 flex-shrink-0 flex items-center justify-center"
                             style={{
+                              color: mode.color,
                               filter: isSelected
                                 ? `drop-shadow(0 0 6px ${glowColor})`
                                 : 'none',
                             }}
                           >
-                            {mode.icon}
+                            {mode.IconComp ? <mode.IconComp size={28} /> : mode.icon}
                           </div>
                           <div
                             className="font-cyber text-xs md:text-sm tracking-wider mb-1 truncate w-full"
@@ -514,6 +563,29 @@ const ModeSelectPage = () => {
                 </div>
               ))}
             </div>
+
+            {/* 已選模式規則提示（v3 新模式 / 特殊勝利條件） */}
+            {(() => {
+              const selected = modeGroups.flatMap((g: ModeGroup) => g.modes).find((m: ModeOption) => m.key === selectedMode);
+              if (!selected?.setupHint) return null;
+              return (
+                <div
+                  className="cyber-card p-3 mb-4 flex items-start gap-2"
+                  style={{
+                    borderColor: `${selected.color}66`,
+                    backgroundColor: `${selected.color}0d`,
+                  }}
+                >
+                  <Scale size={16} className="flex-shrink-0 mt-0.5" style={{ color: selected.color }} />
+                  <div className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    <span className="font-cyber tracking-wider mr-1" style={{ color: selected.color }}>
+                      {selected.label}
+                    </span>
+                    {selected.setupHint}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* 隨機地圖開關 */}
             <div

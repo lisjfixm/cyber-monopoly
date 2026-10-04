@@ -171,6 +171,12 @@ const NeonParticles: React.FC<NeonParticlesProps> = ({
     const isAnimationEnabled = (): boolean =>
       document.documentElement.getAttribute('data-animation') !== 'off';
 
+    /** 系統層級「減少動態效果」偏好：最高優先級，一律靜止 */
+    const prefersReducedMotion = (): boolean => {
+      if (typeof window === 'undefined' || !window.matchMedia) return false;
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    };
+
     /** 動畫主迴圈 */
     const animate = (time: number): void => {
       if (!lastTimeRef.current) lastTimeRef.current = time;
@@ -182,7 +188,7 @@ const NeonParticles: React.FC<NeonParticlesProps> = ({
       }
       draw();
 
-      if (isAnimationEnabled() && !pausedRef.current) {
+      if (isAnimationEnabled() && !pausedRef.current && !prefersReducedMotion()) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
         rafRef.current = null;
@@ -193,10 +199,10 @@ const NeonParticles: React.FC<NeonParticlesProps> = ({
     const startAnimation = (): void => {
       if (rafRef.current !== null) return;
       lastTimeRef.current = 0;
-      if (isAnimationEnabled()) {
+      if (isAnimationEnabled() && !prefersReducedMotion()) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
-        // 靜止模式：只畫一幀
+        // 靜止模式：只畫一幀（使用者關閉動畫或系統要求減少動態）
         draw();
       }
     };
@@ -234,9 +240,25 @@ const NeonParticles: React.FC<NeonParticlesProps> = ({
     window.addEventListener('resize', handleResize);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // 系統「減少動態效果」切換時即時反應
+    const motionQuery =
+      typeof window !== 'undefined' && window.matchMedia
+        ? window.matchMedia('(prefers-reduced-motion: reduce)')
+        : null;
+    const handleMotionChange = (): void => {
+      if (motionQuery?.matches) {
+        stopAnimation();
+        draw();
+      } else {
+        startAnimation();
+      }
+    };
+    motionQuery?.addEventListener('change', handleMotionChange);
+
     return () => {
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      motionQuery?.removeEventListener('change', handleMotionChange);
       stopAnimation();
     };
   }, [count]);

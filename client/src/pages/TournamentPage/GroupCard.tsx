@@ -8,17 +8,32 @@ interface GroupCardProps {
   sortedStandings: TournamentStanding[];
 }
 
+// 小組內排名：同分先比勝場數、再比敗場較少者。
+// 注意：必須在「小組內」排序，而非直接拿全域積分榜的前兩名，
+// 否則跨組名次會誤判晉級者。
+function sortGroupStandings(
+  standings: TournamentStanding[],
+  groupPlayers: string[],
+): TournamentStanding[] {
+  const groupSet = new Set(groupPlayers);
+  return standings
+    .filter((s: TournamentStanding) => groupSet.has(s.player))
+    .sort((a: TournamentStanding, b: TournamentStanding) => {
+      if (b.points !== a.points) return b.points - a.points;
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      return a.losses - b.losses;
+    });
+}
+
 const GroupCard = ({
   groupName,
   players,
   matches,
   sortedStandings,
 }: GroupCardProps) => {
-  const groupStandings = sortedStandings
-    .filter((s: TournamentStanding) => players.includes(s.player))
-    .slice(0, 2);
+  const groupStandings = sortGroupStandings(sortedStandings, players);
   const advancerSet = new Set(
-    groupStandings.map((s: TournamentStanding) => s.player),
+    groupStandings.slice(0, 2).map((s: TournamentStanding) => s.player),
   );
 
   return (

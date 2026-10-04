@@ -34,6 +34,14 @@ import {
   Award,
   Palette,
   Shirt,
+  LineChart,
+  ShoppingBag,
+  Terminal,
+  Stethoscope,
+  Gift,
+  Cpu,
+  HeartPulse,
+  Flag,
 } from 'lucide-react';
 import { ACHIEVEMENTS } from '@shared/game-config';
 import type { AchievementId } from '@shared/api.interface';
@@ -94,6 +102,19 @@ const ACHIEVEMENT_ICON_MAP: Partial<Record<AchievementId, typeof Trophy>> = {
   bankruptcy_comeback: Rocket,
   zero_property_win: Star,
   triple_double_jail: Lock,
+  // v3.0 新增成就
+  stock_frenzy_champion: LineChart,
+  black_market_tycoon: ShoppingBag,
+  twin_strike_veteran: Users,
+  item_armory: Package,
+  netrunner_legend: Terminal,
+  medic_angel: Stethoscope,
+  broker_pro: TrendingUp,
+  airdrop_grateful: Gift,
+  chip_mogul: Cpu,
+  survival_master: HeartPulse,
+  emperor_crowned: Crown,
+  race_finisher: Flag,
 };
 
 const AchievementToast: FC<AchievementToastProps> = ({ achievementId, onClose }) => {
@@ -106,6 +127,8 @@ const AchievementToast: FC<AchievementToastProps> = ({ achievementId, onClose })
     }, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
+
+  if (!achievement) return null;
 
   return (
     <div

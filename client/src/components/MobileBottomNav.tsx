@@ -30,7 +30,7 @@ const MobileBottomNav: React.FC = () => {
       className="fixed bottom-0 left-0 right-0 z-40 md:hidden backdrop-blur-md border-t"
       style={{
         backgroundColor: 'var(--bg-dark)',
-        borderTopColor: 'hsla(180, 100%, 50%, 0.3)',
+        borderTopColor: 'var(--border-neon, var(--border))',
         paddingBottom: 'calc(8px + var(--safe-bottom, 0px))',
       }}
     >

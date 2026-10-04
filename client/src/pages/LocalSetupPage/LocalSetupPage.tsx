@@ -177,6 +177,9 @@ const LocalSetupPage = () => {
               );
             })}
           </div>
+          <p className="text-[11px] text-[var(--text-secondary)] mt-2 leading-relaxed">
+            提示：「雙子星陣營戰」為 2v2 合作對抗，需剛好 4 人（玩家 1、3 為紅隊，玩家 2、4 為藍隊）；「股市狂潮」「黑市軍火賽」為 40 回合計分制，人數不拘。
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

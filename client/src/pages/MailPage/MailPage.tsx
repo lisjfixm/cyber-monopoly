@@ -13,6 +13,7 @@ import {
   Crown,
   Shield,
   Users,
+  CheckCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -102,6 +103,58 @@ const MailPage = () => {
     toast.success('郵件已刪除');
   }, [expandedId]);
 
+  // 目前分頁內可執行的批量操作統計
+  const unreadInTab = useMemo(
+    () => filteredMails.filter((m) => !m.isRead).length,
+    [filteredMails],
+  );
+  const claimableInTab = useMemo(
+    () =>
+      filteredMails.filter(
+        (m) => m.hasAttachment && m.attachment && !m.attachmentClaimed,
+      ).length,
+    [filteredMails],
+  );
+
+  // 全部已讀：逐封呼叫既有 markAsRead，閉環寫回 localStorage
+  const handleMarkAllRead = useCallback(() => {
+    const targets = mails.filter((m) => !m.isRead);
+    if (targets.length === 0) {
+      toast.info('目前沒有未讀郵件');
+      return;
+    }
+    let next = getMailState();
+    targets.forEach((m) => {
+      next = markAsRead(m.id);
+    });
+    setMails(next.mails);
+    toast.success(`已將 ${targets.length} 封郵件標記為已讀`);
+  }, [mails]);
+
+  // 一鍵領取：逐封領取尚未領取的附件，並統計回饋
+  const handleClaimAll = useCallback(() => {
+    const targets = mails.filter(
+      (m) => m.hasAttachment && m.attachment && !m.attachmentClaimed,
+    );
+    if (targets.length === 0) {
+      toast.info('目前沒有可領取的附件');
+      return;
+    }
+    let next = getMailState();
+    let coins = 0;
+    let items = 0;
+    targets.forEach((m) => {
+      next = claimAttachment(m.id);
+      if (m.attachment?.type === 'coins') coins += m.attachment.amount ?? 0;
+      else items += 1;
+    });
+    setMails(next.mails);
+    const parts: string[] = [];
+    if (coins > 0) parts.push(`${coins} 金幣`);
+    if (items > 0) parts.push(`${items} 項附件`);
+    toast.success(`一鍵領取完成：${parts.join('、') || '無'}`);
+  }, [mails]);
+
   const handleBack = useCallback(() => {
     navigate('/');
   }, [navigate]);
@@ -168,6 +221,41 @@ const MailPage = () => {
             </button>
           );
         })}
+      </div>
+
+      {/* 批量操作列 */}
+      <div
+        className="flex items-center justify-between gap-2 px-3 md:px-6 py-2 border-b"
+        style={{ borderColor: 'var(--border-neon)' }}
+      >
+        <span className="text-xs font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
+          未讀 {unreadInTab} · 待領附件 {claimableInTab}
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleMarkAllRead}
+            disabled={unreadInTab === 0}
+            className="cyber-btn px-3 py-1.5 text-xs font-cyber tracking-wider flex items-center gap-1.5 disabled:opacity-40"
+            style={{ borderColor: 'var(--cyan)', color: 'var(--cyan)' }}
+          >
+            <CheckCheck size={13} />
+            全部已讀
+          </button>
+          <button
+            type="button"
+            onClick={handleClaimAll}
+            disabled={claimableInTab === 0}
+            className="cyber-btn px-3 py-1.5 text-xs font-cyber tracking-wider flex items-center gap-1.5 disabled:opacity-40"
+            style={{
+              borderColor: 'hsl(45, 100%, 55%)',
+              color: 'hsl(45, 100%, 55%)',
+            }}
+          >
+            <Gift size={13} />
+            一鍵領取
+          </button>
+        </div>
       </div>
 
       {/* 郵件列表 */}

@@ -66,6 +66,7 @@ import { getUnreadAnnouncements } from '@client/src/utils/announcements';
 import { getUnreadCount } from '@client/src/utils/mail';
 import DailyCheckinModal from '@client/src/components/DailyCheckinModal';
 import TitleEffect from '@client/src/components/TitleEffect';
+import HomeOnboardingGuide, { hasHomeOnboardingCompleted } from '@client/src/components/HomeOnboardingGuide';
 import { TITLES } from '@shared/game-config';
 
 // ---------- 共用小元件 ----------
@@ -230,7 +231,11 @@ const HomePage = () => {
   const equippedTitleConfig = equippedTitle ? TITLES[equippedTitle] : null;
 
   useEffect(() => {
-    setUnreadMailCount(getUnreadCount());
+    try {
+      setUnreadMailCount(getUnreadCount());
+    } catch {
+      setUnreadMailCount(0);
+    }
   }, []);
 
   // 公告彈窗
@@ -267,11 +272,22 @@ const HomePage = () => {
     onComplete: () => unlockAchievement('beginner'),
   });
   const [showTutorialPrompt, setShowTutorialPrompt] = useState<boolean>(false);
+
+  // 首頁新手引導（輕量分步彈層）：首次進入自動顯示
+  const [showHomeOnboarding, setShowHomeOnboarding] = useState<boolean>(false);
   useEffect(() => {
-    if (shouldAutoPrompt) {
+    if (hasHomeOnboardingCompleted()) return;
+    const timer = setTimeout(() => setShowHomeOnboarding(true), 900);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 深層棋盤教學提示：首頁引導完成後再提示，避免兩個彈窗同時出現
+  useEffect(() => {
+    if (shouldAutoPrompt && hasHomeOnboardingCompleted()) {
       const timer = setTimeout(() => setShowTutorialPrompt(true), 800);
       return () => clearTimeout(timer);
     }
+    return;
   }, [shouldAutoPrompt]);
 
   const startTutorial = useCallback(() => {
@@ -504,7 +520,7 @@ const HomePage = () => {
             CYBER MONOPOLY
           </p>
           <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 text-[10px] md:text-xs font-cyber tracking-widest" style={{ border: '1px solid var(--border-neon)', color: 'var(--text-secondary)' }}>
-            <span>v2.0.0</span>
+            <span>v3.0.0</span>
             <span style={{ color: 'var(--cyan)' }}>NEON · FORTUNE · DOMINATION</span>
           </div>
         </div>
@@ -520,8 +536,8 @@ const HomePage = () => {
                 style={{
                   borderColor: 'var(--green)',
                   color: 'var(--green)',
-                  background: 'rgba(0,255,128,0.1)',
-                  boxShadow: '0 0 15px rgba(0,255,128,0.3)',
+                  background: 'color-mix(in srgb, var(--green) 10%, transparent)',
+                  boxShadow: '0 0 15px color-mix(in srgb, var(--green) 30%, transparent)',
                 }}
                 aria-label="繼續遊戲"
               >
@@ -536,8 +552,8 @@ const HomePage = () => {
                 style={{
                   borderColor: 'var(--cyan)',
                   color: 'var(--cyan)',
-                  background: 'rgba(0,255,255,0.1)',
-                  boxShadow: '0 0 15px rgba(0,255,255,0.3)',
+                  background: 'color-mix(in srgb, var(--cyan) 10%, transparent)',
+                  boxShadow: '0 0 15px color-mix(in srgb, var(--cyan) 30%, transparent)',
                 }}
                 aria-label="繼續聯機遊戲"
               >
@@ -554,7 +570,7 @@ const HomePage = () => {
               type="button"
               onClick={go('/local-setup')}
               className="cyber-btn p-4 flex flex-col items-center justify-center gap-2 min-h-[96px]"
-              style={{ borderColor: 'var(--cyan)', color: 'var(--cyan)', background: 'rgba(0,255,255,0.1)', boxShadow: '0 0 18px rgba(0,255,255,0.25)' }}
+              style={{ borderColor: 'var(--cyan)', color: 'var(--cyan)', background: 'color-mix(in srgb, var(--cyan) 10%, transparent)', boxShadow: '0 0 18px color-mix(in srgb, var(--cyan) 25%, transparent)' }}
             >
               <Users size={28} />
               <span className="font-cyber tracking-wider text-sm">本地多人</span>
@@ -563,7 +579,7 @@ const HomePage = () => {
               type="button"
               onClick={go('/ai-setup')}
               className="cyber-btn p-4 flex flex-col items-center justify-center gap-2 min-h-[96px]"
-              style={{ borderColor: 'var(--pink)', color: 'var(--pink)', background: 'rgba(255,107,157,0.1)', boxShadow: '0 0 18px rgba(255,107,157,0.25)' }}
+              style={{ borderColor: 'var(--pink)', color: 'var(--pink)', background: 'color-mix(in srgb, var(--pink) 10%, transparent)', boxShadow: '0 0 18px color-mix(in srgb, var(--pink) 25%, transparent)' }}
             >
               <Bot size={28} />
               <span className="font-cyber tracking-wider text-sm">人機對戰</span>
@@ -572,7 +588,7 @@ const HomePage = () => {
               type="button"
               onClick={() => { playSfx('click'); setOnlineExpanded((p) => !p); }}
               className="cyber-btn p-4 flex flex-col items-center justify-center gap-2 min-h-[96px]"
-              style={{ borderColor: 'var(--purple)', color: 'var(--purple)', background: 'rgba(168,85,247,0.1)', boxShadow: '0 0 18px rgba(168,85,247,0.25)' }}
+              style={{ borderColor: 'var(--purple)', color: 'var(--purple)', background: 'color-mix(in srgb, var(--purple) 10%, transparent)', boxShadow: '0 0 18px color-mix(in srgb, var(--purple) 25%, transparent)' }}
               aria-expanded={onlineExpanded}
             >
               <Globe size={28} />
@@ -583,7 +599,7 @@ const HomePage = () => {
               type="button"
               onClick={go('/story')}
               className="cyber-btn p-4 flex flex-col items-center justify-center gap-2 min-h-[96px]"
-              style={{ borderColor: 'var(--green)', color: 'var(--green)', background: 'rgba(0,255,128,0.1)', boxShadow: '0 0 18px rgba(0,255,128,0.25)' }}
+              style={{ borderColor: 'var(--green)', color: 'var(--green)', background: 'color-mix(in srgb, var(--green) 10%, transparent)', boxShadow: '0 0 18px color-mix(in srgb, var(--green) 25%, transparent)' }}
             >
               <BookOpen size={28} />
               <span className="font-cyber tracking-wider text-sm">劇情模式</span>
@@ -679,7 +695,7 @@ const HomePage = () => {
 
         {/* 版本號 */}
         <div className="relative z-10 mt-8 text-center text-[var(--text-muted)] text-xs font-cyber tracking-wider">
-          v2.0.0 · CYBER MONOPOLY
+          v3.0.0 · CYBER MONOPOLY
         </div>
 
         {/* 新手教學提示 */}
@@ -701,6 +717,7 @@ const HomePage = () => {
         </Dialog>
 
         {/* 彈窗們 */}
+        <HomeOnboardingGuide open={showHomeOnboarding} onClose={() => setShowHomeOnboarding(false)} />
         <DailyCheckinModal isOpen={showCheckinModal} onClose={() => setShowCheckinModal(false)} />
         <AchievementModal isOpen={showAchievements} onClose={() => setShowAchievements(false)} unlockedAchievements={unlockedAchievements} />
         <CustomRulesPanel isOpen={showCustomRules} onClose={() => setShowCustomRules(false)} rules={customRules} onChange={setCustomRules} onStartGame={handleCustomStart} />

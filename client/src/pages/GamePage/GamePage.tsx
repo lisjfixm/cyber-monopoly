@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Coins, Globe, MessageCircle, BarChart3, ShoppingBag, Landmark, Receipt, HandCoins, ClipboardList, Trophy, Store, Flag, SlidersHorizontal } from 'lucide-react';
+import { Coins, Globe, MessageCircle, BarChart3, ShoppingBag, Landmark, Receipt, HandCoins, ClipboardList, Trophy, Store, Flag, SlidersHorizontal, BookOpen } from 'lucide-react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { logger } from '@lark-apaas/client-toolkit/logger';
 import { toast } from 'sonner';
@@ -60,6 +60,10 @@ import MentorCard from '@client/src/components/game/MentorCard';
 import MentorInput from '@client/src/components/game/MentorInput';
 import DevToolsPanel from '@client/src/components/game/DevToolsPanel';
 import SystemMenuSheet, { type SystemMenuSection } from '@client/src/components/game/SystemMenuSheet';
+import ModeRulesModal from '@client/src/components/game/v3/ModeRulesModal';
+import ModeLivePanel from '@client/src/components/game/v3/ModeLivePanel';
+import MountQuickActions from '@client/src/components/game/v3/MountQuickActions';
+import { getV3ModeLabel, isV3Mode, V3_MODES } from '@client/src/components/game/v3/modeMeta';
 
 import {
   createInitialState,
@@ -371,6 +375,8 @@ const GamePage: React.FC = () => {
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   // 次級系統分組抽屜
   const [showSystemMenu, setShowSystemMenu] = useState(false);
+  // v3：模式規則說明彈窗
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   // 職業技能彈窗
   const [showHackModal, setShowHackModal] = useState(false);
@@ -3220,6 +3226,7 @@ const GamePage: React.FC = () => {
       items: [
         { key: 'itemshop', label: '道具商店', icon: ShoppingBag, color: 'var(--purple)', onClick: () => setShowItemShop(true) },
         { key: 'worldview', label: '世界觀', icon: Globe, color: 'var(--purple)', onClick: () => setShowWorldviewPanel(true) },
+        { key: 'rules', label: '模式規則', icon: BookOpen, color: 'var(--yellow)', onClick: () => setShowRulesModal(true) },
       ],
     },
     {
@@ -3248,7 +3255,7 @@ const GamePage: React.FC = () => {
               boxShadow: '0 0 8px rgba(0,255,255,0.2)',
             }}
           >
-            {MODE_LABELS[gameState.mode]}
+            {MODE_LABELS[gameState.mode] ?? getV3ModeLabel(gameState.mode) ?? gameState.mode}
           </div>
           <div
             className="text-xs font-cyber tracking-wider px-3 py-1 border rounded"
@@ -3483,6 +3490,61 @@ const GamePage: React.FC = () => {
                 暗網模式：匿名對局，交易抽成10%，道具增強
               </span>
             </div>
+          )}
+
+          {/* v3：股市狂潮 / 黑市軍火賽 回合倒數橫幅 */}
+          {(gameState.mode === 'stock_frenzy' || gameState.mode === 'black_market_race') && (() => {
+            const meta = V3_MODES[gameState.mode];
+            const maxTurns = gameState.mode === 'stock_frenzy'
+              ? (GAME_MODES.stock_frenzy.maxTurns ?? 40)
+              : (GAME_MODES.black_market_race.maxTurns ?? 40);
+            const left = Math.max(0, maxTurns - gameState.totalTurns);
+            return (
+              <div
+                className="cyber-card px-3 py-2 flex items-center justify-between"
+                style={{
+                  borderColor: `${meta.color}66`,
+                  backgroundColor: `${meta.color}0d`,
+                  boxShadow: `0 0 10px ${meta.color}33, inset 0 0 8px ${meta.color}11`,
+                }}
+              >
+                <span className="text-xs font-cyber tracking-wider" style={{ color: meta.color }}>
+                  {meta.label}：{meta.setupHint}
+                </span>
+                <span className="text-xs font-cyber tracking-wider flex-shrink-0 ml-2" style={{ color: meta.color, textShadow: `0 0 6px ${meta.color}60` }}>
+                  結算：{left}/{maxTurns}
+                </span>
+              </div>
+            );
+          })()}
+
+          {/* v3：雙子星陣營戰橫幅 */}
+          {gameState.mode === 'twin_strike' && (
+            <div
+              className="cyber-card px-3 py-2 flex items-center justify-between"
+              style={{
+                borderColor: `${V3_MODES.twin_strike.color}66`,
+                backgroundColor: `${V3_MODES.twin_strike.color}0d`,
+              }}
+            >
+              <span className="text-xs font-cyber tracking-wider" style={{ color: V3_MODES.twin_strike.color }}>
+                雙子星陣營戰：2v2 共享金庫，殲滅對方全隊
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowRulesModal(true)}
+                className="text-[10px] font-cyber tracking-wider px-2 py-1 rounded flex-shrink-0 ml-2"
+                style={{ border: `1px solid ${V3_MODES.twin_strike.color}66`, color: V3_MODES.twin_strike.color }}
+                aria-label="查看雙子星陣營戰規則"
+              >
+                規則
+              </button>
+            </div>
+          )}
+
+          {/* v3：新模式即時戰況面板（可摺疊） */}
+          {isV3Mode(gameState.mode) && (
+            <ModeLivePanel gameState={gameState} />
           )}
 
           {/* 玩家列表（移动端可折叠） */}
@@ -3729,6 +3791,10 @@ const GamePage: React.FC = () => {
                            'nitro_dash',
                            'media_blitz',
                            'snipe_shot',
+                           // v3.0 新職業主動技能（統一走 applyProfessionSkill）
+                           'digital_raid',
+                           'nanite_repair',
+                           'market_play',
                          ]);
                          if (NEW_SKILL_IDS.has(skillId)) {
                            if (gameState) {
@@ -3797,6 +3863,15 @@ const GamePage: React.FC = () => {
                        });
                      })()}
                      </div>
+                {/* v3：新坐騎主動快捷操作（偵察無人機 / 懸浮跑車） */}
+                {gameStarted && !isSpectator && (
+                  <MountQuickActions
+                    gameState={gameState}
+                    playerIndex={gameState.currentPlayerIndex}
+                    canAct={canRoll}
+                    onApply={(next: GameState) => setGameState(next)}
+                  />
+                )}
                 {gameState.pendingTrade && (
                   <div
                     className="text-center text-xs py-1 px-2 rounded"
@@ -5011,7 +5086,9 @@ const GamePage: React.FC = () => {
                遊戲結束
             </h2>
             <div className="text-neon-cyan font-cyber text-xl md:text-2xl mb-2">
-               {winner.name}
+               {gameState.mode === 'twin_strike' && winner.teamId && gameState.teams?.[winner.teamId]
+                 ? `${gameState.teams[winner.teamId].name} 獲勝`
+                 : winner.name}
             </div>
             <div className="text-text-secondary text-sm mb-4">
               {gameState.lightningMode
@@ -5022,6 +5099,12 @@ const GamePage: React.FC = () => {
                 ? '團隊死鬥勝利！'
                 : gameState.darknetMode
                 ? '暗網對局勝利！'
+                : gameState.mode === 'stock_frenzy'
+                ? '股票持倉市值最高，股市狂潮稱霸！'
+                : gameState.mode === 'black_market_race'
+                ? '資產連同道具總值最高，軍火賽封王！'
+                : gameState.mode === 'twin_strike'
+                ? '雙子星陣營戰勝利，隊友共享榮耀！'
                 : '取得最終勝利！'}
             </div>
 
@@ -5122,6 +5205,15 @@ const GamePage: React.FC = () => {
         onClose={() => setShowShareModal(false)}
         shareId={shareId}
       />
+
+      {/* v3：模式規則說明彈窗（賽中可隨時查看） */}
+      {gameState && (
+        <ModeRulesModal
+          open={showRulesModal}
+          onClose={() => setShowRulesModal(false)}
+          mode={gameState.mode}
+        />
+      )}
 
       {/* 游戏统计面板 */}
       <StatsPanel

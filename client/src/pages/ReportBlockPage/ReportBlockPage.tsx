@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Flag, UserX, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Flag, UserX, AlertTriangle, Send } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Tabs,
   TabsList,
@@ -8,11 +9,20 @@ import {
   TabsContent,
 } from '@client/src/components/ui/tabs';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@client/src/components/ui/select';
+import {
   getReportList,
   getBlockList,
   unblockPlayer,
   getStatusLabel,
   formatTime,
+  submitReport,
+  REPORT_REASONS,
 } from '@client/src/utils/report-block';
 import type { ReportRecord, BlockRecord } from '@client/src/utils/report-block';
 import { useAudio } from '@client/src/hooks/useAudio';
@@ -23,6 +33,32 @@ const ReportBlockPage = () => {
 
   const [reports, setReports] = useState<ReportRecord[]>(getReportList());
   const [blocks, setBlocks] = useState<BlockRecord[]>(getBlockList());
+
+  // 頁面內直接舉報的表單狀態
+  const [targetName, setTargetName] = useState<string>('');
+  const [reason, setReason] = useState<string>(REPORT_REASONS[0]);
+  const [detail, setDetail] = useState<string>('');
+  const [formError, setFormError] = useState<string>('');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const handleSubmitReport = () => {
+    const name = targetName.trim();
+    if (!name) {
+      setFormError('請輸入被舉報玩家的暱稱');
+      return;
+    }
+    if (submitting) return;
+    setSubmitting(true);
+    setFormError('');
+    // 本地提交（閉環）：寫入報告 → 重新整理列表 → 回饋
+    submitReport(name, undefined, reason, detail.trim());
+    setReports(getReportList());
+    setTargetName('');
+    setDetail('');
+    setReason(REPORT_REASONS[0]);
+    setSubmitting(false);
+    toast.success(`已提交對「${name}」的舉報，官方將儘快處理`);
+  };
 
   const handleUnblock = (id: string) => {
     playSfx('click');
@@ -86,6 +122,68 @@ const ReportBlockPage = () => {
 
           {/* 舉報記錄 */}
           <TabsContent value="reports" className="space-y-3 mt-4">
+            {/* 頁面內直接舉報表單（閉環） */}
+            <div
+              className="cyber-card p-4 space-y-3"
+              style={{ borderColor: 'rgba(250, 204, 21, 0.3)' }}
+            >
+              <div className="flex items-center gap-2">
+                <Flag size={16} style={{ color: 'var(--yellow)' }} />
+                <span className="font-cyber text-sm tracking-wider text-[var(--text-primary)]">
+                  新增舉報
+                </span>
+              </div>
+              <input
+                type="text"
+                value={targetName}
+                onChange={(e) => { setTargetName(e.target.value.slice(0, 20)); setFormError(''); }}
+                placeholder="被舉報玩家暱稱"
+                maxLength={20}
+                className="cyber-input w-full"
+                style={{ borderColor: 'rgba(250, 204, 21, 0.3)' }}
+              />
+              <Select value={reason} onValueChange={setReason}>
+                <SelectTrigger
+                  className="w-full"
+                  style={{ borderColor: 'rgba(250, 204, 21, 0.3)', color: 'var(--text-primary)' }}
+                >
+                  <SelectValue placeholder="選擇舉報原因" />
+                </SelectTrigger>
+                <SelectContent style={{ backgroundColor: 'hsl(240, 18%, 10%)', borderColor: 'var(--yellow)' }}>
+                  {REPORT_REASONS.map((r: string) => (
+                    <SelectItem key={r} value={r} className="text-[var(--text-primary)]">
+                      {r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <textarea
+                value={detail}
+                onChange={(e) => setDetail(e.target.value.slice(0, 200))}
+                placeholder="補充說明（選填，最多 200 字）"
+                rows={3}
+                className="w-full bg-transparent rounded px-3 py-2 text-sm outline-none resize-none"
+                style={{
+                  border: '1px solid rgba(250, 204, 21, 0.25)',
+                  color: 'var(--text-primary)',
+                  backgroundColor: 'rgba(0,0,0,0.3)',
+                }}
+              />
+              {formError && (
+                <div className="text-xs" style={{ color: 'var(--red)' }}>{formError}</div>
+              )}
+              <button
+                type="button"
+                onClick={handleSubmitReport}
+                disabled={submitting}
+                className="cyber-btn w-full py-2 text-sm font-cyber tracking-wider flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ borderColor: 'var(--yellow)', color: 'var(--yellow)' }}
+              >
+                <Send size={14} />
+                {submitting ? '提交中...' : '提交舉報'}
+              </button>
+            </div>
+
             {reports.length === 0 ? (
               <div className="cyber-card p-10 text-center">
                 <Flag

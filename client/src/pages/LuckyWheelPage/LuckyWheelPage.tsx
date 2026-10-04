@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gift, Coins, Sparkles, RotateCw, History } from 'lucide-react';
 import { toast } from 'sonner';
@@ -40,9 +40,18 @@ const LuckyWheelPage = () => {
   const [lastResult, setLastResult] = useState<SpinResult | null>(null);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const spinTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // 同步鎖：避免快速連點造成重複領取（spinning 是 state，非同步更新）
+  const spinningRef = useRef<boolean>(false);
+
+  // unmount 時清除未定時器，避免對已卸載元件 setState
+  useEffect(() => {
+    return () => {
+      if (spinTimeoutRef.current) clearTimeout(spinTimeoutRef.current);
+    };
+  }, []);
 
   const handleSpin = useCallback(() => {
-    if (spinning) return;
+    if (spinningRef.current) return;
     if (!canSpin) {
       toast.info('今日已轉過，請明日再來');
       return;
@@ -56,6 +65,8 @@ const LuckyWheelPage = () => {
       return;
     }
 
+    // 先上同步鎖，再動畫
+    spinningRef.current = true;
     setSpinning(true);
     vibrate(vibrationPatterns.medium);
 
@@ -71,6 +82,7 @@ const LuckyWheelPage = () => {
     });
 
     spinTimeoutRef.current = setTimeout(() => {
+      spinningRef.current = false;
       setSpinning(false);
       setLastResult(result);
       vibrate(result.prize.type === 'jackpot' ? vibrationPatterns.win : vibrationPatterns.light);
@@ -107,7 +119,7 @@ const LuckyWheelPage = () => {
             幸運轉盤
           </h1>
           <p className="text-xs font-cyber tracking-wider mt-1" style={{ color: 'var(--text-secondary)' }}>
-            每日一次免費轉盤 · v2.0.0
+            每日一次免費轉盤 · v3.0.0
           </p>
         </div>
         <button

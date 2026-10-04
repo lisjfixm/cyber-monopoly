@@ -26,7 +26,8 @@ export interface Mission {
 export type GameMode = "classic" | "fast" | "crazy" | "custom" | "coop2v2" | "battle_royale"
   | "race" | "survival" | "coop_boss" | "treasure" | "emperor" | "dark"
   | "lightning" | "resource" | "team_deathmatch" | "darknet"
-  | "casino" | "dynasty";
+  | "casino" | "dynasty"
+  | "stock_frenzy" | "black_market_race" | "twin_strike";
 
 // ========== 劇情模式 ==========
 
@@ -275,7 +276,12 @@ export type GlobalEventType =
   | "foreign_inflow"
   | "ad_storm"
   | "subsidy_carnival"
-  | "black_market_crackdown";
+  | "black_market_crackdown"
+  // v3.0 新增全局事件
+  | "satellite_airdrop"
+  | "data_thunder"
+  | "chip_boom"
+  | "mega_subsidy";
 
 export interface GlobalEvent {
   type: GlobalEventType;
@@ -326,15 +332,28 @@ export type ItemType =
   | 'loaded_dice'
   | 'ransomware'
   | 'toll_magnet'
-  | 'lucky_coin';
+  | 'lucky_coin'
+  // v3.0 新增道具
+  | 'overclock_shield'
+  | 'cash_injection'
+  | 'emp_gun'
+  | 'land_bomb'
+  | 'money_tree_plus'
+  | 'ghost_protocol'
+  | 'buy_coupon'
+  | 'loot_drone'
+  | 'warp_token'
+  | 'heal_synth';
 
-export type MountType = 'flyer' | 'diver' | 'rocket' | 'hoverboard';
+export type MountType = 'flyer' | 'diver' | 'rocket' | 'hoverboard' | 'drone_mount' | 'hover_car';
 
 export interface MountState {
   flyerUses: number;
   diverUses: number;
   rocketUses: number;
   hoverboardUses?: number;
+  droneMountUses?: number;
+  hoverCarUses?: number;
 }
 
 export type EvolutionLevel = 0 | 1 | 2;
@@ -513,7 +532,20 @@ export type AchievementId =
   | "set_duke"
   | "penny_pincher"
   | "swap_artist"
-  | "quantum_wanderer";
+  | "quantum_wanderer"
+  // v3.0 新增成就
+  | "stock_frenzy_champion"
+  | "black_market_tycoon"
+  | "twin_strike_veteran"
+  | "item_armory"
+  | "netrunner_legend"
+  | "medic_angel"
+  | "broker_pro"
+  | "airdrop_grateful"
+  | "chip_mogul"
+  | "survival_master"
+  | "emperor_crowned"
+  | "race_finisher";
 
 export interface Achievement {
   id: AchievementId;
@@ -567,7 +599,11 @@ export type Profession =
   | "bounty_hunter"
   | "street_racer"
   | "media_mogul"
-  | "cyber_sniper";
+  | "cyber_sniper"
+  // v3.0 新增職業
+  | "netrunner"
+  | "cyber_medic"
+  | "stock_broker";
 
 export type GamePhase =
   | "waiting"
@@ -815,7 +851,8 @@ export interface SkinConfig {
 
 // ========== 寵物系統 ==========
 
-export type PetType = 'mechDog' | 'ufo' | 'dragon' | 'neon_cat' | 'ghost_hacker';
+export type PetType = 'mechDog' | 'ufo' | 'dragon' | 'neon_cat' | 'ghost_hacker'
+  | 'cyber_bunny' | 'data_fairy';
 
 export interface PetConfig {
   id: PetType;
@@ -1060,6 +1097,12 @@ export interface PlayerState {
   forcedSalesMade?: number;
   // 成就追蹤：本局面對手造成的跳過回合數
   freezesApplied?: number;
+  // v3.0 新職業：剩餘主動技能次數
+  netrunnerRaidUses?: number;
+  cyberMedicRepairUses?: number;
+  stockBrokerPlayUses?: number;
+  // v3.0 成就追蹤：領取衛星空投次數
+  airdropReceived?: number;
 }
 
 // ========== 技能树系统 ==========

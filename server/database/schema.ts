@@ -369,6 +369,39 @@ export const monopolyRoom = pgTable("monopoly_room", {
   uniqueIndex("idx_monopoly_room_code").on(table.roomCode),
 ]);
 
+// ===== v3.0.0 新增：使用者雲端存檔（monopoly.service 已直接以 SQL 存取）=====
+export const monopolyUserSaves = pgTable("monopoly_user_saves", {
+  visitorId: varchar("visitor_id", { length: 64 }).primaryKey(),
+  /**
+   * @type unknown
+   */
+  saveData: jsonb("save_data").notNull().default('{}'),
+  // System field: Creation time (auto-filled, do not modify)
+  createdAt: customTimestamptz("_created_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  // System field: Update time (auto-filled, do not modify)
+  updatedAt: customTimestamptz("_updated_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+// ===== v3.0.0 新增：完賽戰報（戰績統計 / 賽季戰報）=====
+export const monopolyGameRecord = pgTable("monopoly_game_record", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  visitorId: varchar("visitor_id", { length: 64 }).notNull(),
+  season: varchar("season", { length: 7 }).notNull(),
+  /**
+   * @type string[]
+   */
+  opponentIds: jsonb("opponent_ids").notNull().default('[]'),
+  winnerVisitorId: varchar("winner_visitor_id", { length: 64 }),
+  myRank: integer("my_rank").notNull(),
+  totalTurns: integer("total_turns").notNull().default(0),
+  myAssets: integer("my_assets").notNull().default(0),
+  // System field: Creation time (auto-filled, do not modify)
+  createdAt: customTimestamptz("_created_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index("idx_game_record_visitor_season").on(table.visitorId, table.season),
+  index("idx_game_record_visitor_created").on(table.visitorId, table.createdAt),
+]);
+
 // table aliases
 export const monopolyAccountTable = monopolyAccount;
 export const monopolyAccountProviderTable = monopolyAccountProvider;

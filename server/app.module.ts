@@ -11,6 +11,7 @@ import { AccountModule } from './modules/account/account.module';
 import { GmModule } from './modules/gm/gm.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CheckinModule } from './modules/checkin/checkin.module';
+import { StatsModule } from './modules/stats/stats.module';
 import { ViewModule } from './modules/view/view.module';
 
 @Module({
@@ -28,6 +29,7 @@ import { ViewModule } from './modules/view/view.module';
     GmModule,
     AuthModule,
     CheckinModule,
+    StatsModule,
     // ====== @route-section: business-modules END ======
 
     // ⚠️ @route-order: last

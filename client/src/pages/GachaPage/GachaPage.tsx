@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -49,6 +49,15 @@ const GachaPage = () => {
   const [pulling, setPulling] = useState<boolean>(false);
   const [results, setResults] = useState<GrantedReward[] | null>(null);
 
+  // 同步鎖與動畫計時器：避免連點重複扣款/發獎，unmount 時清除
+  const pullingRef = useRef<boolean>(false);
+  const settleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    return () => {
+      if (settleTimeoutRef.current) clearTimeout(settleTimeoutRef.current);
+    };
+  }, []);
+
   const fragments = skinUpgrade.fragments;
 
   const isOwned = useCallback(
@@ -97,20 +106,21 @@ const GachaPage = () => {
 
   const doPull = useCallback(
     (times: 1 | 10, currency: 'coins' | 'fragments') => {
-      if (pulling) return;
+      if (pullingRef.current) return;
       const cost = times === 1 ? SINGLE_PULL_COST : TEN_PULL_COST;
       if (currency === 'coins') {
         if (coins < cost.coins) {
-          toast.error('金幣不足');
+          toast.error(`金幣不足，需要 ${cost.coins}`);
           return;
         }
       } else {
         if (fragments < cost.fragments) {
-          toast.error('碎片不足');
+          toast.error(`碎片不足，需要 ${cost.fragments}`);
           return;
         }
       }
 
+      pullingRef.current = true;
       setPulling(true);
       vibrate(vibrationPatterns.medium);
 
@@ -132,7 +142,8 @@ const GachaPage = () => {
         return { reward: o.reward, isNew: g.isNew, convertedFragments: g.convertedFragments };
       });
 
-      setTimeout(() => {
+      settleTimeoutRef.current = setTimeout(() => {
+        pullingRef.current = false;
         setPulling(false);
         setResults(granted);
         const legendaryCount = granted.filter((g) => g.reward.rarity === 'legendary').length;
@@ -211,7 +222,7 @@ const GachaPage = () => {
             霓虹扭蛋
           </h1>
           <p className="text-xs font-cyber tracking-wider mt-1" style={{ color: 'var(--text-secondary)' }}>
-            抽取皮膚 / 寵物 / 稱號 · v2.0.0
+            抽取皮膚 / 寵物 / 稱號 · v3.0.0
           </p>
         </div>
       </div>

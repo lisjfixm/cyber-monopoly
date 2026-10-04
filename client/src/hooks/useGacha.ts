@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { PawnSkinType, DiceSkinType, PetType, TitleId } from '@shared/api.interface';
 import { PAWN_SKINS, DICE_SKINS, PETS, TITLES } from '@shared/game-config';
 import { safeGetJSON, safeSetJSON } from '@client/src/utils/safeStorage';
@@ -154,32 +154,44 @@ export interface DrawOutcome {
   pityTriggered: boolean;
 }
 
+/**
+ * 單抽純函式：以「傳入的即時 pity 計數」判定本抽是否保底，
+ * 並回傳抽完後的新 pity 計數。
+ * - 達到 PITY_MAX 時本抽「恰好」一次保證傳說，並把計數歸零；
+ * - 其餘各抽正常累加；自然傳說也同樣歸零。
+ * 抽卡迴圈應持續把 nextPity 餵給下一抽，避免读到舊的閉包值。
+ */
+export function rollWithPity(currentPity: number): { outcome: DrawOutcome; nextPity: number } {
+  const pityTriggered = currentPity + 1 >= PITY_MAX;
+  const rarity = pickRarity(pityTriggered);
+  const reward = pickReward(rarity);
+  const nextPity = rarity === 'legendary' ? 0 : currentPity + 1;
+  return { outcome: { reward, pityTriggered }, nextPity };
+}
+
 export function useGacha() {
   const [data, setData] = useState<GachaData>(() => readData());
+  // 即時保底計數：在同一組（十連）內逐抽累加，不依賴 React state 的閉包快照。
+  const pityRef = useRef<number>(data.pityCount);
 
   useEffect(() => {
     safeSetJSON(STORAGE_KEY, data);
   }, [data]);
 
   const drawOnce = useCallback((): DrawOutcome => {
-    const pityTriggered = data.pityCount + 1 >= PITY_MAX;
-    const rarity = pickRarity(pityTriggered);
-    const reward = pickReward(rarity);
-    return { reward, pityTriggered };
-  }, [data.pityCount]);
+    const { outcome, nextPity } = rollWithPity(pityRef.current);
+    pityRef.current = nextPity;
+    return outcome;
+  }, []);
 
   const commitDraws = useCallback(
     (outcomes: DrawOutcome[]) => {
+      // 把這一組抽卡「逐抽累加後」的最終 pity 一次寫回 state（再由 effect 持久化）
+      const finalPity = pityRef.current;
       setData((prev) => {
-        let pity = prev.pityCount;
         const newHistory: DrawRecord[] = [];
         const now = Date.now();
         outcomes.forEach((o, i) => {
-          if (o.reward.rarity === 'legendary') {
-            pity = 0;
-          } else {
-            pity += 1;
-          }
           newHistory.push({
             timestamp: now + i,
             reward: o.reward,
@@ -189,7 +201,7 @@ export function useGacha() {
         });
         return {
           totalPulls: prev.totalPulls + outcomes.length,
-          pityCount: pity,
+          pityCount: finalPity,
           history: [...prev.history, ...newHistory].slice(-50),
         };
       });

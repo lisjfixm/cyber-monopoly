@@ -200,3 +200,27 @@ CREATE TABLE IF NOT EXISTS monopoly_room (
 
 CREATE UNIQUE INDEX IF NOT EXISTS monopoly_room_room_code_key ON monopoly_room (room_code);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_monopoly_room_code ON monopoly_room (room_code);
+
+-- ===== v3.0.0：monopoly_user_saves（雲端存檔同步；monopoly.service 已直接存取此表）=====
+CREATE TABLE IF NOT EXISTS monopoly_user_saves (
+  visitor_id varchar(64) PRIMARY KEY,
+  save_data jsonb NOT NULL DEFAULT '{}',
+  _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  _updated_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ===== v3.0.0：monopoly_game_record（完賽戰報：戰績統計 / 賽季戰報）=====
+CREATE TABLE IF NOT EXISTS monopoly_game_record (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  visitor_id varchar(64) NOT NULL,
+  season varchar(7) NOT NULL,
+  opponent_ids jsonb NOT NULL DEFAULT '[]',
+  winner_visitor_id varchar(64),
+  my_rank integer NOT NULL,
+  total_turns integer NOT NULL DEFAULT 0,
+  my_assets integer NOT NULL DEFAULT 0,
+  _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_game_record_visitor_season ON monopoly_game_record (visitor_id, season);
+CREATE INDEX IF NOT EXISTS idx_game_record_visitor_created ON monopoly_game_record (visitor_id, _created_at);

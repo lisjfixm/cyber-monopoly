@@ -1,6 +1,44 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import type { FC } from 'react';
-import { Shield, Sparkles, Swords, Ticket, Dices, Settings2, Bomb, Ghost, Clock, TreeDeciduous, Eye, Target, RotateCcw, Zap, Radio, Palette, Plane, CreditCard, Satellite, FileText, Package, IdCard, Snowflake, Repeat, Crown, Database, Bug, Magnet, Coins } from 'lucide-react';
+import {
+  Shield,
+  Sparkles,
+  Swords,
+  Ticket,
+  Dices,
+  Settings2,
+  Bomb,
+  Ghost,
+  Clock,
+  TreeDeciduous,
+  Eye,
+  Target,
+  RotateCcw,
+  Zap,
+  Radio,
+  Palette,
+  Plane,
+  CreditCard,
+  Satellite,
+  FileText,
+  Package,
+  IdCard,
+  Snowflake,
+  Repeat,
+  Crown,
+  Database,
+  Bug,
+  Magnet,
+  Coins,
+  Shell,
+  Banknote,
+  Crosshair,
+  TreePine,
+  ScanLine,
+  BadgePercent,
+  Rocket,
+  HeartPulse,
+} from 'lucide-react';
 import { ITEMS, ITEM_TYPES, MAX_ITEMS } from '@shared/game-config';
 import type { GameState, ItemState, ItemType, PlayerState } from '@shared/api.interface';
 
@@ -45,12 +83,48 @@ const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   ransomware: Bug,
   toll_magnet: Magnet,
   lucky_coin: Coins,
+  // v3.0 新增道具
+  overclock_shield: Shell,
+  cash_injection: Banknote,
+  emp_gun: Crosshair,
+  land_bomb: Bomb,
+  money_tree_plus: TreePine,
+  ghost_protocol: Ghost,
+  buy_coupon: BadgePercent,
+  loot_drone: Satellite,
+  warp_token: Rocket,
+  heal_synth: HeartPulse,
 };
+
+// 取得道具圖標（未知類型兜底 Package）
+function getItemIcon(type: ItemType): typeof Shield {
+  return ITEM_ICON_COMPONENTS[type] ?? Package;
+}
 
 interface AggregatedItem {
   type: ItemType;
   count: number;
   firstItemId: number;
+}
+
+// 通用彈窗鎖定：鎖定背景滾動 + Esc 關閉
+function useModalDismiss(open: boolean, onClose: () => void) {
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [open, onClose]);
 }
 
 const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameState }) => {
@@ -60,6 +134,14 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
   const [pendingRemoteItemId, setPendingRemoteItemId] = useState<number | null>(null);
   const [dice1, setDice1] = useState<number>(1);
   const [dice2, setDice2] = useState<number>(1);
+  // 競態鎖：防止連點重複使用道具
+  const usingRef = useRef<boolean>(false);
+
+  useModalDismiss(confirmItem !== null, useCallback(() => setConfirmItem(null), []));
+  useModalDismiss(remoteDiceModalOpen, useCallback(() => {
+    setRemoteDiceModalOpen(false);
+    setPendingRemoteItemId(null);
+  }, []));
 
   // 按类型聚合并计数
   const aggregated = aggregateItems(items);
@@ -67,6 +149,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
 
   const handleItemClick = (agg: AggregatedItem) => {
     if (!clickable) return;
+    if (usingRef.current) return;
     // 找到第一个可用的该类型道具
     const firstItem = items.find((it) => it.type === agg.type);
     if (!firstItem) return;
@@ -75,10 +158,12 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
 
   const handleConfirmUse = () => {
     if (!confirmItem) return;
+    if (usingRef.current) return;
+    usingRef.current = true;
     const itemType = confirmItem.type;
 
     // 传送卡、偷地卡和炸彈需要选择目标
-    if (itemType === 'teleport' || itemType === 'steal_property' || itemType === 'bomb') {
+    if (itemType === 'teleport' || itemType === 'steal_property' || itemType === 'bomb' || itemType === 'land_bomb') {
       const result = onUseItem(confirmItem.id);
       if (result === 'target_needed') {
         // 父组件会进入选目标模式
@@ -93,22 +178,26 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
       onUseItem(confirmItem.id);
     }
     setConfirmItem(null);
+    // 解鎖鎖（稍延遲避免同一事件迴圈重入）
+    window.setTimeout(() => {
+      usingRef.current = false;
+    }, 150);
   };
 
   const handleConfirmRemoteDice = () => {
     if (pendingRemoteItemId === null) return;
+    if (usingRef.current) return;
+    usingRef.current = true;
     onUseItem(pendingRemoteItemId, undefined, [dice1, dice2]);
     setRemoteDiceModalOpen(false);
     setPendingRemoteItemId(null);
+    window.setTimeout(() => {
+      usingRef.current = false;
+    }, 150);
   };
 
   const config = confirmItem ? ITEMS[confirmItem.type] : null;
-
-  // 显示所有6种类型，空的显示为灰色
-  const displaySlots: (AggregatedItem | null)[] = ITEM_TYPES.map((type) => {
-    const agg = aggregated.find((a) => a.type === type);
-    return agg ?? null;
-  });
+  const ConfirmIcon = confirmItem ? getItemIcon(confirmItem.type) : Package;
 
   return (
     <div className="w-full">
@@ -261,58 +350,71 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
         )}
       </div>
 
-      {/* 道具格子 - 12种类型聚合显示 */}
-      <div className="grid grid-cols-6 gap-1.5 md:grid-cols-8">
-        {displaySlots.map((agg, idx) => {
-          const type = ITEM_TYPES[idx];
-          const itemConfig = ITEMS[type];
-          const IconComponent = ITEM_ICON_COMPONENTS[type] ?? Package;
-          const hasItem = agg !== null && agg.count > 0;
+      {/* 道具格子 - 水平捲動列（v3 改進：只顯示已持有道具，避免 42 種全部平鋪造成畫面混亂） */}
+      <div
+        className="flex gap-1.5 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]"
+        role="listbox"
+        aria-label="已持有道具"
+      >
+        {aggregated.length === 0 && (
+          <div
+            className="flex-1 text-center text-[11px] font-cyber tracking-wider py-3 rounded"
+            style={{
+              color: 'var(--text-muted)',
+              border: '1px dashed var(--text-muted)',
+            }}
+          >
+            尚無道具 — 至商店購買
+          </div>
+        )}
+        {aggregated.map((agg) => {
+          const itemConfig = ITEMS[agg.type];
+          const IconComponent = getItemIcon(agg.type);
+          if (!itemConfig) return null;
           const isActive =
-            (type === 'shield' && player.shieldCharges > 0) ||
-            (type === 'double_dice' && player.doubleDiceActive) ||
-            (type === 'remote_dice' && player.remoteDiceActive) ||
-            (type === 'invisibility' && (player.invisibilityTurns ?? 0) > 0) ||
-            (type === 'money_tree' && (player.moneyTreeTurns ?? 0) > 0) ||
-            (type === 'x_ray' && player.xRayActive) ||
-            (type === 'clone_dice' && player.cloneDiceActive);
+            (agg.type === 'shield' && player.shieldCharges > 0) ||
+            (agg.type === 'double_dice' && player.doubleDiceActive) ||
+            (agg.type === 'remote_dice' && player.remoteDiceActive) ||
+            (agg.type === 'invisibility' && (player.invisibilityTurns ?? 0) > 0) ||
+            (agg.type === 'money_tree' && (player.moneyTreeTurns ?? 0) > 0) ||
+            (agg.type === 'x_ray' && player.xRayActive) ||
+            (agg.type === 'clone_dice' && player.cloneDiceActive);
 
           return (
             <button
-              key={type}
-              onClick={() => agg && handleItemClick(agg)}
-              disabled={!hasItem || !clickable}
-              className={`relative aspect-square rounded flex flex-col items-center justify-center gap-0.5 transition-all ${
-                hasItem && clickable
+              key={agg.type}
+              type="button"
+              role="option"
+              aria-selected={isActive}
+              onClick={() => handleItemClick(agg)}
+              disabled={!clickable}
+              className={`relative min-w-[44px] h-11 px-1.5 rounded flex flex-col items-center justify-center gap-0.5 transition-all flex-shrink-0 ${
+                clickable
                   ? 'hover:brightness-125 hover:scale-105 cursor-pointer'
-                  : 'cursor-default opacity-40'
+                  : 'cursor-default opacity-60'
               }`}
               style={{
                 border: isActive
                   ? '2px solid var(--cyan)'
-                  : hasItem
-                    ? '1px solid var(--border-neon-cyan)'
-                    : '1px dashed var(--text-muted)',
-                backgroundColor: hasItem ? 'var(--bg-card)' : 'color-mix(in srgb, var(--bg-mid) 50%, transparent)',
+                  : '1px solid var(--border-neon-cyan)',
+                backgroundColor: 'var(--bg-card)',
                 boxShadow: isActive
                   ? '0 0 12px var(--cyan), inset 0 0 8px color-mix(in srgb, var(--cyan) 30%, transparent)'
-                  : hasItem
-                    ? 'inset 0 0 4px color-mix(in srgb, var(--cyan) 10%, transparent)'
-                    : 'none',
+                  : 'inset 0 0 4px color-mix(in srgb, var(--cyan) 10%, transparent)',
                 animation: isActive ? 'pulse-glow 2s ease-in-out infinite' : undefined,
-                color: hasItem ? 'var(--cyan)' : 'var(--text-muted)',
+                color: 'var(--cyan)',
               }}
-              title={hasItem ? `${itemConfig.name} x${agg.count}` : itemConfig.name}
+              title={`${itemConfig.name} x${agg.count} — ${itemConfig.description}`}
             >
               <IconComponent className="w-4 h-4 md:w-5 md:h-5" />
               <span
-                className="text-[7px] md:text-[8px] font-cyber tracking-wide leading-tight"
-                style={{ color: hasItem ? 'var(--text-secondary)' : 'var(--text-muted)' }}
+                className="text-[8px] md:text-[9px] font-cyber tracking-wide leading-tight"
+                style={{ color: 'var(--text-secondary)' }}
               >
-                {itemConfig.name.slice(0, 2)}
+                {itemConfig.name.slice(0, 4)}
               </span>
               {/* 数量角标 */}
-              {hasItem && agg && agg.count > 1 && (
+              {agg.count > 1 && (
                 <span
                   className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-cyber font-bold flex items-center justify-center"
                   style={{
@@ -328,11 +430,16 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
           );
         })}
       </div>
+      {/* 保留 ITEM_TYPES 引用避免未使用告警（未來可作為"全部道具"索引入口） */}
+      <span className="hidden">{ITEM_TYPES.length}</span>
 
       {/* 确认使用弹窗 */}
       {confirmItem && config && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`使用道具 ${config.name}`}
           style={{
             backgroundColor: 'color-mix(in srgb, var(--bg-deep) 80%, transparent)',
             backdropFilter: 'blur(3px)',
@@ -350,7 +457,16 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-4xl mb-3">{config.icon}</div>
+            <div className="w-14 h-14 mx-auto mb-3 rounded-full flex items-center justify-center"
+              style={{
+                border: '1px solid var(--cyan)',
+                backgroundColor: 'color-mix(in srgb, var(--cyan) 10%, transparent)',
+                color: 'var(--cyan)',
+                boxShadow: '0 0 12px color-mix(in srgb, var(--cyan) 40%, transparent)',
+              }}
+            >
+              <ConfirmIcon className="w-7 h-7" />
+            </div>
             <div className="text-neon-cyan font-cyber text-lg tracking-wider mb-2">
               {config.name}
             </div>
@@ -360,14 +476,14 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
             >
               {config.description}
             </p>
-            {confirmItem.type === 'teleport' && (
+            {(confirmItem.type === 'teleport' || confirmItem.type === 'swap_portal') && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
                 提示：使用后请在棋盘上選擇目标格子
               </p>
             )}
-            {confirmItem.type === 'steal_property' && (
+            {(confirmItem.type === 'steal_property' || confirmItem.type === 'bomb' || confirmItem.type === 'land_bomb') && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
-                提示：使用后请選擇对手的一块无建筑地产
+                提示：使用后请選擇对手的目标地产
               </p>
             )}
             {confirmItem.type === 'remote_dice' && (
@@ -375,29 +491,23 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 提示：使用后请選擇两个骰子的点数（2-12）
               </p>
             )}
-            {confirmItem.type === 'bomb' && (
+            {confirmItem.type === 'emp_gun' && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
-                提示：使用后请選擇对手有建筑的地产
+                提示：指定一名對手，使其下回合跳過行動
               </p>
             )}
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => setConfirmItem(null)}
-                className="flex-1 cyber-btn py-2 text-sm font-cyber"
-                style={{
-                  clipPath:
-                    'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)',
-                }}
+                className="flex-1 cyber-btn py-2 text-sm font-cyber min-h-[44px]"
               >
                 取消
               </button>
               <button
+                type="button"
                 onClick={handleConfirmUse}
-                className="flex-1 cyber-btn cyber-btn-pink py-2 text-sm font-cyber"
-                style={{
-                  clipPath:
-                    'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)',
-                }}
+                className="flex-1 cyber-btn cyber-btn-pink py-2 text-sm font-cyber min-h-[44px]"
               >
                 使用
               </button>
@@ -410,6 +520,9 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
       {remoteDiceModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="遥控骰子"
           style={{
             backgroundColor: 'color-mix(in srgb, var(--bg-deep) 80%, transparent)',
             backdropFilter: 'blur(3px)',
@@ -456,17 +569,19 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
 
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => {
                   setRemoteDiceModalOpen(false);
                   setPendingRemoteItemId(null);
                 }}
-                className="flex-1 cyber-btn py-2 text-sm font-cyber"
+                className="flex-1 cyber-btn py-2 text-sm font-cyber min-h-[44px]"
               >
                 取消
               </button>
               <button
+                type="button"
                 onClick={handleConfirmRemoteDice}
-                className="flex-1 cyber-btn cyber-btn-pink py-2 text-sm font-cyber"
+                className="flex-1 cyber-btn cyber-btn-pink py-2 text-sm font-cyber min-h-[44px]"
               >
                 確認
               </button>
@@ -491,7 +606,9 @@ const DiceSelector: FC<DiceSelectorProps> = ({ value, onChange, label }) => {
       <span className="text-xs font-cyber" style={{ color: 'var(--text-secondary)' }}>
         {label}
       </span>
-      <div
+      <button
+        type="button"
+        aria-label={`${label} 目前點數 ${value}，點擊切換`}
         className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl cursor-pointer hover:scale-105 transition-transform"
         style={{
           border: '2px solid var(--cyan)',
@@ -501,12 +618,14 @@ const DiceSelector: FC<DiceSelectorProps> = ({ value, onChange, label }) => {
         }}
         onClick={() => onChange((value % 6) + 1)}
       >
-        {['①', '②', '③', '④', '⑤', '⑥'][value - 1]}
-      </div>
+        {['①', '②', '③', '④', '⑤', '⑥'][value - 1] ?? '①'}
+      </button>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5, 6].map((n) => (
           <button
             key={n}
+            type="button"
+            aria-label={`${label} 點數 ${n}`}
             onClick={() => onChange(n)}
             className="w-5 h-5 rounded text-[10px] font-cyber transition-all"
             style={{
@@ -523,7 +642,6 @@ const DiceSelector: FC<DiceSelectorProps> = ({ value, onChange, label }) => {
   );
 };
 
-// 聚合道具的工具函数
 // 聚合道具的工具函数
 function aggregateItems(items: ItemState[]): AggregatedItem[] {
   const map = new Map<ItemType, { count: number; firstItemId: number }>();

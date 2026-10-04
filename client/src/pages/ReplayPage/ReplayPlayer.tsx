@@ -106,8 +106,17 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
   const [jumpTurn, setJumpTurn] = useState<number>(1);
 
   const playTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const logContainerRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+
+  // unmount 時清除所有未定時器
+  useEffect(() => {
+    return () => {
+      if (playTimerRef.current) clearTimeout(playTimerRef.current);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
 
   // 是否使用樣本回放資料（當 replay 本身沒有足夠日誌時）
   const useSampleData = replay.log.length < 5;
@@ -247,7 +256,8 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
         document.body.removeChild(ta);
       });
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       logger.error('Export failed:', err instanceof Error ? err.message : String(err));
     }

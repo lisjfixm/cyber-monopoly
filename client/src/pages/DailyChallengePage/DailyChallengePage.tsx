@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   ArrowLeft,
   Trophy,
@@ -156,6 +157,42 @@ const DailyChallengePage = () => {
     incrementTask,
   } = useDailyChallenge();
 
+  // 領取/簽到競態鎖，避免快速連點重複發放
+  const claimLockRef = useRef<boolean>(false);
+
+  const handleClaim = useCallback(
+    (taskId: string, isDaily: boolean) => {
+      if (claimLockRef.current) return;
+      claimLockRef.current = true;
+      try {
+        claimTask(taskId, isDaily);
+        toast.success('領取成功，獎勵已發放');
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : '領取失敗');
+      } finally {
+        setTimeout(() => {
+          claimLockRef.current = false;
+        }, 0);
+      }
+    },
+    [claimTask],
+  );
+
+  const handleCheckIn = useCallback(() => {
+    if (claimLockRef.current) return;
+    claimLockRef.current = true;
+    try {
+      performCheckIn();
+      toast.success('簽到成功，明天再來');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : '簽到失敗');
+    } finally {
+      setTimeout(() => {
+        claimLockRef.current = false;
+      }, 0);
+    }
+  }, [performCheckIn]);
+
   const handleBack = useCallback(() => {
     navigate('/');
   }, [navigate]);
@@ -297,7 +334,7 @@ const DailyChallengePage = () => {
                   key={task.id}
                   task={task}
                   isDaily
-                  onClaim={() => claimTask(task.id, true)}
+                  onClaim={() => handleClaim(task.id, true)}
                 />
               ))}
             </div>
@@ -340,7 +377,7 @@ const DailyChallengePage = () => {
                 key={task.id}
                 task={task}
                 isDaily={false}
-                onClaim={() => claimTask(task.id, false)}
+                onClaim={() => handleClaim(task.id, false)}
               />
             ))}
           </div>
@@ -369,7 +406,7 @@ const DailyChallengePage = () => {
                 ) : (
                   <button
                     type="button"
-                    onClick={performCheckIn}
+                    onClick={handleCheckIn}
                     className="cyber-btn px-4 py-2 text-sm font-cyber tracking-wider pulse-glow"
                     style={{
                       borderColor: 'var(--yellow)',

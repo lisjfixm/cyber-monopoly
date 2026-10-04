@@ -81,6 +81,23 @@ export class GmController {
     return this.gmService.resetUser(id);
   }
 
+  // GM 派發稱號 / 頭像框
+  @UseGuards(GmAuthGuard)
+  @Post('users/:id/grant')
+  async grantTitleOrFrame(
+    @Param('id') id: string,
+    @Body() dto: { titles?: string[]; avatarFrame?: string },
+  ): Promise<Record<string, unknown>> {
+    return this.gmService.grantTitleOrFrame(id, dto);
+  }
+
+  // GM 儀表板總覽
+  @UseGuards(GmAuthGuard)
+  @Get('dashboard')
+  async getDashboard(): Promise<Record<string, number | string>> {
+    return this.gmService.getDashboard();
+  }
+
   // ====== 公告管理 ======
 
   @UseGuards(GmAuthGuard)

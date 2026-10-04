@@ -33,8 +33,12 @@ const POSTGRES_CLIENT = 'POSTGRES_CLIENT';
         const url =
           process.env.DATABASE_URL || process.env.SUDA_DATABASE_URL;
         if (!url) {
-          throw new Error(
-            'DATABASE_URL (or SUDA_DATABASE_URL) environment variable is not set',
+          // 未設定資料庫連線時不讓進程啟動失敗：
+          // 使用本機佔位連線字串，postgres-js 為惰性連線，實際查詢才會失敗
+          // （由全域例外過濾器轉為 5xx）；但健康檢查、靜態資源與 SPA fallback 仍可正常回應。
+          return postgres(
+            'postgres://user:password@127.0.0.1:1/no_database?connect_timeout=1',
+            { max: 1, idle_timeout: 1, connect_timeout: 1 },
           );
         }
         return postgres(url, { max: 10 });
@@ -49,7 +53,15 @@ const POSTGRES_CLIENT = 'POSTGRES_CLIENT';
     },
     {
       provide: APP_PIPE,
-      useValue: new ValidationPipe({ transform: true, forbidUnknownValues: true }),
+      useValue: new ValidationPipe({
+        transform: true,
+        // 白名單：只保留 DTO 中宣告的欄位，其餘一律剝除
+        whitelist: true,
+        // 遇到未宣告欄位直接回 400，避免多出來的欄位被隱帶處理
+        forbidNonWhitelisted: true,
+        forbidUnknownValues: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
     },
     StandaloneCoreModule,
   ],
@@ -64,6 +76,17 @@ export class StandaloneCoreModule implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
+    const hasDbUrl = !!(
+      process.env.DATABASE_URL || process.env.SUDA_DATABASE_URL
+    );
+    // 未設定資料庫時不應在啟動階段嘗試連線建表（postgres-js 連線重試退避會卡住開機）。
+    // 連線保持惰性，僅在實際查詢時失敗（由全域例外過濾器轉 5xx）。
+    if (!hasDbUrl) {
+      this.logger.warn(
+        '未設定 DATABASE_URL，略過自動建表；健康檢查、靜態資源與 SPA fallback 仍可正常服務。',
+      );
+      return;
+    }
     const candidates = [
       join(process.cwd(), 'dist/server/database/init.sql'),
       join(process.cwd(), 'server/database/init.sql'),

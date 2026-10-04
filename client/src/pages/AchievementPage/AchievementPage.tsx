@@ -220,9 +220,10 @@ const AchievementPage = () => {
             const ach = ACHIEVEMENTS[id];
             if (!ach) return null;
             const achUnlocked = isUnlocked(id);
-            const currentProgress = getProgress(id);
-            const target = ach.target ?? 1;
-            const progressPercent = Math.min(100, Math.floor((currentProgress / target) * 100));
+            const rawProgress = getProgress(id);
+            const currentProgress = Number.isFinite(rawProgress) ? rawProgress : 0;
+            const target = Number.isFinite(ach.target) && (ach.target ?? 1) > 0 ? (ach.target ?? 1) : 1;
+            const progressPercent = Math.min(100, Math.max(0, Math.floor((currentProgress / target) * 100)));
             const rarityColor = RARITY_COLORS[ach.rarity];
 
             const IconComponent = getAchievementIcon(ach.icon);

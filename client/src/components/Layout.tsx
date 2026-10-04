@@ -27,19 +27,21 @@ const Layout = () => {
       <div className="theme-bg-effect absolute inset-0 pointer-events-none overflow-hidden" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[var(--bg-deep)]/80" />
 
-      {/* 离线提示横幅 */}
+      {/* 離線提示橫幅 */}
       {!isOnline && (
         <div
-          className="fixed top-0 left-0 right-0 z-50 py-2 px-4 flex items-center justify-center gap-2"
+          role="status"
+          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center gap-2"
           style={{
-            background: 'linear-gradient(90deg, rgba(255,0,100,0.9), rgba(255,0,200,0.9))',
-            color: '#fff',
-            boxShadow: '0 2px 10px rgba(255, 0, 150, 0.5)',
+            background: 'linear-gradient(90deg, var(--destructive), color-mix(in srgb, var(--destructive) 70%, var(--pink)))',
+            color: 'var(--destructive-foreground, #fff)',
+            boxShadow: '0 2px 10px color-mix(in srgb, var(--destructive) 50%, transparent)',
             animation: 'slide-down 0.3s ease-out',
+            paddingTop: 'var(--safe-top, 0px)',
           }}
         >
-          <WifiOff className="w-4 h-4" />
-          <span className="text-sm font-cyber tracking-wide">
+          <WifiOff className="w-4 h-4 shrink-0" />
+          <span className="text-sm font-cyber tracking-wide py-2">
             目前處於離線狀態，聯機模式不可用
           </span>
         </div>

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import type { GameState, PlayerState, MountType, PetType } from "@shared/api.interface";
 import { PETS } from "@shared/game-config";
 import {
@@ -11,12 +11,17 @@ import {
   Dog,
   X,
   ChevronRight,
-  Shield,
   Rocket,
   Plane,
   Fish,
   Sparkles,
   Crown,
+  Cat,
+  Ghost,
+  Rabbit,
+  Wand2,
+  Grip,
+  Car,
 } from "lucide-react";
 
 export interface WorldviewSystemsPanelProps {
@@ -44,6 +49,48 @@ type SystemKey =
   | "parallel"
   | "mount"
   | "pet";
+
+// 寵物圖標映射（未知寵物以 Dog 兜底）
+const PET_ICON_MAP: Partial<Record<PetType, FC<{ className?: string; style?: React.CSSProperties }>>> = {
+  mechDog: Dog,
+  ufo: Sparkles,
+  dragon: Crown,
+  neon_cat: Cat,
+  ghost_hacker: Ghost,
+  cyber_bunny: Rabbit,
+  data_fairy: Wand2,
+};
+
+// 坐騎圖標映射（未知坐騎以 Bike 兜底）
+const MOUNT_ICON_MAP: Partial<Record<MountType, FC<{ className?: string; style?: React.CSSProperties }>>> = {
+  flyer: Plane,
+  diver: Fish,
+  rocket: Rocket,
+  hoverboard: Grip,
+  drone_mount: Bot,
+  hover_car: Car,
+};
+
+// 取得坐騎剩餘次數（兼容舊型別與 v3 新欄位）
+function getMountUses(mounts: PlayerState["mounts"], type: MountType): number {
+  if (!mounts) return 0;
+  switch (type) {
+    case "flyer":
+      return mounts.flyerUses ?? 0;
+    case "diver":
+      return mounts.diverUses ?? 0;
+    case "rocket":
+      return mounts.rocketUses ?? 0;
+    case "hoverboard":
+      return mounts.hoverboardUses ?? 0;
+    case "drone_mount":
+      return mounts.droneMountUses ?? 0;
+    case "hover_car":
+      return mounts.hoverCarUses ?? 0;
+    default:
+      return 0;
+  }
+}
 
 const SYSTEMS: { key: SystemKey; label: string; icon: FC<{ className?: string }>; color: string }[] = [
   { key: "war", label: "戰爭系統", icon: Swords, color: "var(--red)" },
@@ -74,6 +121,29 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
   const [activeSystem, setActiveSystem] = useState<SystemKey | null>(null);
   const [targetPlayer, setTargetPlayer] = useState<number | null>(null);
   const [confirmAction, setConfirmAction] = useState<string | null>(null);
+
+  // Esc 關閉 + 背景滾動鎖
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (confirmAction) {
+          setConfirmAction(null);
+        } else if (activeSystem) {
+          handleBack();
+        } else {
+          onClose();
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSystem, confirmAction, onClose]);
 
   const currentPlayer = gameState.players[playerIndex];
   const opponents = gameState.players
@@ -169,7 +239,9 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
                 {sys.key === "robot" && (isRobotActive ? `AI 托管中（剩 ${robotTurns} 回合）` : "開啟 / 關閉 AI 代打")}
                 {sys.key === "timeTravel" && (timeTravelUsed ? "本場已使用" : hasTimeTravelSnapshot ? "可回溯至快照" : "尚無快照")}
                 {sys.key === "parallel" && (isInParallelWorld ? `平行世界（剩 ${parallelRemaining} 回合）` : "切換至平行世界")}
-                {sys.key === "mount" && (mounts ? `${mounts.flyerUses + mounts.diverUses + mounts.rocketUses} 次可用` : "未解鎖坐騎")}
+                {sys.key === "mount" && (mounts
+                  ? `${(mounts.flyerUses ?? 0) + (mounts.diverUses ?? 0) + (mounts.rocketUses ?? 0) + (mounts.hoverboardUses ?? 0) + (mounts.droneMountUses ?? 0) + (mounts.hoverCarUses ?? 0)} 次可用`
+                  : "未解鎖坐騎")}
                 {sys.key === "pet" && (equippedPet ? `攜帶中：${PETS[equippedPet as PetType]?.name ?? "未知"}` : "尚未攜帶寵物")}
               </div>
             </div>
@@ -454,10 +526,13 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
     </div>
   );
 
-  const MOUNT_DATA: { type: MountType; name: string; desc: string; icon: FC<{ className?: string }> }[] = [
+  const MOUNT_DATA: { type: MountType; name: string; desc: string; icon: FC<{ className?: string; style?: React.CSSProperties }> }[] = [
     { type: "flyer", name: "飛行器", desc: "可跳過 1 格對方地產，免繳過路費", icon: Plane },
     { type: "diver", name: "潛水艇", desc: "規避命運區負面效果", icon: Fish },
     { type: "rocket", name: "火箭", desc: "隨機衝刺 5~12 格", icon: Rocket },
+    { type: "hoverboard", name: "懸浮滑板", desc: "平滑前進 3 格，不觸發落地事件", icon: Grip },
+    { type: "drone_mount", name: "偵查無人機", desc: "偵察全場，下回合買地 9 折", icon: Bot },
+    { type: "hover_car", name: "懸浮跑車", desc: "立即移動到任意地塊", icon: Car },
   ];
 
   const renderMount = () => (
@@ -465,15 +540,10 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
       <div className="text-xs px-3 py-2 rounded" style={{ background: "rgba(0, 200, 255, 0.1)", color: "var(--cyan)" }}>
         坐騎每局可使用 3 次，根據戰況靈活運用。
       </div>
+      <div className="space-y-2">
       {MOUNT_DATA.map((m) => {
         const Icon = m.icon;
-        const uses =
-          m.type === "flyer"
-            ? mounts?.flyerUses ?? 0
-            : m.type === "diver"
-            ? mounts?.diverUses ?? 0
-            : mounts?.rocketUses ?? 0;
-        const unlocked = (mounts?.flyerUses ?? 0) + (mounts?.diverUses ?? 0) + (mounts?.rocketUses ?? 0) > 0;
+        const uses = getMountUses(mounts, m.type);
         return (
           <div
             key={m.type}
@@ -502,9 +572,10 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
               </div>
             </div>
             <button
+              type="button"
               onClick={() => onEquipMount(m.type)}
               disabled={uses <= 0}
-              className="px-3 py-1.5 text-xs rounded font-cyber shrink-0 disabled:opacity-40"
+              className="px-3 py-1.5 text-xs rounded font-cyber shrink-0 disabled:opacity-40 min-h-[36px]"
               style={{ border: "1px solid var(--cyan)", color: "var(--cyan)" }}
             >
               使用
@@ -512,6 +583,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
           </div>
         );
       })}
+      </div>
       {!mounts && (
         <div className="text-center text-xs py-2" style={{ color: "var(--text-secondary)" }}>
           尚未解鎖任何坐騎，可通過商店或命運卡獲得
@@ -520,18 +592,21 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
     </div>
   );
 
-  const PET_LIST: PetType[] = ["mechDog", "ufo", "dragon"];
+  const PET_LIST: PetType[] = ["mechDog", "ufo", "dragon", "neon_cat", "ghost_hacker", "cyber_bunny", "data_fairy"];
 
   const renderPet = () => (
     <div className="space-y-3">
       <div className="text-xs px-3 py-2 rounded" style={{ background: "rgba(0, 255, 128, 0.1)", color: "var(--green)" }}>
         寵物可提供被動加成，每次只能攜帶一隻。
       </div>
+      <div className="space-y-2">
       {PET_LIST.map((petType) => {
         const pet = PETS[petType];
+        if (!pet) return null;
         const isEquipped = equippedPet === petType;
         const rarityColor =
           pet.rarity === "epic" ? "var(--gold, #ffd700)" : pet.rarity === "rare" ? "var(--purple)" : "var(--cyan)";
+        const PetIcon = PET_ICON_MAP[petType] ?? Dog;
         return (
           <div
             key={petType}
@@ -543,14 +618,14 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
             }}
           >
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl"
+              className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
               style={{
                 background: `${rarityColor}15`,
                 border: `1px solid ${rarityColor}`,
                 color: rarityColor,
               }}
             >
-              <Dog className="w-6 h-6" />
+              <PetIcon className="w-6 h-6" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-cyber tracking-wide flex items-center gap-2" style={{ color: rarityColor }}>
@@ -560,15 +635,16 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
               <div className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
                 {pet.description}
               </div>
-              <div className="text-xs mt-1 capitalize" style={{ color: rarityColor }}>
+              <div className="text-xs mt-1" style={{ color: rarityColor }}>
                 {pet.rarity === "epic" ? "史詩" : pet.rarity === "rare" ? "稀有" : "普通"}
               </div>
             </div>
             <div className="flex flex-col gap-1 items-end shrink-0">
               <button
+                type="button"
                 onClick={() => onBringPet(petType)}
                 disabled={isEquipped}
-                className="px-2.5 py-1 text-xs rounded font-cyber disabled:opacity-40"
+                className="px-2.5 py-1 text-xs rounded font-cyber disabled:opacity-40 min-h-[36px]"
                 style={{ border: `1px solid ${rarityColor}`, color: rarityColor }}
               >
                 {isEquipped ? "攜帶中" : "攜帶"}
@@ -577,6 +653,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
           </div>
         );
       })}
+      </div>
     </div>
   );
 
@@ -711,6 +788,9 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="世界觀系統"
       style={{
         backgroundColor: "rgba(10, 10, 25, 0.85)",
         backdropFilter: "blur(4px)",

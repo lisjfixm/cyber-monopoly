@@ -4,6 +4,12 @@ import type { Request } from 'express';
 @Controller()
 export class ViewController {
 
+  // 健康檢查：用於負載均衡 / 容器探活，永遠回 200，不依賴資料庫
+  @Get('health')
+  health() {
+    return { status: 'ok', uptime: process.uptime(), timestamp: Date.now() };
+  }
+
   @Get(['/', '*'])
   @Render('index')
   async render(@Req() req: Request): Promise<{ __platform__: string }>  {

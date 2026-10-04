@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { X, Share2 } from 'lucide-react';
 import {
   Trophy,
@@ -34,6 +34,14 @@ import {
   Briefcase,
   Palette,
   Shirt,
+  LineChart,
+  ShoppingBag,
+  Terminal,
+  Stethoscope,
+  Gift,
+  Cpu,
+  HeartPulse,
+  Flag,
 } from 'lucide-react';
 import { ACHIEVEMENTS, ACHIEVEMENT_IDS } from '@shared/game-config';
 import type { AchievementId } from '@shared/api.interface';
@@ -101,6 +109,19 @@ const ACHIEVEMENT_ICON_MAP: Partial<Record<AchievementId, typeof Trophy>> = {
   bankruptcy_comeback: Rocket,
   zero_property_win: Star,
   triple_double_jail: Lock,
+  // v3.0 新增成就
+  stock_frenzy_champion: LineChart,
+  black_market_tycoon: ShoppingBag,
+  twin_strike_veteran: Users,
+  item_armory: Package,
+  netrunner_legend: Terminal,
+  medic_angel: Stethoscope,
+  broker_pro: TrendingUp,
+  airdrop_grateful: Gift,
+  chip_mogul: Cpu,
+  survival_master: HeartPulse,
+  emperor_crowned: Crown,
+  race_finisher: Flag,
 };
 
 const AchievementModal: FC<AchievementModalProps> = ({
@@ -114,9 +135,24 @@ const AchievementModal: FC<AchievementModalProps> = ({
   const [shareTitle, setShareTitle] = useState<string>('');
   const [shareCanvas, setShareCanvas] = useState<HTMLCanvasElement | null>(null);
 
+  // Esc 關閉 + 背景滾動鎖
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !shareModalOpen) onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen, onClose, shareModalOpen]);
+
   if (!isOpen) return null;
 
-  const totalCount = ACHIEVEMENT_IDS.length;
+  const totalCount = ACHIEVEMENT_IDS.length || 1;
   const unlockedCount = unlockedAchievements.size;
 
   const handleShare = (id: AchievementId): void => {
@@ -141,7 +177,12 @@ const AchievementModal: FC<AchievementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div
+      className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="成就殿堂"
+    >
       <div
         className="cyber-card w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col"
         style={{

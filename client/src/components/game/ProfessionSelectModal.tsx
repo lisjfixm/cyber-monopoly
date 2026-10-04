@@ -35,6 +35,9 @@ import {
   Rocket,
   Megaphone,
   Target,
+  Terminal,
+  Stethoscope,
+  LineChart,
 } from "lucide-react";
 
 interface ProfessionSelectModalProps {
@@ -80,6 +83,10 @@ const ICON_MAP: Partial<Record<Profession, FC<{ className?: string; style?: Reac
   street_racer: Rocket,
   media_mogul: Megaphone,
   cyber_sniper: Target,
+  // v3.0 新增職業
+  netrunner: Terminal,
+  cyber_medic: Stethoscope,
+  stock_broker: LineChart,
 };
 
 const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
@@ -94,13 +101,18 @@ const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
 }) => {
   useEffect(() => {
     if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -113,6 +125,9 @@ const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="選擇職業"
       style={{
         backgroundColor: "rgba(10, 10, 25, 0.85)",
         backdropFilter: "blur(4px)",

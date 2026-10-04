@@ -81,6 +81,18 @@
   --input: hsla(180, 100%, 55%, 0.15);
   --ring: hsl(180, 100%, 55%);
 
+  /* ===== 語義狀態色（跨主題語義，淺/深色皆可讀） ===== */
+  --success: hsl(140, 100%, 45%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(45, 100%, 50%);
+  --warning-foreground: hsl(240, 25%, 8%);
+  --info: hsl(210, 100%, 60%);
+  --info-foreground: hsl(0, 0%, 100%);
+
+  /* ===== Focus ring（無障礙） ===== */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
   --font-cyber: 'Orbitron', 'Rajdhani', 'Share Tech Mono', system-ui, sans-serif;
   --font-sans:
     'LarkHackSafariFont', 'LarkEmojiFont', 'LarkChineseQuote', '-apple-system',
@@ -1095,6 +1107,13 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
 
   --font-cyber: var(--font-cyber);
   --font-sans: var(--font-sans);
@@ -2393,5 +2412,35 @@ html[data-colorblind="true"] .cyber-btn:disabled {
   }
   button {
     min-height: 44px;
+  }
+}
+
+/* ========== 全域鍵盤焦點環（無障礙：僅鍵盤 focus 顯示，滑鼠點擊不擾） ========== */
+:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--ring, var(--cyan));
+  outline-offset: var(--focus-ring-offset, 2px);
+  border-radius: var(--radius);
+}
+
+/* 滑鼠/觸控點擊不顯示焦點環，避免干擾視覺 */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 通用焦點環工具類（需要時可手動套用） */
+.focus-ring {
+  outline: var(--focus-ring-width, 2px) solid var(--ring, var(--cyan));
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+/* ========== 降低動畫偏好：尊重系統「減少動態效果」設定 ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
