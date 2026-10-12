@@ -24,7 +24,7 @@ function createDepartmentsFetcher(pageSize = 100) {
   };
 }
 
-// 内部包装组件用于获取 context 中的 size
+// 內部包裝元件用於獲取 context 中的 size
 const DepartmentItemWrapper = ({
   departmentValue,
   isSelected,
@@ -88,8 +88,8 @@ export const DepartmentSelect = (props: DepartmentSelectProps) => {
     name,
     className,
     classNames,
-    placeholder = '请选择部门',
-    emptyText = '没有匹配结果，换个关键词试试吧',
+    placeholder = '請選擇部門',
+    emptyText = '沒有匹配結果，換個關鍵詞試試吧',
     tagClosable,
     maxTagCount,
     onSelect,

@@ -1,4 +1,4 @@
-// /* 模板代码 仅作示例 */
+// /* 模板程式碼 僅作示例 */
 // import { Controller, Get, Post, Put, Delete, Body, Param, Query, Req, ParseIntPipe } from '@nestjs/common';
 // import type { Request } from 'express';
 // import { HelloService } from './hello.service';

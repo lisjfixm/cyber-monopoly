@@ -6,7 +6,7 @@ import { useEntityComboboxContext } from '@client/src/components/business-ui/ent
 import { cn } from '@/lib/utils';
 
 export const BaseComboboxEmpty = ({
-  text = '没有匹配结果，换个关键词试试吧',
+  text = '沒有匹配結果，換個關鍵詞試試吧',
   className,
 }: {
   text?: string;

@@ -88,7 +88,7 @@ export class OAuthAccountService {
         .where(eq(monopolyAccountTable.id, accountId));
 
       const token = this.accountService.generateToken(account.id);
-      this.logger.log(`第三方登錄成功: ${provider}/${providerUserId} -> ${account.username}`);
+      this.logger.log(`第三方登入成功: ${provider}/${providerUserId} -> ${account.username}`);
 
       return {
         token,
@@ -173,8 +173,8 @@ export class OAuthAccountService {
         boundAt: now,
       });
     } catch (err) {
-      // 並發回調時，唯一索引 (provider, provider_user_id) 可能衝突；
-      // 此時視為已綁定，重新讀取該綁定對應帳號完成登入
+      // 並發回撥時，唯一索引 (provider, provider_user_id) 可能衝突；
+      // 此時視為已繫結，重新讀取該繫結對應帳號完成登入
       if (this.isUniqueViolation(err)) {
         const rebound = await this.db
           .select({ accountId: monopolyAccountProvider.accountId })
@@ -202,12 +202,12 @@ export class OAuthAccountService {
       .limit(1);
 
     if (accounts.length === 0) {
-      throw new BadRequestException('創建帳號失敗');
+      throw new BadRequestException('建立帳號失敗');
     }
 
     const token = this.accountService.generateToken(accountId);
     this.logger.log(
-      `第三方${isNewUser ? '註冊並' : ''}綁定成功: ${provider}/${providerUserId} -> account:${accountId}`,
+      `第三方${isNewUser ? '註冊並' : ''}繫結成功: ${provider}/${providerUserId} -> account:${accountId}`,
     );
 
     return {
@@ -276,7 +276,7 @@ export class OAuthAccountService {
         return;
       }
       throw new BadRequestException(
-        '該第三方帳號已綁定其他遊戲帳號，請先解除舊綁定再重試',
+        '該第三方帳號已繫結其他遊戲帳號，請先解除舊繫結再重試',
       );
     }
 
@@ -292,14 +292,14 @@ export class OAuthAccountService {
     } catch (err) {
       if (this.isUniqueViolation(err)) {
         throw new BadRequestException(
-          '該第三方帳號已被綁定，請重新整理後再試',
+          '該第三方帳號已被繫結，請重新整理後再試',
         );
       }
       throw err;
     }
 
     this.logger.log(
-      `第三方帳號綁定成功: account:${accountId} + ${provider}/${providerUserId}`,
+      `第三方帳號繫結成功: account:${accountId} + ${provider}/${providerUserId}`,
     );
   }
 
@@ -316,14 +316,14 @@ export class OAuthAccountService {
       .limit(1);
 
     if (bindings.length === 0) {
-      throw new BadRequestException('未找到該第三方綁定');
+      throw new BadRequestException('未找到該第三方繫結');
     }
 
     const { bindings: allBindings, hasPassword } = await this.listBindings(accountId);
     const remainingCount = allBindings.filter(b => b.provider !== provider).length;
     if (remainingCount === 0 && !hasPassword) {
       throw new BadRequestException(
-        '至少保留一種登入方式，請先設定密碼或綁定其他第三方帳號',
+        '至少保留一種登入方式，請先設定密碼或繫結其他第三方帳號',
       );
     }
 

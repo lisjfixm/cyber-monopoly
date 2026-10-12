@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Bot, Users, Zap, Brain, Sparkles } from 'lucide-react';
+import { Bot, Users, Zap, Brain } from 'lucide-react';
 import { PLAYER_COLOR_HEX } from '@shared/game-config';
 
 const AI_PLAYER_COUNT_OPTIONS = [2, 4, 6] as const;
@@ -78,7 +78,7 @@ const AISetupPage = () => {
       return;
     }
 
-    // 检查昵称是否和 AI 名字冲突
+    // 檢查暱稱是否和 AI 名字衝突
     for (let i = 1; i <= aiCount; i += 1) {
       if (name === getAIName(i)) {
         setError('暱稱不能與 AI 相同');
@@ -115,7 +115,7 @@ const AISetupPage = () => {
           挑戰賽博 AI · 智鬥霓虹
         </p>
 
-        {/* 玩家数量选择 */}
+        {/* 玩家數量選擇 */}
         <div className="mb-6">
           <label className="block font-cyber text-sm tracking-wider text-[var(--text-secondary)] mb-3 flex items-center gap-2">
             <Users size={14} />
@@ -159,7 +159,7 @@ const AISetupPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* 玩家昵称输入 */}
+          {/* 玩家暱稱輸入 */}
           <div className="space-y-1.5">
             <label
               className="flex items-center gap-2 font-cyber text-sm tracking-wider"
@@ -191,11 +191,11 @@ const AISetupPage = () => {
             </div>
           </div>
 
-          {/* AI 难度选择 */}
+          {/* AI 難度選擇 */}
           <div className="space-y-2">
             <label className="block font-cyber text-sm tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
               <Zap size={14} />
-              AI 难度
+              AI 難度
             </label>
             <div className="grid grid-cols-4 gap-2">
               {DIFFICULTY_OPTIONS.map((opt) => {
@@ -205,7 +205,7 @@ const AISetupPage = () => {
                     key={opt.key}
                     type="button"
                     onClick={() => setDifficulty(opt.key)}
-                    className="py-2 font-cyber text-sm transition-all rounded-sm flex flex-col items-center"
+                    className="py-2 font-cyber text-sm transition-all rounded-sm flex flex-col items-center min-h-[44px] justify-center"
                     style={{
                       border: `1px solid ${isSelected ? opt.color : `${opt.color}33`}`,
                       backgroundColor: isSelected ? `${opt.color}26` : 'transparent',
@@ -222,7 +222,7 @@ const AISetupPage = () => {
             </div>
           </div>
 
-          {/* AI 对手列表 */}
+          {/* AI 對手列表 */}
           <div
             className="cyber-card p-3 space-y-2"
             style={{

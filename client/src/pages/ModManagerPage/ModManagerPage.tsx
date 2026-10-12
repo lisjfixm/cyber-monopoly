@@ -77,8 +77,8 @@ const BUILTIN_GAMEPLAY_MODS: Mod[] = [
 ];
 
 const BUILTIN_VISUAL_MODS: Mod[] = [
-  { id: 'builtin_retro_pixel', name: '懷舊像素風', description: '復古像素畫質', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'Grid3X3' },
-  { id: 'builtin_minimal', name: '極簡模式', description: '關閉所有特效，提升性能', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'MinusCircle' },
+  { id: 'builtin_retro_pixel', name: '懷舊畫素風', description: '復古畫素畫質', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'Grid3X3' },
+  { id: 'builtin_minimal', name: '極簡模式', description: '關閉所有特效，提升效能', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'MinusCircle' },
   { id: 'builtin_rainy', name: '雨天效果', description: '背景下雨動畫', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'CloudRain' },
   { id: 'builtin_starry_night', name: '星空夜晚', description: '背景星空+流星', version: '1.0.0', author: '內建', category: 'visual', isBuiltin: true, iconKey: 'Stars' },
 ];
@@ -831,7 +831,7 @@ const ModManagerPage = () => {
                         backgroundColor: 'rgba(168, 85, 247, 0.08)',
                       }}
                     >
-                      查看詳情
+                      檢視詳情
                     </button>
                   </div>
                 );
@@ -958,7 +958,7 @@ const ModManagerPage = () => {
                 }}
               >
                 <Download size={16} />
-                保存到本地
+                儲存到本地
               </button>
               <button
                 type="button"

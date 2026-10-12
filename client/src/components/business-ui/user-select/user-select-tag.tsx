@@ -30,11 +30,11 @@ export const UserSelectTag = ({
   size?: ComboboxSize;
   disabled?: boolean;
   /**
-   * 是否正在加载用户信息（ID 模式下查询中）
+   * 是否正在載入使用者資訊（ID 模式下查詢中）
    */
   isLoading?: boolean;
   /**
-   * 账户类型，用于 UserProfile 展示
+   * 賬戶型別，用於 UserProfile 展示
    */
   accountType?: AccountType;
 }) => {
@@ -56,7 +56,7 @@ export const UserSelectTag = ({
     </button>
   ) : null;
 
-  // 加载中状态显示 Skeleton（不触发 UserProfile）
+  // 載入中狀態顯示 Skeleton（不觸發 UserProfile）
   if (isLoading && !user) {
     return (
       <div className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5">

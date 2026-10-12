@@ -44,14 +44,14 @@ const STORAGE_KEY = 'cyber_monopoly_tournament';
 type TabKey = 'create' | 'schedule' | 'standings' | 'official';
 
 const TABS: { key: TabKey; label: string; icon: typeof Trophy }[] = [
-  { key: 'create', label: '創建錦標賽', icon: Users },
+  { key: 'create', label: '建立錦標賽', icon: Users },
   { key: 'schedule', label: '賽程', icon: Swords },
   { key: 'standings', label: '積分榜', icon: Trophy },
   { key: 'official', label: '官方賽事', icon: Crown },
 ];
 
 const PHASE_LABELS: Record<TournamentPhase, string> = {
-  group: '分組循環賽',
+  group: '分組迴圈賽',
   knockout: '淘汰賽',
   final: '決賽',
   finished: '已結束',
@@ -63,10 +63,10 @@ const FORMAT_OPTIONS: { size: TournamentSize; label: string; desc: string }[] = 
   { size: 32, label: '32 人賽', desc: '頂級爭霸' },
 ];
 
-// 模擬 bracket 數據：16人賽打到八強（第1輪已結束，進入第2輪）
+// 模擬 bracket 資料：16人賽打到八強（第1輪已結束，進入第2輪）
 function buildMockLiveBracket(): BracketMatch[][] {
   const playerNames = [
-    '霓虹行者', '暗影獵手', '數據暴君', '量子先鋒',
+    '霓虹行者', '暗影獵手', '資料暴君', '量子先鋒',
     '地獄領主', '星塵騎士', '電馭叛客', '夜之精靈',
     '鋼鐵之心', '極速之影', '深藍薩滿', '紫晶巫師',
     '赤焰戰神', '銀河護衛', '網路忍者', '終端守望者',
@@ -182,7 +182,7 @@ function buildMockLiveBracket(): BracketMatch[][] {
 }
 
 const MOCK_HISTORY: TournamentHistory[] = [
-  { id: 'h1', date: '2026-09-28', format: 16, myRank: 1, rewards: '20000 幣 + 數據核心' },
+  { id: 'h1', date: '2026-09-28', format: 16, myRank: 1, rewards: '20000 幣 + 資料核心' },
   { id: 'h2', date: '2026-09-25', format: 32, myRank: 3, rewards: '30000 幣 + 時空裂隙' },
   { id: 'h3', date: '2026-09-20', format: 8, myRank: 2, rewards: '3000 幣 + 強化模組' },
   { id: 'h4', date: '2026-09-15', format: 16, myRank: 5, rewards: '5000 幣' },
@@ -272,7 +272,7 @@ const TournamentPage = () => {
     [tournament],
   );
 
-  // 模擬數據
+  // 模擬資料
   const liveBracket = useMemo<BracketMatch[][]>(() => buildMockLiveBracket(), []);
 
   const liveTournament = useMemo<LiveTournament>(
@@ -612,7 +612,7 @@ const TournamentPage = () => {
                     style={{ borderColor: 'rgba(255, 107, 157, 0.3)' }}
                   >
                     <h2 className="font-cyber text-xl text-neon-pink tracking-wider mb-6 text-center">
-                      創建錦標賽
+                      建立錦標賽
                     </h2>
 
                     <div className="mb-6">
@@ -694,14 +694,14 @@ const TournamentPage = () => {
                         <p className="font-cyber tracking-wider text-base mb-2">
                           尚無進行中的錦標賽
                         </p>
-                        <p className="text-xs">前往「創建錦標賽」頁面開始</p>
+                        <p className="text-xs">前往「建立錦標賽」頁面開始</p>
                         <button
                           type="button"
                           onClick={() => setActiveTab('create')}
                           className="cyber-btn mt-4 px-6 py-2 text-sm"
                           style={{ borderColor: 'var(--pink)', color: 'var(--pink)' }}
                         >
-                          立即創建
+                          立即建立
                         </button>
                       </div>
                     ) : (
@@ -793,7 +793,7 @@ const TournamentPage = () => {
                         {tournament.groups && (
                           <div>
                             <h3 className="font-cyber text-lg text-neon-cyan tracking-wider mb-3">
-                              分組循環賽
+                              分組迴圈賽
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {Object.entries(tournament.groups).map(
@@ -835,9 +835,9 @@ const TournamentPage = () => {
                           style={{ color: 'var(--purple)' }}
                         />
                         <p className="font-cyber tracking-wider text-base mb-2">
-                          尚無積分數據
+                          尚無積分資料
                         </p>
-                        <p className="text-xs">創建錦標賽後查看積分榜</p>
+                        <p className="text-xs">建立錦標賽後檢視積分榜</p>
                       </div>
                     ) : (
                       <StandingsTable

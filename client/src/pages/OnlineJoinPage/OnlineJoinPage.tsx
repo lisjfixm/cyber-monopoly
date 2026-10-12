@@ -14,7 +14,7 @@ function isNetworkError(err: unknown): boolean {
       msg.includes('network') ||
       msg.includes('failed to fetch') ||
       msg.includes('timeout') ||
-      msg.includes('連接') ||
+      msg.includes('連線') ||
       msg.includes('連線') ||
       msg.includes('跨網域') ||
       msg.includes('err_connection')

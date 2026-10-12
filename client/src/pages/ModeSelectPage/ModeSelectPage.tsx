@@ -4,12 +4,13 @@ import { toast } from 'sonner';
 import TutorialOverlay from '@client/src/components/game/TutorialOverlay';
 import { TUTORIAL_STEPS } from '@client/src/config/tutorial';
 import { useTutorial } from '@client/src/hooks/useTutorial';
-import { Map, LineChart, Flame, Users, Scale } from 'lucide-react';
+import { Map, LineChart, Flame, Users, Scale, Lock, Target, Coins, Trophy, Bot, Repeat } from 'lucide-react';
 import { useAchievements } from '@client/src/hooks/useAchievements';
 import { GAME_MODES, PLAYER_COLOR_HEX, DEFAULT_PLAYER_NAMES } from '@shared/game-config';
 import type { GameMode, PlayMode, GameModeConfig } from '@shared/api.interface';
 import { V3_MODES } from '@client/src/components/game/v3/modeMeta';
 import type { V3ModeId } from '@client/src/components/game/v3/modeMeta';
+import { V4_MODES, type V4ModeId } from '@client/src/components/game/v4/modeMeta';
 
 interface ModeOption {
   key: GameMode;
@@ -18,7 +19,7 @@ interface ModeOption {
   color: string;
   description: string;
   icon: string;
-  /** v3 新模式使用 lucide 圖標（優先於文字 icon） */
+  /** v3 新模式使用 lucide 圖示（優先於文字 icon） */
   IconComp?: React.ComponentType<{ size?: number; className?: string }>;
   gradient?: string;
   difficulty?: string;
@@ -34,6 +35,16 @@ interface ModeGroup {
   modes: ModeOption[];
 }
 
+// v4「量子超躍」模式圖示（lucide）
+const V4_MODE_ICONS: Record<V4ModeId, React.ComponentType<{ size?: number; className?: string }>> = {
+  heist: Lock,
+  bounty_hunt: Target,
+  gold_rush: Coins,
+  cyber_olympics: Trophy,
+  rogue_ai: Bot,
+  time_loop: Repeat,
+};
+
 const ModeSelectPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -42,7 +53,7 @@ const ModeSelectPage = () => {
   const [randomBoard, setRandomBoard] = useState<boolean>(false);
   const [blindAuction, setBlindAuction] = useState<boolean>(false);
 
-  // 新手教学
+  // 新手教學
   const { unlock: unlockAchievement } = useAchievements();
   const tutorial = useTutorial({
     onComplete: () => {
@@ -50,7 +61,7 @@ const ModeSelectPage = () => {
     },
   });
 
-  // 模式选择页只处理第2步（ruleModes，索引2）
+  // 模式選擇頁只處理第2步（ruleModes，索引2）
   const tutorialVisible = tutorial.isActive && tutorial.currentStep === 2;
 
   const playModeParam = searchParams.get('mode') as PlayMode | null;
@@ -69,7 +80,7 @@ const ModeSelectPage = () => {
     hell: '地獄',
   };
 
-  // 解析玩家名称
+  // 解析玩家名稱
   const playerNames: string[] = [];
   for (let i = 0; i < playerCount; i += 1) {
     const name = searchParams.get(`p${i + 1}`);
@@ -80,7 +91,7 @@ const ModeSelectPage = () => {
 
   useEffect(() => {
     if (!playModeParam || !hasValidPlayers) {
-      setError('參數不完整，請返回重新開始');
+      setError('引數不完整，請返回重新開始');
     }
   }, [playModeParam, hasValidPlayers]);
 
@@ -237,7 +248,7 @@ const ModeSelectPage = () => {
            label: '資源爭奪',
            config: GAME_MODES.resource,
            color: 'hsl(140, 100%, 55%)',
-           description: '爭奪數據核心，資源最多者勝',
+           description: '爭奪資料核心，資源最多者勝',
             icon: '資源',
             difficulty: '困難',
           },
@@ -303,6 +314,26 @@ const ModeSelectPage = () => {
           },
        ],
      },
+     // === v4.0.0「量子超躍」6 款新模式（已接引擎，可實際對局）===
+     {
+       title: '量子超躍 v4',
+       titleColor: 'hsl(180, 100%, 60%)',
+       modes: (Object.keys(V4_MODES) as V4ModeId[]).map((id): ModeOption => {
+         const m = V4_MODES[id];
+         return {
+           key: id as GameMode,
+           label: m.label,
+           config: GAME_MODES[id],
+           color: m.color,
+           description: m.tagline,
+           icon: '量子',
+           IconComp: V4_MODE_ICONS[id],
+           difficulty: m.difficulty,
+           requiredPlayers: m.requiredPlayers,
+           setupHint: m.rolesHint ? `${m.setupHint}\n角色：${m.rolesHint}` : m.setupHint,
+         };
+       }),
+     },
    ];
 
   const handleSelect = (key: GameMode) => {
@@ -311,7 +342,7 @@ const ModeSelectPage = () => {
 
   const handleConfirm = () => {
     if (!playModeParam || !hasValidPlayers) {
-      setError('參數不完整，請返回重新開始');
+      setError('引數不完整，請返回重新開始');
       return;
     }
 
@@ -321,7 +352,7 @@ const ModeSelectPage = () => {
       return;
     }
 
-    // 构建完整参数
+    // 構建完整引數
     const params = new URLSearchParams();
     params.set('mode', selectedMode);
     params.set('playMode', playModeParam);
@@ -477,7 +508,7 @@ const ModeSelectPage = () => {
                        const disabled = needPlayers !== undefined && playerCount !== needPlayers;
                        const disabledTitle = needPlayers !== undefined
                          ? (mode.key === 'twin_strike'
-                             ? `雙子星陣營戰需剛好 ${needPlayers} 人（2v2），請返回調整為 ${needPlayers} 人`
+                             ? `雙子星陣營戰需剛好 ${needPlayers} 人（2v2），請返回撥整為 ${needPlayers} 人`
                              : `需要 ${needPlayers} 人以上（2v2）`)
                          : undefined;
                        const difficultyColor =
@@ -730,7 +761,7 @@ const ModeSelectPage = () => {
               ← 返回
             </button>
 
-            {/* 新手教学浮层 */}
+            {/* 新手教學浮層 */}
             {tutorialVisible && tutorial.currentStepConfig && (
               <TutorialOverlay
                 steps={TUTORIAL_STEPS}

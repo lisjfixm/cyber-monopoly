@@ -33,7 +33,7 @@ const POSTGRES_CLIENT = 'POSTGRES_CLIENT';
         const url =
           process.env.DATABASE_URL || process.env.SUDA_DATABASE_URL;
         if (!url) {
-          // 未設定資料庫連線時不讓進程啟動失敗：
+          // 未設定資料庫連線時不讓程序啟動失敗：
           // 使用本機佔位連線字串，postgres-js 為惰性連線，實際查詢才會失敗
           // （由全域例外過濾器轉為 5xx）；但健康檢查、靜態資源與 SPA fallback 仍可正常回應。
           return postgres(

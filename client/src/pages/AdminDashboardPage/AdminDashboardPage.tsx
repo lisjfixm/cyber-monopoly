@@ -103,7 +103,7 @@ const AdminDashboardPage = () => {
     const monitor = AntiCheatMonitor.getInstance();
     setAntiCheatLogs(monitor.getEvents());
 
-    // 定期刷新
+    // 定期重新整理
     const timer = setInterval(() => {
       setAntiCheatLogs(monitor.getEvents());
     }, 3000);
@@ -236,7 +236,7 @@ const AdminDashboardPage = () => {
       </div>
 
       <div className="p-4 md:p-6 max-w-6xl mx-auto space-y-4 md:space-y-6">
-        {/* 第一行：在線人數 + 今日局數 */}
+        {/* 第一行：線上人數 + 今日局數 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
             className="cyber-card p-5 relative overflow-hidden"

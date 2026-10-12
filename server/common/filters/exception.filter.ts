@@ -4,14 +4,14 @@ import { BusinessException } from '../interfaces/exception.interface';
 import { HTTP_STATUS_TO_RESPONSE_CODE_MAP, ResponseCode } from '../constants/api_response_code';
 import { ApiErrorResponse } from '../interfaces/api_response.interface';
 
-// 全局异常过滤器，用于捕获所有未处理的异常
+// 全域性異常過濾器，用於捕獲所有未處理的異常
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
      
-    // 如果响应头已发送，则不处理
+    // 如果響應頭已傳送，則不處理
     if (response.headersSent) {
       return;
     }
@@ -20,7 +20,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let httpStatus: HttpStatus;
 
     if (exception instanceof BusinessException) {
-      // 业务异常
+      // 業務異常
       httpStatus = exception.httpStatus;
       errorResponse = {
         error: {
@@ -32,7 +32,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         },
       };
     } else if (exception instanceof HttpException) {
-      // HTTP异常
+      // HTTP異常
       httpStatus = exception.getStatus() as HttpStatus;
       const exceptionResponse = exception.getResponse();
 
@@ -49,13 +49,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       exception !== null &&
       (exception as { code?: unknown }).code === '22P02'
     ) {
-      // Postgres invalid_text_representation：路径/查询参数与列类型不匹配（最常见是非法 UUID）
-      // 与「合法 UUID 但记录不存在」走同一条 not-found 语义，避免 500 噪声
+      // Postgres invalid_text_representation：路徑/查詢引數與列型別不配對（最常見是非法 UUID）
+      // 與「合法 UUID 但記錄不存在」走同一條 not-found 語義，避免 500 雜訊
       httpStatus = HttpStatus.NOT_FOUND;
       errorResponse = {
         error: {
           code: ResponseCode.NOT_FOUND,
-          message: '资源不存在',
+          message: '資源不存在',
           timestamp: Date.now(),
         },
       };
@@ -66,7 +66,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       errorResponse = {
         error: {
           code: ResponseCode.INTERNAL_ERROR,
-          message: '服务器内部错误',
+          message: '伺服器內部錯誤',
           ...(isDev
             ? {
                 stack: (exception as Error).stack,

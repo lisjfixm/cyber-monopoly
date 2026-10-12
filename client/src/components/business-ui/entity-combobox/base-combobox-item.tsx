@@ -15,8 +15,8 @@ export type BaseComboboxItemProps<T = unknown> = {
   onSelect?: () => void;
   className?: string;
   /**
-   * 是否禁用该选项
-   * 禁用时不能改变选中状态
+   * 是否禁用該選項
+   * 禁用時不能改變選中狀態
    */
   disabled?: boolean;
 };

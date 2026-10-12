@@ -22,7 +22,7 @@ function createChatsFetcher(pageSize: number = 100) {
   };
 }
 
-// 内部包装组件用于获取 context 中的 size
+// 內部包裝元件用於獲取 context 中的 size
 const ChatItemWrapper = ({
   chatValue,
   isSelected,
@@ -90,8 +90,8 @@ export const ChatSelect: React.FC<ChatSelectProps> = (props) => {
     name,
     className,
     classNames,
-    placeholder = '请选择',
-    emptyText = '没有匹配结果，换个关键词试试吧',
+    placeholder = '請選擇',
+    emptyText = '沒有符合結果，換個關鍵字試試',
     tagClosable,
     maxTagCount,
     onSelect,
@@ -105,14 +105,14 @@ export const ChatSelect: React.FC<ChatSelectProps> = (props) => {
 
   const isControlled = value !== undefined;
 
-  // 使用 useChatValue 处理不同类型的 value（包括 defaultValue）
+  // 使用 useChatValue 處理不同型別的 value（包括 defaultValue）
   const { internalValue, isLoading, toExternalValue } = useChatValue(
     value ?? null,
     multiple,
     valueType,
   );
 
-  // 同样处理 defaultValue，确保 ID 字符串类型的 defaultValue 也能正确解析
+  // 同樣處理 defaultValue，確保 ID 字串型別的 defaultValue 也能正確解析
   const { internalValue: internalDefaultValue } = useChatValue(
     defaultValue ?? null,
     multiple,
@@ -121,7 +121,7 @@ export const ChatSelect: React.FC<ChatSelectProps> = (props) => {
 
   const fetchFn = useMemo(() => createChatsFetcher(), []);
 
-  // 包装 onChange，根据输入模式转换输出格式
+  // 包裝 onChange，根據輸入模式轉換輸出格式
   const handleChange = useCallback(
     (newValue: Chat | Chat[] | null) => {
       if (!onChange) return;

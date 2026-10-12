@@ -1,6 +1,6 @@
 /**
  * 震動回饋工具函式
- * 基於 navigator.vibrate API，在不支援的裝置上静默失效。
+ * 基於 navigator.vibrate API，在不支援的裝置上靜默失效。
  */
 
 export function vibrate(pattern: number | number[] = 50): void {

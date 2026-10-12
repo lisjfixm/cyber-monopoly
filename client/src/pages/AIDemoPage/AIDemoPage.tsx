@@ -445,7 +445,7 @@ const AIDemoPage = () => {
     }
   };
 
-  // AI 對戰觀察模式視圖
+  // AI 對戰觀察模式檢視
   if (aiBattleMode && battleState) {
     const leftDiff = getAiDifficulty(battleAiLeft);
     const rightDiff = getAiDifficulty(battleAiRight);
@@ -830,7 +830,7 @@ const AIDemoPage = () => {
               <div className="cyber-card p-4" style={{ borderColor: 'var(--border-neon-cyan)' }}>
                 <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                   <Info size={14} />
-                  <span className="text-xs font-cyber tracking-wider">繼續播放以查看關鍵決策分析</span>
+                  <span className="text-xs font-cyber tracking-wider">繼續播放以檢視關鍵決策分析</span>
                 </div>
               </div>
             )}
@@ -1217,7 +1217,7 @@ const AIDemoPage = () => {
                 {strategyModal.description}
               </p>
               <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
-                推薦對象：{strategyModal.recommendedFor}
+                推薦物件：{strategyModal.recommendedFor}
               </p>
             </div>
 
@@ -1307,7 +1307,7 @@ const AIDemoPage = () => {
   );
 };
 
-// 對戰分析文本
+// 對戰分析文字
 function getBattleAnalysis(
   turn: number,
   leftDiff: AIDifficultyLevel | undefined,
@@ -1338,7 +1338,7 @@ function getBattleAnalysis(
     }
     return '後期鏖戰，雙方資產龐大，一次高額過路費就可能逆轉局勢。地獄級 AI 在此時會尋找致命一擊的機會。';
   }
-  return '對局接近尾聲。最終勝負取決於誰的現金管理更為出色，以及誰能在對方踩中自己的高級建築時給予最後一擊。';
+  return '對局接近尾聲。最終勝負取決於誰的現金管理更為出色，以及誰能在對方踩中自己的高階建築時給予最後一擊。';
 }
 
 export default AIDemoPage;

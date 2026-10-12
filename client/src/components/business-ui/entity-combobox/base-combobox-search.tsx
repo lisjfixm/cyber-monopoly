@@ -12,7 +12,7 @@ export type BaseComboboxSearchProps = {
 };
 
 export const BaseComboboxSearch = ({
-  placeholder = '搜索...',
+  placeholder = '搜尋...',
   className,
   ref,
 }: BaseComboboxSearchProps) => {

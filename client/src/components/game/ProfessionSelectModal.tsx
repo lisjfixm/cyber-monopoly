@@ -164,7 +164,7 @@ const ProfessionSelectModal: FC<ProfessionSelectModalProps> = ({
             onClick={onClose}
             className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded transition-colors hover:bg-white/10"
             style={{ color: "var(--text-secondary)" }}
-            aria-label="关闭"
+            aria-label="關閉"
           >
             <X className="w-5 h-5" />
           </button>

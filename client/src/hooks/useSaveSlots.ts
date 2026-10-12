@@ -33,7 +33,7 @@ function getSlotKey(slot: number): string {
 function computeTurnCount(state: GameState): number {
   const diceLogs = state.logs.filter(
     (l) => l.type === 'player1' || l.type === 'player2',
-  ).filter((l) => l.text.includes('掷出')).length;
+  ).filter((l) => l.text.includes('擲出')).length;
   return Math.ceil(diceLogs / 2);
 }
 

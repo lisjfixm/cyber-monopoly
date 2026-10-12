@@ -16,7 +16,7 @@ const dictionaries: Record<Language, Record<string, string>> = {
   ja,
 };
 
-// 命名空間註冊表（供其他模組動態擴充）
+// 名稱空間登錄檔（供其他模組動態擴充）
 interface NamespaceTranslations {
   [lang: string]: Record<string, string>;
 }
@@ -24,10 +24,10 @@ interface NamespaceTranslations {
 const registeredNamespaces: Record<string, NamespaceTranslations> = {};
 
 /**
- * 動態註冊某個命名空間的翻譯。
- * 其他批次/模組可以呼叫此函數註冊自己的翻譯，不與核心字典衝突。
+ * 動態註冊某個名稱空間的翻譯。
+ * 其他批次/模組可以呼叫此函式註冊自己的翻譯，不與核心字典衝突。
  *
- * @param namespace 命名空間，例如 'battlepass'、'tournament'
+ * @param namespace 名稱空間，例如 'battlepass'、'tournament'
  * @param translations 各語言的翻譯物件
  */
 export function registerTranslations(
@@ -103,7 +103,7 @@ export function translate(lang: Language, key: string): string {
 }
 
 /**
- * 獨立於 React 之外的 t 函數，用於非組件環境。
+ * 獨立於 React 之外的 t 函式，用於非元件環境。
  * 會讀取 localStorage 中的語言設定。
  */
 export function t(key: string): string {

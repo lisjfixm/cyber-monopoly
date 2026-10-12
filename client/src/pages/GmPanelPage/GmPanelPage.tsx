@@ -26,7 +26,7 @@ function isNetworkError(err: unknown): boolean {
       msg.includes('network') ||
       msg.includes('failed to fetch') ||
       msg.includes('timeout') ||
-      msg.includes('連接') ||
+      msg.includes('連線') ||
       msg.includes('連線') ||
       msg.includes('跨網域') ||
       msg.includes('err_connection')
@@ -37,7 +37,7 @@ function isNetworkError(err: unknown): boolean {
 
 function errMsg(err: unknown, fallback: string): string {
   if (isNetworkError(err)) {
-    return 'GM 後端於靜態版不可用，部署後端後即可使用主控台。';
+    return 'GM 後端於靜態版不可用，部署後端後即可使用主控臺。';
   }
   return err instanceof Error ? err.message : fallback;
 }
@@ -74,10 +74,10 @@ function providerLabel(provider: OAuthProvider) {
 }
 
 const GM_MENU_ITEMS: Array<{ key: GmMenuKey; label: string; icon: string }> = [
-  { key: 'users', label: '使用者管理', icon: '用戶' },
+  { key: 'users', label: '使用者管理', icon: '使用者' },
   { key: 'announcements', label: '公告管理', icon: '公告' },
   { key: 'events', label: '活動管理', icon: '活動' },
-  { key: 'online', label: '在線使用者', icon: '在線' },
+  { key: 'online', label: '線上使用者', icon: '線上' },
 ];
 
 // ==================== 通用確認彈窗 ====================
@@ -284,7 +284,7 @@ const GmLoginView: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           boxShadow: '0 2px 20px hsl(0, 100%, 50%, 0.3)',
         }}
       >
-        警告 GM 控制台 - 僅限授權人員使用 警告
+        警告 GM 控制檯 - 僅限授權人員使用 警告
       </div>
 
       <div
@@ -310,7 +310,7 @@ const GmLoginView: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
               textShadow: '0 0 15px hsl(0, 100%, 60%), 0 0 30px hsl(0, 100%, 60%)',
             }}
           >
-            GM 控制台
+            GM 控制檯
           </h1>
           <p className="text-sm tracking-wide" style={{ color: 'hsl(0, 30%, 60%)' }}>
             CYBER MONOPOLY ADMINISTRATION
@@ -523,7 +523,7 @@ const UsersSection: React.FC = () => {
       setUsers((prev) => prev.filter((u) => u.id !== confirmReset));
       setConfirmReset(null);
       setEditingUser(null);
-      showSuccess('使用者數據已重置');
+      showSuccess('使用者資料已重置');
     } catch (err: unknown) {
       const msg = errMsg(err, '重置失敗');
       setError(msg);
@@ -761,7 +761,7 @@ const UsersSection: React.FC = () => {
                   className="text-sm font-bold mb-2 tracking-wider"
                   style={{ color: 'hsl(270, 90%, 75%)', textShadow: '0 0 6px hsl(270, 80%, 60%)' }}
                 >
-                  第三方登入綁定
+                  第三方登入繫結
                 </h4>
                 {editingUser.oauthBindings && editingUser.oauthBindings.length > 0 ? (
                   <div className="space-y-2">
@@ -790,7 +790,7 @@ const UsersSection: React.FC = () => {
                           </div>
                           <div className="text-right">
                             <div className="text-xs" style={{ color: 'hsl(0, 20%, 50%)' }}>
-                              綁定時間
+                              繫結時間
                             </div>
                             <div className="text-xs font-mono" style={{ color: 'hsl(0, 20%, 70%)' }}>
                               {new Date(b.boundAt).toLocaleString('zh-TW')}
@@ -802,7 +802,7 @@ const UsersSection: React.FC = () => {
                   </div>
                 ) : (
                   <p className="text-xs" style={{ color: 'hsl(0, 20%, 50%)' }}>
-                    此使用者未綁定任何第三方帳號
+                    此使用者未繫結任何第三方帳號
                   </p>
                 )}
               </div>
@@ -844,7 +844,7 @@ const UsersSection: React.FC = () => {
                   border: '1px solid hsl(0, 100%, 60%)',
                 }}
               >
-                 警告 重置數據
+                 警告 重置資料
               </button>
             </div>
 
@@ -869,7 +869,7 @@ const UsersSection: React.FC = () => {
                   boxShadow: '0 0 10px hsl(0, 100%, 60%, 0.5)',
                 }}
               >
-                保存
+                儲存
               </button>
             </div>
           </div>
@@ -954,7 +954,7 @@ const UsersSection: React.FC = () => {
       <ConfirmDialog
         open={!!confirmReset}
         title="確認重置？"
-        message="此操作將清空該使用者的所有遊戲數據（金幣、ELO、皮膚等），且無法恢復。"
+        message="此操作將清空該使用者的所有遊戲資料（金幣、ELO、皮膚等），且無法恢復。"
         confirmText="確認重置"
         danger
         onConfirm={handleReset}
@@ -1040,9 +1040,9 @@ const AnnouncementsSection: React.FC = () => {
       }
       setEditing(null);
       setIsNew(false);
-      showSuccess('公告已保存');
+      showSuccess('公告已儲存');
     } catch (err: unknown) {
-      const msg = errMsg(err, '保存失敗');
+      const msg = errMsg(err, '儲存失敗');
       setError(msg);
     }
   };
@@ -1121,11 +1121,11 @@ const AnnouncementsSection: React.FC = () => {
                     {a.isActive ? '啟用' : '停用'}
                   </span>
                   <span className="text-xs" style={{ color: 'hsl(0, 30%, 50%)' }}>
-                    優先級: {a.priority}
+                    優先順序: {a.priority}
                   </span>
                 </div>
                 <div className="text-xs" style={{ color: 'hsl(0, 20%, 60%)' }}>
-                  創建時間: {new Date(a.createdAt).toLocaleString()}
+                  建立時間: {new Date(a.createdAt).toLocaleString()}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -1163,7 +1163,7 @@ const AnnouncementsSection: React.FC = () => {
               <GmInput label="標題" value={formTitle} onChange={setFormTitle} placeholder="請輸入公告標題" />
               <GmInput label="內容" value={formContent} onChange={setFormContent} placeholder="請輸入公告內容" textarea rows={5} />
               <div className="grid grid-cols-2 gap-3">
-                <GmInput label="優先級" type="number" value={formPriority} onChange={setFormPriority} />
+                <GmInput label="優先順序" type="number" value={formPriority} onChange={setFormPriority} />
                 <div className="flex items-end">
                   <GmSwitch label="啟用狀態" checked={formActive} onChange={setFormActive} />
                 </div>
@@ -1182,7 +1182,7 @@ const AnnouncementsSection: React.FC = () => {
                 className="px-6 py-2 text-sm font-bold rounded transition-all hover:scale-105"
                 style={{ background: 'hsl(0, 100%, 50%)', color: 'white', boxShadow: '0 0 10px hsl(0, 100%, 60%, 0.5)' }}
               >
-                保存
+                儲存
               </button>
             </div>
           </div>
@@ -1315,9 +1315,9 @@ const EventsSection: React.FC = () => {
       }
       setEditing(null);
       setIsNew(false);
-      showSuccess('活動已保存');
+      showSuccess('活動已儲存');
     } catch (err: unknown) {
-      const msg = errMsg(err, '保存失敗');
+      const msg = errMsg(err, '儲存失敗');
       setError(msg);
     }
   };
@@ -1442,7 +1442,7 @@ const EventsSection: React.FC = () => {
             <div className="space-y-3 mb-6">
               <GmInput label="活動名稱" value={formName} onChange={setFormName} placeholder="請輸入活動名稱" />
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-bold tracking-wider" style={{ color: 'hsl(0, 80%, 75%)' }}>活動類型</label>
+                <label className="text-xs font-bold tracking-wider" style={{ color: 'hsl(0, 80%, 75%)' }}>活動型別</label>
                 <select
                   value={formType}
                   onChange={(e) => setFormType(e.target.value)}
@@ -1475,7 +1475,7 @@ const EventsSection: React.FC = () => {
                 className="px-6 py-2 text-sm font-bold rounded transition-all hover:scale-105"
                 style={{ background: 'hsl(0, 100%, 50%)', color: 'white', boxShadow: '0 0 10px hsl(0, 100%, 60%, 0.5)' }}
               >
-                保存
+                儲存
               </button>
             </div>
           </div>
@@ -1495,7 +1495,7 @@ const EventsSection: React.FC = () => {
   );
 };
 
-// ==================== 在線使用者 ====================
+// ==================== 線上使用者 ====================
 const OnlineUsersSection: React.FC = () => {
   const [list, setList] = useState<GmOnlineUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1523,7 +1523,7 @@ const OnlineUsersSection: React.FC = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold tracking-wider" style={{ color: 'hsl(0, 100%, 70%)' }}>
-          在線使用者
+          線上使用者
         </h2>
         <button
           onClick={loadList}
@@ -1543,7 +1543,7 @@ const OnlineUsersSection: React.FC = () => {
       {loading ? (
         <div className="text-center py-8" style={{ color: 'hsl(0, 30%, 60%)' }}>載入中...</div>
       ) : list.length === 0 ? (
-        <div className="text-center py-8" style={{ color: 'hsl(0, 30%, 60%)' }}>當無在線使用者</div>
+        <div className="text-center py-8" style={{ color: 'hsl(0, 30%, 60%)' }}>當無線上使用者</div>
       ) : (
         <div className="overflow-x-auto rounded" style={{ border: '1px solid hsl(0, 50%, 30%)' }}>
           <table className="w-full text-sm">
@@ -1616,7 +1616,7 @@ const GmMainPanel: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               textShadow: '0 0 10px hsl(0, 100%, 60%)',
             }}
           >
-             GM 控制台
+             GM 控制檯
           </h1>
         </div>
         <button
@@ -1707,7 +1707,7 @@ const GmMainPanel: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   );
 };
 
-// ==================== 根組件 ====================
+// ==================== 根元件 ====================
 const GmPanelPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasGmToken());
 

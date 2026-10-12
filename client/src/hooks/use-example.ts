@@ -27,10 +27,10 @@
 //     try {
 //       setData(prev => ({ ...prev, loading: true, error: null }));
 
-//       // 使用axios实例获取数据
+//       // 使用axios例項獲取資料
 //       const response = await axiosForBackend.get('/api/hello');
 
-//       // 提取响应数据中的 data 字段
+//       // 提取響應資料中的 data 欄位
 //       const record = response.data.data;
 
 //       setData({
@@ -39,11 +39,11 @@
 //         error: null,
 //       });
 //     } catch (error) {
-//       logger.error('获取数据失败', error);
+//       logger.error('獲取資料失敗', error);
 //       setData(prev => ({
 //         ...prev,
 //         loading: false,
-//         error: '获取数据失败，请稍后重试',
+//         error: '獲取資料失敗，請稍後重試',
 //       }));
 //     }
 //   };

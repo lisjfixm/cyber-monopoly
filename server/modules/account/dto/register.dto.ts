@@ -4,7 +4,7 @@ import type { RegisterRequest } from '@shared/api.interface';
 export class RegisterDto implements RegisterRequest {
   @IsString()
   @Length(3, 20)
-  @Matches(/^[a-zA-Z0-9]+$/, { message: '用户名只能包含英文字母和数字' })
+  @Matches(/^[a-zA-Z0-9]+$/, { message: '使用者名只能包含英文字母和數字' })
   username!: string;
 
   @IsString()

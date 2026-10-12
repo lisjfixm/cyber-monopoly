@@ -9,7 +9,7 @@ import type {
   TriggerType,
 } from '@client/src/components/business-ui/entity-combobox/shared-types';
 
-// 重新导出共享类型
+// 重新匯出共享型別
 export type {
   ItemValue,
   TriggerType,
@@ -20,7 +20,7 @@ export type {
 };
 
 /**
- * EntityCombobox 组件的 Props
+ * EntityCombobox 元件的 Props
  */
 export type EntityComboboxProps<
   T = unknown,
@@ -30,7 +30,7 @@ export type EntityComboboxProps<
   // 尺寸
   size?: ComboboxSize;
 
-  // 数据获取
+  // 資料獲取
   fetchFn: (search: string) => Promise<{ items: T[] }>;
 
   // 受控/非受控
@@ -39,7 +39,7 @@ export type EntityComboboxProps<
   defaultValue?: TValue | TValue[] | null;
   onChange?: (value: TValue | TValue[] | null) => void;
 
-  // 弹层控制
+  // 彈層控制
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -49,7 +49,7 @@ export type EntityComboboxProps<
   debounce?: number;
   disabled?: boolean;
 
-  // 回调
+  // 回撥
   onSelect?: (value: TValue) => void;
   onDeselect?: (value: TValue) => void;
   onSearch?: (value: string) => void;
@@ -57,7 +57,7 @@ export type EntityComboboxProps<
 
   children: ReactNode;
 
-  // 转换函数
+  // 轉換函式
   getItemValue: (item: T) => TValue;
 };
 
@@ -69,7 +69,7 @@ export type EntityComboboxContextValue<
   TRaw = unknown,
   TValue extends ItemValue<TRaw> = ItemValue<TRaw>,
 > = {
-  // 状态
+  // 狀態
   open: boolean;
   setOpen: (open: boolean) => void;
   searchValue: string;
@@ -82,7 +82,7 @@ export type EntityComboboxContextValue<
   handleDeselect: (value: TValue) => void;
   handleClear: () => void;
 
-  // 数据
+  // 資料
   data: T[];
   isFetching: boolean;
   isPending: boolean;
@@ -97,12 +97,12 @@ export type EntityComboboxContextValue<
   fetchStatus?: string;
   isPlaceholderData?: boolean;
 
-  // 转换函数
+  // 轉換函式
   getItemValue: (item: T) => TValue;
 };
 
 /**
- * BaseCombobox 组件的 Props
+ * BaseCombobox 元件的 Props
  */
 export type BaseComboboxProps<
   T = unknown,
@@ -112,10 +112,10 @@ export type BaseComboboxProps<
   // 尺寸
   size?: ComboboxSize;
 
-  // 数据获取
+  // 資料獲取
   fetchFn: (search: string) => Promise<{ items: T[] }>;
 
-  // 触发器
+  // 觸發器
   triggerType?: TriggerType;
   renderTrigger?: (props: TriggerRenderProps<TRaw>) => ReactNode;
 
@@ -125,7 +125,7 @@ export type BaseComboboxProps<
   defaultValue?: TValue | TValue[] | null;
   onChange?: (value: TValue | TValue[] | null) => void;
 
-  // 弹层控制
+  // 彈層控制
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -138,7 +138,7 @@ export type BaseComboboxProps<
   required?: boolean;
   name?: string;
 
-  // 渲染函数
+  // 渲染函式
   renderItem: (
     item: T,
     isSelected: boolean,
@@ -151,9 +151,9 @@ export type BaseComboboxProps<
     disabled?: boolean,
   ) => ReactNode;
   /**
-   * 判断选项是否禁用
-   * @param value 选项值
-   * @returns 如果返回 true，该选项将被禁用
+   * 判斷選項是否禁用
+   * @param value 選項值
+   * @returns 如果返回 true，該選項將被禁用
    */
   getOptionDisabled?: (value: TValue) => boolean;
   getItemLabel?: (item: T) => string;
@@ -164,11 +164,11 @@ export type BaseComboboxProps<
   emptyText?: string;
   loadingText?: string;
 
-  // 样式
+  // 樣式
   className?: string;
   classNames?: ClassNamesConfig;
 
-  // 标签（多选）
+  // 標籤（多選）
   tagClosable?: boolean;
   maxTagCount?: number | 'responsive';
   maxTagTextLength?: number;
@@ -178,7 +178,7 @@ export type BaseComboboxProps<
   align?: 'start' | 'center' | 'end';
   sideOffset?: number;
 
-  // 回调
+  // 回撥
   onSelect?: (value: TValue) => void;
   onDeselect?: (value: TValue) => void;
   onSearch?: (value: string) => void;
@@ -186,7 +186,7 @@ export type BaseComboboxProps<
   onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLElement>) => void;
 
-  // 转换函数
+  // 轉換函式
   getItemValue?: (item: T) => TValue;
 
   slotProps?: PopoverSlotProps;
@@ -194,7 +194,7 @@ export type BaseComboboxProps<
 };
 
 /**
- * PopoverWrapper 组件的 Props
+ * PopoverWrapper 元件的 Props
  */
 export type PopoverWrapperProps<
   T = unknown,
@@ -237,7 +237,7 @@ export type PopoverWrapperProps<
 };
 
 /**
- * 国际化文本类型
+ * 國際化文字型別
  */
 export type I18nText = {
   zh_cn: string;

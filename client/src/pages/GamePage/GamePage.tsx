@@ -51,6 +51,7 @@ import { useAchievements } from '@client/src/hooks/useAchievements';
 import { useAudio } from '@client/src/hooks/useAudio';
 import { useSaveSlots, consumeContinueSave } from '@client/src/hooks/useSaveSlots';
 import { useAutoReplay } from '@client/src/hooks/useAutoReplay';
+import { useMatchHistory } from '@client/src/hooks/useMatchHistory';
 import SaveSlotPanel from '@client/src/components/game/SaveSlotPanel';
 import DanmakuLayer from '@client/src/components/game/DanmakuLayer';
 import type { DanmakuMessage as DanmakuMsg } from '@client/src/components/game/DanmakuLayer';
@@ -63,6 +64,8 @@ import SystemMenuSheet, { type SystemMenuSection } from '@client/src/components/
 import ModeRulesModal from '@client/src/components/game/v3/ModeRulesModal';
 import ModeLivePanel from '@client/src/components/game/v3/ModeLivePanel';
 import MountQuickActions from '@client/src/components/game/v3/MountQuickActions';
+import V4EconomyModal from '@client/src/components/game/v4/V4EconomyModal';
+import V4ModeLivePanel from '@client/src/components/game/v4/V4ModeLivePanel';
 import { getV3ModeLabel, isV3Mode, V3_MODES } from '@client/src/components/game/v3/modeMeta';
 
 import {
@@ -175,6 +178,7 @@ import type {
   Mod,
   ItemState,
   NpcEntity,
+  MatchHistoryItem,
 } from '@shared/api.interface';
 import { loadEnabledMods } from '@client/src/utils/mod';
 import { AntiCheatMonitor } from '@client/src/utils/anti-cheat';
@@ -248,7 +252,7 @@ const SurrenderButton: React.FC<SurrenderButtonProps> = ({ onConfirm }) => {
   );
 };
 
-// 从 searchParams 解析玩家名称列表
+// 從 searchParams 解析玩家名稱列表
 function parsePlayerNames(params: URLSearchParams, count: number): string[] {
   const names: string[] = [];
   for (let i = 0; i < count; i += 1) {
@@ -293,7 +297,7 @@ const GamePage: React.FC = () => {
     return result;
   }, [searchParams]);
 
-  // 解析玩家数量和名称
+  // 解析玩家數量和名稱
   const playerCountParam = searchParams.get('playerCount');
   const playerCount = isStoryMode && storyLevel
     ? storyLevel.aiCount + 1
@@ -357,9 +361,9 @@ const GamePage: React.FC = () => {
   const [showBondModal, setShowBondModal] = useState(false);
   const [showSkillTreeModal, setShowSkillTreeModal] = useState(false);
   const [showMissionPanel, setShowMissionPanel] = useState(false);
-  // NPC 交互弹窗
+  // NPC 互動彈窗
   const [showNpcModal, setShowNpcModal] = useState(false);
-  // 道具选目标模式
+  // 道具選目標模式
   const [itemTargetMode, setItemTargetMode] = useState<'teleport' | 'steal_property' | 'bomb' | 'quantum_portal' | null>(null);
   const [pendingItemId, setPendingItemId] = useState<number | null>(null);
   // 撤銷操作倒計時
@@ -372,6 +376,8 @@ const GamePage: React.FC = () => {
   const [showBatchSelect, setShowBatchSelect] = useState<null | 'build' | 'mortgage' | 'redeem'>(null);
   const [showUndoConfirm, setShowUndoConfirm] = useState(false);
   const [showWorldviewPanel, setShowWorldviewPanel] = useState(false);
+  // v4 量子金融面板（加密/IPO/稅務/利率控股，單一彈窗）
+  const [showV4Economy, setShowV4Economy] = useState(false);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   // 次級系統分組抽屜
   const [showSystemMenu, setShowSystemMenu] = useState(false);
@@ -388,7 +394,7 @@ const GamePage: React.FC = () => {
   const [sellSelectedItemId, setSellSelectedItemId] = useState<number | null>(null);
   const [sellPrice, setSellPrice] = useState<number>(100);
 
-  // Esc 关闭确认弹窗（等同于取消）
+  // Esc 關閉確認彈窗（等同於取消）
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
@@ -408,23 +414,23 @@ const GamePage: React.FC = () => {
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [shareId, setShareId] = useState<string>('');
 
-  // 全局事件弹窗
+  // 全域性事件彈窗
   const [showGlobalEvent, setShowGlobalEvent] = useState(false);
   const prevGlobalEventRef = useRef<string | null>(null);
   // 災難彈窗
   const [showDisasterModal, setShowDisasterModal] = useState(false);
   const prevDisasterTypeRef = useRef<string | null>(null);
 
-  // 成就系统
+  // 成就係統
   const { unlocked: unlockedAchievements, unlockMany, unlock: unlockAchievement } = useAchievements();
 
-  // 新手教学（游戏页处理第3步及以后：professions ~ victory）
+  // 新手教學（遊戲頁處理第3步及以後：professions ~ victory）
   const tutorial = useTutorial({
     onComplete: () => {
       unlockAchievement('beginner');
     },
   });
-  // 当前步骤属于游戏页的范围（3-11，共9步：professions到victory）
+  // 當前步驟屬於遊戲頁的範圍（3-11，共9步：professions到victory）
   const tutorialVisible = tutorial.isActive && tutorial.currentStep >= 3;
   // 最新破產玩家索引（用於鏡頭動畫）
   const latestBankruptIndex = useMemo<number | null>(() => {
@@ -523,13 +529,13 @@ const GamePage: React.FC = () => {
   const prevLogLengthRef = useRef<number>(0);
   const prevMoveStepRef = useRef<number>(0);
 
-  // 存档系统
+  // 存檔系統
   const { slots, saveGame, loadGame, deleteSlot } = useSaveSlots(false);
   const [showSavePanel, setShowSavePanel] = useState(false);
   const [savePanelMode, setSavePanelMode] = useState<'save' | 'load'>('save');
   const autoSaveTriggeredRef = useRef<number>(0);
 
-  // 觀戰模式（從 URL 參數啟用，用於演示/開發）
+  // 觀戰模式（從 URL 引數啟用，用於演示/開發）
   const isSpectator = searchParams.get('spectator') === '1';
   const [followView, setFollowView] = useState<number | 'free'>('free');
 
@@ -570,14 +576,14 @@ const GamePage: React.FC = () => {
     if (auctionTimerRef.current) clearTimeout(auctionTimerRef.current);
   }, []);
 
-  // 构建 PlayerConfig 数组
+  // 構建 PlayerConfig 陣列
   const buildPlayerConfigs = useCallback((): PlayerConfig[] => {
     const configs: PlayerConfig[] = [];
     for (let i = 0; i < playerCount; i += 1) {
       configs.push({
         name: playerNames[i] || `玩家${i + 1}`,
         color: PLAYER_COLORS[i % PLAYER_COLORS.length] as PlayerColor,
-         isAI: isAIGame && i > 0, // AI 模式：玩家0是人类，其他都是AI
+         isAI: isAIGame && i > 0, // AI 模式：玩家0是人類，其他都是AI
          aiDifficulty: isAIGame && i > 0 ? aiDifficulty : undefined,
          aiPersonality: isAIGame && i > 0 ? aiPersonalities[i - 1] ?? undefined : undefined,
        });
@@ -619,7 +625,7 @@ const GamePage: React.FC = () => {
       if (storyLevel.specialRule?.includes('命運卡金錢倍率×2')) {
         customRules.fateMoneyMultiplier = (customRules.fateMoneyMultiplier ?? 1) * 2;
       }
-      // 其他特殊規則（建房成本、通脹等）由後續版本引擎實現，目前以基礎配置運行
+      // 其他特殊規則（建房成本、通脹等）由後續版本引擎實現，目前以基礎配置執行
     }
     // 隨機地圖（適用於所有模式）
     const randomBoardParam = searchParams.get('randomBoard');
@@ -627,7 +633,7 @@ const GamePage: React.FC = () => {
     const needsCustomRules = randomBoardParam === '1' || blindAuctionParam === '1';
     if (needsCustomRules && !isStoryMode) {
       if (!customRules) {
-        // 非 custom 模式也啟用特殊規則：構建僅含所需字段的規則對象
+        // 非 custom 模式也啟用特殊規則：構建僅含所需欄位的規則物件
         customRules = {
           initialMoney: GAME_MODES[mode]?.initialMoney ?? 15000,
           tollPercent: GAME_MODES[mode]?.tollRate ?? 0.25,
@@ -681,7 +687,7 @@ const GamePage: React.FC = () => {
     gameMode: mode,
   });
 
-  // 反作弊監控：遊戲開始時啟動，結束/卸載時停止
+  // 反作弊監控：遊戲開始時啟動，結束/解除安裝時停止
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.phase === 'ended') return;
@@ -697,7 +703,7 @@ const GamePage: React.FC = () => {
     }
 
     return () => {
-      // 組件卸載或狀態變化時停止
+      // 元件解除安裝或狀態變化時停止
     };
   }, [gameState, gameStarted]);
 
@@ -711,7 +717,7 @@ const GamePage: React.FC = () => {
     }
   }, [gameState?.phase]);
 
-  // 記錄骰子點擊用於反作弊頻率檢測
+  // 記錄骰子點選用於反作弊頻率檢測
   const recordAntiCheatClick = useCallback((): void => {
     const monitor = AntiCheatMonitor.getInstance();
     if (monitor.isRunning()) {
@@ -719,13 +725,17 @@ const GamePage: React.FC = () => {
     }
   }, []);
 
-  // 实时计算游戏统计
+  // 對局紀錄（結束時寫入一次）
+  const { addMatch } = useMatchHistory();
+  const matchWrittenRef = useRef(false);
+
+  // 實時計算遊戲統計
   const gameStats = useMemo(() => {
     if (!gameState) return null;
     return calculateGameStats(gameState);
   }, [gameState]);
 
-  // 实时计算每个玩家的地产数量
+  // 實時計算每個玩家的地產數量
   const propertyCounts = useMemo(() => {
     if (!gameState) return {};
     const counts: Record<number, number> = {};
@@ -740,7 +750,7 @@ const GamePage: React.FC = () => {
     return counts;
   }, [gameState]);
 
-  // 实时计算每个玩家的债券发行/持有数量
+  // 實時計算每個玩家的債券發行/持有數量
   const bondIssuedCounts = useMemo(() => {
     if (!gameState || !gameState.bonds) return {};
     const counts: Record<number, number> = {};
@@ -773,7 +783,7 @@ const GamePage: React.FC = () => {
 
   useEffect(() => {
     initGame();
-    // 检查是否有继续游戏的存档
+    // 檢查是否有繼續遊戲的存檔
     const continueSlot = consumeContinueSave();
     if (continueSlot !== null) {
       const saved = loadGame(continueSlot);
@@ -801,11 +811,11 @@ const GamePage: React.FC = () => {
   const handleRollDice = useCallback(() => {
     if (!gameState || isRolling) return;
     if (gameState.phase !== 'rolling') return;
-    // 同步守衛：同 tick 內第二次呼叫直接忽略（觸控/點擊雙觸發）
+    // 同步守衛：同 tick 內第二次呼叫直接忽略（觸控/點選雙觸發）
     if (isRollingGuardRef.current) return;
     isRollingGuardRef.current = true;
 
-    // 反作弊：記錄點擊頻率
+    // 反作弊：記錄點選頻率
     recordAntiCheatClick();
 
     audio.init();
@@ -823,7 +833,7 @@ const GamePage: React.FC = () => {
     }, 1500);
   }, [gameState, isRolling, audio]);
 
-  // 回合倒計時邏輯（放在所有 hook 之后，early return 之前）
+  // 回合倒計時邏輯（放在所有 hook 之後，early return 之前）
   const turnTimeLimit = gameState?.turnTimeLimit ?? 0;
   const turnStartTime = gameState?.turnStartTime ?? 0;
   const hasTurnTimer = turnTimeLimit > 0 && turnStartTime > 0 && gameState?.phase === 'rolling' && gameState?.winner === null;
@@ -942,7 +952,7 @@ const GamePage: React.FC = () => {
     initGame();
   };
 
-  // ========== 职业选择（多人轮转） ==========
+  // ========== 職業選擇（多人輪轉） ==========
 
   const handleProfessionSelect = (profession: Profession) => {
     setPendingProfession(profession);
@@ -951,7 +961,7 @@ const GamePage: React.FC = () => {
   const handleProfessionClose = () => {
     setShowProfessionSelect(false);
     setPendingProfession(undefined);
-    // 回到开局前状态（如果尚未开始游戏）
+    // 回到開局前狀態（如果尚未開始遊戲）
     if (!gameStarted) {
       setProfessionSelectIndex(0);
     }
@@ -968,7 +978,7 @@ const GamePage: React.FC = () => {
     };
     setPendingProfession(undefined);
 
-    // AI 模式下，给所有 AI 玩家随机分配职业
+    // AI 模式下，給所有 AI 玩家隨機分配職業
     if (isAIGame && professionSelectIndex === 0) {
       const professionKeys = Object.keys(PROFESSIONS) as Profession[];
       const usedProfessions: Profession[] = [pendingProfession];
@@ -991,19 +1001,19 @@ const GamePage: React.FC = () => {
     } else {
       setGameState(newState);
 
-      // 找下一个还没选职业的人类玩家
+      // 找下一個還沒選職業的人類玩家
       const nextIdx = findNextHumanPlayer(newState, professionSelectIndex);
       if (nextIdx >= 0) {
         setProfessionSelectIndex(nextIdx);
       } else {
-        // 所有玩家都选好了
+        // 所有玩家都選好了
         setShowProfessionSelect(false);
         setGameStarted(true);
       }
     }
   };
 
-  // 找下一个需要选职业的人类玩家索引
+  // 找下一個需要選職業的人類玩家索引
   const findNextHumanPlayer = (state: GameState, fromIdx: number): number => {
     const n = state.players.length;
     for (let offset = 1; offset <= n; offset += 1) {
@@ -1016,7 +1026,7 @@ const GamePage: React.FC = () => {
     return -1;
   };
 
-  // ========== 拍卖（多人） ==========
+  // ========== 拍賣（多人） ==========
 
   const handleStartAuction = () => {
     if (!gameState) return;
@@ -1042,7 +1052,7 @@ const GamePage: React.FC = () => {
     setGameState(newState);
   };
 
-  // ========== NPC 交互 ==========
+  // ========== NPC 互動 ==========
 
   const handleBuyFromMerchant = (itemType: string) => {
     if (!gameState) return;
@@ -1084,7 +1094,7 @@ const GamePage: React.FC = () => {
     if (gameState.winner !== null) return;
     if (isAnimatingRef.current) return;
 
-    // 选目标模式：传送卡/偷地卡
+    // 選目標模式：傳送卡/偷地卡
     if (itemTargetMode && pendingItemId !== null) {
       handleUseItem(pendingItemId, cellId);
       return;
@@ -1096,9 +1106,9 @@ const GamePage: React.FC = () => {
     const prop = gameState.properties[cellId];
     if (!prop) return;
 
-    // 只有当前玩家（热座模式下都是人类操作）且是自己的地块才能操作
+    // 只有當前玩家（熱座模式下都是人類操作）且是自己的地塊才能操作
     const currentIdx = gameState.currentPlayerIndex;
-    if (isAIGame && gameState.players[currentIdx]?.isAI) return; // AI 回合不能点
+    if (isAIGame && gameState.players[currentIdx]?.isAI) return; // AI 回合不能點
     if (prop.owner !== currentIdx) return;
 
     setSelectedCellId(cellId);
@@ -1327,12 +1337,12 @@ const GamePage: React.FC = () => {
     const aliveOthers = gameState.players.filter((p, i) => i !== gameState.currentPlayerIndex && !p.isBankrupt);
     if (aliveOthers.length === 0) return;
 
-    // 多人模式先选择交易对象；两人模式直接进入 propose
+    // 多人模式先選擇交易物件；兩人模式直接進入 propose
     if (gameState.players.filter((p) => !p.isBankrupt).length > 2) {
       setTradeModalMode('selectTarget');
       setTradeTargetIndex(-1);
     } else {
-      // 两人模式：直接找对方
+      // 兩人模式：直接找對方
       const otherIdx = gameState.players.findIndex((p, i) => i !== gameState.currentPlayerIndex && !p.isBankrupt);
       setTradeTargetIndex(otherIdx);
       setTradeModalMode('propose');
@@ -1391,7 +1401,7 @@ const GamePage: React.FC = () => {
     navigate('/');
   };
 
-  // ========== 存档系统 ==========
+  // ========== 存檔系統 ==========
 
   const openSavePanel = () => {
     audio.playSfx('click');
@@ -1431,7 +1441,7 @@ const GamePage: React.FC = () => {
     audio.playSfx('click');
   };
 
-  // ========== 股票系统 ==========
+  // ========== 股票系統 ==========
 
   const handleBuyStock = (symbol: StockSymbol, quantity: number) => {
     if (!gameState) return;
@@ -1482,7 +1492,7 @@ const GamePage: React.FC = () => {
     toast('已撤銷上一步操作');
   };
 
-  // ========== 快捷操作（批量） ==========
+  // ========== 快捷操作（批次） ==========
 
   const handleBatchBuild = () => {
     if (!gameState) return;
@@ -1604,7 +1614,7 @@ const GamePage: React.FC = () => {
     audio.playSfx('buy');
   };
 
-  // 計算控股格子映射
+  // 計算控股格子對映
   const getControllingCells = (): Record<number, { symbol: string; playerIndex: number }> => {
     if (!gameState?.stockStates) return {};
     const result: Record<number, { symbol: string; playerIndex: number }> = {};
@@ -1623,7 +1633,7 @@ const GamePage: React.FC = () => {
     return result;
   };
 
-  // ========== 道具系统 ==========
+  // ========== 道具系統 ==========
 
   const handleBuyItem = (itemType: ItemType) => {
     if (!gameState) return;
@@ -1633,7 +1643,7 @@ const GamePage: React.FC = () => {
     if (gameState.players[playerIdx].money < itemConfig.price) return;
     if (gameState.players[playerIdx].items.length >= MAX_ITEMS) return;
 
-    // 模拟本地购买（实际项目应走 API，此处调用游戏引擎）
+    // 模擬本地購買（實際專案應走 API，此處呼叫遊戲引擎）
     const newItems = [...gameState.players[playerIdx].items];
     const newItem = {
       type: itemType,
@@ -1805,17 +1815,17 @@ const GamePage: React.FC = () => {
     const item = player.items.find((it) => it.id === itemId);
     if (!item) return;
 
-    // 传送卡、量子传送门、偷地卡和炸彈需要选择目标
+    // 傳送卡、量子傳送門、偷地卡和炸彈需要選擇目標
     if ((item.type === 'teleport' || item.type === 'quantum_portal' || item.type === 'steal_property' || item.type === 'bomb') && targetCellId === undefined) {
       setItemTargetMode(item.type);
       setPendingItemId(itemId);
       return 'target_needed';
     }
 
-    // 遥控骰子在 ItemBar 组件内已经处理了弹窗选择
-    // 这里 remoteDiceValues 会被传入
+    // 遙控骰子在 ItemBar 元件內已經處理了彈窗選擇
+    // 這裡 remoteDiceValues 會被傳入
 
-    // 直接可使用的道具：本地模拟效果
+    // 直接可使用的道具：本地模擬效果
     const remainingItems = player.items.filter((it) => it.id !== itemId);
     let updatedPlayer = { ...player, items: remainingItems };
     let logText = '';
@@ -1823,15 +1833,15 @@ const GamePage: React.FC = () => {
     switch (item.type) {
       case 'double_dice':
         updatedPlayer = { ...updatedPlayer, doubleDiceActive: true };
-        logText = `${player.name} 使用了双倍骰`;
+        logText = `${player.name} 使用了雙倍骰`;
         break;
       case 'shield':
         updatedPlayer = { ...updatedPlayer, shieldCharges: 3 };
-        logText = `${player.name} 使用了护盾（剩余3次）`;
+        logText = `${player.name} 使用了護盾（剩餘3次）`;
         break;
       case 'free_pass':
         updatedPlayer = { ...updatedPlayer, freePassRemaining: 1 };
-        logText = `${player.name} 使用了免费过路卡`;
+        logText = `${player.name} 使用了免費過路卡`;
         break;
       case 'remote_dice':
         if (remoteDiceValues) {
@@ -1840,13 +1850,13 @@ const GamePage: React.FC = () => {
             remoteDiceActive: true,
             remoteDiceValues,
           };
-          logText = `${player.name} 使用了遥控骰子（${remoteDiceValues[0]}+${remoteDiceValues[1]}）`;
+          logText = `${player.name} 使用了遙控骰子（${remoteDiceValues[0]}+${remoteDiceValues[1]}）`;
         }
         break;
       case 'teleport':
         if (targetCellId !== undefined) {
           updatedPlayer = { ...updatedPlayer, position: targetCellId };
-          logText = `${player.name} 使用传送卡传送到 ${CELLS[targetCellId]?.name ?? '未知'}`;
+          logText = `${player.name} 使用傳送卡傳送到 ${CELLS[targetCellId]?.name ?? '未知'}`;
           setItemTargetMode(null);
           setPendingItemId(null);
         }
@@ -1869,7 +1879,7 @@ const GamePage: React.FC = () => {
                 {
                   id: gameState.logs.length + 1,
                   type: 'item' as const,
-                  text: `${player.name} 使用掠夺卡夺取了 ${CELLS[targetCellId]?.name}`,
+                  text: `${player.name} 使用掠奪卡奪取了 ${CELLS[targetCellId]?.name}`,
                 },
               ],
             };
@@ -1947,7 +1957,7 @@ const GamePage: React.FC = () => {
         }
         case 'data_courier': {
           updatedPlayer = { ...updatedPlayer, money: updatedPlayer.money + 500 };
-          logText = `${player.name} 使用了數據快遞，獲得 500 元`;
+          logText = `${player.name} 使用了資料快遞，獲得 500 元`;
           break;
         }
         case 'fake_id': {
@@ -1977,7 +1987,7 @@ const GamePage: React.FC = () => {
     }
   };
 
-  // ========== 迷你游戏 ==========
+  // ========== 迷你遊戲 ==========
 
   const calcBlackjackTotal = (cards: number[]): number => {
     let total = 0;
@@ -2017,14 +2027,14 @@ const GamePage: React.FC = () => {
         break;
 
       case 'spin_slots': {
-        // 生成结果（本地模拟）
+        // 生成結果（本地模擬）
         const r1 = Math.floor(Math.random() * 6);
         const r2 = Math.floor(Math.random() * 6);
         const r3 = Math.floor(Math.random() * 6);
         miniState.reels = [r1, r2, r3];
         miniState.spinning = false;
         miniState.finished = true;
-        // 计算奖励
+        // 計算獎勵
         if (r1 === r2 && r2 === r3) {
           miniState.reward = 3000;
         } else if (r1 === r2 || r2 === r3 || r1 === r3) {
@@ -2033,7 +2043,7 @@ const GamePage: React.FC = () => {
           miniState.reward = 0;
         }
         addLog(
-          `${gameState.players[playerIdx].name} 玩老虎机获得 ${miniState.reward > 0 ? `+¥${miniState.reward}` : '未中奖'}`,
+          `${gameState.players[playerIdx].name} 玩老虎機獲得 ${miniState.reward > 0 ? `+¥${miniState.reward}` : '未中獎'}`,
         );
         if (miniState.reward > 0) {
           newPlayers = newPlayers.map((p, i) =>
@@ -2047,18 +2057,18 @@ const GamePage: React.FC = () => {
         const newCard = Math.floor(Math.random() * 13) + 1;
         const newPlayerCards = [...(miniState.playerCards ?? []), newCard];
         miniState.playerCards = newPlayerCards;
-        // 计算是否爆牌
+        // 計算是否爆牌
         const total = calcBlackjackTotal(newPlayerCards);
         if (total > 21) {
           miniState.finished = true;
           miniState.reward = 0;
-          addLog(`${gameState.players[playerIdx].name} 21点爆牌，未获奖`);
+          addLog(`${gameState.players[playerIdx].name} 21點爆牌，未獲獎`);
         }
         break;
       }
 
       case 'blackjack_stand': {
-        // 庄家补牌
+        // 莊家補牌
         let dealerCards = [...(miniState.dealerCards ?? [])];
         let dealerTotal = calcBlackjackTotal(dealerCards);
         while (dealerTotal < 17) {
@@ -2070,16 +2080,16 @@ const GamePage: React.FC = () => {
         const playerTotal = calcBlackjackTotal(miniState.playerCards ?? []);
         if (dealerTotal > 21 || playerTotal > dealerTotal) {
           miniState.reward = 1000;
-          addLog(`${gameState.players[playerIdx].name} 赢得21点，+¥1000`);
+          addLog(`${gameState.players[playerIdx].name} 贏得21點，+¥1000`);
           newPlayers = newPlayers.map((p, i) =>
             i === playerIdx ? { ...p, money: p.money + 1000 } : p,
           );
         } else if (playerTotal === dealerTotal) {
           miniState.reward = 0;
-          addLog(`${gameState.players[playerIdx].name} 21点平局`);
+          addLog(`${gameState.players[playerIdx].name} 21點平局`);
         } else {
           miniState.reward = 0;
-          addLog(`${gameState.players[playerIdx].name} 21点失败，无损失`);
+          addLog(`${gameState.players[playerIdx].name} 21點失敗，無損失`);
         }
         break;
       }
@@ -2093,13 +2103,13 @@ const GamePage: React.FC = () => {
         const guessedBig = action === 'guess_big';
         if (isBig === guessedBig) {
           miniState.reward = 800;
-          addLog(`${gameState.players[playerIdx].name} 猜大小猜对，+¥800`);
+          addLog(`${gameState.players[playerIdx].name} 猜大小猜對，+¥800`);
           newPlayers = newPlayers.map((p, i) =>
             i === playerIdx ? { ...p, money: p.money + 800 } : p,
           );
         } else {
           miniState.reward = 0;
-          addLog(`${gameState.players[playerIdx].name} 猜大小猜错了`);
+          addLog(`${gameState.players[playerIdx].name} 猜大小猜錯了`);
         }
         break;
       }
@@ -2111,19 +2121,19 @@ const GamePage: React.FC = () => {
         miniState.finished = true;
         if (dice === targetValue) {
           miniState.reward = 2000;
-          addLog(`${gameState.players[playerIdx].name} 豹子猜对！+¥2000`);
+          addLog(`${gameState.players[playerIdx].name} 豹子猜對！+¥2000`);
           newPlayers = newPlayers.map((p, i) =>
             i === playerIdx ? { ...p, money: p.money + 2000 } : p,
           );
         } else {
           miniState.reward = 0;
-          addLog(`${gameState.players[playerIdx].name} 豹子猜错了`);
+          addLog(`${gameState.players[playerIdx].name} 豹子猜錯了`);
         }
         break;
       }
 
       case 'memory_flip': {
-        // 延迟初始化：第一次翻牌时生成卡片
+        // 延遲初始化：第一次翻牌時生成卡片
         if (!miniState.memoryCards || miniState.memoryCards.length === 0) {
           const pairs: number[] = [];
           for (let i = 0; i < 6; i++) pairs.push(i, i);
@@ -2262,7 +2272,7 @@ const GamePage: React.FC = () => {
             miniState.shootingScore += 1;
           }
         }
-        // 子弹用完自动结算
+        // 子彈用完自動結算
         if (miniState.shootingBullets <= 0) {
           const hitCount = miniState.shootingTargets
             ? miniState.shootingTargets.filter((t) => t.hit).length
@@ -2343,12 +2353,12 @@ const GamePage: React.FC = () => {
         miniState.reward = score * 50;
         miniState.finished = true;
         if (miniState.reward > 0) {
-          addLog(`${gameState.players[playerIdx].name} 數據挖掘獲得 ${score} 點，+¥${miniState.reward}`);
+          addLog(`${gameState.players[playerIdx].name} 資料探勘獲得 ${score} 點，+¥${miniState.reward}`);
           newPlayers = newPlayers.map((p, i) =>
             i === playerIdx ? { ...p, money: p.money + miniState.reward } : p,
           );
         } else {
-          addLog(`${gameState.players[playerIdx].name} 數據挖掘顆粒無收`);
+          addLog(`${gameState.players[playerIdx].name} 資料探勘顆粒無收`);
         }
         break;
       }
@@ -2502,8 +2512,8 @@ const GamePage: React.FC = () => {
       case 'auction_start': {
         const templates = [
           { name: '現金包裹', icon: 'coins', minBid: 300, valueRange: [500, 1500] },
-          { name: '神祕寶箱', icon: 'mystery', minBid: 500, valueRange: [200, 2000] },
-          { name: '數據核心', icon: 'item', minBid: 800, valueRange: [1000, 2500] },
+          { name: '神秘寶箱', icon: 'mystery', minBid: 500, valueRange: [200, 2000] },
+          { name: '資料核心', icon: 'item', minBid: 800, valueRange: [1000, 2500] },
           { name: '霓虹晶片', icon: 'item', minBid: 600, valueRange: [800, 1800] },
           { name: '能源電池', icon: 'mystery', minBid: 400, valueRange: [300, 1200] },
         ];
@@ -2628,7 +2638,7 @@ const GamePage: React.FC = () => {
     }
   };
 
-  // ========== 全局事件监听 ==========
+  // ========== 全域性事件監聽 ==========
 
   useEffect(() => {
     if (!gameState || !gameStarted) return;
@@ -2649,14 +2659,14 @@ const GamePage: React.FC = () => {
     const prevType = prevDisasterTypeRef.current;
     const currentType = currentDisaster?.type ?? null;
 
-    // 災難從無到有 或 類型變化時彈出
+    // 災難從無到有 或 型別變化時彈出
     if (currentDisaster?.active && currentType && prevType !== currentType) {
       setShowDisasterModal(true);
     }
     prevDisasterTypeRef.current = currentType;
   }, [gameState?.disaster?.type, gameState?.disaster?.active, gameStarted, gameState]);
 
-  // AI 拍卖决策（多人）
+  // AI 拍賣決策（多人）
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.phase !== 'auction') return;
@@ -2666,7 +2676,7 @@ const GamePage: React.FC = () => {
     const auction = gameState.auction;
     const activeBidder = auction.activeBidders[auction.activeBidderIndex];
     if (activeBidder === undefined) return;
-    // 只有当行动方是 AI 时才自动处理
+    // 只有當行動方是 AI 時才自動處理
     if (!gameState.players[activeBidder]?.isAI) return;
 
     const delay = 800 + Math.random() * 600;
@@ -2686,12 +2696,12 @@ const GamePage: React.FC = () => {
     };
   }, [gameState?.auction?.currentBid, gameState?.auction?.activeBidderIndex, gameState?.phase, gameStarted, gameState, isAIGame]);
 
-  // NPC 交互弹窗：检测到 pendingNpcInteraction 时打开
+  // NPC 互動彈窗：檢測到 pendingNpcInteraction 時開啟
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.pendingNpcInteraction && !showNpcModal) {
       const npcPlayerIdx = gameState.pendingNpcInteraction.playerIndex;
-      // 只有当前玩家是人类时才弹窗（AI 会在 AI 回合中自动处理）
+      // 只有當前玩家是人類時才彈窗（AI 會在 AI 回合中自動處理）
       if (!gameState.players[npcPlayerIdx]?.isAI) {
         setShowNpcModal(true);
       }
@@ -2701,7 +2711,7 @@ const GamePage: React.FC = () => {
     }
   }, [gameState?.pendingNpcInteraction, gameStarted, gameState, showNpcModal]);
 
-  // 暗拍 AI 自动出价（本地模式）
+  // 暗拍 AI 自動出價（本地模式）
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.phase !== 'auction') return;
@@ -2711,7 +2721,7 @@ const GamePage: React.FC = () => {
     if (!isAIGame) return;
 
     const auction = gameState.auction;
-    // 检查是否有 AI 玩家还未出价
+    // 檢查是否有 AI 玩家還未出價
     const aiBidders = auction.activeBidders.filter(
       (idx: number) => gameState.players[idx]?.isAI,
     );
@@ -2739,7 +2749,7 @@ const GamePage: React.FC = () => {
     };
   }, [gameState?.auction?.blindBids, gameState?.auction?.active, gameState?.phase, gameStarted, gameState, isAIGame]);
 
-  // 暗拍：所有玩家出价后自动揭晓
+  // 暗拍：所有玩家出價後自動揭曉
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.phase !== 'auction') return;
@@ -2764,7 +2774,7 @@ const GamePage: React.FC = () => {
     }
   }, [gameState?.auction?.blindBids, gameState?.auction?.active, gameState?.auction?.revealed, gameState?.phase, gameStarted, gameState]);
 
-  // AI 回合自动执行
+  // AI 回合自動執行
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (gameState.phase !== 'rolling') return;
@@ -2773,7 +2783,7 @@ const GamePage: React.FC = () => {
     if (showBuyModal || showFateModal || showChanceModal) return;
     if (isAnimatingRef.current) return;
     if (gameState.winner !== null) return;
-    // 如果有待处理的 NPC 交互，先不掷骰（由专门的 effect 处理）
+    // 如果有待處理的 NPC 互動，先不擲骰（由專門的 effect 處理）
     if (gameState.pendingNpcInteraction) return;
 
     const delay = 800 + Math.random() * 400;
@@ -2793,7 +2803,7 @@ const GamePage: React.FC = () => {
     };
   }, [gameState, gameStarted, isRolling, showBuyModal, showFateModal, showChanceModal, isCurrentAI, handleRollDice]);
 
-  // AI 自动处理 NPC 交互
+  // AI 自動處理 NPC 互動
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (!gameState.pendingNpcInteraction) return;
@@ -2836,14 +2846,14 @@ const GamePage: React.FC = () => {
     };
   }, [gameState, gameStarted, isCurrentAI]);
 
-  // AI 自动响应交易请求（多人）
+  // AI 自動響應交易請求（多人）
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (!isAIGame) return;
     if (!gameState.pendingTrade) return;
 
     const trade = gameState.pendingTrade;
-    // 只有当接收方是 AI 时才自动处理
+    // 只有當接收方是 AI 時才自動處理
     const receiver = gameState.players[trade.toPlayer];
     if (!receiver?.isAI) return;
 
@@ -2861,7 +2871,7 @@ const GamePage: React.FC = () => {
     };
   }, [gameState?.pendingTrade?.id, gameState, gameStarted, isAIGame]);
 
-  // 监听 pendingTrade，弹出响应弹窗（人类接收方）
+  // 監聽 pendingTrade，彈出響應彈窗（人類接收方）
   useEffect(() => {
     if (!gameState || !gameStarted) return;
     if (!gameState.pendingTrade) return;
@@ -2869,7 +2879,7 @@ const GamePage: React.FC = () => {
     const trade = gameState.pendingTrade;
     const receiver = gameState.players[trade.toPlayer];
 
-    // 人类接收方才弹响应弹窗
+    // 人類接收方才彈響應彈窗
     if (!receiver || receiver.isAI) return;
 
     if (!showTradeModal) {
@@ -2917,7 +2927,7 @@ const GamePage: React.FC = () => {
     if (gameState?.phase === 'ended') {
       setShowEndModal(true);
       setShowStatsPanel(true);
-      // 胜利音效
+      // 勝利音效
       if (gameState.winner !== null) {
         audio.playSfx('victory');
         audio.speak('恭喜獲勝！');
@@ -2928,12 +2938,73 @@ const GamePage: React.FC = () => {
           detail: { levelId: storyLevelId },
         }));
       }
-      // 游戏结束清除自动存档
+      // 遊戲結束清除自動存檔
       deleteSlot(0);
     }
   }, [gameState?.phase, gameState?.winner, audio, deleteSlot, isStoryMode, storyLevelId]);
 
-  // 自动存档：每回合结束（phase 回到 rolling 且玩家切换时）存到 slot 0
+  // 對局結束：寫入對局紀錄（matchWrittenRef 保證整場只寫一次）
+  useEffect(() => {
+    if (!gameState || !gameStarted) return;
+    if (gameState.phase !== 'ended') return;
+    if (matchWrittenRef.current) return;
+    matchWrittenRef.current = true;
+
+    const players = gameState.players;
+    // 記錄視角：第一個非 AI 玩家，找不到則 0
+    let meIdx = players.findIndex((p) => !p.isAI);
+    if (meIdx < 0) meIdx = 0;
+    const me = players[meIdx];
+    const bankruptList = gameState.bankruptcyList ?? [];
+
+    let result: 'win' | 'loss' | 'draw' = 'draw';
+    if (gameState.winner === meIdx) result = 'win';
+    else if (bankruptList.includes(meIdx)) result = 'loss';
+
+    const myStats = gameStats?.players?.[meIdx];
+    const assetList = players.map((p, i) => gameStats?.players?.[i]?.totalAssets ?? p.money ?? 0);
+    const highestAssets = Math.max(0, ...assetList);
+    const finalAssets = myStats?.totalAssets ?? me.money ?? 0;
+    const rank = 1 + assetList.filter((v) => v > finalAssets).length;
+
+    const opponent = players.find((p, i) => i !== meIdx)?.name ?? 'AI 對手';
+    const professionName = me.profession ? PROFESSIONS[me.profession]?.name : undefined;
+    const duration = Math.max(30, (gameState.totalTurns ?? 0) * 25);
+
+    addMatch({
+      mode: gameState.mode,
+      opponent,
+      result,
+      duration,
+      finalAssets: Math.round(finalAssets),
+      profession: professionName,
+      rank,
+      highestAssets: Math.round(highestAssets),
+      tollIncome: myStats?.tollIncome,
+      propertiesOwned: myStats?.propertyCount,
+      housesBuilt: myStats?.totalHouses,
+      hotelsBuilt: myStats?.totalHotels,
+      fateCardsDrawn: myStats?.fateCardDraws,
+      chanceCardsDrawn: myStats?.chanceCardDraws,
+      // v4 新欄位（缺欄位歸零/省略）
+      cryptoPnl: me.cryptoPnl ?? 0,
+      ipoProfit: me.ipoProfit ?? 0,
+      taxPaid: gameState.taxPaidThisGame?.[meIdx] ?? 0,
+      taxEvaded: me.taxEvadedThisGame ?? 0,
+      taxAudited: me.taxAuditedCount ?? 0,
+      hostileTakeovers: me.hostileTakeoverCount ?? 0,
+      controlledCompanies: me.controlledCompanies?.length ?? 0,
+      taxHavenBalance: me.taxHavenBalance ?? 0,
+      bountyIncome: me.bountyOnHead ?? 0,
+      goldMined: me.minesMined ?? 0,
+      olympicMedals: me.olympicScore ?? 0,
+      heistRole: gameState.heistMode?.roles?.[meIdx],
+      coreDamageDealt: 0,
+      loopsBroken: gameState.timeLoopMode?.loopsBroken ?? 0,
+    } as Omit<MatchHistoryItem, 'id' | 'date'>);
+  }, [gameState, gameStarted, gameStats, addMatch]);
+
+  // 自動存檔：每回合結束（phase 回到 rolling 且玩家切換時）存到 slot 0
   const prevPlayerIndexRef = useRef<number>(-1);
   useEffect(() => {
     if (!gameState || !gameStarted) return;
@@ -2967,7 +3038,7 @@ const GamePage: React.FC = () => {
     return () => clearInterval(timer);
   }, [gameState?.lastAction?.timestamp, gameState?.lastAction?.type, gameState?.lastAction?.cellId]);
 
-  // ========== 音效：监听日志变化播放对应音效 ==========
+  // ========== 音效：監聽日誌變化播放對應音效 ==========
 
   useEffect(() => {
     if (!gameState || !gameStarted) {
@@ -3000,40 +3071,36 @@ const GamePage: React.FC = () => {
         audio.playGlobalEvent();
       } else {
         // player1 / player2 / system / stock
-        if (txt.includes('掷出')) {
+        if (txt.includes('擲出')) {
           audio.playDiceRoll();
           // 擷取點數：格式如「擲出 3+4 = 7 點」
           const diceMatch = txt.match(/(\d+)\s*點/);
           if (diceMatch) {
             audio.speak(`擲骰！${diceMatch[1]} 點`);
           }
-        } else if (txt.includes('购得') || txt.includes('購得')) {
+        } else if (txt.includes('購得')) {
           audio.playBuy();
           // 購買成功，{propertyName}
-          const buyMatch = txt.match(/(購得|购得)[\s]*[「"']?([^「"'，,。\n]+)[」"']?/);
-          if (buyMatch && buyMatch[2]) {
-            audio.speak(`購買成功，${buyMatch[2]}`);
+          const buyMatch = txt.match(/購得[\s]*[「"']?([^「"'，,。\n]+)[」"']?/);
+          if (buyMatch && buyMatch[1]) {
+            audio.speak(`購買成功，${buyMatch[1]}`);
           }
-        } else if (txt.includes('支付过路费') || txt.includes('支付過路費')) {
+        } else if (txt.includes('支付過路費')) {
           audio.playToll();
           const tollMatch = txt.match(/(\d+)\s*元/);
           if (tollMatch) {
             audio.speak(`支付過路費 ${tollMatch[1]} 元`);
           }
-        } else if (txt.includes('进入') && txt.includes('禁闭区') ||
-                   txt.includes('進入') && txt.includes('禁閉區')) {
+        } else if (txt.includes('進入') && txt.includes('禁閉區')) {
           audio.playDetention();
           audio.speak('闖入禁閉區！');
-        } else if (txt.includes('出狱') || txt.includes('释放') ||
-                   txt.includes('出獄') || txt.includes('釋放')) {
+        } else if (txt.includes('出獄') || txt.includes('釋放')) {
           audio.playRelease();
-        } else if (txt.includes('建造') || txt.includes('升级') ||
-                   txt.includes('升級')) {
+        } else if (txt.includes('建造') || txt.includes('升級')) {
           audio.playBuild();
-        } else if (txt.includes('抵押') || txt.includes('赎回') ||
-                   txt.includes('贖回')) {
+        } else if (txt.includes('抵押') || txt.includes('贖回')) {
           audio.playMortgage();
-        } else if (ltype === 'system' && (txt.includes('破产') || txt.includes('破產'))) {
+        } else if (ltype === 'system' && txt.includes('破產')) {
           audio.playBankruptcy();
           audio.speak('破產了...');
         }
@@ -3041,7 +3108,7 @@ const GamePage: React.FC = () => {
     }
   }, [gameState?.logs.length, gameStarted, gameState, audio]);
 
-  // ========== 成就检查 ==========
+  // ========== 成就檢查 ==========
 
   const toastQueueRef = useRef<AchievementId[]>([]);
 
@@ -3094,7 +3161,7 @@ const GamePage: React.FC = () => {
     }
   }, [gameState?.phase, gameStarted, gameState, isCurrentAI]);
 
-  // 發送彈幕（本地模式下僅本地顯示，聯機模式走 API）
+  // 傳送彈幕（本地模式下僅本地顯示，聯機模式走 API）
   const handleSendDanmaku = useCallback((content: string): void => {
     danmakuIdRef.current += 1;
     const newMsg: DanmakuMsg = {
@@ -3123,14 +3190,14 @@ const GamePage: React.FC = () => {
       audio.startBGM();
       audio.playSfx('click');
     } catch {
-      // 音频初始化失败不影响游戏流程
+      // 音訊初始化失敗不影響遊戲流程
     }
   };
 
   if (!gameState) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-neon-cyan pulse-glow text-xl font-cyber">加载中...</div>
+        <div className="text-neon-cyan pulse-glow text-xl font-cyber">載入中...</div>
       </div>
     );
   }
@@ -3140,12 +3207,12 @@ const GamePage: React.FC = () => {
   const buyPrice = getCellPrice(currentPlayer.position, gameState.mode);
   const canAffordBuy = currentPlayer.money >= buyPrice;
   const winner = gameState.winner !== null ? gameState.players[gameState.winner] : null;
-  const isMyTurn = !isCurrentAI(gameState); // 热座模式：只有 AI 回合才不可操作
+  const isMyTurn = !isCurrentAI(gameState); // 熱座模式：只有 AI 回合才不可操作
 
   const missions = gameState.missions ?? [];
   const hasCompletedMission = missions.some((m) => m.completed && !m.claimed);
 
-  // 拍卖相关
+  // 拍賣相關
   const auction = gameState.auction ?? null;
   const auctionCell = auction ? CELLS[auction.cellId] : null;
   const auctionCellPrice = auction ? getCellPrice(auction.cellId, gameState.mode) : 0;
@@ -3156,7 +3223,7 @@ const GamePage: React.FC = () => {
     ? gameState.players[auctionActiveBidder]
     : null;
 
-  // 热座模式：当前操作玩家 = 当前出价者（人类出价时才显示可操作）
+  // 熱座模式：當前操作玩家 = 當前出價者（人類出價時才顯示可操作）
   const auctionViewerIndex = auctionActiveBidder ?? 0;
   const auctionViewerMoney = gameState.players[auctionViewerIndex]?.money ?? 0;
   const isAuctionAITurn = isAIGame && auctionActivePlayer?.isAI;
@@ -3188,6 +3255,8 @@ const GamePage: React.FC = () => {
           ? [{ key: 'resource', label: '資源兌換', icon: BarChart3, color: 'var(--green)', onClick: () => setShowResourceExchange(true) }]
           : []),
         { key: 'blackmarket', label: '黑市', icon: Store, color: 'var(--red)', onClick: () => setShowUndergroundMarket(true) },
+        // v4.0.0 量子金融：加密迷因幣 / IPO / 稅務 / 央行利率 / 敵意收購（收進單一彈窗）
+        { key: 'v4finance', label: '量子金融', icon: Landmark, color: 'var(--cyan)', onClick: () => setShowV4Economy(true) },
       ],
     },
     {
@@ -3233,15 +3302,21 @@ const GamePage: React.FC = () => {
       key: 'system',
       label: '存檔其他',
       items: [
-        { key: 'save', label: '保存/讀檔', icon: ShoppingBag, color: 'var(--cyan)', onClick: () => { openSavePanel(); } },
+        { key: 'save', label: '儲存/讀檔', icon: ShoppingBag, color: 'var(--cyan)', onClick: () => { openSavePanel(); } },
         { key: 'surrender', label: '投降', icon: Flag, color: 'var(--red)', onClick: () => setShowSurrenderDialog(true), disabled: gameState.winner !== null },
       ],
     },
   ];
 
   return (
-    <div className={`min-h-screen p-3 md:p-6 flex flex-col ${screenShake ? 'screen-shake' : ''}`}>
-      {/* 顶部模式标签 + 回合信息 */}
+    <div
+      className={`min-h-screen p-3 md:p-6 flex flex-col ${screenShake ? 'screen-shake' : ''}`}
+      style={{
+        paddingTop: 'calc(var(--safe-top, 0px) + 0.75rem)',
+        paddingBottom: 'calc(var(--safe-bottom, 0px) + 0.75rem)',
+      }}
+    >
+      {/* 頂部模式標籤 + 回合資訊 */}
       <div className="flex items-center justify-between mb-3 md:mb-4">
         <button onClick={handleBackToMenu} className="cyber-btn px-3 py-1 text-xs md:text-sm">
           ← 返回
@@ -3285,11 +3360,11 @@ const GamePage: React.FC = () => {
         <VolumeControl onFirstInteract={() => { audio.init(); audio.startBGM(); }} />
       </div>
 
-      {/* 主区域 */}
+      {/* 主區域 */}
       <div className="flex-1 flex flex-col lg:flex-row gap-4 items-center lg:items-start justify-center">
-        {/* 棋盘 */}
+        {/* 棋盤 */}
         <div className="w-full max-w-[560px] lg:max-w-[640px] flex-shrink-0 order-1 lg:order-1" data-tutorial="board">
-          {/* 天气显示 */}
+          {/* 天氣顯示 */}
           {/* 季節顯示 */}
           {gameState.season && (
             <div className="flex justify-center mb-3 max-w-[640px] mx-auto w-full">
@@ -3318,7 +3393,7 @@ const GamePage: React.FC = () => {
             </div>
           )}
 
-          {/* 棋盘 + 弹幕层 + 金幣浮動層 */}
+          {/* 棋盤 + 彈幕層 + 金幣浮動層 */}
           <div className="relative">
             <Board
               gameState={gameState}
@@ -3384,13 +3459,13 @@ const GamePage: React.FC = () => {
             <div className="mt-3">
               <DanmakuInput
                 onSend={handleSendDanmaku}
-                placeholder="發送彈幕..."
+                placeholder="傳送彈幕..."
               />
             </div>
           )}
         </div>
 
-        {/* 右侧信息面板 */}
+        {/* 右側資訊面板 */}
         <div className="w-full lg:w-80 flex flex-col gap-3 md:gap-4 order-2 lg:order-2">
           {/* 行動面板標題列（移動端摺疊按鈕） */}
           <div className="flex items-center justify-between lg:hidden">
@@ -3535,7 +3610,7 @@ const GamePage: React.FC = () => {
                 onClick={() => setShowRulesModal(true)}
                 className="text-[10px] font-cyber tracking-wider px-2 py-1 rounded flex-shrink-0 ml-2"
                 style={{ border: `1px solid ${V3_MODES.twin_strike.color}66`, color: V3_MODES.twin_strike.color }}
-                aria-label="查看雙子星陣營戰規則"
+                aria-label="檢視雙子星陣營戰規則"
               >
                 規則
               </button>
@@ -3547,7 +3622,10 @@ const GamePage: React.FC = () => {
             <ModeLivePanel gameState={gameState} />
           )}
 
-          {/* 玩家列表（移动端可折叠） */}
+          {/* v4：量子超躍新模式即時狀態面板（可摺疊，僅對應模式顯示） */}
+          <V4ModeLivePanel gameState={gameState} currentPlayerIndex={gameState.currentPlayerIndex} />
+
+          {/* 玩家列表（移動端可摺疊） */}
           <PlayerList
             players={gameState.players}
             currentPlayerIndex={gameState.currentPlayerIndex}
@@ -3610,7 +3688,7 @@ const GamePage: React.FC = () => {
             </>
           )}
 
-          {/* 操作区（觀戰模式下禁用） */}
+          {/* 操作區（觀戰模式下禁用） */}
           <div
             className={`cyber-card p-3 md:p-4 flex flex-col gap-3 ${isSpectator ? 'opacity-50 pointer-events-none' : ''}`}
             data-tutorial="building"
@@ -3822,7 +3900,7 @@ const GamePage: React.FC = () => {
                              // 機械強化由擲骰區按鈕觸發，這裡不做彈窗
                              break;
                            case 'priest_sacrifice':
-                             // 數據獻祭：立即生效（引擎函式）
+                             // 資料獻祭：立即生效（引擎函式）
                              if (gameState) setGameState(priestSacrifice(gameState, gameState.currentPlayerIndex));
                              break;
                            case 'time_watcher_extra':
@@ -3881,12 +3959,12 @@ const GamePage: React.FC = () => {
                       border: "1px solid rgba(255, 107, 157, 0.3)",
                     }}
                   >
-                    交易等待对方回应中...
+                    交易等待對方回應中...
                   </div>
                 )}
                 {gameState.lastDiceValues[0] > 0 && gameState.winner === null && (
                   <span className="text-center text-xs text-text-secondary">
-                    上次点数：{gameState.lastDiceValues[0]}+{gameState.lastDiceValues[1]}={gameState.lastDiceValues[0] + gameState.lastDiceValues[1]}
+                    上次點數：{gameState.lastDiceValues[0]}+{gameState.lastDiceValues[1]}={gameState.lastDiceValues[0] + gameState.lastDiceValues[1]}
                   </span>
                 )}
 
@@ -4056,7 +4134,7 @@ const GamePage: React.FC = () => {
           {/* 可摺疊：下方次要面板 */}
           {!panelCollapsed && (
             <>
-          {/* 道具栏 */}
+          {/* 道具欄 */}
           {gameStarted && gameState.winner === null && (
             <div className="cyber-card p-3 md:p-4">
               <ItemBar
@@ -4068,7 +4146,7 @@ const GamePage: React.FC = () => {
             </div>
           )}
 
-          {/* 游戏日志 */}
+          {/* 遊戲日誌 */}
           <div className="md:w-auto h-32 md:h-40 overflow-hidden">
             <GameLog logs={gameState.logs as LogEntry[]} inflationRate={gameState.inflationRate ?? 1.0} />
           </div>
@@ -4077,10 +4155,10 @@ const GamePage: React.FC = () => {
         </div>
       </div>
 
-      {/* 骰子覆盖层 */}
+      {/* 骰子覆蓋層 */}
       <DiceOverlay isRolling={isRolling} values={diceValues} onComplete={onDiceComplete} />
 
-      {/* 购买弹窗 */}
+      {/* 購買彈窗 */}
       <BuyModal
         isOpen={showBuyModal}
         cellName={currentCell.name}
@@ -4094,21 +4172,21 @@ const GamePage: React.FC = () => {
         enablePropertyFutures={gameState.customRules?.enablePropertyFutures !== false}
       />
 
-      {/* 命运卡弹窗 */}
+      {/* 命運卡彈窗 */}
       <FateCardModal
         isOpen={showFateModal}
         card={(gameState.pendingFateCard as FateCard) || null}
         onClose={() => setShowFateModal(false)}
       />
 
-      {/* 机会卡弹窗 */}
+      {/* 機會卡彈窗 */}
       <ChanceCardModal
         isOpen={showChanceModal}
         card={(gameState.pendingChanceCard as ChanceCard) || null}
         onClose={() => setShowChanceModal(false)}
       />
 
-      {/* 地块操作弹窗 */}
+      {/* 地塊操作彈窗 */}
       <PropertyActionModal
         isOpen={showPropertyModal && selectedCellId !== null}
         cellId={selectedCellId ?? 0}
@@ -4304,7 +4382,7 @@ const GamePage: React.FC = () => {
         </div>
       )}
 
-      {/* 精選批量操作彈窗 */}
+      {/* 精選批次操作彈窗 */}
       {gameState && gameStarted && gameState.winner === null && showBatchSelect && (
         <BatchSelectModal
           open={!!showBatchSelect}
@@ -4379,7 +4457,7 @@ const GamePage: React.FC = () => {
         onClose={() => setShowMissionPanel(false)}
       />
 
-      {/* 职业选择弹窗（多人轮转） */}
+      {/* 職業選擇彈窗（多人輪轉） */}
       <ProfessionSelectModal
         isOpen={showProfessionSelect}
         playerName={gameState.players[professionSelectIndex]?.name ?? ''}
@@ -4391,7 +4469,7 @@ const GamePage: React.FC = () => {
         disabled={false}
       />
 
-      {/* 拍卖弹窗（多人） */}
+      {/* 拍賣彈窗（多人） */}
       <AuctionModal
         isOpen={gameState.phase === 'auction' && !!auction?.active}
         auction={auction}
@@ -4408,7 +4486,7 @@ const GamePage: React.FC = () => {
         disabled={isAuctionAITurn}
       />
 
-      {/* NPC 交互弹窗 */}
+      {/* NPC 互動彈窗 */}
       <NpcModal
         isOpen={showNpcModal && !!gameState.pendingNpcInteraction}
         onClose={handleCloseNpc}
@@ -4428,7 +4506,7 @@ const GamePage: React.FC = () => {
         onHireHacker={handleHireHacker}
       />
 
-      {/* 交易弹窗（多人：可选对象） */}
+      {/* 交易彈窗（多人：可選物件） */}
       <TradeModal
         mode={tradeModalMode}
         isOpen={showTradeModal}
@@ -4468,7 +4546,7 @@ const GamePage: React.FC = () => {
         <EmotePanel currentPlayerIndex={gameState.currentPlayerIndex} />
       )}
 
-      {/* 存档槽位面板 */}
+      {/* 存檔槽位面板 */}
       <SaveSlotPanel
         isOpen={showSavePanel}
         mode={savePanelMode}
@@ -4517,18 +4595,18 @@ const GamePage: React.FC = () => {
         cellConfigs={CELLS}
       />
 
-      {/* 全局事件弹窗 */}
+      {/* 全域性事件彈窗 */}
       <GlobalEventModal
         isOpen={showGlobalEvent}
         eventType={gameState.currentGlobalEvent}
         onClose={() => setShowGlobalEvent(false)}
       />
 
-      {/* 道具商店弹窗 */}
+      {/* 道具商店彈窗 */}
       {/* TODO: 黑市商人道具商店價格展示（原價劃掉 + 8折後價）
-         需在 ItemShop 組件中增加：檢查 player.profession === 'black_market_dealer'，
+         需在 ItemShop 元件中增加：檢查 player.profession === 'black_market_dealer'，
          若是則顯示原價 + 劃掉 + 折後價（price * 0.8）。
-         由於 ItemShop 是獨立組件，此處暫不修改，待後續更新。 */}
+         由於 ItemShop 是獨立元件，此處暫不修改，待後續更新。 */}
       <ItemShop
         open={showItemShop}
         onClose={() => setShowItemShop(false)}
@@ -5047,7 +5125,7 @@ const GamePage: React.FC = () => {
         />
       )}
 
-      {/* 迷你游戏弹窗 */}
+      {/* 迷你遊戲彈窗 */}
       {gameState.pendingMiniGame && isMyTurn && (
         <MiniGameModal
           open={!!gameState.pendingMiniGame && !gameState.pendingMiniGame.finished}
@@ -5063,14 +5141,14 @@ const GamePage: React.FC = () => {
         />
       )}
 
-      {/* 成就殿堂弹窗 */}
+      {/* 成就殿堂彈窗 */}
       <AchievementModal
         isOpen={showAchievementModal}
         onClose={() => setShowAchievementModal(false)}
         unlockedAchievements={unlockedAchievements}
       />
 
-      {/* 成就解锁 Toast */}
+      {/* 成就解鎖 Toast */}
       {toastAchievement && (
         <AchievementToast
           achievementId={toastAchievement}
@@ -5159,14 +5237,14 @@ const GamePage: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                // 從 localStorage 取得最新回放（useAutoReplay 已自動保存）
+                // 從 localStorage 取得最新回放（useAutoReplay 已自動儲存）
                 const replays = loadReplays();
                 const latest = replays[0];
                 if (latest) {
                   const id = uploadReplay(latest);
                   setShareId(id);
                 } else if (gameState) {
-                  // 若無保存的回放，構造一個基礎版本
+                  // 若無儲存的回放，構造一個基礎版本
                   const basicReplay = {
                     id: `replay_end_${Date.now()}`,
                     gameMode: mode,
@@ -5206,7 +5284,7 @@ const GamePage: React.FC = () => {
         shareId={shareId}
       />
 
-      {/* v3：模式規則說明彈窗（賽中可隨時查看） */}
+      {/* v3：模式規則說明彈窗（賽中可隨時檢視） */}
       {gameState && (
         <ModeRulesModal
           open={showRulesModal}
@@ -5215,7 +5293,7 @@ const GamePage: React.FC = () => {
         />
       )}
 
-      {/* 游戏统计面板 */}
+      {/* 遊戲統計面板 */}
       <StatsPanel
         isOpen={showStatsPanel}
         onClose={() => setShowStatsPanel(false)}
@@ -5225,7 +5303,7 @@ const GamePage: React.FC = () => {
         humanPlayerIndex={isAIGame ? 0 : undefined}
       />
 
-      {/* 新手教学浮层 */}
+      {/* 新手教學浮層 */}
       {tutorialVisible && tutorial.currentStepConfig && (
         <TutorialOverlay
           steps={TUTORIAL_STEPS}
@@ -5273,7 +5351,7 @@ const GamePage: React.FC = () => {
         />
       )}
 
-      {/* 全局聊天按鈕 */}
+      {/* 全域性聊天按鈕 */}
       <button
         type="button"
         onClick={() => setShowGlobalChat(true)}
@@ -5291,7 +5369,7 @@ const GamePage: React.FC = () => {
         <MessageCircle size={18} />
       </button>
 
-      {/* 全局聊天面板 */}
+      {/* 全域性聊天面板 */}
       <GlobalChatPanel
         open={showGlobalChat}
         onClose={() => setShowGlobalChat(false)}
@@ -5315,6 +5393,17 @@ const GamePage: React.FC = () => {
         onClose={() => setShowSystemMenu(false)}
         sections={systemMenuSections}
       />
+
+      {/* v4 量子金融彈窗（加密/IPO/稅務/利率控股） */}
+      {gameState && (
+        <V4EconomyModal
+          open={showV4Economy}
+          onClose={() => setShowV4Economy(false)}
+          gameState={gameState}
+          playerIndex={gameState.currentPlayerIndex}
+          onCommit={(ns) => setGameState(ns)}
+        />
+      )}
     </div>
   );
 };

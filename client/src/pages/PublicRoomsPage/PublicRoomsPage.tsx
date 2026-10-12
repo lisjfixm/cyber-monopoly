@@ -60,6 +60,12 @@ const MODE_COLORS: Record<GameMode, string> = {
   stock_frenzy: 'hsl(170, 100%, 50%)',
   black_market_race: 'var(--orange)',
   twin_strike: 'var(--purple)',
+  heist: 'hsl(200, 100%, 60%)',
+  bounty_hunt: 'hsl(15, 100%, 55%)',
+  gold_rush: 'var(--yellow)',
+  cyber_olympics: 'var(--green)',
+  rogue_ai: 'hsl(300, 90%, 60%)',
+  time_loop: 'hsl(180, 100%, 50%)',
 };
 
 const MODE_LABELS: Record<GameMode, string> = {
@@ -84,6 +90,12 @@ const MODE_LABELS: Record<GameMode, string> = {
   stock_frenzy: '股市狂潮',
   black_market_race: '黑市軍火賽',
   twin_strike: '雙子星戰',
+  heist: '數位劫案',
+  bounty_hunt: '賞金獵殺',
+  gold_rush: '淘金熱',
+  cyber_olympics: '賽博奧運',
+  rogue_ai: '叛逆AI',
+  time_loop: '時間迴圈',
 };
 
 const STATUS_COLORS: Record<RoomStatus, string> = {
@@ -297,7 +309,7 @@ const PublicRoomsPage = () => {
             borderColor: 'var(--green)',
             color: 'var(--green)',
           }}
-          title="刷新"
+          title="重新整理"
         >
           <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
         </button>
@@ -430,7 +442,7 @@ const PublicRoomsPage = () => {
                   無法載入房間列表
                 </p>
                 <p className="text-sm text-[var(--text-secondary)] mb-1">
-                  聯機功能於靜態版不可用，部署後端後即可查看公開房間。
+                  聯機功能於靜態版不可用，部署後端後即可檢視公開房間。
                 </p>
                 <p className="text-xs text-[var(--text-muted)] mb-6">{error}</p>
                 <button

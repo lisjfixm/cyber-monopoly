@@ -384,15 +384,15 @@ function playNoiseBurst(
 
 function sfxDice(): void {
   if (!audioCtx) return;
-  // 白噪声 burst + 频率下降的落定音
+  // 白噪聲 burst + 頻率下降的落定音
   playNoiseBurst(0.3, 0.25, 'bandpass', 2500);
-  // 落定音：两个下降咔嗒
+  // 落定音：兩個下降咔嗒
   setTimeout(() => playOscTone(500, 0.06, 'square', 0.25, 1500), 200);
   setTimeout(() => playOscTone(350, 0.08, 'square', 0.3, 1200), 280);
 }
 
 function sfxBuy(): void {
-  // C5 → E5 → G5 上升琶音，方波+低通滤波
+  // C5 → E5 → G5 上升琶音，方波+低通濾波
   const notes = [523.25, 659.25, 783.99];
   notes.forEach((freq, i) => {
     setTimeout(() => playOscTone(freq, 0.1, 'square', 0.3, 1500), i * 60);
@@ -400,7 +400,7 @@ function sfxBuy(): void {
 }
 
 function sfxPay(): void {
-  // G4 → E4 → C4 下降音调，三角波+低通
+  // G4 → E4 → C4 下降音調，三角波+低通
   const notes = [392.0, 329.63, 261.63];
   notes.forEach((freq, i) => {
     setTimeout(() => playOscTone(freq, 0.12, 'triangle', 0.35, 800), i * 90);
@@ -408,7 +408,7 @@ function sfxPay(): void {
 }
 
 function sfxFate(): void {
-  // A minor 七和弦分解，正弦波+延迟感
+  // A minor 七和絃分解，正弦波+延遲感
   if (!audioCtx || !sfxGain) return;
   const notes = [220.0, 261.63, 329.63, 440.0, 523.25];
   const now = audioCtx.currentTime;
@@ -437,7 +437,7 @@ function sfxFate(): void {
 }
 
 function sfxDetention(): void {
-  // 低频警报：两个交替低音 80Hz / 100Hz，锯齿波失真感
+  // 低頻警報：兩個交替低音 80Hz / 100Hz，鋸齒波失真感
   for (let i = 0; i < 5; i += 1) {
     const freq = i % 2 === 0 ? 80 : 100;
     setTimeout(() => playOscTone(freq, 0.12, 'sawtooth', 0.35, 300), i * 100);
@@ -445,7 +445,7 @@ function sfxDetention(): void {
 }
 
 function sfxRelease(): void {
-  // 快速上升音阶：C4 → G4 → C5，方波
+  // 快速上升音階：C4 → G4 → C5，方波
   const notes = [261.63, 392.0, 523.25];
   notes.forEach((freq, i) => {
     setTimeout(() => playOscTone(freq, 0.1, 'square', 0.3, 1200), i * 70);
@@ -455,7 +455,7 @@ function sfxRelease(): void {
 }
 
 function sfxEvent(): void {
-  // 警报脉冲：快速上升下降扫频，锯齿波+高通
+  // 警報脈衝：快速上升下降掃頻，鋸齒波+高通
   if (!audioCtx) return;
   playSweep(100, 800, 0.3, 'sawtooth', 0.3);
   setTimeout(() => playSweep(800, 100, 0.3, 'sawtooth', 0.3), 300);
@@ -463,19 +463,19 @@ function sfxEvent(): void {
 }
 
 function sfxVictory(): void {
-  // C 大调胜利旋律：C5 E5 G5 C6，方波+叠加衰减
+  // C 大調勝利旋律：C5 E5 G5 C6，方波+疊加衰減
   const notes = [523.25, 659.25, 783.99, 1046.5];
   // 主旋律
   notes.forEach((freq, i) => {
     setTimeout(() => playOscTone(freq, 0.2, 'square', 0.35, 2000), i * 120);
   });
-  // 第二层叠加（混响感）
+  // 第二層疊加（混響感）
   setTimeout(() => {
     notes.forEach((freq, i) => {
       setTimeout(() => playOscTone(freq * 0.5, 0.25, 'triangle', 0.15, 1500), i * 120 + 60);
     });
   }, 80);
-  // 结束长音
+  // 結束長音
   setTimeout(() => {
     playOscTone(1046.5, 0.4, 'square', 0.3, 2000);
     playOscTone(1318.51, 0.4, 'triangle', 0.2, 2000);
@@ -483,12 +483,12 @@ function sfxVictory(): void {
 }
 
 function sfxClick(): void {
-  // 非常短的高频点击音，正弦波 1200Hz，0.05s
+  // 非常短的高頻點選音，正弦波 1200Hz，0.05s
   playOscTone(1200, 0.04, 'sine', 0.15);
 }
 
 function sfxButtonClick(): void {
-  // 更清脆的按鈕點擊：方波高頻 + 快速衰減
+  // 更清脆的按鈕點選：方波高頻 + 快速衰減
   playOscTone(1800, 0.03, 'square', 0.12, 3000);
   playOscTone(900, 0.02, 'sine', 0.08);
 }
@@ -548,7 +548,7 @@ function sfxThunder(): void {
   setTimeout(() => playNoiseBurst(0.15, 0.2, 'highpass', 3000), 0);
 }
 
-// 向后兼容的旧名称别名
+// 向後相容的舊名稱別名
 const sfxDiceRoll = sfxDice;
 const sfxMoveStep = (): void => {
   playOscTone(800, 0.06, 'sine', 0.2, 4000);
@@ -665,7 +665,7 @@ function startAmbientSound(type: AmbientType): void {
   const now = audioCtx.currentTime;
   const ctx = audioCtx;
 
-  // 創建淡入增益
+  // 建立淡入增益
   const fadeGain = ctx.createGain();
   fadeGain.gain.setValueAtTime(0, now);
   fadeGain.gain.setTargetAtTime(DEFAULT_AMBIENT_VOLUME, now, 0.5);
@@ -728,7 +728,7 @@ function startAmbientSound(type: AmbientType): void {
     osc2.start(now);
     // 用 buffer source 複用 ambientSource 不太合適，這裡用 osc 當標記
     ambientFilter = null;
-    // 建立一個假的 source 對象用於停止管理
+    // 建立一個假的 source 物件用於停止管理
     const fakeSrc = ctx.createBufferSource();
     fakeSrc.buffer = noiseBuffer;
     fakeSrc.onended = () => {
@@ -777,7 +777,7 @@ function speakByText(text: string): void {
   if (!voiceEnabledState) return;
   if (!isSpeechSynthesisSupported()) return;
 
-  // 去重：短时间内相同内容不重复播报
+  // 去重：短時間內相同內容不重複播報
   const now = Date.now();
   if (text === lastSpeechText && now - lastSpeechTime < SPEECH_DEDUPE_MS) return;
   lastSpeechText = text;
@@ -792,7 +792,7 @@ function speakByText(text: string): void {
     utterance.lang = 'zh-CN';
     window.speechSynthesis.speak(utterance);
   } catch {
-    // 浏览器不支持或调用失败，静默降级
+    // 瀏覽器不支援或呼叫失敗，靜默降級
   }
 }
 
@@ -839,7 +839,7 @@ export interface UseAudioReturn {
   stopBGM: () => void;
   startAmbient: (type: AmbientType) => void;
   stopAmbient: () => void;
-  // 向后兼容
+  // 向後相容
   isMuted: boolean;
   toggleMute: () => void;
   playDiceRoll: () => void;
@@ -907,13 +907,13 @@ export function useAudio(): UseAudioReturn {
 
   const toggleMusic = useCallback(() => {
     if (!musicEnabledState) {
-      // 打开音乐：需要先 init 再启动
+      // 開啟音樂：需要先 init 再啟動
       startBGMEngine();
     } else {
       setMusicEnabledState(false);
     }
-    // startBGMEngine 内部会 applyBgmGain（基于 musicEnabledState）
-    // 所以打开时我们再设一次 true 以触发 gain
+    // startBGMEngine 內部會 applyBgmGain（基於 musicEnabledState）
+    // 所以開啟時我們再設一次 true 以觸發 gain
     if (!musicEnabledState) {
       setMusicEnabledState(true);
     }
@@ -939,11 +939,11 @@ export function useAudio(): UseAudioReturn {
     stopSpeakEngine();
   }, []);
 
-  // 向后兼容：isMuted = 两者都关
+  // 向後相容：isMuted = 兩者都關
   const isMuted = !sfxEnabled && !musicEnabled;
   const toggleMute = useCallback(() => {
     const newVal = !isMuted;
-    // toggleMute 同时切换两者（保持原 VolumeControl 行为）
+    // toggleMute 同時切換兩者（保持原 VolumeControl 行為）
     setSfxEnabledState(newVal);
     setMusicEnabledState(newVal);
     if (newVal) {
@@ -968,7 +968,7 @@ export function useAudio(): UseAudioReturn {
     stopBGM,
     startAmbient,
     stopAmbient,
-    // 向后兼容
+    // 向後相容
     isMuted,
     toggleMute,
     playDiceRoll: sfxDiceRoll,

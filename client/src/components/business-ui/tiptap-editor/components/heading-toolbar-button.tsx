@@ -24,12 +24,12 @@ import {
 
 const HEADING_OPTIONS = [
   { level: 0, label: '正文', icon: Type },
-  { level: 1, label: '一级标题', icon: Heading1 },
-  { level: 2, label: '二级标题', icon: Heading2 },
-  { level: 3, label: '三级标题', icon: Heading3 },
-  { level: 4, label: '四级标题', icon: Heading4 },
-  { level: 5, label: '五级标题', icon: Heading5 },
-  { level: 6, label: '六级标题', icon: Heading6 },
+  { level: 1, label: '一級標題', icon: Heading1 },
+  { level: 2, label: '二級標題', icon: Heading2 },
+  { level: 3, label: '三級標題', icon: Heading3 },
+  { level: 4, label: '四級標題', icon: Heading4 },
+  { level: 5, label: '五級標題', icon: Heading5 },
+  { level: 6, label: '六級標題', icon: Heading6 },
 ] as const;
 
 export function HeadingToolbarButton() {

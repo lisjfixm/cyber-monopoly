@@ -622,7 +622,7 @@ const LeaderboardPage = () => {
           {restItems.length === 0 && (
             <div className="cyber-card p-8 text-center text-[var(--text-secondary)]">
               <Target className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--purple)' }} />
-              <p className="font-cyber tracking-wider">暫無排行數據</p>
+              <p className="font-cyber tracking-wider">暫無排行資料</p>
             </div>
           )}
 

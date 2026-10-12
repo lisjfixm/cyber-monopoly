@@ -55,10 +55,10 @@ function createInitialState(): MailState {
     {
       from: '賽博系統', title: '版本更新 v2.3.0', type: 'system',
       isRead: true, hasAttachment: false, attachmentClaimed: false,
-      content: '本次更新內容：\n\n1. 新增「命運卡」系統，12 張全新卡牌等你體驗\n2. 新增多人聯機對戰模式\n3. 優化 AI 決策邏輯\n4. 修復若干已知問題\n\n更多精彩內容，敬請進入遊戲體驗！',
+      content: '本次更新內容：\n\n1. 新增「命運卡」系統，12 張全新卡牌等你體驗\n2. 新增多人聯機對戰模式\n3. 最佳化 AI 決策邏輯\n4. 修復若干已知問題\n\n更多精彩內容，敬請進入遊戲體驗！',
     },
      {
-       from: '成就系統', title: '成就解鎖：百戰榮耀', type: 'system',
+       from: '成就係統', title: '成就解鎖：百戰榮耀', type: 'system',
        isRead: false, hasAttachment: true, attachmentClaimed: false,
        attachment: { type: 'achievement', itemId: 'hundred_battles', itemName: '百戰榮耀徽章', amount: 1, rarity: 'legendary' },
        content: '恭喜您達成成就「百戰榮耀」！\n\n累計完成 100 場對局，這是屬於您的榮耀徽章。\n\n繼續挑戰更多成就吧！',
@@ -87,10 +87,10 @@ function createInitialState(): MailState {
     {
       from: '暗影獵手', title: '來戰一場吧！', type: 'friend',
       isRead: false, hasAttachment: false, attachmentClaimed: false,
-      content: '嘿，好久不見！\n\n聽說你最近戰績不錯，敢不敢跟我來一局？\n\n我在線上等你，輸的人要請喝霓虹可樂哦～',
+      content: '嘿，好久不見！\n\n聽說你最近戰績不錯，敢不敢跟我來一局？\n\n我線上上等你，輸的人要請喝霓虹可樂哦～',
     },
     {
-      from: '數據幽靈', title: '送你一個小禮物', type: 'friend',
+      from: '資料幽靈', title: '送你一個小禮物', type: 'friend',
       isRead: false, hasAttachment: true, attachmentClaimed: false,
       attachment: { type: 'item', itemId: 'shield_token', itemName: '護身符', amount: 2 },
       content: '嗨！上次對戰輸得有點不甘心，這次給你準備了個小禮物。\n\n別誤會，只是不想贏得太無趣而已。\n\n記得下次全力以赴哦！',
@@ -141,7 +141,7 @@ export function claimAttachment(mailId: string): MailState {
   const mail = state.mails.find((m) => m.id === mailId);
   if (!mail || !mail.attachment || mail.attachmentClaimed) return state;
 
-  // 真實後端對接時應調用既有加幣/加道具接口
+  // 真實後端對接時應呼叫既有加幣/加道具介面
   if (mail.attachment.type === 'coins' && mail.attachment.amount) {
     try {
       const existing = Number(localStorage.getItem(CLAIMED_COINS_KEY) || '0');

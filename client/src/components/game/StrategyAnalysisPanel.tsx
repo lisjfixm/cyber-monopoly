@@ -51,8 +51,8 @@ const generateAnalysisPoints = (stats: GameStats, humanIdx: number): AnalysisPoi
     points.push({
       id: 'tp-1',
       turn: Math.floor(totalTurns * 0.3),
-      title: '過路費支出占比過高',
-      description: `本局你支付了 ${human.tollExpense.toLocaleString()} 元過路費，約占總資金流的 ${tollPercent}%。建議優先購買對方經常經過的地塊系列，形成套裝反制，而非分散買地。`,
+      title: '過路費支出佔比過高',
+      description: `本局你支付了 ${human.tollExpense.toLocaleString()} 元過路費，約佔總資金流的 ${tollPercent}%。建議優先購買對方經常經過的地塊系列，形成套裝反制，而非分散買地。`,
       category: 'mistake',
       impact: 'high',
       playerIndex: humanIdx,
@@ -131,7 +131,7 @@ const generateAnalysisPoints = (stats: GameStats, humanIdx: number): AnalysisPoi
       id: 'tp-6',
       turn: Math.floor(totalTurns * 0.5),
       title: '進入禁閉區次數偏多',
-      description: `你本局限留在禁閉區 ${human.detentionCount} 次，錯過了約 ${human.detentionCount * 2} 次購地機會。禁閉區對前期擴張極為不利，後局反而有保護作用。前期應盡快繳納保釋金出場搶地。`,
+      description: `你本侷限留在禁閉區 ${human.detentionCount} 次，錯過了約 ${human.detentionCount * 2} 次購地機會。禁閉區對前期擴張極為不利，後局反而有保護作用。前期應盡快繳納保釋金出場搶地。`,
       category: 'tip',
       impact: 'low',
       playerIndex: humanIdx,
@@ -424,7 +424,7 @@ const StrategyAnalysisPanel: FC<StrategyAnalysisPanelProps> = ({
                     </span>
                   </div>
                   <p>
-                    以上分析基於本局數據與通用大富翁策略模型，僅供參考。實際對局中變數眾多，
+                    以上分析基於本局資料與通用大富翁策略模型，僅供參考。實際對局中變數眾多，
                     最佳決策需綜合判斷對手風格、當前局勢與運氣成分。
                   </p>
                 </div>
@@ -433,7 +433,7 @@ const StrategyAnalysisPanel: FC<StrategyAnalysisPanelProps> = ({
               <div className="h-full flex flex-col items-center justify-center text-center p-6">
                 <Brain size={40} style={{ color: 'var(--text-muted)', opacity: 0.3 }} />
                 <p className="text-sm mt-3" style={{ color: 'var(--text-secondary)' }}>
-                  點擊左側分析項目查看詳細解讀
+                  點選左側分析專案檢視詳細解讀
                 </p>
               </div>
             )}

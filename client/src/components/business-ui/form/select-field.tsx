@@ -54,7 +54,7 @@ type SelectFieldProps = CommonFieldProps & {
 function renderOptions(
   options: SelectOption[] | SelectGroupOption[],
 ): ReactNode {
-  // 检查是否是分组选项
+  // 檢查是否是分組選項
   const isGrouped = options.length > 0 && options[0] && 'options' in options[0];
 
   if (isGrouped) {
@@ -137,7 +137,7 @@ export function SelectField(props: SelectFieldProps) {
           name={name}
           aria-invalid={isInvalid}
         >
-          <SelectValue placeholder={placeholder || '请选择'} />
+          <SelectValue placeholder={placeholder || '請選擇'} />
         </SelectTrigger>
         <SelectContent>
           {hasContent ? (
@@ -145,7 +145,7 @@ export function SelectField(props: SelectFieldProps) {
           ) : (
             // eslint-disable-next-line no-restricted-syntax
             <SelectItem disabled value={''}>
-              暂无选项
+              暫無選項
             </SelectItem>
           )}
         </SelectContent>

@@ -78,19 +78,19 @@ export function MarkToolbarButton({
   };
 
   const labels: Record<typeof format, string> = {
-    bold: '粗体',
-    italic: '斜体',
-    underline: '下划线',
-    strike: '删除线',
-    code: '行内代码',
+    bold: '粗體',
+    italic: '斜體',
+    underline: '下劃線',
+    strike: '刪除線',
+    code: '行內程式碼',
   };
 
   const tooltips: Record<typeof format, string> = {
-    bold: '粗体(⌘+B)',
-    italic: '斜体(⌘+I)',
-    underline: '下划线(⌘+U)',
-    strike: '删除线(⌘+Shift+X)',
-    code: '行内代码(⌘+E)',
+    bold: '粗體(⌘+B)',
+    italic: '斜體(⌘+I)',
+    underline: '下劃線(⌘+U)',
+    strike: '刪除線(⌘+Shift+X)',
+    code: '行內程式碼(⌘+E)',
   };
 
   return (

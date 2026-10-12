@@ -20,7 +20,7 @@ interface MiniGameModalProps {
   onClose: () => void;
 }
 
-// ========== 老虎机子组件 ==========
+// ========== 老虎機子元件 ==========
 const SLOT_SYMBOLS = ['柒', '鑽', '星', '鈴', '檸', '櫻'];
 
 interface SlotMachineProps {
@@ -116,7 +116,7 @@ const SlotMachine: FC<SlotMachineProps> = ({ reels, spinning, finished, reward, 
           ) : reward >= 500 ? (
             <div className="text-lg">小獎 +¥{reward}</div>
           ) : (
-            <div className="text-base">未中奖</div>
+            <div className="text-base">未中獎</div>
           )}
         </div>
       )}
@@ -132,14 +132,14 @@ const SlotMachine: FC<SlotMachineProps> = ({ reels, spinning, finished, reward, 
 
       {spinning && (
         <div className="text-[var(--text-secondary)] font-cyber text-sm tracking-wider">
-          转动中...
+          轉動中...
         </div>
       )}
     </div>
   );
 };
 
-// ========== 21点子组件 ==========
+// ========== 21點子元件 ==========
 interface BlackjackProps {
   playerCards: number[];
   dealerCards: number[];
@@ -182,13 +182,13 @@ const Blackjack: FC<BlackjackProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      {/* 庄家 */}
+      {/* 莊家 */}
       <div className="text-center w-full">
         <div
           className="text-xs font-cyber tracking-wider mb-2"
           style={{ color: 'var(--text-secondary)' }}
         >
-          庄家 {finished && <span className="text-[var(--cyan)]">({dealerTotal}点)</span>}
+          莊家 {finished && <span className="text-[var(--cyan)]">({dealerTotal}點)</span>}
         </div>
         <div className="flex gap-2 justify-center flex-wrap">
           {dealerCards.map((c, i) => {
@@ -221,7 +221,7 @@ const Blackjack: FC<BlackjackProps> = ({
           className="text-xs font-cyber tracking-wider mb-2"
           style={{ color: 'var(--text-secondary)' }}
         >
-          你的手牌 <span className="text-[var(--cyan)]">({playerTotal}点)</span>
+          你的手牌 <span className="text-[var(--cyan)]">({playerTotal}點)</span>
         </div>
         <div className="flex gap-2 justify-center flex-wrap">
           {playerCards.map((c, i) => (
@@ -254,7 +254,7 @@ const Blackjack: FC<BlackjackProps> = ({
           ) : dealerTotal === playerTotal ? (
             <div className="text-base">平局</div>
           ) : (
-            <div className="text-base">失败，无损失</div>
+            <div className="text-base">失敗，無損失</div>
           )}
         </div>
       )}
@@ -280,7 +280,7 @@ const Blackjack: FC<BlackjackProps> = ({
   );
 };
 
-// ========== 猜大小子组件 ==========
+// ========== 猜大小子元件 ==========
 interface GuessBigSmallProps {
   diceResult: number;
   finished: boolean;
@@ -343,7 +343,7 @@ const GuessBigSmall: FC<GuessBigSmallProps> = ({
       </div>
 
       {rolling && (
-        <div className="text-[var(--text-secondary)] font-cyber text-sm">掷骰中...</div>
+        <div className="text-[var(--text-secondary)] font-cyber text-sm">擲骰中...</div>
       )}
 
       {finished && !rolling && (
@@ -352,7 +352,7 @@ const GuessBigSmall: FC<GuessBigSmallProps> = ({
             className="font-cyber text-lg tracking-wider mb-1"
             style={{ color: 'var(--text-primary)' }}
           >
-            结果：{diceResult} 点
+            結果：{diceResult} 點
           </div>
           <div
             className="font-cyber tracking-wider"
@@ -407,7 +407,7 @@ const GuessBigSmall: FC<GuessBigSmallProps> = ({
                 className="text-xs font-cyber tracking-wider"
                 style={{ color: 'var(--yellow)' }}
               >
-                 選擇豹子点数
+                 選擇豹子點數
               </div>
               <div className="flex gap-1.5 justify-center flex-wrap">
                 {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -450,7 +450,7 @@ const GuessBigSmall: FC<GuessBigSmallProps> = ({
                 className="text-[10px] font-cyber"
                 style={{ color: 'var(--text-muted)' }}
               >
-                奖励：猜对获得双倍奖金
+                獎勵：猜對獲得雙倍獎金
               </div>
             </div>
           )}
@@ -460,7 +460,7 @@ const GuessBigSmall: FC<GuessBigSmallProps> = ({
   );
 };
 
-// ========== 主弹窗组件 ==========
+// ========== 主彈窗元件 ==========
 const MiniGameModal: FC<MiniGameModalProps> = ({
   open,
   miniGameState,
@@ -664,7 +664,7 @@ const MiniGameModal: FC<MiniGameModalProps> = ({
           )}
         </div>
 
-        {/* 奖励飞入动画提示 */}
+        {/* 獎勵飛入動畫提示 */}
         {finished && reward > 0 && (
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none font-cyber text-3xl font-bold"

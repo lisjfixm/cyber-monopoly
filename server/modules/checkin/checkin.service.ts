@@ -45,7 +45,7 @@ export class CheckinService {
       .limit(1);
 
     if (!account) {
-      throw new BadRequestException('账号不存在');
+      throw new BadRequestException('帳號不存在');
     }
 
     const recent = await this.db

@@ -29,6 +29,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { usePlayerIdentity } from '@client/src/hooks/usePlayerIdentity';
+import { usePlayerLevel } from '@client/src/hooks/usePlayerLevel';
 import { useCloudSave } from '@client/src/hooks/useCloudSave';
 import { useSkinStorage } from '@client/src/hooks/useSkinStorage';
 import { useTitles } from '@client/src/hooks/useTitles';
@@ -110,6 +111,9 @@ const ProfilePage = () => {
   const { equippedTitle, unlockedTitles, equipTitle, checkAndUnlockTitles } = useTitles();
   const { equippedFrame, unlockedFrames, equipFrame, checkAndUnlockFrames } = useAvatarFrame();
 
+  // v4.0.0：帳號 XP / 玩家等級（局外元系統）
+  const { levelInfo } = usePlayerLevel();
+
   // 自訂頭像
   const AVATAR_STORAGE_KEY = 'cyber_monopoly_custom_avatar';
   const [customAvatar, setCustomAvatar] = useState<string | null>(null);
@@ -128,7 +132,7 @@ const ProfilePage = () => {
     void newTitles;
   }, [unlockedAchievements, checkAndUnlockTitles, checkAndUnlockFrames, unlockedPawnSkins]);
 
-  // 加載自訂頭像
+  // 載入自訂頭像
   useEffect(() => {
     try {
       const saved = localStorage.getItem(AVATAR_STORAGE_KEY);
@@ -297,7 +301,7 @@ const ProfilePage = () => {
 
   const formatNumber = (num: number): string => {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 10000) return (num / 10000).toFixed(1) + '万';
+    if (num >= 10000) return (num / 10000).toFixed(1) + '萬';
     return num.toLocaleString();
   };
 
@@ -409,7 +413,7 @@ const ProfilePage = () => {
                     disabled={saving}
                     className="cyber-btn p-2"
                     style={{ borderColor: 'var(--green)', color: 'var(--green)' }}
-                    aria-label="保存"
+                    aria-label="儲存"
                   >
                     <Check size={18} />
                   </button>
@@ -499,6 +503,51 @@ const ProfilePage = () => {
           </div>
         </div>
 
+        {/* v4.0.0：帳號 XP / 玩家等級 */}
+        <div
+          className="cyber-card p-4"
+          style={{ borderColor: `color-mix(in srgb, ${levelInfo.tierColor} 30%, transparent)` }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Zap size={16} style={{ color: levelInfo.tierColor }} />
+              <span className="text-xs text-[var(--text-secondary)] font-cyber tracking-wider">
+                玩家等級 Lv.{levelInfo.level}
+              </span>
+              <span
+                className="text-[10px] px-2 py-0.5 font-cyber tracking-wider rounded-sm"
+                style={{ color: levelInfo.tierColor, border: `1px solid ${levelInfo.tierColor}`, backgroundColor: `color-mix(in srgb, ${levelInfo.tierColor} 12%, transparent)` }}
+              >
+                {levelInfo.tierName}
+              </span>
+            </div>
+            <span className="text-xs text-[var(--text-muted)] font-cyber">
+              {levelInfo.currentLevelXp}/{levelInfo.xpToNextLevel} XP
+            </span>
+          </div>
+          <div
+            className="w-full h-2 rounded-sm overflow-hidden"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            role="progressbar"
+            aria-valuenow={Math.round(levelInfo.progress * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="升級進度"
+          >
+            <div
+              className="h-full transition-all duration-500"
+              style={{
+                width: `${Math.round(levelInfo.progress * 100)}%`,
+                background: `linear-gradient(90deg, ${levelInfo.tierColor}, var(--cyan))`,
+                boxShadow: `0 0 8px ${levelInfo.tierColor}`,
+              }}
+            />
+          </div>
+          <p className="text-[11px] text-[var(--text-muted)] mt-2">
+            完成每日/每週任務、每日簽到與對戰可累積帳號經驗，提升解鎖稱號與稱號風采。
+          </p>
+        </div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3 md:gap-4">
           <StatCard label="總勝場" value={wins} icon={TrendingUp} color="var(--green)" />
@@ -556,7 +605,7 @@ const ProfilePage = () => {
                     textShadow: '0 0 8px rgba(255, 200, 0, 0.5)',
                   }}
                 >
-                  查看詳情
+                  檢視詳情
                 </div>
               </div>
             </div>
@@ -575,7 +624,7 @@ const ProfilePage = () => {
               <BarChart3 size={22} style={{ color: 'var(--cyan)' }} />
               <div>
                 <div className="text-xs text-[var(--text-muted)] font-cyber tracking-wider mb-1">
-                  數據儀表板
+                  資料儀錶板
                 </div>
                 <div
                   className="font-cyber text-xl font-bold"
@@ -584,7 +633,7 @@ const ProfilePage = () => {
                     textShadow: '0 0 8px rgba(0, 255, 255, 0.5)',
                   }}
                 >
-                  查看戰績
+                  檢視戰績
                 </div>
               </div>
             </div>
@@ -776,7 +825,7 @@ const ProfilePage = () => {
                   </div>
                   <div className="text-[10px] text-[var(--text-muted)] mt-1 flex items-center gap-1">
                     {isUnlocked ? (
-                      isEquipped ? <><Check size={10} style={{ color: 'var(--green)' }} />已裝備</> : <><Sparkles size={10} />點擊裝備</>
+                      isEquipped ? <><Check size={10} style={{ color: 'var(--green)' }} />已裝備</> : <><Sparkles size={10} />點選裝備</>
                     ) : (
                       <><Lock size={10} />{t.unlockCondition}</>
                     )}
@@ -1002,7 +1051,7 @@ const ProfilePage = () => {
           className="cyber-btn w-full py-2 text-sm font-cyber tracking-wider"
           style={{ borderColor: 'var(--text-muted)', color: 'var(--text-secondary)' }}
         >
-          刷新資料
+          重新整理資料
         </button>
       </div>
 

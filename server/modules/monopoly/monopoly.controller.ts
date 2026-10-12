@@ -84,7 +84,7 @@ export class MonopolyController {
 
   @Post('room')
   async createRoom(@Body() dto: CreateRoomRequest): Promise<ApiResponse<RoomState>> {
-    if (!dto.hostName?.trim()) throw new BadRequestException('昵称不能为空');
+    if (!dto.hostName?.trim()) throw new BadRequestException('暱稱不能為空');
     const room = await this.monopolyService.createRoom({
       hostName: dto.hostName.trim(),
       gameMode: dto.gameMode,
@@ -103,11 +103,11 @@ export class MonopolyController {
     @Body() dto: JoinRoomRequest,
   ): Promise<ApiResponse<{ room: RoomState; playerIndex: number }>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
-    // 向后兼容：支持 guestName 字段
+    // 向後相容：支援 guestName 欄位
     const playerName = dto.playerName?.trim() || dto.guestName?.trim();
-    if (!playerName) throw new BadRequestException('昵称不能为空');
+    if (!playerName) throw new BadRequestException('暱稱不能為空');
 
     const result = await this.monopolyService.joinRoom(
       dto.roomCode,
@@ -124,7 +124,7 @@ export class MonopolyController {
     @Body() dto: LeaveRoomRequest,
   ): Promise<ApiResponse<RoomState>> {
     if (!roomCode || !/^\d{6}$/.test(roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
 
     const room = await this.monopolyService.leaveRoom(
@@ -140,7 +140,7 @@ export class MonopolyController {
     @Body() dto: TransferHostRequest,
   ): Promise<ApiResponse<RoomState>> {
     if (!roomCode || !/^\d{6}$/.test(roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
 
     const room = await this.monopolyService.transferHost(
@@ -201,7 +201,7 @@ export class MonopolyController {
   @Post('build')
   async buildHouse(@Body() dto: BuildHouseRequest): Promise<ApiResponse<RoomState>> {
     if (dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('地块ID无效');
+      throw new BadRequestException('地塊ID無效');
     }
     const room = await this.monopolyService.buildHouse(
       dto.roomCode,
@@ -214,7 +214,7 @@ export class MonopolyController {
   @Post('demolish')
   async demolishBuilding(@Body() dto: DemolishRequest): Promise<ApiResponse<RoomState>> {
     if (dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('地块ID无效');
+      throw new BadRequestException('地塊ID無效');
     }
     const room = await this.monopolyService.demolishBuilding(
       dto.roomCode,
@@ -227,7 +227,7 @@ export class MonopolyController {
   @Post('mortgage')
   async mortgageProperty(@Body() dto: MortgageRequest): Promise<ApiResponse<RoomState>> {
     if (dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('地块ID无效');
+      throw new BadRequestException('地塊ID無效');
     }
     const room = await this.monopolyService.mortgageProperty(
       dto.roomCode,
@@ -240,7 +240,7 @@ export class MonopolyController {
   @Post('redeem')
   async redeemProperty(@Body() dto: RedeemRequest): Promise<ApiResponse<RoomState>> {
     if (dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('地块ID无效');
+      throw new BadRequestException('地塊ID無效');
     }
     const room = await this.monopolyService.redeemProperty(
       dto.roomCode,
@@ -253,7 +253,7 @@ export class MonopolyController {
   @Post('trade/propose')
   async proposeTrade(@Body() dto: ProposeTradeRequest): Promise<ApiResponse<RoomState>> {
     if (dto.givenProperties.length === 0 && dto.receivedProperties.length === 0 && dto.moneyAmount === 0) {
-      throw new BadRequestException('交易内容不能为空');
+      throw new BadRequestException('交易內容不能為空');
     }
     const room = await this.monopolyService.proposeTrade(
       dto.roomCode,
@@ -283,7 +283,7 @@ export class MonopolyController {
       'cyber_hacker', 'quantum_physicist', 'influencer', 'black_market_dealer', 'cyberborg', 'blockchain_miner',
     ];
     if (!validProfessions.includes(dto.profession)) {
-      throw new BadRequestException('无效的职业');
+      throw new BadRequestException('無效的職業');
     }
     const room = await this.monopolyService.selectProfession(
       dto.roomCode,
@@ -304,7 +304,7 @@ export class MonopolyController {
 
   @Post('auction/bid')
   async auctionBid(@Body() dto: AuctionBidRequest): Promise<ApiResponse<RoomState>> {
-    if (dto.bidAmount <= 0) throw new BadRequestException('出价金额必须大于0');
+    if (dto.bidAmount <= 0) throw new BadRequestException('出價金額必須大於0');
     const room = await this.monopolyService.auctionBid(
       dto.roomCode,
       dto.playerIndex,
@@ -322,18 +322,18 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ========== NPC 系统 ==========
+  // ========== NPC 系統 ==========
 
   @Post('npc/buy-item')
   async npcBuyItem(@Body() dto: NpcBuyItemRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!dto.itemType) {
-      throw new BadRequestException('道具类型不能为空');
+      throw new BadRequestException('道具型別不能為空');
     }
     const room = await this.monopolyService.npcBuyItem(
       dto.roomCode,
@@ -346,13 +346,13 @@ export class MonopolyController {
   @Post('npc/hire-hacker')
   async npcHireHacker(@Body() dto: NpcHireHackerRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.targetPlayerIndex) || dto.targetPlayerIndex < 0) {
-      throw new BadRequestException('无效的目标玩家索引');
+      throw new BadRequestException('無效的目標玩家索引');
     }
     const room = await this.monopolyService.npcHireHacker(
       dto.roomCode,
@@ -365,10 +365,10 @@ export class MonopolyController {
   @Post('npc/close')
   async npcClose(@Body() dto: NpcCloseRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const room = await this.monopolyService.npcClose(
       dto.roomCode,
@@ -377,18 +377,18 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ========== 暗拍系统 ==========
+  // ========== 暗拍系統 ==========
 
   @Post('auction/blind-bid')
   async submitBlindBid(@Body() dto: BlindBidRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.bidAmount) || dto.bidAmount <= 0) {
-      throw new BadRequestException('出价必须为正整数');
+      throw new BadRequestException('出價必須為正整數');
     }
     const room = await this.monopolyService.submitBlindBid(
       dto.roomCode,
@@ -401,7 +401,7 @@ export class MonopolyController {
   @Post('auction/reveal')
   async revealBlindBids(@Body() dto: RevealBlindBidsRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     const room = await this.monopolyService.revealBlindBids(dto.roomCode);
     return { code: 0, message: 'ok', data: room };
@@ -409,10 +409,10 @@ export class MonopolyController {
 
   @Post('stock/buy')
   async buyStock(@Body() dto: BuyStockRequest): Promise<ApiResponse<RoomState>> {
-    if (dto.quantity <= 0) throw new BadRequestException('数量必须大于0');
+    if (dto.quantity <= 0) throw new BadRequestException('數量必須大於0');
     const validSymbols = ['NEON', 'QNTM', 'DATA', 'CYBR'];
     if (!validSymbols.includes(dto.symbol)) {
-      throw new BadRequestException('无效的股票代码');
+      throw new BadRequestException('無效的股票程式碼');
     }
     const room = await this.monopolyService.buyStock(
       dto.roomCode,
@@ -425,10 +425,10 @@ export class MonopolyController {
 
   @Post('stock/sell')
   async sellStock(@Body() dto: SellStockRequest): Promise<ApiResponse<RoomState>> {
-    if (dto.quantity <= 0) throw new BadRequestException('数量必须大于0');
+    if (dto.quantity <= 0) throw new BadRequestException('數量必須大於0');
     const validSymbols = ['NEON', 'QNTM', 'DATA', 'CYBR'];
     if (!validSymbols.includes(dto.symbol)) {
-      throw new BadRequestException('无效的股票代码');
+      throw new BadRequestException('無效的股票程式碼');
     }
     const room = await this.monopolyService.sellStock(
       dto.roomCode,
@@ -444,13 +444,13 @@ export class MonopolyController {
   @Post('force-acquire')
   async forceAcquireProperty(@Body() dto: ForceAcquireRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     const room = await this.monopolyService.forceAcquireProperty(
       dto.roomCode,
@@ -465,13 +465,13 @@ export class MonopolyController {
   @Post('bribe-bank')
   async bribeBank(@Body() dto: BribeBankRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     const room = await this.monopolyService.bribeBank(
       dto.roomCode,
@@ -486,17 +486,17 @@ export class MonopolyController {
   @Post('shareholder-meeting')
   async callShareholderMeeting(@Body() dto: ShareholderMeetingRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const validSymbols = ['NEON', 'QNTM', 'DATA', 'CYBR'];
     if (!validSymbols.includes(dto.symbol)) {
-      throw new BadRequestException('无效的股票代码');
+      throw new BadRequestException('無效的股票程式碼');
     }
     if (dto.direction !== 'up' && dto.direction !== 'down') {
-      throw new BadRequestException('无效的方向');
+      throw new BadRequestException('無效的方向');
     }
     const room = await this.monopolyService.callShareholderMeeting(
       dto.roomCode,
@@ -512,13 +512,13 @@ export class MonopolyController {
   @Post('underground-market/buy')
   async undergroundMarketBuy(@Body() dto: UndergroundMarketBuyRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     const room = await this.monopolyService.undergroundMarketBuy(
       dto.roomCode,
@@ -533,16 +533,16 @@ export class MonopolyController {
   @Post('upgrade-path')
   async chooseUpgradePath(@Body() dto: ChooseUpgradePathRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     if (!['attack', 'defense', 'tech'].includes(dto.path)) {
-      throw new BadRequestException('无效的升级路线');
+      throw new BadRequestException('無效的升級路線');
     }
     const room = await this.monopolyService.chooseUpgradePath(
       dto.roomCode,
@@ -558,13 +558,13 @@ export class MonopolyController {
   @Post('alliance/invite')
   async sendAllianceInvite(@Body() dto: AllianceInviteRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.targetPlayerIndex) || dto.targetPlayerIndex < 0) {
-      throw new BadRequestException('无效的目标玩家索引');
+      throw new BadRequestException('無效的目標玩家索引');
     }
     const room = await this.monopolyService.sendAllianceInvite(
       dto.roomCode,
@@ -577,10 +577,10 @@ export class MonopolyController {
   @Post('alliance/accept')
   async acceptAllianceInvite(@Body() dto: AllianceActionRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const room = await this.monopolyService.acceptAllianceInvite(
       dto.roomCode,
@@ -592,10 +592,10 @@ export class MonopolyController {
   @Post('alliance/reject')
   async rejectAllianceInvite(@Body() dto: AllianceActionRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const room = await this.monopolyService.rejectAllianceInvite(
       dto.roomCode,
@@ -607,10 +607,10 @@ export class MonopolyController {
   @Post('alliance/break')
   async breakAlliance(@Body() dto: AllianceActionRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const room = await this.monopolyService.breakAlliance(
       dto.roomCode,
@@ -624,16 +624,16 @@ export class MonopolyController {
   @Post('black-market/bid')
   async placeBlackMarketBid(@Body() dto: BlackMarketBidRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.itemIndex) || dto.itemIndex < 0) {
-      throw new BadRequestException('无效的道具索引');
+      throw new BadRequestException('無效的道具索引');
     }
     if (!Number.isInteger(dto.bidAmount) || dto.bidAmount < 300) {
-      throw new BadRequestException('出价金额无效');
+      throw new BadRequestException('出價金額無效');
     }
     const room = await this.monopolyService.placeBlackMarketBid(
       dto.roomCode,
@@ -647,10 +647,10 @@ export class MonopolyController {
   @Post('black-market/finalize')
   async finalizeBlackMarketAuction(@Body() dto: BlackMarketFinalizeRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const room = await this.monopolyService.finalizeBlackMarketAuction(
       dto.roomCode,
@@ -659,19 +659,19 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ===== 聊天系统新接口 =====
+  // ===== 聊天系統新介面 =====
 
   @Post('chat')
   async sendChat(@Body() dto: SendChatMessageRequest): Promise<ApiResponse<SendChatResponse>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
-    if (!dto.content?.trim()) throw new BadRequestException('消息内容不能为空');
+    if (!dto.content?.trim()) throw new BadRequestException('訊息內容不能為空');
     if (dto.content.trim().length > 500) {
-      throw new BadRequestException('消息长度不能超过500字');
+      throw new BadRequestException('訊息長度不能超過500字');
     }
     const result = await this.monopolyService.sendChat(
       dto.roomCode,
@@ -685,10 +685,10 @@ export class MonopolyController {
   @Post('chat/read')
   async markChatRead(@Body() dto: MarkChatReadRequest): Promise<ApiResponse<MarkChatReadResponse>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const result = await this.monopolyService.markChatRead(
       dto.roomCode,
@@ -697,15 +697,15 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: result };
   }
 
-  // ===== 心跳与断线重连 =====
+  // ===== 心跳與斷線重連 =====
 
   @Post('heartbeat')
   async heartbeat(@Body() dto: HeartbeatRequest): Promise<ApiResponse<HeartbeatResponse>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const result = await this.monopolyService.playerHeartbeat(
       dto.roomCode,
@@ -719,10 +719,10 @@ export class MonopolyController {
     @Body() dto: SurrenderDisconnectedRequest,
   ): Promise<ApiResponse<SurrenderDisconnectedResponse>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const result = await this.monopolyService.surrenderDisconnected(
       dto.roomCode,
@@ -731,18 +731,18 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: result };
   }
 
-  // ========== 道具系统 ==========
+  // ========== 道具系統 ==========
 
   @Post('item/buy')
   async buyItem(@Body() dto: BuyItemRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!dto.itemType) {
-      throw new BadRequestException('道具类型不能为空');
+      throw new BadRequestException('道具型別不能為空');
     }
     const result = await this.monopolyService.buyItem(
       dto.roomCode,
@@ -755,13 +755,13 @@ export class MonopolyController {
   @Post('item/use')
   async useItem(@Body() dto: UseItemRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.itemId) || dto.itemId < 0) {
-      throw new BadRequestException('无效的道具ID');
+      throw new BadRequestException('無效的道具ID');
     }
     const result = await this.monopolyService.useItem(
       dto.roomCode,
@@ -778,15 +778,15 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ========== 迷你游戏系统 ==========
+  // ========== 迷你遊戲系統 ==========
 
   @Post('minigame/start')
   async startMiniGame(@Body() dto: { roomCode: string; playerIndex: number }): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     const result = await this.monopolyService.startMiniGame(
       dto.roomCode,
@@ -798,13 +798,13 @@ export class MonopolyController {
   @Post('minigame/action')
   async miniGameAction(@Body() dto: MiniGameActionRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!dto.action) {
-      throw new BadRequestException('操作类型不能为空');
+      throw new BadRequestException('操作型別不能為空');
     }
     const result = await this.monopolyService.miniGameAction(
       dto.roomCode,
@@ -818,13 +818,13 @@ export class MonopolyController {
   @Post('loan/take')
   async takeLoan(@Body() dto: TakeLoanRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.amount) || dto.amount <= 0) {
-      throw new BadRequestException('贷款金额必须为正整数');
+      throw new BadRequestException('貸款金額必須為正整數');
     }
     const result = await this.monopolyService.takeLoan(
       dto.roomCode,
@@ -837,13 +837,13 @@ export class MonopolyController {
   @Post('loan/repay')
   async repayLoan(@Body() dto: RepayLoanRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.amount) || dto.amount <= 0) {
-      throw new BadRequestException('还款金额必须为正整数');
+      throw new BadRequestException('還款金額必須為正整數');
     }
     const result = await this.monopolyService.repayLoan(
       dto.roomCode,
@@ -853,18 +853,18 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: result };
   }
 
-  // ========== 保险系统 ==========
+  // ========== 保險系統 ==========
 
   @Post('insurance/buy')
   async buyInsurance(@Body() dto: BuyInsuranceRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     const room = await this.monopolyService.buyInsurance(
       dto.roomCode,
@@ -877,13 +877,13 @@ export class MonopolyController {
   @Post('skill/upgrade')
   async upgradeSkill(@Body() dto: UpgradeSkillRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!dto.skillId || typeof dto.skillId !== 'string') {
-      throw new BadRequestException('无效的技能ID');
+      throw new BadRequestException('無效的技能ID');
     }
     const room = await this.monopolyService.upgradeSkill(
       dto.roomCode,
@@ -896,16 +896,16 @@ export class MonopolyController {
   @Post('building/special')
   async buildSpecialBuilding(@Body() dto: BuildSpecialBuildingRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     if (!dto.buildingType || typeof dto.buildingType !== 'string') {
-      throw new BadRequestException('无效的特殊建筑类型');
+      throw new BadRequestException('無效的特殊建築型別');
     }
     const room = await this.monopolyService.buildSpecialBuilding(
       dto.roomCode,
@@ -919,13 +919,13 @@ export class MonopolyController {
   @Post('building/special-demolish')
   async demolishSpecialBuilding(@Body() dto: DemolishSpecialBuildingRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.cellId) || dto.cellId < 0 || dto.cellId > 35) {
-      throw new BadRequestException('无效的地块ID');
+      throw new BadRequestException('無效的地塊ID');
     }
     const room = await this.monopolyService.demolishSpecialBuilding(
       dto.roomCode,
@@ -935,24 +935,24 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ========== 债券系统 ==========
+  // ========== 債券系統 ==========
 
   @Post('bond/issue')
   async issueBond(@Body() dto: IssueBondRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!Number.isInteger(dto.amount) || dto.amount <= 0) {
-      throw new BadRequestException('债券金额必须为正整数');
+      throw new BadRequestException('債券金額必須為正整數');
     }
     if (typeof dto.interestRate !== 'number' || dto.interestRate < 0) {
-      throw new BadRequestException('利率必须为非负数');
+      throw new BadRequestException('利率必須為非負數');
     }
     if (!Number.isInteger(dto.turns) || dto.turns <= 0) {
-      throw new BadRequestException('回合数必须为正整数');
+      throw new BadRequestException('回合數必須為正整數');
     }
     const room = await this.monopolyService.issueBond(
       dto.roomCode,
@@ -967,13 +967,13 @@ export class MonopolyController {
   @Post('bond/subscribe')
   async subscribeBond(@Body() dto: SubscribeBondRequest): Promise<ApiResponse<RoomState>> {
     if (!dto.roomCode || !/^\d{6}$/.test(dto.roomCode)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
     if (!Number.isInteger(dto.playerIndex) || dto.playerIndex < 0) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
     if (!dto.bondId || typeof dto.bondId !== 'string') {
-      throw new BadRequestException('债券ID不能为空');
+      throw new BadRequestException('債券ID不能為空');
     }
     const room = await this.monopolyService.subscribeBond(
       dto.roomCode,
@@ -994,7 +994,7 @@ export class MonopolyController {
       throw new BadRequestException('無效的玩家索引');
     }
     if (typeof dto.muted !== 'boolean') {
-      throw new BadRequestException('muted 參數必須為布林值');
+      throw new BadRequestException('muted 引數必須為布林值');
     }
     const room = await this.monopolyService.toggleVoice(
       dto.roomCode,
@@ -1083,9 +1083,9 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: room };
   }
 
-  // ========== SSE 实时推送 ==========
+  // ========== SSE 實時推送 ==========
 
-  // ========== 跨平台存檔同步 ==========
+  // ========== 跨平臺存檔同步 ==========
 
   @Get('save')
   async getSaveData(
@@ -1119,7 +1119,7 @@ export class MonopolyController {
     return { code: 0, message: 'ok', data: result };
   }
 
-  // ========== SSE 实时推送 ==========
+  // ========== SSE 實時推送 ==========
 
   @Sse('room/:code/stream')
   streamRoom(
@@ -1127,28 +1127,28 @@ export class MonopolyController {
     @Query('playerIndex') playerIndex?: string,
   ): Observable<MessageEvent> {
     if (!/^\d{6}$/.test(code)) {
-      throw new BadRequestException('房间码格式错误');
+      throw new BadRequestException('房間碼格式錯誤');
     }
 
     const idx = playerIndex !== undefined ? parseInt(playerIndex, 10) : undefined;
 
-    // 获取房间的状态流（懒创建）
+    // 獲取房間的狀態流（懶建立）
     const stateStream = this.monopolyService.getRoomStream(code);
 
-    // 先查一次当前状态作为初始推送（同时验证房间存在），再订阅后续变更
+    // 先查一次當前狀態作為初始推送（同時驗證房間存在），再訂閱後續變更
     return from(this.monopolyService.getRoom(code, idx)).pipe(
       switchMap((initialRoom) => {
         return new Observable<MessageEvent>((subscriber) => {
-          // 1. 立即推送当前状态
+          // 1. 立即推送當前狀態
           subscriber.next({ type: 'state', data: initialRoom });
 
-          // 2. 订阅后续状态变更
+          // 2. 訂閱後續狀態變更
           const stateSub = stateStream.subscribe({
             next: (roomState) => subscriber.next({ type: 'state', data: roomState }),
             error: (err) => subscriber.error(err),
           });
 
-          // 3. 每 15 秒发送 ping 保活
+          // 3. 每 15 秒傳送 ping 保活
           const pingTimer = setInterval(() => {
             subscriber.next({
               type: 'ping',
@@ -1156,7 +1156,7 @@ export class MonopolyController {
             });
           }, 15_000);
 
-          // 客户端断开时自动清理（NestJS SSE 会 unsubscribe）
+          // 使用者端斷開時自動清理（NestJS SSE 會 unsubscribe）
           return () => {
             stateSub.unsubscribe();
             clearInterval(pingTimer);

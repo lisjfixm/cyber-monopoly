@@ -264,7 +264,7 @@ const ChanceCardModal: FC<ChanceCardModalProps> = ({
               color: "var(--blue)",
             }}
           >
-            点击任意处关闭
+            點選任意處關閉
           </div>
         )}
         {isChoiceCard && (

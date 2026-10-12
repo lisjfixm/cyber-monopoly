@@ -24,14 +24,14 @@ export function HorizontalRuleToolbarButton() {
             size="sm"
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
             disabled={!editor.can().setHorizontalRule()}
-            aria-label="分割线"
+            aria-label="分割線"
             className="size-6 px-0"
           >
             <Minus className="size-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>分割线(⌘+Option+S)</p>
+          <p>分割線(⌘+Option+S)</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

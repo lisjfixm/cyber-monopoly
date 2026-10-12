@@ -56,16 +56,16 @@ const MOCK_TOURNAMENTS: OfficialTournament[] = [
   },
   {
     id: 'off_002',
-    name: '數據塔挑戰賽',
+    name: '資料塔挑戰賽',
     time: '2026-09-22 19:30',
     maxPlayers: 256,
     currentPlayers: 256,
     status: 'closed',
-    skinName: '數據行者',
+    skinName: '資料行者',
     skinColor: 'hsl(180, 100%, 50%)',
-    titleName: '數據先鋒',
+    titleName: '資料先鋒',
     description:
-      '數據塔主題賽事，考驗玩家的投資眼光與風險控制能力，前三名獲得限定皮膚。',
+      '資料塔主題賽事，考驗玩家的投資眼光與風險控制能力，前三名獲得限定皮膚。',
   },
   {
     id: 'off_003',

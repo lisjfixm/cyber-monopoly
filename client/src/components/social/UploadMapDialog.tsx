@@ -80,7 +80,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
         name: name.trim(),
       };
       const newId = publishMap(mapToPublish, authorName, description.trim(), selectedTags);
-      toast.success('地圖已發布到社區！');
+      toast.success('地圖已發布到社群！');
       onPublished?.(newId);
       onClose();
     } catch {
@@ -107,7 +107,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 头部 */}
+        {/* 頭部 */}
         <div
           className="flex items-center gap-3 px-4 py-3 border-b"
           style={{ borderColor: 'rgba(255, 0, 170, 0.2)', background: 'rgba(255, 0, 170, 0.05)' }}
@@ -129,7 +129,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
           </button>
         </div>
 
-        {/* 内容 */}
+        {/* 內容 */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {localMaps.length === 0 ? (
             <div className="text-center py-10">
@@ -138,12 +138,12 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
                 暫無本地地圖
               </p>
               <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
-                請先前往地圖編輯器創建並保存地圖
+                請先前往地圖編輯器建立並儲存地圖
               </p>
             </div>
           ) : (
             <>
-              {/* 选择本地地图 */}
+              {/* 選擇本地地圖 */}
               <div>
                 <label className="text-xs font-bold block mb-2" style={{ color: 'var(--text-primary)' }}>
                   選擇本地地圖
@@ -171,7 +171,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
                 </div>
               </div>
 
-              {/* 地图名称 */}
+              {/* 地圖名稱 */}
               <div>
                 <label className="text-xs font-bold block mb-2" style={{ color: 'var(--text-primary)' }}>
                   地圖名稱
@@ -214,7 +214,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
                 </div>
               </div>
 
-              {/* 标签 */}
+              {/* 標籤 */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold flex items-center gap-1" style={{ color: 'var(--text-primary)' }}>
@@ -259,7 +259,7 @@ export const UploadMapDialog: React.FC<UploadMapDialogProps> = ({
                 }}
               >
                 <AlertCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#ffd700' }} />
-                <span>上傳即表示您同意社區公約，禁止發布含有違規內容的地圖。</span>
+                <span>上傳即表示您同意社群公約，禁止發布含有違規內容的地圖。</span>
               </div>
             </>
           )}

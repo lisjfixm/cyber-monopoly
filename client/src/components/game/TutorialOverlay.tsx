@@ -109,7 +109,7 @@ function TutorialOverlay({
           return;
       }
 
-      // 水平边界约束
+      // 水平邊界約束
       left = Math.max(16, Math.min(left, vw - tooltipWidth - 16));
       top = Math.max(16, Math.min(top, vh - tooltipHeight - 16));
 
@@ -121,10 +121,10 @@ function TutorialOverlay({
     updatePosition();
   }, [currentStep, step, updatePosition]);
 
-  // 内容变化后重新计算位置
+  // 內容變化後重新計算位置
   useEffect(() => {
     if (!tooltipRef.current) return;
-    // 双重 RAF 确保布局完成
+    // 雙重 RAF 確保佈局完成
     const t1 = requestAnimationFrame(() => {
       const t2 = requestAnimationFrame(() => {
         updatePosition();
@@ -157,19 +157,19 @@ function TutorialOverlay({
             boxShadow: '0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1)',
           }}
         >
-          {/* 关闭按钮 */}
+          {/* 關閉按鈕 */}
           <button
             type="button"
             onClick={onSkip}
             className="absolute top-3 right-3 text-[var(--text-secondary)] hover:text-neon-cyan transition-colors"
-            aria-label="关闭"
+            aria-label="關閉"
           >
             <X size={20} />
           </button>
 
           <div className="text-center">
             <div className="text-neon-cyan font-cyber text-xs tracking-[0.3em] mb-2">
-              {step?.id === 'victory' ? '教学完成' : '新手教学'}
+              {step?.id === 'victory' ? '教學完成' : '新手教學'}
             </div>
             <h2
               className="font-cyber text-2xl md:text-3xl tracking-wider mb-4 pulse-glow"
@@ -181,7 +181,7 @@ function TutorialOverlay({
               {step?.description}
             </p>
 
-            {/* 进度 */}
+            {/* 進度 */}
             <div className="flex items-center justify-center gap-2 mb-4">
               {steps.map((_, idx: number) => (
                 <div
@@ -228,7 +228,7 @@ function TutorialOverlay({
                 onClick={onSkip}
                 className="mt-4 text-xs text-[var(--text-secondary)] hover:text-neon-cyan transition-colors font-cyber tracking-wider"
               >
-                跳过教学
+                跳過教學
               </button>
             )}
           </div>
@@ -245,7 +245,7 @@ function TutorialOverlay({
 
   return (
     <div className="fixed inset-0 z-40 pointer-events-none">
-      {/* 4 个遮罩块形成"洞" */}
+      {/* 4 個遮罩塊形成"洞" */}
       <div
         className="absolute left-0 right-0 bg-black/70"
         style={{ top: 0, height: Math.max(0, top) }}
@@ -263,7 +263,7 @@ function TutorialOverlay({
         style={{ top, left: left + width, right: 0, height }}
       />
 
-      {/* 高亮边框 + 呼吸发光 */}
+      {/* 高亮邊框 + 呼吸發光 */}
       <div
         className="absolute pointer-events-none tutorial-highlight-glow rounded-md"
         style={{
@@ -300,7 +300,7 @@ function TutorialOverlay({
             type="button"
             onClick={onSkip}
             className="text-[var(--text-secondary)] hover:text-neon-cyan transition-colors flex-shrink-0"
-            aria-label="关闭"
+            aria-label="關閉"
           >
             <X size={18} />
           </button>
@@ -310,7 +310,7 @@ function TutorialOverlay({
           {step?.description}
         </p>
 
-        {/* 进度 */}
+        {/* 進度 */}
         <div className="flex items-center gap-2 mb-3">
           {steps.map((_, idx: number) => (
             <div
@@ -334,7 +334,7 @@ function TutorialOverlay({
             onClick={onSkip}
             className="text-xs text-[var(--text-secondary)] hover:text-neon-cyan transition-colors font-cyber tracking-wider"
           >
-            跳过教学
+            跳過教學
           </button>
           <div className="flex gap-2">
             <button

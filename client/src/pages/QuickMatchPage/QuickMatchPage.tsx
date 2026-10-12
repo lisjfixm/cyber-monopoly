@@ -54,9 +54,9 @@ const QuickMatchPage = () => {
   const pollTimerRef = useRef<number | null>(null);
   const secondTimerRef = useRef<number | null>(null);
   const hasJoinedRef = useRef<boolean>(false);
-  // 防止連續點擊重複送出 joinMatch
+  // 防止連續點選重複送出 joinMatch
   const startingRef = useRef<boolean>(false);
-  // 黑名單跳過提示的短暫計時器，卸載時一併清除
+  // 黑名單跳過提示的短暫計時器，解除安裝時一併清除
   const skipTimerRef = useRef<number | null>(null);
 
   const clearTimers = useCallback(() => {
@@ -92,7 +92,7 @@ const QuickMatchPage = () => {
     setQueuePosition(0);
   }, [clearTimers, leaveQueue]);
 
-  // 清理：离开页面时取消匹配
+  // 清理：離開頁面時取消匹配
   useEffect(() => {
     return () => {
       clearTimers();
@@ -103,7 +103,7 @@ const QuickMatchPage = () => {
   const goToRoom = useCallback((roomCode: string, playerIndex: number) => {
     clearTimers();
     hasJoinedRef.current = false;
-    // 存 sessionStorage 供 OnlineRoomPage 读取
+    // 存 sessionStorage 供 OnlineRoomPage 讀取
     try {
       sessionStorage.setItem(
         'monopoly_online_room',
@@ -121,7 +121,7 @@ const QuickMatchPage = () => {
       const status: MatchStatusResponse = await matchmaking.matchmakingApi.getMatchStatus(visitorId);
 
       if (!status.inQueue && !status.matchedRoomCode) {
-        // 被移出队列但未匹配（异常）
+        // 被移出佇列但未匹配（異常）
         setError('配對連線已中斷，請重試');
         setPhase('config');
         clearTimers();
@@ -160,11 +160,11 @@ const QuickMatchPage = () => {
         return;
       }
 
-      // 继续轮询
+      // 繼續輪詢
       pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
     } catch (err) {
       logger.warn('getMatchStatus failed', err instanceof Error ? err.message : String(err));
-      // 失败后继续轮询
+      // 失敗後繼續輪詢
       pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
     }
   }, [visitorId, clearTimers, goToRoom]);
@@ -178,7 +178,7 @@ const QuickMatchPage = () => {
       setError('請先設定暱稱');
       return;
     }
-    // 連發保護：若已在送出中，忽略重複點擊
+    // 連發保護：若已在送出中，忽略重複點選
     if (startingRef.current) return;
 
     setError('');
@@ -199,12 +199,12 @@ const QuickMatchPage = () => {
       setQueuePosition(result.position);
       setWaitedSeconds(result.waitedSeconds);
 
-      // 启动秒数计时（本地递增，UI 用）
+      // 啟動秒數計時（本地遞增，UI 用）
       secondTimerRef.current = window.setInterval(() => {
         setWaitedSeconds((prev: number) => prev + 1);
       }, 1000);
 
-      // 启动轮询
+      // 啟動輪詢
       pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
     } catch (err) {
       const message = err instanceof Error ? err.message : '加入匹配失敗';
@@ -223,11 +223,11 @@ const QuickMatchPage = () => {
 
   const handleContinueWaiting = useCallback(() => {
     playSfx('click');
-    // 重置已等待秒數，重新給一段等待窗口；
+    // 重置已等待秒數，重新給一段等待視窗；
     // 否則 waitedSeconds 仍 >= TIMEOUT_SECONDS，下方 timeout effect 會立刻把 phase 打回 timeout。
     setWaitedSeconds(0);
     setPhase('matching');
-    // 逾時時已清除輪詢計時器；若仍在隊列中（hasJoined），重啟輪詢以恢復配對狀態。
+    // 逾時時已清除輪詢計時器；若仍在佇列中（hasJoined），重啟輪詢以恢復配對狀態。
     if (hasJoinedRef.current && visitorId) {
       pollTimerRef.current = window.setTimeout(pollStatus, POLL_INTERVAL_MS);
     }
@@ -244,7 +244,7 @@ const QuickMatchPage = () => {
     navigate('/');
   }, [playSfx, navigate]);
 
-  // 超时检测：達到等待上限後停止所有輪詢/計時，避免離線時持續打 API
+  // 超時檢測：達到等待上限後停止所有輪詢/計時，避免離線時持續打 API
   useEffect(() => {
     if (phase === 'matching' && waitedSeconds >= TIMEOUT_SECONDS) {
       clearTimers();
@@ -257,7 +257,7 @@ const QuickMatchPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 scanlines relative">
       <div className="w-full max-w-md">
-        {/* ===== 配置阶段 ===== */}
+        {/* ===== 配置階段 ===== */}
         {phase === 'config' && (
           <div className="cyber-card p-6 md:p-8">
             <div className="text-center mb-6">
@@ -269,7 +269,7 @@ const QuickMatchPage = () => {
               </p>
             </div>
 
-            {/* 模式选择 */}
+            {/* 模式選擇 */}
             <div className="mb-6">
               <label className="block font-cyber text-sm tracking-wider text-[var(--text-secondary)] mb-3">
                 <Zap size={14} className="inline mr-1.5" style={{ color: 'var(--cyan)' }} />
@@ -306,7 +306,7 @@ const QuickMatchPage = () => {
               </p>
             </div>
 
-            {/* 人数选择 */}
+            {/* 人數選擇 */}
             <div className="mb-6">
               <label className="block font-cyber text-sm tracking-wider text-[var(--text-secondary)] mb-3">
                 <Users size={14} className="inline mr-1.5" style={{ color: 'var(--pink)' }} />
@@ -373,10 +373,10 @@ const QuickMatchPage = () => {
           </div>
         )}
 
-        {/* ===== 匹配中阶段 ===== */}
+        {/* ===== 匹配中階段 ===== */}
         {(phase === 'matching' || phase === 'matched' || phase === 'timeout') && (
           <div className="cyber-card p-6 md:p-8 text-center match-card-pulse">
-            {/* 动画圆环 */}
+            {/* 動畫圓環 */}
             <div className="flex justify-center mb-6">
               <div className="neon-ring" />
             </div>
@@ -393,7 +393,7 @@ const QuickMatchPage = () => {
                 : '正在尋找對手，請稍候'}
             </p>
 
-            {/* 匹配信息 */}
+            {/* 匹配資訊 */}
             <div className="space-y-3 text-left mb-6">
               <div className="flex items-center justify-between py-2 px-3 cyber-card"
                    style={{ borderColor: 'rgba(0, 255, 255, 0.15)' }}>
@@ -437,7 +437,7 @@ const QuickMatchPage = () => {
               </div>
             </div>
 
-            {/* 按钮区 */}
+            {/* 按鈕區 */}
             {phase === 'matching' && (
               <button
                 type="button"

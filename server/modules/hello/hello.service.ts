@@ -1,4 +1,4 @@
-// /* 模板代码 仅作示例 */
+// /* 模板程式碼 僅作示例 */
 // import { Injectable, Inject, Logger } from '@nestjs/common';
 // import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
 // import { record } from '@server/database/schema';
@@ -21,7 +21,7 @@
   
 //       return results;
 //     } catch (error) {
-//       this.logger.error('获取最近记录失败', error);
+//       this.logger.error('獲取最近記錄失敗', error);
 //       throw error;
 //     }
 //   }

@@ -26,14 +26,14 @@ export function CodeBlockToolbarButton() {
               editor.chain().focus().toggleCodeBlock().run()
             }
             disabled={!editor.can().toggleCodeBlock()}
-            aria-label="代码块"
+            aria-label="程式碼塊"
             className="size-6 p-0"
           >
             <CodeXml className="size-4" />
           </Toggle>
         </TooltipTrigger>
         <TooltipContent>
-          <p>代码块</p>
+          <p>程式碼塊</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -111,7 +111,7 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
   const trackAvailabilityRef = useRef<number[]>(new Array(maxTracks).fill(0));
   const rafRef = useRef<number | null>(null);
 
-  // 設置狀態
+  // 設定狀態
   const [settings, setSettings] = useState<DanmakuSettings>(() => loadSettings());
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
 
@@ -123,7 +123,7 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
     return SPEED_PRESETS[settings.speed];
   }, [propSpeed, settings.speed]);
 
-  // 保存設置
+  // 儲存設定
   const updateSettings = useCallback((patch: Partial<DanmakuSettings>): void => {
     setSettings((prev: DanmakuSettings) => {
       const next = { ...prev, ...patch };
@@ -191,7 +191,7 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
     return bestTrack;
   }, [maxTracks, effectiveSpeed]);
 
-  // 新消息入隊
+  // 新訊息入隊
   useEffect(() => {
     if (!effectiveEnabled) return;
     if (messages.length === 0) return;
@@ -296,7 +296,7 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
             animation: `danmaku-scroll ${d.duration}ms linear forwards`,
             animationDelay: '0s',
             willChange: 'transform',
-            // 用 CSS 變量傳遞移動距離
+            // 用 CSS 變數傳遞移動距離
             ['--dm-travel' as string]: `-${d.travelDistance}px`,
           } as React.CSSProperties}
         >
@@ -344,7 +344,7 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
             )}
           </button>
 
-          {/* 設置按鈕 */}
+          {/* 設定按鈕 */}
           <button
             type="button"
             onClick={() => setShowSettingsPanel((v) => !v)}
@@ -356,15 +356,15 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
               background: 'rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(4px)',
             }}
-            aria-label="彈幕設置"
-            title="彈幕設置"
+            aria-label="彈幕設定"
+            title="彈幕設定"
           >
             <Settings className="w-4 h-4" />
           </button>
         </div>
       )}
 
-      {/* 設置面板 */}
+      {/* 設定面板 */}
       {showControls && showSettingsPanel && (
         <div
           className="absolute bottom-14 right-3 w-64 z-40 cyber-card border-neon-pink p-3 space-y-3 pointer-events-auto"
@@ -380,14 +380,14 @@ const DanmakuLayer: React.FC<DanmakuLayerProps> = ({
               className="font-cyber text-sm tracking-wide"
               style={{ color: 'var(--pink)', textShadow: '0 0 6px rgba(255, 107, 157, 0.5)' }}
             >
-              彈幕設置
+              彈幕設定
             </span>
             <button
               type="button"
               onClick={() => setShowSettingsPanel(false)}
               className="w-5 h-5 flex items-center justify-center rounded transition-colors hover:bg-white/10"
               style={{ color: 'var(--text-secondary)' }}
-              aria-label="關閉設置"
+              aria-label="關閉設定"
             >
               <X className="w-3.5 h-3.5" />
             </button>

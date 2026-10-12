@@ -3,10 +3,10 @@ import type { User } from '@client/src/components/business-ui/types/user';
 import type { UserInfo } from '@lark-apaas/client-toolkit/tools/services';
 import type { AccountType } from '@client/src/components/business-ui/api/users/service';
 
-// 直接导出统一的函数
+// 直接匯出統一的函式
 export { normalizeUser, isValidUserId };
 
-// user-display 专用的转换函数
+// user-display 專用的轉換函式
 export function userInfoToUser(
   userInfo: (UserInfo & { avatar?: any }) | any,
   accountType: AccountType,
@@ -32,6 +32,6 @@ export function userInfoToUser(
 export function createUnknownUser(user_id: string): User {
   return {
     user_id,
-    name: '未知用户',
+    name: '未知使用者',
   };
 }

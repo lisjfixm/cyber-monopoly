@@ -117,7 +117,7 @@ const ScenarioEditorPage = () => {
     }
     if ((victoryCondition === 'reach_money' || victoryCondition === 'own_properties')
       && (!Number.isInteger(victoryParam) || victoryParam <= 0)) {
-      showToast('勝利條件參數必須為正整數');
+      showToast('勝利條件引數必須為正整數');
       return;
     }
     const existing = editingId ? localScenarios.find((s) => s.id === editingId) : null;
@@ -166,7 +166,7 @@ const ScenarioEditorPage = () => {
       setAiDifficulty(scenario.aiDifficulty);
     } else {
       setAiDifficulty('normal');
-      showToast('數據格式已升級');
+      showToast('資料格式已升級');
     }
 
     const validVictory: VictoryCondition[] = ['reach_money', 'own_properties', 'eliminate_all'];
@@ -174,7 +174,7 @@ const ScenarioEditorPage = () => {
       setVictoryCondition(scenario.victoryCondition);
     } else {
       setVictoryCondition('eliminate_all');
-      showToast('數據格式已升級');
+      showToast('資料格式已升級');
     }
 
     setVictoryParam(scenario.victoryParam);
@@ -214,7 +214,7 @@ const ScenarioEditorPage = () => {
     };
     publishScenario(scenario, '我');
     refreshCommunity();
-    showToast('已發布到社區！');
+    showToast('已發布到社群！');
   };
 
   const handleInstall = (id: string) => {
@@ -279,7 +279,7 @@ const ScenarioEditorPage = () => {
         <div className="flex gap-2 mb-6 max-w-xl">
           {[
             { key: 'editor' as EditorTab, label: '劇本編輯', icon: Zap },
-            { key: 'community' as EditorTab, label: '社區劇本', icon: Sparkles },
+            { key: 'community' as EditorTab, label: '社群劇本', icon: Sparkles },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
@@ -406,7 +406,7 @@ const ScenarioEditorPage = () => {
                   className="cyber-btn flex-1 py-2.5 font-cyber tracking-wider flex items-center justify-center gap-2"
                   style={{ borderColor: 'var(--cyan)', color: 'var(--cyan)' }}>
                   <Save size={16} />
-                  {editingId ? '更新' : '保存到本地'}
+                  {editingId ? '更新' : '儲存到本地'}
                 </button>
                 <button type="button" onClick={handlePublish}
                   className="cyber-btn flex-1 py-2.5 font-cyber tracking-wider flex items-center justify-center gap-2"
@@ -458,7 +458,7 @@ const ScenarioEditorPage = () => {
           </div>
         )}
 
-        {/* 社區 Tab */}
+        {/* 社群 Tab */}
         {activeTab === 'community' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
              {sortByFeatured(communityScenarios, 'scenario').map((scenario) => (
@@ -508,7 +508,7 @@ const ScenarioEditorPage = () => {
             ))}
             {communityScenarios.length === 0 && (
               <div className="cyber-card p-8 text-center col-span-full text-sm" style={{ color: 'var(--text-secondary)' }}>
-                社區尚未有劇本，來建立第一個吧！
+                社群尚未有劇本，來建立第一個吧！
               </div>
             )}
           </div>
@@ -522,7 +522,7 @@ const ScenarioEditorPage = () => {
         </div>
       )}
 
-      {/* 刪除確認對話框 */}
+      {/* 刪除確認對話方塊 */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="cyber-card w-full max-w-sm p-5" style={{ borderColor: 'var(--red)', background: 'hsl(240, 18%, 10%)' }}>

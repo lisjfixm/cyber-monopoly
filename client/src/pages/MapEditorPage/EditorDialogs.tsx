@@ -66,7 +66,7 @@ const EditorDialogs: FC<EditorDialogsProps> = ({
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-cyber tracking-wider text-neon-cyan">
-              導出地圖
+              匯出地圖
             </DialogTitle>
             <DialogDescription className="text-[var(--text-secondary)]">
               複製下方 base64 字串即可分享或備份你的地圖
@@ -95,7 +95,7 @@ const EditorDialogs: FC<EditorDialogsProps> = ({
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-cyber tracking-wider text-neon-pink">
-              導入地圖
+              匯入地圖
             </DialogTitle>
             <DialogDescription className="text-[var(--text-secondary)]">
               貼上 base64 格式的地圖資料
@@ -133,7 +133,7 @@ const EditorDialogs: FC<EditorDialogsProps> = ({
               onClick={onImport}
               className="cyber-btn cyber-btn-sm cyber-btn-pink"
             >
-              導入
+              匯入
             </button>
           </DialogFooter>
         </DialogContent>
@@ -144,7 +144,7 @@ const EditorDialogs: FC<EditorDialogsProps> = ({
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="font-cyber tracking-wider text-neon-cyan">
-              已保存地圖
+              已儲存地圖
             </DialogTitle>
             <DialogDescription className="text-[var(--text-secondary)]">
               最多 {MAX_CUSTOM_MAPS} 張
@@ -165,7 +165,7 @@ const EditorDialogs: FC<EditorDialogsProps> = ({
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {savedMaps.length === 0 && (
               <div className="text-center text-[var(--text-secondary)] py-6 text-sm">
-                尚無保存的地圖
+                尚無儲存的地圖
               </div>
             )}
             {savedMaps.map((m) => (

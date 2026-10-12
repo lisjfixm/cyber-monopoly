@@ -24,6 +24,9 @@ import {
   CloudLightning,
   Cpu,
   HandCoins,
+  Snowflake,
+  Sun,
+  Scale,
 } from 'lucide-react';
 import { GLOBAL_EVENTS } from '@shared/game-config';
 import type { GlobalEventType } from '@shared/api.interface';
@@ -34,7 +37,7 @@ interface GlobalEventModalProps {
   onClose: () => void;
 }
 
-// 使用 Partial 容納引擎後續新增的事件類型（未知事件以 AlertTriangle 兜底）
+// 使用 Partial 容納引擎後續新增的事件型別（未知事件以 AlertTriangle 兜底）
 const EVENT_ICON_MAP: Partial<Record<GlobalEventType, typeof AlertTriangle>> = {
   economic_crisis: TrendingDown,
   tech_boom: Zap,
@@ -54,11 +57,20 @@ const EVENT_ICON_MAP: Partial<Record<GlobalEventType, typeof AlertTriangle>> = {
   ad_storm: Megaphone,
   subsidy_carnival: BadgePercent,
   black_market_crackdown: ShieldAlert,
-  // v3.0 新增全局事件
+  // v3.0 新增全域性事件
   satellite_airdrop: Satellite,
   data_thunder: CloudLightning,
   chip_boom: Cpu,
   mega_subsidy: HandCoins,
+  // v4.0 新增全域性事件
+  quantum_leap: Zap,
+  crypto_winter: Snowflake,
+  ipo_wave: TrendingUp,
+  central_bank_rate: Landmark,
+  trade_war: ShieldAlert,
+  solar_flare: Sun,
+  ubi: HandCoins,
+  antitrust: Scale,
 };
 
 const GlobalEventModal: FC<GlobalEventModalProps> = ({ isOpen, eventType, onClose }) => {

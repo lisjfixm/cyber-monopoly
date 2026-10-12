@@ -105,7 +105,7 @@ export default function AccountBindingsSection({
       setError(linkError);
     }
     if (getOAuthLinkSuccess()) {
-      setLinkSuccess('第三方帳號綁定成功');
+      setLinkSuccess('第三方帳號繫結成功');
       setTimeout(() => setLinkSuccess(''), 5000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,7 +136,7 @@ export default function AccountBindingsSection({
       setUnbindDialog(null);
       await loadBindings();
     } catch (err) {
-      const message = err instanceof Error ? err.message : '解除綁定失敗';
+      const message = err instanceof Error ? err.message : '解除繫結失敗';
       setUnbindError(message);
       logger.error('Failed to unbind OAuth provider', { provider: unbindDialog, error: err });
     } finally {
@@ -156,11 +156,11 @@ export default function AccountBindingsSection({
         <div className="flex items-center gap-2 mb-3">
           <Link2 size={18} style={{ color: 'var(--text-secondary)' }} />
           <h3 className="font-cyber text-sm tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-            第三方帳號綁定
+            第三方帳號繫結
           </h3>
         </div>
         <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-          請先登入後再進行第三方帳號綁定
+          請先登入後再進行第三方帳號繫結
         </p>
       </div>
     );
@@ -172,7 +172,7 @@ export default function AccountBindingsSection({
         <div className="flex items-center gap-2">
           <Link2 size={18} style={{ color: 'var(--purple)' }} />
           <h3 className="font-cyber text-sm tracking-wider" style={{ color: 'var(--purple)' }}>
-            第三方帳號綁定
+            第三方帳號繫結
           </h3>
         </div>
         {hasPassword && (
@@ -243,7 +243,7 @@ export default function AccountBindingsSection({
                   {bound && (
                     <span className="text-xs font-cyber flex items-center gap-1" style={{ color: 'var(--green)' }}>
                       <Check size={12} />
-                      {bound.displayName || bound.email || '已綁定'}
+                      {bound.displayName || bound.email || '已繫結'}
                     </span>
                   )}
                 </div>
@@ -262,7 +262,7 @@ export default function AccountBindingsSection({
                       cursor: 'pointer',
                     }}
                   >
-                    解除綁定
+                    解除繫結
                   </button>
                 ) : (
                   <button
@@ -288,16 +288,16 @@ export default function AccountBindingsSection({
       )}
 
       <p className="mt-3 text-xs font-cyber text-center" style={{ color: 'var(--text-secondary)' }}>
-        綁定後可用第三方帳號快速登入
+        繫結後可用第三方帳號快速登入
       </p>
 
-      {/* 解除綁定確認彈窗 */}
+      {/* 解除繫結確認彈窗 */}
       <Dialog open={!!unbindDialog} onOpenChange={(open: boolean) => { if (!open) setUnbindDialog(null); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>解除第三方綁定</DialogTitle>
+            <DialogTitle>解除第三方繫結</DialogTitle>
             <DialogDescription>
-              確定要解除 {unbindDialog ? PROVIDER_CONFIGS.find(c => c.provider === unbindDialog)?.label : ''} 帳號的綁定嗎？
+              確定要解除 {unbindDialog ? PROVIDER_CONFIGS.find(c => c.provider === unbindDialog)?.label : ''} 帳號的繫結嗎？
               解除後將無法再使用該第三方帳號登入。
             </DialogDescription>
           </DialogHeader>

@@ -20,13 +20,13 @@ import {
 
 // Design system colors matching Figma
 const TEXT_COLORS = [
-  { value: 'var(--foreground)', label: '默认', className: 'bg-foreground' },
+  { value: 'var(--foreground)', label: '預設', className: 'bg-foreground' },
   {
     value: 'var(--muted-foreground)',
     label: '次要',
     className: 'bg-muted-foreground',
   },
-  { value: 'var(--color-red-600)', label: '红色', className: 'bg-red-600' },
+  { value: 'var(--color-red-600)', label: '紅色', className: 'bg-red-600' },
   {
     value: 'var(--color-orange-500)',
     label: '橙色',
@@ -34,11 +34,11 @@ const TEXT_COLORS = [
   },
   {
     value: 'var(--color-yellow-500)',
-    label: '黄色',
+    label: '黃色',
     className: 'bg-yellow-500',
   },
-  { value: 'var(--color-green-500)', label: '绿色', className: 'bg-green-500' },
-  { value: 'var(--color-blue-600)', label: '蓝色', className: 'bg-blue-600' },
+  { value: 'var(--color-green-500)', label: '綠色', className: 'bg-green-500' },
+  { value: 'var(--color-blue-600)', label: '藍色', className: 'bg-blue-600' },
   {
     value: 'var(--color-purple-600)',
     label: '紫色',
@@ -78,7 +78,7 @@ export function ColorHighlightToolbarButton() {
     >
       <Baseline className="size-4" style={{ color: currentColor }} />
       <ChevronDown className="size-3.5 text-muted-foreground" />
-      <span className="sr-only">文字颜色</span>
+      <span className="sr-only">文字顏色</span>
     </Button>
   );
 
@@ -91,7 +91,7 @@ export function ColorHighlightToolbarButton() {
           </TooltipTrigger>
           {!open && (
             <TooltipContent>
-              <p>文字颜色</p>
+              <p>文字顏色</p>
             </TooltipContent>
           )}
         </Tooltip>
@@ -132,7 +132,7 @@ export function ColorHighlightToolbarButton() {
             className="w-full"
             onClick={handleResetColor}
           >
-            恢复默认
+            恢復預設
           </Button>
         </div>
       </PopoverContent>

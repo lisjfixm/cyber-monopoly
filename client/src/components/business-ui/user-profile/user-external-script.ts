@@ -10,10 +10,10 @@ export interface UseExternalScriptOptions {
 }
 
 /**
- * 在组件生命周期内按需注入外链脚本（追加到 <body> 末尾），并返回加载状态。
- * - 避免重复注入：如果页面已存在同 src 的脚本，直接标记为 ready。
- * - 支持 CSP：可通过 nonce 传入。
- * - 可选清理：removeOnUnmount=true 时卸载时移除脚本。
+ * 在元件生命週期內按需注入外鏈指令碼（追加到 <body> 末尾），並返回載入狀態。
+ * - 避免重複注入：如果頁面已存在同 src 的指令碼，直接標記為 ready。
+ * - 支援 CSP：可透過 nonce 傳入。
+ * - 可選清理：removeOnUnmount=true 時解除安裝時移除指令碼。
  */
 export function useExternalScript(
   src: string,
@@ -24,7 +24,7 @@ export function useExternalScript(
   useEffect(() => {
     if (!src) return;
 
-    // 如果已经存在同 src 的脚本，直接认为已就绪
+    // 如果已經存在同 src 的指令碼，直接認為已就緒
     const existing = document.querySelector<HTMLScriptElement>(
       `script[src="${src}"]`,
     );
@@ -34,7 +34,7 @@ export function useExternalScript(
       });
       return;
     }
-    // 在 effect 中避免同步 setState，使用微任务调度，防止级联渲染警告
+    // 在 effect 中避免同步 setState，使用微任務排程，防止級聯渲染警告
     let cancelled = false;
     queueMicrotask(() => {
       if (!cancelled) setStatus('loading');

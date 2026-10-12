@@ -39,13 +39,13 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
   const helpEntries: Record<HelpCategoryKey, { title: string; description: string }[]> = {
     basic: [
       { title: '遊戲目標', description: '讓對手破產，成為最後的贏家。當所有對手皆因欠債而無法繼續遊戲時，你即獲得勝利。' },
-      { title: '擲骰子', description: '點擊「擲骰子」按鈕，根據擲出的點數移動相應步數。每回合可擲一次，擲出點數相同時可獲得額外回合。' },
+      { title: '擲骰子', description: '點選「擲骰子」按鈕，根據擲出的點數移動相應步數。每回合可擲一次，擲出點數相同時可獲得額外回合。' },
       { title: '買地', description: '走到無主地塊時可選擇購買，購買後取得該地塊的所有權。之後其他玩家經過此地塊時需支付過路費。' },
       { title: '建房', description: '在自有地塊上可建造房屋或酒店，建築等級越高，過路費越高。需要同色組地塊全部擁有才可建房。' },
       { title: '命運/機會', description: '踩到命運區或機會區時會抽卡，效果隨機，可能獲得金錢、損失金錢、傳送位置等各種效果。' },
     ],
     career: [
-      { title: '駭客', description: '被動技能：可侵入對方地塊，短暫降低其過路費收益。擅長干擾敵方經濟體系。' },
+      { title: '駭客', description: '被動技能：可侵入對方地塊，短暫降低其過路費收益。擅長幹擾敵方經濟體系。' },
       { title: '企業家', description: '被動技能：建造費用降低，建房成本比其他職業更低，適合快速擴張地產帝國。' },
       { title: '銀行家', description: '被動技能：收取過路費時有額外金錢加成，依賴地盤收取穩定收益。' },
       { title: '投機者', description: '被動技能：命運卡金額倍率提升，不論獎勵或罰款都會放大，高風險高報酬。' },
@@ -70,18 +70,18 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
       { title: '瘋狂模式', description: '高起始資金，金錢流動大，買地建房更容易，場面更為混亂刺激。' },
       { title: '生存模式', description: '血量機制，破產不等於淘汰，玩家有機會靠打工或特殊卡逆轉翻盤。' },
       { title: '團隊死鬥', description: '2v2 隊伍對抗，隊友共享資源與地產，考驗團隊配合與策略分工。' },
-      { title: '暗網模式', description: '信息不對稱，隱藏對手狀態，只能看到部分資訊，增加心理戰與不確定性。' },
+      { title: '暗網模式', description: '資訊不對稱，隱藏對手狀態，只能看到部分資訊，增加心理戰與不確定性。' },
     ],
     glossary: [
       { title: '霓虹幣', description: '遊戲內通用貨幣，用於買地、建房、付費等所有金錢交易。' },
-      { title: '數據核心', description: '地塊的所有權證明，相當於地契，持有數據核心即擁有該地塊。' },
+      { title: '資料核心', description: '地塊的所有權證明，相當於地契，持有資料核心即擁有該地塊。' },
       { title: '量子跳躍', description: '隨機傳送到任意地塊的效果，無法預測落點，充滿不確定性。' },
-      { title: '暗網', description: '隱藏信息的區域，交易不在檯面上進行，部分特殊規則適用於此。' },
+      { title: '暗網', description: '隱藏資訊的區域，交易不在檯面上進行，部分特殊規則適用於此。' },
       { title: '禁閉區', description: '玩家被拘留無法行動的區域，類似傳統大富翁的監獄。' },
-      { title: '賽博空間', description: '虛擬網絡空間，部分卡牌效果發生在此，與現實地圖分開計算。' },
-      { title: '神經連結', description: '玩家與地塊的所有權連接狀態，斷開連結等同失去所有權。' },
+      { title: '賽博空間', description: '虛擬網路空間，部分卡牌效果發生在此，與現實地圖分開計算。' },
+      { title: '神經連結', description: '玩家與地塊的所有權連線狀態，斷開連結等同失去所有權。' },
       { title: '能量矩陣', description: '建築等級的衡量單位，能量矩陣等級越高，收取的過路費越貴。' },
-      { title: '數據風暴', description: '隨機觸發的全局事件，影響所有玩家，可能改變整場遊戲的走勢。' },
+      { title: '資料風暴', description: '隨機觸發的全域性事件，影響所有玩家，可能改變整場遊戲的走勢。' },
       { title: '霓虹護盾', description: '可抵擋一次負面效果的防護道具，是保護自己的重要手段。' },
     ],
   };
@@ -142,7 +142,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
         onClick={onClose}
       />
 
-      {/* 弹窗内容 */}
+      {/* 彈窗內容 */}
       <div
         className="cyber-card relative w-full max-w-2xl overflow-hidden flex flex-col"
         style={{
@@ -152,10 +152,10 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
           maxHeight: '90vh',
         }}
       >
-        {/* 顶部装饰线 */}
+        {/* 頂部裝飾線 */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--cyan)] to-transparent" />
 
-        {/* 标题栏 */}
+        {/* 標題欄 */}
         <div className="flex items-center justify-between p-5 md:p-7 pb-3 md:pb-4 flex-shrink-0">
           <h2
             className="font-cyber text-xl md:text-2xl tracking-wider"
@@ -180,9 +180,9 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
           </button>
         </div>
 
-        {/* 滚动内容区 */}
+        {/* 滾動內容區 */}
         <div className="flex-1 overflow-y-auto px-5 md:px-7 pb-5 md:pb-7">
-        {/* 主题皮肤设置 */}
+        {/* 主題皮膚設定 */}
         <div className="mb-6">
           <h3
             className="font-cyber text-sm md:text-base tracking-wider mb-3 md:mb-4"
@@ -223,7 +223,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
                     }
                   }}
                 >
-                  {/* 预览区 */}
+                  {/* 預覽區 */}
                   <div
                     className="h-16 md:h-20 w-full"
                     style={{
@@ -231,7 +231,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
                     }}
                   />
 
-                  {/* 选中勾选 */}
+                  {/* 選中勾選 */}
                   {isActive && (
                     <div
                       className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
@@ -245,7 +245,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
                     </div>
                   )}
 
-                  {/* 文字区 */}
+                  {/* 文字區 */}
                   <div className="p-2 md:p-3">
                     <div
                       className="font-cyber text-sm md:text-base font-bold tracking-wide mb-1"
@@ -319,7 +319,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
             </button>
           </div>
 
-          {/* 字體大小調節 */}
+          {/* 字型大小調節 */}
           <div className="p-3 rounded" style={{
             background: 'var(--bg-mid)',
             border: '1px solid var(--border)',
@@ -331,7 +331,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
                   className="font-cyber text-sm font-bold tracking-wide"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  字體大小
+                  字型大小
                 </span>
               </div>
               <span
@@ -345,7 +345,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
               {(['small', 'normal', 'large', 'xlarge'] as const).map((size) => {
                 const isActive = fontSize === size;
                 const label = size === 'small' ? '小' : size === 'normal' ? '中' : size === 'large' ? '大' : '超大';
-                const ariaLabel = size === 'small' ? '字體大小：小' : size === 'normal' ? '字體大小：中' : size === 'large' ? '字體大小：大' : '字體大小：超大';
+                const ariaLabel = size === 'small' ? '字型大小：小' : size === 'normal' ? '字型大小：中' : size === 'large' ? '字型大小：大' : '字型大小：超大';
                 return (
                   <button
                     key={size}
@@ -396,7 +396,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
                 className="text-xs"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                關閉可提升低端設備性能
+                關閉可提升低端裝置效能
               </div>
             </div>
             <button
@@ -667,7 +667,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
           </button>
         </div>
 
-        {/* 安装应用 */}
+        {/* 安裝應用 */}
         {canInstall && (
           <div className="mb-6 p-4 rounded-lg" style={{
             border: '1px solid var(--border-neon-pink)',
@@ -683,7 +683,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
               className="text-xs mb-3"
               style={{ color: 'var(--text-secondary)' }}
             >
-               將賽博大富翁添加到主畫面，享受離線暢玩體驗
+               將賽博大富翁新增到主畫面，享受離線暢玩體驗
             </p>
             <button
               type="button"
@@ -705,7 +705,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
             >
               <Download className="w-4 h-4" />
               <span className="font-cyber tracking-wide text-sm">
-                 添加到主畫面
+                 新增到主畫面
               </span>
             </button>
           </div>
@@ -726,7 +726,7 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
           </span>
         </div>
 
-        {/* 管理後台入口（低調） */}
+        {/* 管理後臺入口（低調） */}
         <div className="mb-2 text-center">
           <button
             type="button"
@@ -742,9 +742,9 @@ const SettingsModal = ({ open, onClose }: SettingsModalProps) => {
         </div>
 
         </div>
-        {/* 滚动内容区 結束 */}
+        {/* 滾動內容區 結束 */}
 
-        {/* 底部版本信息 */}
+        {/* 底部版本資訊 */}
         <div className="mt-auto pt-4 px-5 md:px-7 pb-5 md:pb-7 flex-shrink-0" style={{ borderTop: '1px solid var(--border)' }}>
           <p
             className="text-xs font-cyber tracking-wider"

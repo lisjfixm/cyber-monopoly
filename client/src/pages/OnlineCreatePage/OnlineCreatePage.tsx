@@ -18,7 +18,7 @@ function isNetworkError(err: unknown): boolean {
       msg.includes('network') ||
       msg.includes('failed to fetch') ||
       msg.includes('timeout') ||
-      msg.includes('連接') ||
+      msg.includes('連線') ||
       msg.includes('連線') ||
       msg.includes('跨網域') ||
       msg.includes('err_connection')
@@ -68,7 +68,7 @@ const OnlineCreatePage = () => {
     setError('');
 
     try {
-      // 同步玩家身份到排行榜系统
+      // 同步玩家身份到排行榜系統
       if (visitorId && name) {
         try {
           await ranking.rankingApi.getOrCreatePlayer(visitorId, name);

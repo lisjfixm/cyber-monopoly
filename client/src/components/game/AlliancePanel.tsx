@@ -241,7 +241,7 @@ const AlliancePanel: FC<AlliancePanelProps> = ({
                   boxShadow: `0 0 12px ${accentGlow}`,
                   background: accentBg,
                 }}>
-                {isBetray ? '確認背叛' : '發送邀請'}
+                {isBetray ? '確認背叛' : '傳送邀請'}
               </button>
             </div>
           </div>

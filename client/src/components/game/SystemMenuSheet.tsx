@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
+import { createPortal } from 'react-dom';
 import { X, LayoutGrid } from 'lucide-react';
 
 export interface SystemMenuItem {
@@ -51,7 +52,9 @@ const SystemMenuSheet = ({ open, onClose, sections, title = '系統選單' }: Sy
   const section = sections[activeSection] ?? sections[0];
   const visibleItems = section?.items ?? [];
 
-  return (
+  // 透過 Portal 掛到 body，避免被頁面內容的 z-10 層疊上下文困住，
+  // 確保抽屜 z-60 能蓋過固定底部導覽列（z-40），最後一行按鈕不被遮擋。
+  return createPortal(
     <div
       className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center"
       role="dialog"
@@ -173,7 +176,8 @@ const SystemMenuSheet = ({ open, onClose, sections, title = '系統選單' }: Sy
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

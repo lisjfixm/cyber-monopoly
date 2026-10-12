@@ -65,7 +65,7 @@ function ImageNodeView(props: NodeViewProps) {
 
   const isEditable = editor.isEditable;
 
-  // 计算宽高比：优先使用属性中的宽高，否则使用自然宽高比
+  // 計算寬高比：優先使用屬性中的寬高，否則使用自然寬高比
   const aspectRatio =
     typeof attrs.width === 'number' && attrs.height
       ? attrs.width / attrs.height
@@ -116,8 +116,8 @@ function ImageNodeView(props: NodeViewProps) {
           const dx = ev.clientX - startX;
           const dy = ev.clientY - startY;
 
-          // 保持宽高比
-          // 根据角落方向调整宽度
+          // 保持寬高比
+          // 根據角落方向調整寬度
           let nextWidth = startWidth;
           if (corner === 'ne' || corner === 'se') {
             nextWidth = startWidth + dx;
@@ -125,7 +125,7 @@ function ImageNodeView(props: NodeViewProps) {
             nextWidth = startWidth - dx;
           }
 
-          // 允许垂直拖拽调整大小，根据角落映射 dy 到宽度变化
+          // 允許垂直拖拽調整大小，根據角落對映 dy 到寬度變化
           const dyAsWidth = dy * ratio;
           if (corner === 'se' || corner === 'sw') {
             nextWidth =
@@ -146,7 +146,7 @@ function ImageNodeView(props: NodeViewProps) {
 
           const nextHeight = nextWidth / ratio;
 
-          // 如果接近容器宽度，吸附到 100%
+          // 如果接近容器寬度，吸附到 100%
           if (Math.abs(containerWidth - nextWidth) < 10) {
             props.updateAttributes({
               width: '100%',
@@ -209,7 +209,7 @@ function ImageNodeView(props: NodeViewProps) {
                 className="size-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent"
                 aria-hidden="true"
               />
-              <span className="sr-only">图片上传中</span>
+              <span className="sr-only">圖片上傳中</span>
             </div>
           </>
         ) : null}
@@ -387,7 +387,7 @@ export const Image = TiptapImage.extend<ImageOptions>({
             };
           });
 
-          // 一次性插入多个节点，避免 NodeSelection 导致后续插入替换掉前一个节点
+          // 一次性插入多個節點，避免 NodeSelection 導致後續插入替換掉前一個節點
           const inserted = commands.insertContent([
             ...uploads.map(({ uploadId, previewUrl }) => ({
               type: this.name,
@@ -399,7 +399,7 @@ export const Image = TiptapImage.extend<ImageOptions>({
             { type: 'paragraph' },
           ]);
 
-          // 并发上传：不阻塞命令返回
+          // 併發上傳：不阻塞命令返回
           void Promise.all(
             uploads.map(async ({ file, uploadId, previewUrl }) => {
               try {

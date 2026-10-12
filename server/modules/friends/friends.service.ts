@@ -27,7 +27,7 @@ import type {
 const MAX_MESSAGES = 100;
 const DEFAULT_MESSAGE_LIMIT = 50;
 const SEARCH_LIMIT = 20;
-// 單則聊天訊息的最大字元數，防止用戶端送出超長訊息造成儲存與頻寬壓力
+// 單則聊天訊息的最大字元數，防止使用者端送出超長訊息造成儲存與頻寬壓力
 const MAX_MESSAGE_LENGTH = 2000;
 
 interface FriendRow {
@@ -90,7 +90,7 @@ export class FriendsService {
     const friendRows = rows as unknown as FriendRow[];
     const friendIds: string[] = friendRows.map((r: FriendRow) => r.userId);
 
-    // 获取未读消息计数
+    // 獲取未讀訊息計數
     const unreadCounts = await this.getUnreadCounts(userId, friendIds);
 
     return friendRows.map((row: FriendRow) => ({
@@ -104,7 +104,7 @@ export class FriendsService {
     }));
   }
 
-  // ========== 待处理请求 ==========
+  // ========== 待處理請求 ==========
 
   async getPendingRequests(userId: string): Promise<FriendInfo[]> {
     const rows = await this.db.execute(sql<FriendRow>`
@@ -131,7 +131,7 @@ export class FriendsService {
     }));
   }
 
-  // ========== 搜索用户 ==========
+  // ========== 搜尋使用者 ==========
 
   async searchUsers(userId: string, query: string): Promise<SearchUserResult[]> {
     if (!query?.trim()) return [];
@@ -151,7 +151,7 @@ export class FriendsService {
     const searchRows = rows as unknown as SearchRow[];
     if (searchRows.length === 0) return [];
 
-    // 批量检查好友状态
+    // 批次檢查好友狀態
     const userIds: string[] = searchRows.map((r: SearchRow) => r.userId);
     const friendStatuses = await this.getFriendStatusMap(userId, userIds);
 
@@ -162,7 +162,7 @@ export class FriendsService {
     }));
   }
 
-  // ========== 添加好友 ==========
+  // ========== 新增好友 ==========
 
   async addFriend(
     fromUserId: string,
@@ -170,25 +170,25 @@ export class FriendsService {
     remark?: string,
   ): Promise<void> {
     if (fromUserId === toUserId) {
-      throw new BadRequestException('不能添加自己为好友');
+      throw new BadRequestException('不能新增自己為好友');
     }
     if (!toUserId?.trim()) {
-      throw new BadRequestException('目标用户ID不能为空');
+      throw new BadRequestException('目標使用者ID不能為空');
     }
 
-    // 检查是否已存在好友关系或待处理请求（双向检查）
+    // 檢查是否已存在好友關係或待處理請求（雙向檢查）
     const existing = await this.findFriendship(fromUserId, toUserId);
     if (existing) {
       if (existing.status === 'pending') {
-        throw new BadRequestException('已存在待处理的好友请求');
+        throw new BadRequestException('已存在待處理的好友請求');
       }
       if (existing.status === 'accepted') {
-        throw new BadRequestException('对方已经是你的好友');
+        throw new BadRequestException('對方已經是你的好友');
       }
       if (existing.status === 'blocked') {
-        throw new BadRequestException('对方已被你拉黑');
+        throw new BadRequestException('對方已被你拉黑');
       }
-      // rejected 状态允许重新发起请求
+      // rejected 狀態允許重新發起請求
     }
 
     try {
@@ -201,7 +201,7 @@ export class FriendsService {
     } catch (err) {
       const code = this.extractPostgresErrorCode(err);
       if (code === '23505') {
-        throw new BadRequestException('好友请求已存在');
+        throw new BadRequestException('好友請求已存在');
       }
       this.logger.error(
         `addFriend failed: ${JSON.stringify(err)}`,
@@ -218,17 +218,17 @@ export class FriendsService {
     action: 'accept' | 'reject' | 'remove' | 'block',
   ): Promise<void> {
     if (!friendUserId?.trim()) {
-      throw new BadRequestException('好友用户ID不能为空');
+      throw new BadRequestException('好友使用者ID不能為空');
     }
     if (userId === friendUserId) {
-      throw new BadRequestException('不能对自己执行此操作');
+      throw new BadRequestException('不能對自己執行此操作');
     }
 
     const friendship = await this.findFriendship(userId, friendUserId);
 
     if (action === 'remove') {
       if (!friendship) {
-        throw new NotFoundException('好友关系不存在');
+        throw new NotFoundException('好友關係不存在');
       }
       await this.db.delete(monopolyFriends).where(
         sql`(user_id).user_id = ${friendship.userIdSide}
@@ -239,7 +239,7 @@ export class FriendsService {
 
     if (action === 'block') {
       if (friendship) {
-        // 更新现有记录为 blocked
+        // 更新現有記錄為 blocked
         await this.db.update(monopolyFriends)
           .set({ status: 'blocked' })
           .where(
@@ -247,7 +247,7 @@ export class FriendsService {
                  AND (friend_id).user_id = ${friendship.friendIdSide}`,
           );
       } else {
-        // 创建新的拉黑记录
+        // 建立新的拉黑記錄
         await this.db.insert(monopolyFriends).values({
           userId,
           friendId: friendUserId,
@@ -257,18 +257,18 @@ export class FriendsService {
       return;
     }
 
-    // accept / reject：只有收到请求的一方可以操作
+    // accept / reject：只有收到請求的一方可以操作
     if (!friendship) {
-      throw new NotFoundException('好友请求不存在');
+      throw new NotFoundException('好友請求不存在');
     }
 
-    // 必须是对方发给当前用户的请求（friend_id = 当前用户）
+    // 必須是對方發給當前使用者的請求（friend_id = 當前使用者）
     if (friendship.friendIdSide !== userId) {
-      throw new BadRequestException('无权处理此好友请求');
+      throw new BadRequestException('無權處理此好友請求');
     }
 
     if (friendship.status !== 'pending') {
-      throw new BadRequestException('该好友请求已被处理');
+      throw new BadRequestException('該好友請求已被處理');
     }
 
     if (action === 'accept') {
@@ -288,7 +288,7 @@ export class FriendsService {
     }
   }
 
-  // ========== 聊天消息 ==========
+  // ========== 聊天訊息 ==========
 
   async getMessages(
     userId: string,
@@ -296,7 +296,7 @@ export class FriendsService {
     limit: number = DEFAULT_MESSAGE_LIMIT,
   ): Promise<FriendMessage[]> {
     if (!otherUserId?.trim()) {
-      throw new BadRequestException('对方用户ID不能为空');
+      throw new BadRequestException('對方使用者ID不能為空');
     }
 
     const actualLimit = Math.min(Math.max(limit, 1), MAX_MESSAGES);
@@ -320,7 +320,7 @@ export class FriendsService {
     `);
 
     const msgRows = rows as unknown as MessageRow[];
-    // 倒序后再正序排列（最新的N条，按时间正序返回）
+    // 倒序後再正序排列（最新的N條，按時間正序返回）
     const sorted = [...msgRows].reverse();
 
     return sorted.map((row: MessageRow) => ({
@@ -340,19 +340,19 @@ export class FriendsService {
     content: string,
   ): Promise<FriendMessage> {
     if (!toUserId?.trim()) {
-      throw new BadRequestException('接收用户ID不能为空');
+      throw new BadRequestException('接收使用者ID不能為空');
     }
     if (!content?.trim()) {
-      throw new BadRequestException('消息内容不能为空');
+      throw new BadRequestException('訊息內容不能為空');
     }
     if (fromUserId === toUserId) {
-      throw new BadRequestException('不能给自己发消息');
+      throw new BadRequestException('不能給自己發訊息');
     }
 
     const trimmedContent = content.trim();
     if (trimmedContent.length > MAX_MESSAGE_LENGTH) {
       throw new BadRequestException(
-        `消息内容不能超过 ${MAX_MESSAGE_LENGTH} 个字符`,
+        `訊息內容不能超過 ${MAX_MESSAGE_LENGTH} 個字元`,
       );
     }
 
@@ -370,7 +370,7 @@ export class FriendsService {
       });
 
     if (result.length === 0) {
-      throw new BadRequestException('消息发送失败');
+      throw new BadRequestException('訊息傳送失敗');
     }
 
     return {
@@ -386,7 +386,7 @@ export class FriendsService {
 
   async markAsRead(userId: string, fromUserId: string): Promise<void> {
     if (!fromUserId?.trim()) {
-      throw new BadRequestException('发送方用户ID不能为空');
+      throw new BadRequestException('傳送方使用者ID不能為空');
     }
 
     await this.db.update(monopolyFriendMessages)
@@ -398,7 +398,7 @@ export class FriendsService {
       );
   }
 
-  // ========== 在线状态 ==========
+  // ========== 線上狀態 ==========
 
   async getOnlineStatus(
     userIds: string[],
@@ -410,7 +410,7 @@ export class FriendsService {
     return result;
   }
 
-  // ========== 辅助方法 ==========
+  // ========== 輔助方法 ==========
 
   private async getUnreadCounts(
     userId: string,

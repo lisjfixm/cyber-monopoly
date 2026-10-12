@@ -7,36 +7,36 @@ import type { I18nText } from '@client/src/components/business-ui/entity-combobo
 export type { I18nText };
 
 /**
- * 群组原始信息（对应 SearchChatEntity）
+ * 群組原始資訊（對應 SearchChatEntity）
  */
 export type ChatInfo = {
-  /** 群组 ID */
+  /** 群組 ID */
   chatID: string;
-  /** 群组名称（国际化文本） */
+  /** 群組名稱（國際化文字） */
   name: I18nText;
-  /** 头像：URL 或 16 进制 RGB 颜色 */
+  /** 頭像：URL 或 16 進位制 RGB 顏色 */
   avatar: string;
   /** 是否是外部群 */
   isExternal?: boolean;
-  /** 群成员数量（不包括机器人） */
+  /** 群成員數量（不包括機器人） */
   userCount?: number;
 };
 
 /**
- * 标准化后的群组数据（用于 BaseCombobox）
+ * 標準化後的群組資料（用於 BaseCombobox）
  */
 export type Chat = ItemValue<ChatInfo>;
 
 /**
- * 值类型
- * - 'string': value 为 chatID 字符串
- * - 'object': value 为 Chat 对象
+ * 值型別
+ * - 'string': value 為 chatID 字串
+ * - 'object': value 為 Chat 物件
  * @default 'string'
  */
 export type ValueType = 'string' | 'object';
 
 /**
- * 根据 valueType 和 multiple 推断 value 类型
+ * 根據 valueType 和 multiple 推斷 value 型別
  */
 export type InferValue<
   V extends ValueType,
@@ -57,36 +57,36 @@ type ChatSelectBaseProps<
   'value' | 'defaultValue' | 'onChange'
 > & {
   /**
-   * 值类型
-   * - 'string': value 为 chatID 字符串
-   * - 'object': value 为 Chat 对象
+   * 值型別
+   * - 'string': value 為 chatID 字串
+   * - 'object': value 為 Chat 物件
    * @default 'string'
    */
   valueType?: V;
   /**
-   * 是否多选
+   * 是否多選
    * @default false
    */
   multiple?: M;
   /**
-   * 当前值
+   * 當前值
    */
   value?: InferValue<V, M>;
   /**
-   * 默认值
+   * 預設值
    */
   defaultValue?: InferValue<V, M>;
   /**
-   * 值变化回调
+   * 值變化回撥
    */
   onChange?: (value: InferValue<V, M>) => void;
 };
 
 /**
- * ChatSelect 组件 Props
+ * ChatSelect 元件 Props
  *
- * 类型组合：
- * | valueType | multiple | value 类型 |
+ * 型別組合：
+ * | valueType | multiple | value 型別 |
  * |-----------|----------|------------|
  * | 'string'  | false    | string \| null |
  * | 'string'  | true     | string[] |

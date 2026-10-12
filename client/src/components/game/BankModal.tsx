@@ -542,7 +542,7 @@ const BankModal: FC<BankModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: 'var(--text-secondary)' }}>類型</span>
+                <span style={{ color: 'var(--text-secondary)' }}>型別</span>
                 <span style={{ color: 'var(--text-primary)' }}>
                   {confirmTrade.kind === 'futures' ? '期貨合約' : confirmTrade.kind === 'call' ? '看漲期權' : '看跌期權'}
                 </span>

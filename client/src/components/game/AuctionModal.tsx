@@ -169,7 +169,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
     }
   };
 
-  // 计算已退出竞拍的玩家
+  // 計算已退出競拍的玩家
   const allPlayerIndices = players.map((_p, i) => i);
   const activeBiddersSet = new Set(auction.activeBidders);
 
@@ -453,7 +453,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             <>
               <div className="text-center p-4 rounded-lg" style={{ backgroundColor: "var(--bg-mid)" }}>
             <div className="text-[10px] font-cyber tracking-widest mb-1" style={{ color: "var(--text-secondary)" }}>
-              当前最高价（{currentBidder?.name ?? "-"}）
+              當前最高價（{currentBidder?.name ?? "-"}）
             </div>
             <div
               className="font-cyber text-3xl md:text-4xl tracking-wider pulse-glow"
@@ -472,7 +472,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-4 h-4" style={{ color: "var(--cyan)" }} />
               <span className="text-xs text-[var(--text-secondary)] font-cyber tracking-wider">
-                竞拍者 ({auction.activeBidders.length}/{players.length})
+                競拍者 ({auction.activeBidders.length}/{players.length})
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -528,7 +528,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             <div className="flex items-center gap-2">
               <Timer className="w-4 h-4" style={{ color: PLAYER_COLOR_HEX[activePlayer?.color ?? "red"] }} />
               <span className="text-xs text-[var(--text-secondary)]">
-                当前出价者
+                當前出價者
               </span>
             </div>
             <span
@@ -546,7 +546,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg text-center" style={{ backgroundColor: "var(--bg-mid)" }}>
               <div className="text-[10px] font-cyber tracking-widest mb-1" style={{ color: "var(--text-secondary)" }}>
-                起拍价
+                起拍價
               </div>
               <div className="font-cyber text-sm" style={{ color: "var(--cyan)" }}>
                 ¥{auction.startingPrice.toLocaleString()}
@@ -554,7 +554,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             </div>
             <div className="p-3 rounded-lg text-center" style={{ backgroundColor: "var(--bg-mid)" }}>
               <div className="text-[10px] font-cyber tracking-widest mb-1" style={{ color: "var(--text-secondary)" }}>
-                最低加价
+                最低加價
               </div>
               <div className="font-cyber text-sm" style={{ color: "var(--green)" }}>
                 ¥{auction.minIncrement.toLocaleString()}
@@ -567,7 +567,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             <div className="flex items-center gap-2">
               <Landmark className="w-4 h-4" style={{ color: "var(--purple)" }} />
               <span className="text-xs text-[var(--text-secondary)]">
-                地块原价
+                地塊原價
               </span>
             </div>
             <span className="font-cyber text-sm text-[var(--text-secondary)] line-through">
@@ -580,7 +580,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             <div className="flex items-center gap-2">
               <DollarSign className="w-4 h-4" style={{ color: "var(--green)" }} />
               <span className="text-xs text-[var(--text-secondary)]">
-                我的现金
+                我的現金
               </span>
             </div>
             <span
@@ -602,7 +602,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
             >
               <Timer className="w-4 h-4" style={{ color: "var(--purple)" }} />
               <span className="text-sm" style={{ color: "var(--purple)" }}>
-                等待 {activePlayer?.name ?? "对方"} 出价...
+                等待 {activePlayer?.name ?? "對方"} 出價...
               </span>
             </div>
           )}
@@ -621,7 +621,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
                     style={{ color: "var(--red)" }}
                   />
                   <span className="text-xs" style={{ color: "var(--red)" }}>
-                    现金不足，无法支付该出价
+                    現金不足，無法支付該出價
                   </span>
                 </div>
               )}
@@ -639,7 +639,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
           {isMyTurn && auction.active && (
             <div className="space-y-2">
               <div className="text-[10px] font-cyber tracking-widest" style={{ color: "var(--text-secondary)" }}>
-                加价金额
+                加價金額
               </div>
               <div className="flex gap-2">
                 <input
@@ -657,7 +657,7 @@ const AuctionModal: FC<AuctionModalProps> = ({
                   disabled={!canBid}
                 >
                   <ArrowUp className="w-4 h-4 inline mr-1" />
-                  出价
+                  出價
                 </button>
               </div>
               {/* Quick bid buttons */}

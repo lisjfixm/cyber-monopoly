@@ -141,7 +141,7 @@ const StoryModePage = () => {
 
   return (
     <div className="min-h-screen w-full px-4 py-6 md:py-8 scanlines relative">
-      {/* 背景装饰 */}
+      {/* 背景裝飾 */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 rounded-full opacity-10 blur-[100px]"
@@ -237,7 +237,7 @@ const StoryModePage = () => {
             {/* Level Map */}
             <div className="flex-1 lg:max-w-md">
             <div className="relative">
-              {/* 纵向连接线 */}
+              {/* 縱向連線線 */}
               <div
                 className="absolute left-6 top-4 bottom-4 w-px"
                 style={{
@@ -280,7 +280,7 @@ const StoryModePage = () => {
                         animation: isCurrent ? 'pulse-glow 2s ease-in-out infinite' : undefined,
                       }}
                     >
-                      {/* 节点圆点 */}
+                      {/* 節點圓點 */}
                       <div
                         className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center font-cyber text-sm font-bold"
                         style={{
@@ -480,7 +480,7 @@ const StoryModePage = () => {
                   選擇關卡
                 </h3>
                 <p className="text-sm text-[var(--text-secondary)]">
-                  點擊左側已解鎖的關卡查看詳情
+                  點選左側已解鎖的關卡檢視詳情
                   <br />
                   通關後自動解鎖下一關
                 </p>
@@ -522,7 +522,7 @@ const StoryModePage = () => {
                   尚無自製劇本
                 </h3>
                 <p className="text-sm text-[var(--text-secondary)] mb-4">
-                  使用劇本製作器創建專屬挑戰
+                  使用劇本製作器建立專屬挑戰
                 </p>
                 <button
                   type="button"

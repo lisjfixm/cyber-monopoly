@@ -1,4 +1,4 @@
-// 自製卡牌與社區卡牌工具
+// 自製卡牌與社群卡牌工具
 import type { CardEffect } from '@shared/api.interface';
 
 const LOCAL_KEY = 'cyber_monopoly_custom_cards_local';

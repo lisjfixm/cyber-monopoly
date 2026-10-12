@@ -9,7 +9,7 @@ import {
 const chatService = new ChatService();
 
 /**
- * 搜索群组
+ * 搜尋群組
  */
 export async function searchChats(
   params: SearchChatsParams,
@@ -18,7 +18,7 @@ export async function searchChats(
 }
 
 /**
- * 批量根据群组 ID 查询群组信息
+ * 批次根據群組 ID 查詢群組資訊
  */
 export async function listChatsByIds(
   chatIds: string[],

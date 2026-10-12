@@ -8,7 +8,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    // 生產環境啟動失敗時讓進程退出（由容器/編排層重啟）；開發環境保留完整錯誤輸出
+    // 生產環境啟動失敗時讓程序退出（由容器/編排層重啟）；開發環境保留完整錯誤輸出
     abortOnError: process.env.NODE_ENV !== 'development',
   });
 
@@ -49,7 +49,7 @@ async function bootstrap() {
 }
 
 bootstrap().catch((err) => {
-  // 啟動階段未被 Nest 接住的例外（如監聽失敗）至少印出結構化錯誤，避免進程靜默退出
+  // 啟動階段未被 Nest 接住的例外（如監聽失敗）至少印出結構化錯誤，避免程序靜默退出
   // eslint-disable-next-line no-console
   console.error('伺服器啟動失敗:', err instanceof Error ? err.message : String(err));
   process.exit(1);

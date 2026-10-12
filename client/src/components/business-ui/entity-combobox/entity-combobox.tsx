@@ -36,7 +36,7 @@ export function EntityCombobox<
     getItemValue,
   } = props;
 
-  // 受控状态
+  // 受控狀態
   const [selectedValue, setSelectedValue] = useControllableState({
     prop: valueProp,
     defaultProp: defaultValue ?? (!multiple ? null : []),
@@ -46,7 +46,7 @@ export function EntityCombobox<
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearch = useDebounce(searchValue, debounce);
 
-  // 代理 onOpenChange，关闭时清空搜索
+  // 代理 onOpenChange，關閉時清空搜尋
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
       if (!newOpen) {
@@ -63,7 +63,7 @@ export function EntityCombobox<
     onChange: handleOpenChange,
   });
 
-  // 使用自定义 hook 处理数据请求
+  // 使用自定義 hook 處理資料請求
   const { data, isFetching, isError, isSuccess, fetchStatus, refetch } =
     useFetchData<T>({
       fetchFn,
@@ -72,7 +72,7 @@ export function EntityCombobox<
       onSearch,
     });
 
-  // 选择逻辑
+  // 選擇邏輯
   const handleSelect = useCallback(
     (itemValue: TValue) => {
       if (!multiple) {

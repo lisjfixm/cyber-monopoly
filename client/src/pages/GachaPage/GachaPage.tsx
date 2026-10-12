@@ -222,7 +222,7 @@ const GachaPage = () => {
             霓虹扭蛋
           </h1>
           <p className="text-xs font-cyber tracking-wider mt-1" style={{ color: 'var(--text-secondary)' }}>
-            抽取皮膚 / 寵物 / 稱號 · v3.0.0
+            抽取皮膚 / 寵物 / 稱號 · v4.0.0
           </p>
         </div>
       </div>

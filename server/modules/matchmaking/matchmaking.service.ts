@@ -34,7 +34,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   onModuleInit(): void {
     this.cleanupTimer = setInterval(() => {
       void this.cleanupExpired(MATCH_TIMEOUT_SECONDS).catch(() => {
-        // 静默失败，避免定时器崩溃
+        // 靜默失敗，避免定時器崩潰
       });
     }, CLEANUP_INTERVAL_MS);
   }
@@ -47,7 +47,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 加入匹配队列
+   * 加入配對佇列
    */
   async joinQueue(
     visitorId: string,
@@ -55,32 +55,32 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
     gameMode: string,
     maxPlayers: number,
   ): Promise<{ position: number; waitedSeconds: number }> {
-    // 参数校验
+    // 引數校驗
     if (!visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
     const trimmedNickname = nickname?.trim();
     if (!trimmedNickname) {
-      throw new BadRequestException('昵称不能为空');
+      throw new BadRequestException('暱稱不能為空');
     }
     if (trimmedNickname.length > 20) {
-      throw new BadRequestException('昵称长度不能超过 20 字符');
+      throw new BadRequestException('暱稱長度不能超過 20 字元');
     }
     if (!VALID_GAME_MODES.includes(gameMode as GameMode)) {
-      throw new BadRequestException('无效的游戏模式');
+      throw new BadRequestException('無效的遊戲模式');
     }
     if (!VALID_MAX_PLAYERS.includes(maxPlayers)) {
-      throw new BadRequestException('无效的玩家数量');
+      throw new BadRequestException('無效的玩家數量');
     }
 
     const cleanId = visitorId.trim();
     const now = new Date();
 
     await this.db.transaction(async (tx) => {
-      // 先移除该 visitorId 已有的队列记录（防止重复加入）
+      // 先移除該 visitorId 已有的佇列記錄（防止重複加入）
       await tx.delete(monopolyMatchQueue).where(eq(monopolyMatchQueue.visitorId, cleanId));
 
-      // 清理超时记录
+      // 清理超時記錄
       const cutoff = new Date(now.getTime() - MATCH_TIMEOUT_SECONDS * 1000);
       await tx.delete(monopolyMatchQueue).where(
         and(
@@ -90,7 +90,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
         ),
       );
 
-      // 插入新记录
+      // 插入新記錄
       await tx.insert(monopolyMatchQueue).values({
         visitorId: cleanId,
         nickname: trimmedNickname,
@@ -100,26 +100,26 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
       });
     });
 
-    // 获取当前位置
+    // 獲取當前位置
     const { position, waitedSeconds } = await this.getQueuePosition(
       cleanId,
       gameMode,
       maxPlayers,
     );
 
-    // 尝试匹配
+    // 嘗試配對
     await this.checkMatch(gameMode, maxPlayers);
 
     return { position, waitedSeconds };
   }
 
   /**
-   * 检查并执行匹配
-   * @returns 匹配成功返回房间码，否则返回 null
+   * 檢查並執行配對
+   * @returns 配對成功返回房間碼，否則返回 null
    */
   async checkMatch(gameMode: string, maxPlayers: number): Promise<string | null> {
     return this.db.transaction(async (tx) => {
-      // 查詢該模式下按加入時間排序的前 N 個玩家，並加行鎖防止並發匹配
+      // 查詢該模式下按加入時間排序的前 N 個玩家，並加行鎖防止並發配對
       const candidates: QueueRecord[] = await tx
         .select()
         .from(monopolyMatchQueue)
@@ -145,7 +145,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
       const joinedPlayers: number[] = [];
 
       try {
-        // 創建房間（第一個玩家為房主）
+        // 建立房間（第一個玩家為房主）
         const room = await this.monopolyService.createRoom({
           hostName: hostPlayer.nickname,
           gameMode: gameMode as GameMode,
@@ -171,7 +171,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
 
         // 校驗：所有玩家都成功加入後才開始遊戲
         if (joinedPlayers.length !== playerIds.length) {
-          throw new Error('部分玩家加入失敗，取消匹配');
+          throw new Error('部分玩家加入失敗，取消配對');
         }
 
         // 房主自動開始遊戲
@@ -181,7 +181,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
           gameMode as GameMode,
         );
 
-        // 從隊列中刪除這些玩家
+        // 從佇列中刪除這些玩家
         await tx
           .delete(monopolyMatchQueue)
           .where(inArray(monopolyMatchQueue.id, playerIds));
@@ -193,7 +193,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
 
         return room.roomCode;
       } catch (err) {
-        // 補償：關閉已創建的髒房間
+        // 補償：關閉已建立的髒房間
         if (roomCode) {
           try {
             await this.monopolyService.closeRoom(roomCode);
@@ -201,7 +201,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
             // 忽略清理失敗
           }
         }
-        // 補償：把已匹配的玩家重新放回隊列
+        // 補償：把已配對的玩家重新放回佇列
         try {
           const requeueValues = matched.map((p: QueueRecord) => ({
             visitorId: p.visitorId,
@@ -223,11 +223,11 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 离开匹配队列
+   * 離開配對佇列
    */
   async leaveQueue(visitorId: string): Promise<boolean> {
     if (!visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
 
     const result = await this.db
@@ -239,11 +239,11 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 获取当前玩家的匹配状态
+   * 獲取當前玩家的配對狀態
    */
   async getQueueStatus(visitorId: string): Promise<MatchStatusResponse> {
     if (!visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
 
     const cleanId = visitorId.trim();
@@ -272,7 +272,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
       player.maxPlayers,
     );
 
-    // 如果該玩家已匹配成功，返回一次性房間碼並清除
+    // 如果該玩家已配對成功，返回一次性房間碼並清除
     const matchedRoomCode = pendingMatches.get(cleanId);
     if (matchedRoomCode) {
       pendingMatches.delete(cleanId);
@@ -299,7 +299,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 清理超时的匹配请求
+   * 清理超時的配對請求
    */
   async cleanupExpired(timeoutSeconds: number): Promise<number> {
     const cutoff = new Date(Date.now() - timeoutSeconds * 1000);
@@ -312,7 +312,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 获取玩家在同模式同人数队列中的位置（从0开始）
+   * 獲取玩家在同模式同人數佇列中的位置（從0開始）
    */
   private async getQueuePosition(
     visitorId: string,
@@ -347,7 +347,7 @@ export class MatchmakingService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 查询所有队列统计（用于监控）
+   * 查詢所有佇列統計（用於監控）
    */
   async getQueueStats(): Promise<Array<{ gameMode: string; maxPlayers: number; count: number }>> {
     const result = await this.db

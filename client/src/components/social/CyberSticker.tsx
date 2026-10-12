@@ -271,7 +271,7 @@ const STICKER_MAP: Record<string, React.FC<{ size: number }>> = {
 export const STICKER_LIST = [
   { id: 'neon_smile', name: '霓虹笑臉' },
   { id: 'hacker_mask', name: '駭客面具' },
-  { id: 'data_stream', name: '數據流' },
+  { id: 'data_stream', name: '資料流' },
   { id: 'gold_coin', name: '金幣' },
   { id: 'cyber_bomb', name: '炸彈' },
   { id: 'cyber_crown', name: '王冠' },

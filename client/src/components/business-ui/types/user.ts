@@ -4,71 +4,71 @@ import type { I18nText } from '@/components/business-ui/entity-combobox/types';
 import type { Department } from '@/components/business-ui/department-select/types';
 
 /**
- * 重新导出相关类型，方便统一导入
+ * 重新匯出相關型別，方便統一匯入
  */
 export type { I18nText, Department };
 
 /**
- * 用户类型枚举
+ * 使用者型別列舉
  */
 export type UserType = '_employee' | '_externalUser' | '_anonymousUser';
 
 /**
- * 统一的标准用户类型（单一事实来源）
- * 使用下划线命名（与后端统一），larkUserId 除外
+ * 統一的標準使用者型別（單一事實來源）
+ * 使用下劃線命名（與後端統一），larkUserId 除外
  */
 export interface User {
-  /** 用户 ID（未注册外部联系人可能没有） */
+  /** 使用者 ID（未註冊外部聯絡人可能沒有） */
   user_id?: string;
 
-  /** 飞书用户 ID（保持驼峰） */
+  /** 飛書使用者 ID（保持駝峰） */
   larkUserId?: string;
 
   /**
-   * 用户名称
-   * 支持简单字符串或国际化文本
+   * 使用者名稱稱
+   * 支援簡單字串或國際化文字
    */
   name?: I18nText | string;
 
-  /** 用户头像 URL */
+  /** 使用者頭像 URL */
   avatar?: string;
 
-  /** 用户邮箱 */
+  /** 使用者郵箱 */
   email?: string;
 
   /**
-   * 用户类型
-   * - '_employee': 内部员工
-   * - '_externalUser': 外部用户
-   * - '_anonymousUser': 匿名用户
+   * 使用者型別
+   * - '_employee': 內部員工
+   * - '_externalUser': 外部使用者
+   * - '_anonymousUser': 匿名使用者
    */
   user_type?: UserType;
 
-  /** 部门信息（引用 DepartmentSelect 的类型） */
+  /** 部門資訊（引用 DepartmentSelect 的型別） */
   department?: Department;
 
-  /** 租户名称（外部用户显示） */
+  /** 租戶名稱（外部使用者顯示） */
   tenantName?: string;
 
-  /** 用户状态 */
+  /** 使用者狀態 */
   status?: number;
 }
 
 /**
- * 用户数据输入类型（用于组件 Props）
- * 兼容驼峰和下划线命名，内部自动转换为标准 User 类型
+ * 使用者資料輸入型別（用於元件 Props）
+ * 相容駝峰和下劃線命名，內部自動轉換為標準 User 型別
  */
 export type UserInput =
   | User
   | {
       user_id?: string;
-      userId?: string;         // 兼容驼峰
+      userId?: string;         // 相容駝峰
       larkUserId?: string;
       name?: I18nText | string;
       avatar?: string;
       email?: string;
       user_type?: UserType;
-      userType?: UserType;     // 兼容驼峰
+      userType?: UserType;     // 相容駝峰
       department?: Department | any;
       status?: number;
     };

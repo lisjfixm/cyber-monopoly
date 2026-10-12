@@ -24,7 +24,7 @@ export type BaseComboboxListProps<T = unknown> = {
   ) => React.ReactNode;
   getItemValue: (item: T) => ItemValue;
   /**
-   * 判断选项是否禁用
+   * 判斷選項是否禁用
    */
   getOptionDisabled?: (value: ItemValue) => boolean;
   emptyText?: string;
@@ -79,24 +79,24 @@ export function BaseComboboxList<T>({
 
   const hasSearchQuery = debouncedSearch.trim() !== '';
 
-  // 1. 没有搜索词时显示 placeholder
+  // 1. 沒有搜尋詞時顯示 placeholder
   const shouldShowPlaceHolder = !hasSearchQuery;
-  // 2. 搜索出错时显示错误状态
+  // 2. 搜尋出錯時顯示錯誤狀態
   const shouldShowError = isError && hasSearchQuery;
-  // 3. 首次搜索无已有数据时显示骨架屏
+  // 3. 首次搜尋無已有資料時顯示骨架屏
   const shouldShowSkeleton =
     isFetching && (data === undefined || data?.length === 0) && hasSearchQuery;
-  // 4. 有已有内容触发搜索时显示蒙层 loading
+  // 4. 有已有內容觸發搜尋時顯示蒙層 loading
   const shouldShowSpinner =
     isFetching && data !== undefined && data.length > 0 && hasSearchQuery;
-  // 5. 搜索完成结果为空时显示空状态
+  // 5. 搜尋完成結果為空時顯示空狀態
   const shouldShowEmpty =
     !isFetching && isSuccess && data?.length === 0 && hasSearchQuery;
 
   const content = (() => {
     if (shouldShowPlaceHolder) {
       return (
-        <BaseComboboxEmpty text={'请输入关键词'} className={classNames.empty} />
+        <BaseComboboxEmpty text={'請輸入關鍵詞'} className={classNames.empty} />
       );
     }
 

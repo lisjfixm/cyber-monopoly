@@ -26,7 +26,7 @@ const LocalSetupPage = () => {
 
   const [playerCount, setPlayerCount] = useState<PlayerCountOption>(initialCount);
 
-  // 初始化玩家名称
+  // 初始化玩家名稱
   const getInitialNames = (count: number): string[] => {
     const names: string[] = [];
     for (let i = 0; i < count; i += 1) {
@@ -39,7 +39,7 @@ const LocalSetupPage = () => {
   const [playerNames, setPlayerNames] = useState<string[]>(() => getInitialNames(initialCount));
   const [error, setError] = useState<string>('');
 
-  // 新手教学
+  // 新手教學
   const { unlock: unlockAchievement } = useAchievements();
   const tutorial = useTutorial({
     onComplete: () => {
@@ -47,11 +47,11 @@ const LocalSetupPage = () => {
     },
   });
 
-  // 本地设置页只处理第1步（gameModes，索引1）
+  // 本地設定頁只處理第1步（gameModes，索引1）
   const tutorialVisible = tutorial.isActive && tutorial.currentStep === 1;
 
   useEffect(() => {
-    // 调整玩家数量时，保留已有名字，新位置填空
+    // 調整玩家數量時，保留已有名字，新位置填空
     setPlayerNames((prev) => {
       const next: string[] = [];
       for (let i = 0; i < playerCount; i += 1) {
@@ -81,21 +81,21 @@ const LocalSetupPage = () => {
     e.preventDefault();
     const trimmedNames = playerNames.map((n: string) => n.trim());
 
-    // 检查空昵称
+    // 檢查空暱稱
     const hasEmpty = trimmedNames.some((n: string) => !n);
     if (hasEmpty) {
       setError('請輸入所有玩家的暱稱');
       return;
     }
 
-    // 检查重复昵称
+    // 檢查重複暱稱
     const uniqueNames = new Set(trimmedNames);
     if (uniqueNames.size !== trimmedNames.length) {
       setError('玩家暱稱不能重複');
       return;
     }
 
-    // 构建 URL 参数
+    // 構建 URL 引數
     const params = new URLSearchParams();
     params.set('mode', 'local');
     params.set('playerCount', String(playerCount));
@@ -104,7 +104,7 @@ const LocalSetupPage = () => {
     });
 
     if (modeParam === 'custom') {
-      // 自定义模式：直接进入游戏
+      // 自定義模式：直接進入遊戲
       params.set('mode', 'custom');
       params.set('playMode', 'local');
       navigate(`/game?${params.toString()}`);
@@ -136,13 +136,13 @@ const LocalSetupPage = () => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 scanlines relative">
       <div className="w-full max-w-md cyber-card p-6 md:p-8" data-tutorial="game-modes">
         <h2 className="font-cyber text-2xl md:text-3xl text-neon-cyan text-center tracking-wider mb-2">
-          本地多人对战
+          本地多人對戰
         </h2>
         <p className="text-center text-[var(--text-secondary)] text-sm mb-6 font-cyber tracking-wider">
-          一部装置 · 同屏对决
+          一部裝置 · 同屏對決
         </p>
 
-        {/* 玩家数量选择 */}
+        {/* 玩家數量選擇 */}
         <div className="mb-6">
           <label className="block font-cyber text-sm tracking-wider text-[var(--text-secondary)] mb-3 flex items-center gap-2">
             <Users size={14} />
@@ -243,7 +243,7 @@ const LocalSetupPage = () => {
         </button>
       </div>
 
-      {/* 新手教学浮层 */}
+      {/* 新手教學浮層 */}
       {tutorialVisible && tutorial.currentStepConfig && (
         <TutorialOverlay
           steps={TUTORIAL_STEPS}

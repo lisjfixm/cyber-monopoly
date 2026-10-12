@@ -13,8 +13,8 @@ import { cn } from '@/lib/utils';
 import { Popover, PopoverTrigger } from '@client/src/components/ui/popover';
 
 /**
- * 统一的浮层包装组件
- * 根据 triggerType 渲染不同的交互模式
+ * 統一的浮層包裝元件
+ * 根據 triggerType 渲染不同的互動模式
  */
 export function PopoverWrapper<
   T = unknown,
@@ -50,13 +50,13 @@ export function PopoverWrapper<
 
   const { open, setOpen, disabled } = useEntityComboboxContext();
 
-  // 处理打开状态变化，如果 disabled 则不允许打开
+  // 處理開啟狀態變化，如果 disabled 則不允許開啟
   const handleOpenChange = (newOpen: boolean) => {
     if (disabled && newOpen) return;
     setOpen(newOpen);
   };
 
-  // 渲染 Popover 内容
+  // 渲染 Popover 內容
   const renderPopoverContent = () => (
     <BaseComboboxContent
       popoverProps={slotProps?.popover}
@@ -88,7 +88,7 @@ export function PopoverWrapper<
     </BaseComboboxContent>
   );
 
-  // button 类型：标签在外部，Popover 只包裹加号按钮
+  // button 型別：標籤在外部，Popover 只包裹加號按鈕
   if (triggerType === 'button') {
     return (
       <div className={cn(className, classNames?.root)}>
@@ -118,7 +118,7 @@ export function PopoverWrapper<
     );
   }
 
-  // search 和 custom 类型：整个 trigger 包裹在 Popover 中
+  // search 和 custom 型別：整個 trigger 包裹在 Popover 中
   return (
     <div className={cn(className, classNames?.root)}>
       <Popover open={open} onOpenChange={handleOpenChange}>

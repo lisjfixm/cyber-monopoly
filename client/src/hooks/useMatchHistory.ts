@@ -43,9 +43,9 @@ function generateSeedMatches(): MatchHistoryItem[] {
     crazy: '瘋狂模式',
     battle_royale: '大逃殺',
   };
-  const professions = ['賽博黑客', '金融巨鱷', '地產大亨', '科技先鋒', '街頭霸王', '夜之精靈'];
-  const cards = ['黑紅利是', '數據外洩', '黑客轉帳', '獲得補貼', '維修費', '黑市交易', '系統維護', '傳送起點'];
-  const opponents = ['AI 對手', '霓虹刺客', '數據幽靈', '影子商人', '量子駭客'];
+  const professions = ['賽博駭客', '金融巨鱷', '地產大亨', '科技先鋒', '街頭霸王', '夜之精靈'];
+  const cards = ['黑紅利是', '資料外洩', '駭客轉帳', '獲得補貼', '維修費', '黑市交易', '系統維護', '傳送起點'];
+  const opponents = ['AI 對手', '霓虹刺客', '資料幽靈', '影子商人', '量子駭客'];
   const results: ('win' | 'loss' | 'draw')[] = ['win', 'win', 'loss', 'win', 'loss', 'win', 'draw', 'loss'];
 
   const seed: MatchHistoryItem[] = [];

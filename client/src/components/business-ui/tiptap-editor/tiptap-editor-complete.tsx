@@ -26,29 +26,29 @@ export interface TiptapEditorCompleteProps extends Omit<
   TiptapEditorProps,
   'extensions'
 > {
-  /** 占位符文本 */
+  /** 佔位符文字 */
   placeholder?: string;
 }
 
 /**
- * 一个完整、开箱即用的富文本编辑器组件，包含预配置的工具栏。
- * 这是大多数使用场景下的推荐组件。
+ * 一個完整、開箱即用的富文字編輯器元件，包含預配置的工具欄。
+ * 這是大多數使用場景下的推薦元件。
  *
  * 功能特性：
- * - 预配置的工具栏，包含常用的格式化选项
- * - 已内置完整样式，包括边框、焦点态等，你无需在此编辑器外包裹 div 实现样式
- * - 支持撤销/重做
- * - 标题样式 (H1-H6)
- * - 文本对齐
- * - 列表 (无序、有序、任务)
- * - 文本格式化 (加粗、斜体、下划线、删除线、代码)
+ * - 預配置的工具欄，包含常用的格式化選項
+ * - 已內建完整樣式，包括邊框、焦點態等，你無需在此編輯器外包裹 div 實現樣式
+ * - 支援撤銷/重做
+ * - 標題樣式 (H1-H6)
+ * - 文字對齊
+ * - 列表 (無序、有序、任務)
+ * - 文字格式化 (加粗、斜體、下劃線、刪除線、程式碼)
  *
  * @example
  * ```tsx
  * <TiptapEditorComplete
  *   value={value}
  *   onValueChange={setValue}
- *   placeholder="在此输入消息..."
+ *   placeholder="在此輸入訊息..."
  *   aria-invalid={invalid}
  *   aria-disabled={disabled}
  * />
@@ -76,21 +76,21 @@ export function TiptapEditorComplete({
 function DefaultToolbar() {
   return (
     <TiptapEditorToolbar>
-      {/* 撤销/重做 */}
+      {/* 撤銷/重做 */}
       <UndoRedoToolbarButton action="undo" />
       <UndoRedoToolbarButton action="redo" />
       <TiptapEditorToolbarSeparator />
 
-      {/* 标题/正文 */}
+      {/* 標題/正文 */}
       <HeadingToolbarButton />
       <TiptapEditorToolbarSeparator />
 
-      {/* 文本对齐 & 列表 */}
+      {/* 文字對齊 & 列表 */}
       <TextAlignToolbarButton />
       <ListToolbarButton />
       <TiptapEditorToolbarSeparator />
 
-      {/* 文本格式化: 加粗、删除线、斜体、下划线、颜色 */}
+      {/* 文字格式化: 加粗、刪除線、斜體、下劃線、顏色 */}
       <MarkToolbarButton format="bold" />
       <MarkToolbarButton format="strike" />
       <MarkToolbarButton format="italic" />
@@ -98,12 +98,12 @@ function DefaultToolbar() {
       <ColorHighlightToolbarButton />
       <TiptapEditorToolbarSeparator />
 
-      {/* 块级元素: 引用、分割线、代码块 */}
+      {/* 塊級元素: 引用、分割線、程式碼塊 */}
       <BlockquoteToolbarButton />
       <HorizontalRuleToolbarButton />
       <CodeBlockToolbarButton />
 
-      {/* 链接 & 媒体: 图片、附件 */}
+      {/* 連結 & 媒體: 圖片、附件 */}
       <LinkToolbarButton />
       <ImageUploadToolbarButton />
       <AttachmentToolbarButton />

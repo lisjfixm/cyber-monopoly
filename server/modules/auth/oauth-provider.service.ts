@@ -148,7 +148,7 @@ export class OAuthProviderService {
         const primary = emails.find(e => e.primary);
         email = primary?.email;
       } catch {
-        // 拿不到 email 也不阻塞登錄
+        // 拿不到 email 也不阻塞登入
       }
     }
 

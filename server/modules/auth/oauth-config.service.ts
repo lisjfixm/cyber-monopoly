@@ -100,7 +100,7 @@ export class OAuthConfigService {
   ensureConfigured(provider: OAuthProvider): void {
     if (!this.isConfigured(provider)) {
       throw new BadRequestException(
-        `${provider} 第三方登录未配置，请联系管理员设置 ${provider.toUpperCase()}_CLIENT_ID / ${provider.toUpperCase()}_CLIENT_SECRET 等环境变量。`,
+        `${provider} 第三方登入未配置，請聯絡管理員設定 ${provider.toUpperCase()}_CLIENT_ID / ${provider.toUpperCase()}_CLIENT_SECRET 等環境變數。`,
       );
     }
   }

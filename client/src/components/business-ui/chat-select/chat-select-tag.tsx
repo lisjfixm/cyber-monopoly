@@ -31,7 +31,7 @@ export const ChatSelectTag = ({
   size?: ComboboxSize;
   disabled?: boolean;
   /**
-   * 是否正在加载群组信息（ID 模式下查询中）
+   * 是否正在載入群組資訊（ID 模式下查詢中）
    */
   isLoading?: boolean;
 }) => {
@@ -53,7 +53,7 @@ export const ChatSelectTag = ({
     </button>
   ) : null;
 
-  // 加载中状态显示 Skeleton
+  // 載入中狀態顯示 Skeleton
   if (isLoading && !chat) {
     return (
       <div className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5">

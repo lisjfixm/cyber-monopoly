@@ -72,7 +72,7 @@ const HomeOnboardingGuide = ({ open, onClose }: HomeOnboardingGuideProps) => {
       id: 'local',
       icon: <Users size={28} style={{ color: 'var(--cyan)' }} />,
       title: '和朋友同樂？本地多人',
-      body: '「本地多人」讓大家輪流使用同一台裝置對決，适合聚會同樂。規則都一樣，隨時能開一局。',
+      body: '「本地多人」讓大家輪流使用同一臺裝置對決，適合聚會同樂。規則都一樣，隨時能開一局。',
       actionLabel: '開始本地多人',
       onAction: goLocal,
     },

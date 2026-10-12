@@ -32,9 +32,9 @@ export type SearchTriggerProps = {
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   /**
-   * 自定义渲染单个标签
-   * @param value 标签的值对象
-   * @param onClose 关闭标签的回调
+   * 自定義渲染單個標籤
+   * @param value 標籤的值物件
+   * @param onClose 關閉標籤的回撥
    * @param disabled 是否禁用
    * @returns ReactNode
    */
@@ -44,7 +44,7 @@ export type SearchTriggerProps = {
     disabled?: boolean,
   ) => React.ReactNode;
   /**
-   * 判断选项是否禁用
+   * 判斷選項是否禁用
    */
   getOptionDisabled?: (value: ItemValue) => boolean;
   ref?: React.Ref<HTMLDivElement>;
@@ -52,7 +52,7 @@ export type SearchTriggerProps = {
 
 export const SearchTrigger = ({
   size = 'medium',
-  placeholder = '请选择',
+  placeholder = '請選擇',
   maxTagCount,
   maxTagTextLength,
   tagClosable = true,
@@ -74,7 +74,7 @@ export const SearchTrigger = ({
 
   const selectedArray = Array.isArray(selectedValue) ? selectedValue : [];
 
-  // 计算显示的标签
+  // 計算顯示的標籤
   const getDisplayTags = () => {
     if (!multiple) return [];
 
@@ -82,7 +82,7 @@ export const SearchTrigger = ({
       return selectedArray.slice(0, maxTagCount);
     }
 
-    // TODO: responsive 模式需要根据容器宽度计算
+    // TODO: responsive 模式需要根據容器寬度計算
     return selectedArray;
   };
 
@@ -101,9 +101,9 @@ export const SearchTrigger = ({
     e.stopPropagation();
     if (getOptionDisabled?.(value)) return;
     if (!multiple) {
-      handleClear(); // 单选模式清空
+      handleClear(); // 單選模式清空
     } else {
-      handleDeselect(value); // 多选模式删除指定项
+      handleDeselect(value); // 多選模式刪除指定項
     }
   };
 
@@ -114,7 +114,7 @@ export const SearchTrigger = ({
     return text.slice(0, maxTagTextLength) + '...';
   };
 
-  // 单选模式下显示选中值
+  // 單選模式下顯示選中值
   const displayValue =
     !multiple && selectedValue && !Array.isArray(selectedValue)
       ? selectedValue.name

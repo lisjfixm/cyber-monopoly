@@ -41,12 +41,12 @@ export type BaseComboboxTriggerProps = {
     disabled?: boolean,
   ) => React.ReactNode;
   /**
-   * 判断选项是否禁用
+   * 判斷選項是否禁用
    */
   getOptionDisabled?: (value: ItemValue) => boolean;
   /**
-   * button 模式下，自定义渲染加号按钮的包裹器
-   * 用于将按钮包裹在 PopoverTrigger 中，使浮层跟随加号按钮而非整个容器
+   * button 模式下，自定義渲染加號按鈕的包裹器
+   * 用於將按鈕包裹在 PopoverTrigger 中，使浮層跟隨加號按鈕而非整個容器
    */
   renderAddButton?: (button: React.ReactNode) => React.ReactNode;
   ref?: React.Ref<HTMLButtonElement>;
@@ -55,7 +55,7 @@ export type BaseComboboxTriggerProps = {
 export const BaseComboboxTrigger = ({
   triggerType = 'button',
   size = 'medium',
-  placeholder = '请选择',
+  placeholder = '請選擇',
   renderTrigger,
   maxTagCount,
   maxTagTextLength,
@@ -78,12 +78,12 @@ export const BaseComboboxTrigger = ({
     handleDeselect,
   } = useEntityComboboxContext();
 
-  // 自定义渲染 (custom 类型)
+  // 自定義渲染 (custom 型別)
   if (triggerType === 'custom' && renderTrigger) {
     return <>{renderTrigger({ selectedValue, multiple, open, disabled })}</>;
   }
 
-  // search 类型
+  // search 型別
   if (triggerType === 'search') {
     return (
       <SearchTrigger
@@ -101,16 +101,16 @@ export const BaseComboboxTrigger = ({
     );
   }
 
-  // button 类型（默认）
+  // button 型別（預設）
   const hasValue = !multiple
     ? !!selectedValue
     : Array.isArray(selectedValue) && selectedValue.length > 0;
 
-  // 计算最大显示标签数
+  // 計算最大顯示標籤數
   const maxDisplayCount =
     typeof maxTagCount === 'number' ? maxTagCount : Infinity;
 
-  // 计算隐藏的标签
+  // 計算隱藏的標籤
   const hiddenCount =
     multiple && Array.isArray(selectedValue) && typeof maxTagCount === 'number'
       ? Math.max(0, selectedValue.length - maxTagCount)
@@ -121,15 +121,15 @@ export const BaseComboboxTrigger = ({
       ? selectedValue.slice(maxTagCount)
       : [];
 
-  // 标签关闭回调
+  // 標籤關閉回撥
   const handleTagClose = (value: ItemValue, e: React.MouseEvent) => {
-    e.stopPropagation(); // 阻止触发按钮点击
-    // 禁用的选项不允许关闭
+    e.stopPropagation(); // 阻止觸發按鈕點選
+    // 禁用的選項不允許關閉
     if (getOptionDisabled?.(value)) return;
     if (!multiple) {
-      handleClear(); // 单选模式清空
+      handleClear(); // 單選模式清空
     } else {
-      handleDeselect(value); // 多选模式删除指定项
+      handleDeselect(value); // 多選模式刪除指定項
     }
   };
 
@@ -140,7 +140,7 @@ export const BaseComboboxTrigger = ({
         classNames?.trigger,
       )}
     >
-      {/* 已选择的标签显示区域 */}
+      {/* 已選擇的標籤顯示區域 */}
       {hasValue && (
         <>
           {!multiple && selectedValue ? (
@@ -252,7 +252,7 @@ export const BaseComboboxTrigger = ({
         </>
       )}
 
-      {/* 加号按钮 - 紧跟标签 */}
+      {/* 加號按鈕 - 緊跟標籤 */}
       {(() => {
         const addButton = (
           <Button

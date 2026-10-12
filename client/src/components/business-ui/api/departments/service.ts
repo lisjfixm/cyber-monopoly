@@ -7,7 +7,7 @@ import {
 const departmentService = new DepartmentService();
 
 /**
- * 搜索部门
+ * 搜尋部門
  */
 export async function searchDepartments(
   params: SearchDepartmentsParams,

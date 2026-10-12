@@ -103,7 +103,7 @@ const MailPage = () => {
     toast.success('郵件已刪除');
   }, [expandedId]);
 
-  // 目前分頁內可執行的批量操作統計
+  // 目前分頁內可執行的批次操作統計
   const unreadInTab = useMemo(
     () => filteredMails.filter((m) => !m.isRead).length,
     [filteredMails],
@@ -223,7 +223,7 @@ const MailPage = () => {
         })}
       </div>
 
-      {/* 批量操作列 */}
+      {/* 批次操作列 */}
       <div
         className="flex items-center justify-between gap-2 px-3 md:px-6 py-2 border-b"
         style={{ borderColor: 'var(--border-neon)' }}
@@ -309,7 +309,7 @@ const MailPage = () => {
                         />
                       )}
                     </div>
-                    {/* 附件圖標 */}
+                    {/* 附件圖示 */}
                     {mail.hasAttachment && (
                       <Gift
                         size={16}

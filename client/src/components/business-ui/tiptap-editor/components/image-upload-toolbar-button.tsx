@@ -27,7 +27,7 @@ export function ImageUploadToolbarButton() {
 
     const ok = editor.chain().focus().insertImages([file]).run();
     if (!ok) {
-      toast.error('插入图片失败（请确认图片扩展已启用且提供 upload）');
+      toast.error('插入圖片失敗（請確認圖片擴充套件已啟用且提供 upload）');
     }
 
     if (fileInputRef.current) {
@@ -46,11 +46,11 @@ export function ImageUploadToolbarButton() {
             onClick={() => fileInputRef.current?.click()}
           >
             <ImageIcon className="size-4" />
-            <span className="sr-only">上传图片</span>
+            <span className="sr-only">上傳圖片</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>上传图片</p>
+          <p>上傳圖片</p>
         </TooltipContent>
       </Tooltip>
       <input

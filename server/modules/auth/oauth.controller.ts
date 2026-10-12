@@ -40,7 +40,7 @@ interface LoginStateEntry {
 }
 
 const linkTokenStore = new Map<string, LinkTokenEntry>();
-// 登入流程的 CSRF state 暫存：發起授權時寫入，回調時比對，防止登入 CSRF
+// 登入流程的 CSRF state 暫存：發起授權時寫入，回撥時比對，防止登入 CSRF
 const loginStateStore = new Map<string, LoginStateEntry>();
 
 @Controller('api/auth/oauth')
@@ -153,7 +153,7 @@ export class OAuthController {
     }
 
     // CSRF 防護：一般登入流程必須帶有伺服器簽發且未過期的 state；
-    // 綁定流程的 state 由 linkTokenStore 另外校驗。
+    // 繫結流程的 state 由 linkTokenStore 另外校驗。
     const isLinkMode = state?.startsWith(LINK_STATE_PREFIX);
     if (!isLinkMode) {
       const loginEntry = state ? loginStateStore.get(state) : undefined;
@@ -163,7 +163,7 @@ export class OAuthController {
         Date.now() > loginEntry.expiresAt
       ) {
         this.logger.warn(
-          `${oauthProvider} 回調 state 無效或已過期，可能為 CSRF 攻擊`,
+          `${oauthProvider} 回撥 state 無效或已過期，可能為 CSRF 攻擊`,
         );
         res.redirect(
           `/?oauth_error=${encodeURIComponent('授權連結已過期，請重新登入')}`,
@@ -183,13 +183,13 @@ export class OAuthController {
         const entry = linkTokenStore.get(linkToken);
         if (!entry || Date.now() > entry.expiresAt) {
           throw new BadRequestException(
-            '綁定連結已過期或無效，請重新發起綁定請求',
+            '繫結連結已過期或無效，請重新發起繫結請求',
           );
         }
         linkTokenStore.delete(linkToken);
         await this.accountService.bindToAccount(entry.accountId, userInfo);
         this.logger.log(
-          `第三方帳號綁定成功: account:${entry.accountId} + ${oauthProvider}/${userInfo.providerUserId}`,
+          `第三方帳號繫結成功: account:${entry.accountId} + ${oauthProvider}/${userInfo.providerUserId}`,
         );
         res.redirect('/profile?oauth_link=1');
         return;
@@ -200,7 +200,7 @@ export class OAuthController {
       res.redirect(redirectUrl);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '未知錯誤';
-      this.logger.error(`${oauthProvider} 回調處理失敗: ${msg}`);
+      this.logger.error(`${oauthProvider} 回撥處理失敗: ${msg}`);
       const isLinkMode = state?.startsWith(LINK_STATE_PREFIX);
       const redirectPath = isLinkMode
         ? '/profile?oauth_link_error='
@@ -242,7 +242,7 @@ export class OAuthController {
 
   private validateProvider(provider: string): OAuthProvider {
     if (!VALID_PROVIDERS.includes(provider as OAuthProvider)) {
-      throw new BadRequestException(`不支援的第三方登錄方式: ${provider}`);
+      throw new BadRequestException(`不支援的第三方登入方式: ${provider}`);
     }
     return provider as OAuthProvider;
   }

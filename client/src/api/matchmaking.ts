@@ -12,7 +12,7 @@ async function request<T>(url: string, method: string, data?: unknown, params?: 
   const response = await axiosForBackend({ url, method, data, params });
   const result = response.data as ApiResponse<T>;
   if (result.code !== 0) {
-    throw new Error(result.message || '请求失败');
+    throw new Error(result.message || '請求失敗');
   }
   return result.data as T;
 }

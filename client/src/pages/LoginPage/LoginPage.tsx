@@ -43,7 +43,7 @@ const LoginPage = () => {
   const [nicknameSetupError, setNicknameSetupError] = useState<string>('');
   const [isSettingNickname, setIsSettingNickname] = useState<boolean>(false);
 
-  // 從 URL 讀取 tab 參數與 OAuth 回調結果
+  // 從 URL 讀取 tab 引數與 OAuth 回撥結果
   useEffect(() => {
     const tabParam = searchParams.get('tab');
     const oauthErrorParam = searchParams.get('oauth_error');
@@ -165,7 +165,7 @@ const LoginPage = () => {
       setShowNicknameSetup(false);
       navigate('/');
     } catch (err) {
-      const message = err instanceof Error ? err.message : '設置失敗，請重試';
+      const message = err instanceof Error ? err.message : '設定失敗，請重試';
       setNicknameSetupError(message);
       logger.error('Nickname setup failed', { error: err });
     } finally {
@@ -173,7 +173,7 @@ const LoginPage = () => {
     }
   }, [nicknameInput, updateProfile, navigate]);
 
-  // 生成霓虹粒子數據（純 CSS 動畫，不依賴圖片）
+  // 生成霓虹粒子資料（純 CSS 動畫，不依賴圖片）
   const particles = useMemo(
     () =>
       Array.from({ length: 20 }, (_, i) => ({
@@ -626,7 +626,7 @@ const LoginPage = () => {
                   className="text-xs font-cyber tracking-wide cursor-default"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  忘記密碼請聯繫管理員
+                  忘記密碼請聯絡管理員
                 </span>
               </div>
             )}
@@ -722,7 +722,7 @@ const LoginPage = () => {
               className="mt-2 text-center text-xs font-cyber tracking-wide"
               style={{ color: 'var(--text-secondary)' }}
             >
-              無需註冊即可體驗，資料僅保存於本機
+              無需註冊即可體驗，資料僅儲存於本機
             </p>
           </div>
         </div>
@@ -755,7 +755,7 @@ const LoginPage = () => {
         </p>
       </div>
 
-      {/* 首次設置暱稱彈窗 */}
+      {/* 首次設定暱稱彈窗 */}
       <Dialog open={showNicknameSetup} onOpenChange={setShowNicknameSetup}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

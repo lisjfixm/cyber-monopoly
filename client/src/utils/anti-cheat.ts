@@ -69,7 +69,7 @@ export class AntiCheatMonitor {
   }
 
   /**
-   * 記錄一次點擊/操作，用於頻率檢測
+   * 記錄一次點選/操作，用於頻率檢測
    */
   recordClick(): void {
     if (!this.running) return;

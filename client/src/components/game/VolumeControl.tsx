@@ -28,7 +28,7 @@ const VolumeControl = ({ className, onFirstInteract }: VolumeControlProps) => {
 
   return (
     <div className={`flex items-center gap-2 ${className || ''}`}>
-      {/* 音效按钮 */}
+      {/* 音效按鈕 */}
       <div
         className="relative"
         onMouseEnter={() => setShowTip('sfx')}
@@ -43,7 +43,7 @@ const VolumeControl = ({ className, onFirstInteract }: VolumeControlProps) => {
             color: sfxEnabled ? 'var(--cyan)' : 'rgba(255,255,255,0.4)',
             boxShadow: sfxEnabled ? '0 0 8px rgba(0, 255, 255, 0.3)' : 'none',
           }}
-          aria-label={sfxEnabled ? '音效开' : '音效关'}
+          aria-label={sfxEnabled ? '音效開' : '音效關'}
         >
           {sfxEnabled ? (
             <Volume2 className="w-4 h-4 md:w-5 md:h-5" />
@@ -60,12 +60,12 @@ const VolumeControl = ({ className, onFirstInteract }: VolumeControlProps) => {
               fontSize: '11px',
             }}
           >
-            音效{sfxEnabled ? '开' : '关'}
+            音效{sfxEnabled ? '開' : '關'}
           </div>
         )}
       </div>
 
-      {/* 音乐按钮 */}
+      {/* 音樂按鈕 */}
       <div
         className="relative"
         onMouseEnter={() => setShowTip('music')}
@@ -80,7 +80,7 @@ const VolumeControl = ({ className, onFirstInteract }: VolumeControlProps) => {
             color: musicEnabled ? 'var(--pink)' : 'rgba(255,255,255,0.4)',
             boxShadow: musicEnabled ? '0 0 8px rgba(255, 107, 157, 0.3)' : 'none',
           }}
-          aria-label={musicEnabled ? '音乐开' : '音乐关'}
+          aria-label={musicEnabled ? '音樂開' : '音樂關'}
         >
           {musicEnabled ? (
             <Music className="w-4 h-4 md:w-5 md:h-5" />
@@ -97,7 +97,7 @@ const VolumeControl = ({ className, onFirstInteract }: VolumeControlProps) => {
               fontSize: '11px',
             }}
           >
-            音乐{musicEnabled ? '开' : '关'}
+            音樂{musicEnabled ? '開' : '關'}
           </div>
         )}
       </div>

@@ -19,12 +19,12 @@ export function getUserId(
   if (accountType === 'lark') {
     return user.larkUserID || `_unknown_${Math.random().toString(36).slice(2)}`;
   }
-  // 未注册外部联系人没有 userID，暂用 larkUserID 作为临时标识
+  // 未註冊外部聯絡人沒有 userID，暫用 larkUserID 作為臨時標識
   return user.userID || user.larkUserID || `_unknown_${Math.random().toString(36).slice(2)}`;
 }
 
 /**
- * 判断用户是否为未注册的外部联系人
+ * 判斷使用者是否為未註冊的外部聯絡人
  */
 export function isUnregisteredExternalContact(user: UserSelectItemValue): boolean {
   const raw = user.raw;
@@ -34,7 +34,7 @@ export function isUnregisteredExternalContact(user: UserSelectItemValue): boolea
 export function createUnknownUser(id: string): UserSelectItemValue {
   return {
     id,
-    name: '未知用户',
+    name: '未知使用者',
     avatar: undefined,
     raw: undefined,
   };
@@ -44,7 +44,7 @@ export function userInfoToUser(
   userInfo: UserInfo & SearchAvatar,
   accountType: AccountType,
 ): UserSelectItemValue {
-  // 构建统一的 User 类型作为 raw 数据
+  // 構建統一的 User 型別作為 raw 資料
   const rawUser: User = {
     user_id: userInfo.userID || undefined,
     larkUserId: userInfo.larkUserID || undefined,
@@ -66,7 +66,7 @@ export function searchUserInfoToUser(
   userInfo: UserInfo & { avatar?: string; tenantName?: string },
   accountType: AccountType,
 ): UserSelectItemValue {
-  // 构建统一的 User 类型作为 raw 数据
+  // 構建統一的 User 型別作為 raw 資料
   const rawUser: User = {
     user_id: userInfo.userID || undefined,
     larkUserId: userInfo.larkUserID || undefined,
@@ -107,7 +107,7 @@ export function getAppId(path: string): string | null | undefined {
   let prefix: string;
 
   /**
-   * 从路径中提取 appId
+   * 從路徑中提取 appId
    * @example "/app/my-app/settings" → "my-app"
    */
   const appMatch = path.match(/\/app\/([^/]+)/);
@@ -115,7 +115,7 @@ export function getAppId(path: string): string | null | undefined {
     return appMatch[1];
   }
 
-  // 检查路径是否以固定前缀开头
+  // 檢查路徑是否以固定字首開頭
   if (path.includes('/ai/feida/runtime/')) {
     prefix = '/ai/feida/runtime/';
   } else if (path.includes('/spark/r/')) {
@@ -124,20 +124,20 @@ export function getAppId(path: string): string | null | undefined {
     prefix = '/ai/miaoda/';
   }
 
-  // 兼容全栈appId挂载在window上，作为兜底
+  // 相容全棧appId掛載在window上，作為兜底
   const windowAppId = window.appId || null;
 
   if (!path.startsWith(prefix)) {
     return windowAppId;
   }
 
-  // 截取前缀后的部分
+  // 擷取字首後的部分
   const remainder = path.substring(prefix.length);
 
-  // 找到下一个斜杠的位置
+  // 找到下一個斜槓的位置
   const nextSlashIndex = remainder.indexOf('/');
 
-  // 如果没有斜杠，返回整个remainder；否则返回斜杠前的部分
+  // 如果沒有斜槓，返回整個remainder；否則返回斜槓前的部分
   if (nextSlashIndex === -1) {
     return remainder || windowAppId;
   }
@@ -145,8 +145,8 @@ export function getAppId(path: string): string | null | undefined {
 }
 
 /**
- * 从 value 中提取 ID 列表
- * 支持 User 类型（user_id）和 UserSelectItemValue 类型（id）
+ * 從 value 中提取 ID 列表
+ * 支援 User 型別（user_id）和 UserSelectItemValue 型別（id）
  */
 export function extractIdsFromValue(value: UserSelectValue): string[] {
   if (value === null || value === undefined) {
@@ -159,24 +159,24 @@ export function extractIdsFromValue(value: UserSelectValue): string[] {
     if (value.length === 0) {
       return [];
     }
-    // 检查第一个元素判断类型
+    // 檢查第一個元素判斷型別
     if (typeof value[0] === 'string') {
       return value as string[];
     }
-    // 对象数组：可能是 User[] 或 UserSelectItemValue[]
+    // 物件陣列：可能是 User[] 或 UserSelectItemValue[]
     return value.map((item: any) => {
-      // UserSelectItemValue 有 id 字段（内部类型）
+      // UserSelectItemValue 有 id 欄位（內部型別）
       if ('id' in item && item.id) {
         return item.id;
       }
-      // User 有 user_id 字段（外部类型）
+      // User 有 user_id 欄位（外部型別）
       if ('user_id' in item && item.user_id) {
         return item.user_id;
       }
       return '';
     }).filter(Boolean);
   }
-  // 单个对象：可能是 User 或 UserSelectItemValue
+  // 單個物件：可能是 User 或 UserSelectItemValue
   const item = value as any;
   if ('id' in item && item.id) {
     return [item.id];

@@ -18,23 +18,23 @@ import {
 
 export type UserPillProps = {
   /**
-   * 用户 ID，用于 UserProfile 展示
+   * 使用者 ID，用於 UserProfile 展示
    */
   userId: string;
 
   /**
-   * 账户类型
+   * 賬戶型別
    * @default "apaas"
    */
   accountType?: AccountType;
 
   /**
-   * 显示的用户名
+   * 顯示的使用者名稱
    */
   label: string;
 
   /**
-   * 头像 URL
+   * 頭像 URL
    */
   avatarUrl?: string;
 
@@ -50,22 +50,22 @@ export type UserPillProps = {
   disabled?: boolean;
 
   /**
-   * 最大文本长度
+   * 最大文字長度
    */
   maxTextLength?: number;
 
   /**
-   * 后缀（如关闭按钮）
+   * 字尾（如關閉按鈕）
    */
   suffix?: React.ReactNode;
 
   /**
-   * 自定义样式
+   * 自定義樣式
    */
   className?: string;
 
   /**
-   * 是否启用点击头像弹出 UserProfile
+   * 是否啟用點選頭像彈出 UserProfile
    * @default true
    */
   enableProfile?: boolean;

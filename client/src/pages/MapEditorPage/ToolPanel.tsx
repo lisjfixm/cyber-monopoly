@@ -61,7 +61,7 @@ const ToolPanel: FC<ToolPanelProps> = ({ tool, onToolChange, selectedType, onTyp
 
       {/* Cell type list */}
       <div>
-        <h3 className="font-cyber text-sm tracking-wider text-neon-cyan mb-2">格子類型</h3>
+        <h3 className="font-cyber text-sm tracking-wider text-neon-cyan mb-2">格子型別</h3>
         <div className="space-y-1.5">
           {cellTypes.map((ct) => {
             const Icon = ct.icon;

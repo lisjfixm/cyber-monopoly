@@ -126,7 +126,7 @@ const CardEditorPage = () => {
     }
     const effect = buildEffect(effectType, amount);
     if (!effect) {
-      showToast('不支援的效果類型，無法儲存');
+      showToast('不支援的效果型別，無法儲存');
       return;
     }
     const existing = editingId ? localCards.find((c) => c.id === editingId) : null;
@@ -189,7 +189,7 @@ const CardEditorPage = () => {
     }
     const effect = buildEffect(effectType, amount);
     if (!effect) {
-      showToast('不支援的效果類型，無法發布');
+      showToast('不支援的效果型別，無法發布');
       return;
     }
     const card: CustomCard = {
@@ -208,7 +208,7 @@ const CardEditorPage = () => {
     };
     publishCard(card, '我');
     refreshCommunity();
-    showToast('已發布到社區！');
+    showToast('已發布到社群！');
   };
 
   const handleInstall = (id: string) => {
@@ -236,7 +236,7 @@ const CardEditorPage = () => {
     'card',
   );
 
-  // 社區詳情頁
+  // 社群詳情頁
   if (activeTab === 'community' && selectedCommunityCard) {
     return (
       <>
@@ -279,7 +279,7 @@ const CardEditorPage = () => {
         <div className="flex gap-2 mb-6 max-w-xl">
           {[
             { key: 'editor' as EditorTab, label: '卡牌編輯器', icon: Plus },
-            { key: 'community' as EditorTab, label: '社區卡牌', icon: Sparkles },
+            { key: 'community' as EditorTab, label: '社群卡牌', icon: Sparkles },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
@@ -304,7 +304,7 @@ const CardEditorPage = () => {
             {/* 左側編輯面板 */}
             <div className="space-y-4">
               <div className="cyber-card p-4" style={{ borderColor: 'rgba(0, 255, 255, 0.2)' }}>
-                <div className="text-xs font-cyber tracking-wider text-[var(--text-secondary)] mb-3">卡牌類型</div>
+                <div className="text-xs font-cyber tracking-wider text-[var(--text-secondary)] mb-3">卡牌型別</div>
                 <div className="flex gap-2 mb-4">
                   {[
                     { value: 'fate' as CardType, label: '命運卡', color: 'var(--purple)' },
@@ -335,7 +335,7 @@ const CardEditorPage = () => {
                       className="cyber-input w-full text-sm resize-none" />
                   </div>
                   <div>
-                    <label className="text-xs font-cyber tracking-wider text-[var(--text-secondary)] block mb-1">效果類型</label>
+                    <label className="text-xs font-cyber tracking-wider text-[var(--text-secondary)] block mb-1">效果型別</label>
                     <select value={effectType} onChange={(e) => setEffectType(e.target.value)}
                       className="cyber-input w-full text-sm" style={{ appearance: 'none' }}>
                       {EFFECT_TYPES.map((e) => (
@@ -387,7 +387,7 @@ const CardEditorPage = () => {
                   className="cyber-btn flex-1 py-2.5 font-cyber tracking-wider flex items-center justify-center gap-2"
                   style={{ borderColor: 'var(--cyan)', color: 'var(--cyan)' }}>
                   <Save size={16} />
-                  {editingId ? '更新' : '保存到本地'}
+                  {editingId ? '更新' : '儲存到本地'}
                 </button>
                 <button type="button" onClick={handlePublish}
                   className="cyber-btn flex-1 py-2.5 font-cyber tracking-wider flex items-center justify-center gap-2"
@@ -454,7 +454,7 @@ const CardEditorPage = () => {
           </div>
         )}
 
-        {/* 社區 Tab */}
+        {/* 社群 Tab */}
         {activeTab === 'community' && (
           <div className="space-y-4">
             <div className="flex gap-2">
@@ -519,7 +519,7 @@ const CardEditorPage = () => {
               ))}
               {filteredCommunity.length === 0 && (
                 <div className="cyber-card p-8 text-center col-span-full text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  社區尚未有這類型的卡牌，來發布第一張吧！
+                  社群尚未有這型別的卡牌，來發布第一張吧！
                 </div>
               )}
             </div>
@@ -534,7 +534,7 @@ const CardEditorPage = () => {
         </div>
       )}
 
-      {/* 刪除確認對話框 */}
+      {/* 刪除確認對話方塊 */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="cyber-card w-full max-w-sm p-5" style={{ borderColor: 'var(--red)', background: 'hsl(240, 18%, 10%)' }}>

@@ -13,6 +13,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CheckinModule } from './modules/checkin/checkin.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { ViewModule } from './modules/view/view.module';
+import { GangModule } from './modules/gang/gang.module';
+import { SeasonModule } from './modules/season/season.module';
+import { EconomyModule } from './modules/economy/economy.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { ViewModule } from './modules/view/view.module';
     AuthModule,
     CheckinModule,
     StatsModule,
+    GangModule,
+    SeasonModule,
+    EconomyModule,
     // ====== @route-section: business-modules END ======
 
     // ⚠️ @route-order: last

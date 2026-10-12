@@ -117,7 +117,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
   const maxBribeCount = bribeMaxCount ?? 3;
   const remainingBribes = Math.max(0, maxBribeCount - (bribeCount ?? 0));
 
-  const ownerLabel = isOwner ? "你拥有" : "对方拥有";
+  const ownerLabel = isOwner ? "你擁有" : "對方擁有";
   const ownerColor = isOwner
     ? player.color === "red"
       ? "var(--red)"
@@ -126,20 +126,20 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
 
   const buildingLabel: Record<BuildingLevel, string> = {
     0: "空地",
-    1: "1 栋房屋",
-    2: "2 栋房屋",
-    3: "3 栋房屋",
-    4: "4 栋房屋",
+    1: "1 棟房屋",
+    2: "2 棟房屋",
+    3: "3 棟房屋",
+    4: "4 棟房屋",
     5: "酒店",
   };
 
   const nextLevelLabel: Record<BuildingLevel, string> = {
-    0: "第 1 栋房屋",
-    1: "第 2 栋房屋",
-    2: "第 3 栋房屋",
-    3: "第 4 栋房屋",
+    0: "第 1 棟房屋",
+    1: "第 2 棟房屋",
+    2: "第 3 棟房屋",
+    3: "第 4 棟房屋",
     4: "酒店",
-    5: "已达最高等級",
+    5: "已達最高等級",
   };
 
   return (
@@ -176,7 +176,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
           style={{ borderColor: "var(--border-neon-cyan)" }}
         >
           <div className="text-[10px] font-cyber text-[var(--text-secondary)] tracking-widest mb-1">
-            地块操作 / PROPERTY
+            地塊操作 / PROPERTY
           </div>
           <div className="flex items-center gap-2">
             <div
@@ -221,7 +221,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
             <div className="flex items-center gap-2">
               <Building2 className="w-5 h-5" style={{ color: "var(--cyan)" }} />
               <span className="text-sm text-[var(--text-secondary)]">
-                建筑等級
+                建築等級
               </span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -271,7 +271,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
             <div className="flex items-center gap-2">
               <Coins className="w-5 h-5" style={{ color: "var(--yellow)" }} />
               <span className="text-sm text-[var(--text-secondary)]">
-                抵押状态
+                抵押狀態
               </span>
             </div>
             <span
@@ -477,7 +477,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
               }}
             >
               <span className="text-sm" style={{ color: "var(--yellow)" }}>
-                赎回需要：¥{redeemPrice.toLocaleString()}
+                贖回需要：¥{redeemPrice.toLocaleString()}
               </span>
             </div>
           )}
@@ -507,7 +507,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
               }}
             >
               <span className="text-sm" style={{ color: "var(--red)" }}>
-                该地块属于对方，你无法操作
+                該地塊屬於對方，你無法操作
               </span>
             </div>
           )}
@@ -672,7 +672,7 @@ const PropertyActionModal: FC<PropertyActionModalProps> = ({
             disabled={!canDoRedeem}
           >
             <DollarSign className="w-4 h-4 inline mr-1.5" />
-            赎回
+            贖回
           </button>
           <button
             className="cyber-btn text-xs py-2.5 col-span-2"

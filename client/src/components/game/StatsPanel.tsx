@@ -53,7 +53,7 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
   if (!isOpen || !stats) return null;
 
   const winnerIdx = stats.winner;
-  const winReasonText = stats.winReason === 'bankruptcy' ? '对手破产' : stats.winReason === 'surrender' ? '对手投降' : '';
+  const winReasonText = stats.winReason === 'bankruptcy' ? '對手破產' : stats.winReason === 'surrender' ? '對手投降' : '';
   const playerCount = stats.players.length;
 
   // Grid columns based on player count
@@ -80,12 +80,12 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-          aria-label="关闭"
+          aria-label="關閉"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* 标题区 */}
+        {/* 標題區 */}
         <div className="text-center mb-6">
           {isFinal && winnerIdx !== null ? (
             <>
@@ -106,11 +106,11 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                   textShadow: `0 0 10px ${getPlayerColorInfo(winnerIdx, stats.players).glow}`,
                 }}
               >
-                {stats.players[winnerIdx].name} 获胜！
+                {stats.players[winnerIdx].name} 獲勝！
               </div>
               {winReasonText && (
                 <div className="text-sm font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-                  胜利原因：{winReasonText}
+                  勝利原因：{winReasonText}
                 </div>
               )}
             </>
@@ -132,11 +132,11 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
             style={{ color: 'var(--text-secondary)' }}
           >
             <RotateCcw className="w-3.5 h-3.5 inline mr-1.5" />
-            总回合数：{stats.totalTurns}
+            總回合數：{stats.totalTurns}
           </div>
         </div>
 
-        {/* 玩家卡片 - 自适应网格 */}
+        {/* 玩家卡片 - 自適應網格 */}
         <div className={`grid ${gridCols} gap-3 md:gap-4 mb-6`}>
           {stats.players.map((player: PlayerStats, idx: number) => {
             const isWinner = winnerIdx === idx;
@@ -154,7 +154,7 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                   backgroundColor: isWinner ? 'color-mix(in srgb, var(--yellow) 5%, transparent)' : 'color-mix(in srgb, var(--bg-deep) 20%, transparent)',
                 }}
               >
-                {/* 玩家名 + 胜者标记 */}
+                {/* 玩家名 + 勝者標記 */}
                 <div className="flex items-center justify-between mb-3 pb-2 border-b" style={{ borderColor: `${colors.main}30` }}>
                   <span
                     className="font-cyber text-base md:text-lg tracking-wider"
@@ -177,7 +177,7 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                     )}
                     {isBankrupt && !isWinner && (
                       <span className="text-[10px] font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-                        已破产
+                        已破產
                       </span>
                     )}
                   </div>
@@ -187,19 +187,19 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                 <div className="grid grid-cols-2 gap-y-2 gap-x-2 text-xs">
                   <StatRow
                     icon={<Coins className="w-3.5 h-3.5" style={{ color: 'var(--yellow)' }} />}
-                     label="最终现金"
+                     label="最終現金"
                      value={`¥${player.finalMoney.toLocaleString()}`}
                      valueColor="var(--yellow)"
                   />
                   <StatRow
                     icon={<HomeIcon className="w-3.5 h-3.5" style={{ color: 'var(--cyan)' }} />}
-                    label="地产数量"
-                    value={`${player.propertyCount} 块`}
+                    label="地產數量"
+                    value={`${player.propertyCount} 塊`}
                   />
                   <StatRow
                     icon={<Building2 className="w-3.5 h-3.5" style={{ color: 'var(--pink)' }} />}
-                    label="建筑总数"
-                    value={`${player.totalBuildings} 栋`}
+                    label="建築總數"
+                    value={`${player.totalBuildings} 棟`}
                   />
                   <StatRow
                     icon={<Hotel className="w-3.5 h-3.5" style={{ color: 'var(--orange)' }} />}
@@ -208,19 +208,19 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                   />
                   <StatRow
                     icon={<TrendingUp className="w-3.5 h-3.5" style={{ color: 'var(--green)' }} />}
-                    label="过路费收入"
+                    label="過路費收入"
                     value={`¥${player.tollIncome.toLocaleString()}`}
                     valueColor="var(--green)"
                   />
                   <StatRow
                     icon={<TrendingUp className="w-3.5 h-3.5 rotate-180" style={{ color: 'var(--red)' }} />}
-                    label="过路费支出"
+                    label="過路費支出"
                     value={`¥${player.tollExpense.toLocaleString()}`}
                     valueColor="var(--red)"
                   />
                   <StatRow
                     icon={<TrendingUp className="w-3.5 h-3.5" style={{ color: player.stockProfit >= 0 ? 'var(--green)' : 'var(--red)' }} />}
-                    label="股票盈亏"
+                    label="股票盈虧"
                     value={`${player.stockProfit >= 0 ? '+' : ''}¥${player.stockProfit.toLocaleString()}`}
                     valueColor={player.stockProfit >= 0 ? 'var(--green)' : 'var(--red)'}
                   />
@@ -231,32 +231,32 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
                   />
                   <StatRow
                     icon={<Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--pink)' }} />}
-                     label="命運卡次数"
+                     label="命運卡次數"
                     value={`${player.fateCardDraws} 次`}
                   />
                   <StatRow
                     icon={<Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--cell-chance-color)' }} />}
-                     label="機會卡次数"
+                     label="機會卡次數"
                     value={`${player.chanceCardDraws} 次`}
                   />
                   <StatRow
                     icon={<Lock className="w-3.5 h-3.5" style={{ color: 'var(--purple)' }} />}
-                    label="进禁闭区"
+                    label="進禁閉區"
                     value={`${player.detentionCount} 次`}
                   />
                   <StatRow
                     icon={<Handshake className="w-3.5 h-3.5" style={{ color: 'var(--green)' }} />}
-                    label="交易次数"
+                    label="交易次數"
                     value={`${player.tradeCount} 次`}
                   />
                   <StatRow
                     icon={<Gavel className="w-3.5 h-3.5" style={{ color: 'var(--orange)' }} />}
-                     label="拍賣获胜"
+                     label="拍賣獲勝"
                     value={`${player.auctionWins} 次`}
                   />
                   <StatRow
                     icon={<Layers className="w-3.5 h-3.5" style={{ color: 'var(--cyan)' }} />}
-                    label="完整套装"
+                    label="完整套裝"
                     value={`${player.completeSets} 套`}
                   />
                 </div>
@@ -265,7 +265,7 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
           })}
         </div>
 
-        {/* 總資產排行柱状图 */}
+        {/* 總資產排行柱狀圖 */}
         <div className="mb-6 px-2">
           <div
             className="text-xs font-cyber tracking-wider mb-3 text-center"
@@ -342,7 +342,7 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
           </div>
         </div>
 
-         {/* 底部按钮 */}
+         {/* 底部按鈕 */}
          <div className="flex justify-center gap-3 mt-4 flex-wrap">
            {isFinal && (
              <button
@@ -365,12 +365,12 @@ const StatsPanel: FC<StatsPanelProps> = ({ isOpen, onClose, stats, isFinal = fal
           )}
           {!isFinal && (
             <button onClick={onClose} className="cyber-btn px-8 py-2 font-cyber tracking-wider">
-              关闭
+              關閉
             </button>
           )}
           {isFinal && (
             <button onClick={onClose} className="cyber-btn px-8 py-2 font-cyber tracking-wider">
-              查看棋盘
+              檢視棋盤
             </button>
           )}
         </div>

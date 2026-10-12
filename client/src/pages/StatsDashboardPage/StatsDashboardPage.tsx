@@ -41,6 +41,7 @@ import {
   calcPropertyStats,
   calcCardStats,
   calcTimeStats,
+  calcV4EconomyStats,
   formatDuration,
   formatDate,
   formatBigNumber,
@@ -53,8 +54,8 @@ import type {
   GameTimeBucket,
 } from '@shared/api.interface';
 
-// ========== 示例數據（待接入真實接口） ==========
-// 以下 mock 數據為示例展示，待後續接入真實統計接口後替換
+// ========== 示例資料（待接入真實介面） ==========
+// 以下 mock 資料為示例展示，待後續接入真實統計介面後替換
 
 const mockPropertyROI: PropertyROIItem[] = [
   { propertyName: '高新園', cost: 4000, rentEarned: 8520, roi: 213.0 },
@@ -72,21 +73,21 @@ const mockItemUsage: ItemUsageItem[] = [
   { itemName: '雙倍骰子', count: 118, ratio: 20.3 },
   { itemName: '傳送門', count: 95, ratio: 16.4 },
   { itemName: '能量護盾', count: 82, ratio: 14.1 },
-  { itemName: '數據洪流', count: 61, ratio: 10.5 },
+  { itemName: '資料洪流', count: 61, ratio: 10.5 },
   { itemName: '量子糾纏', count: 48, ratio: 8.3 },
   { itemName: '黑洞發生器', count: 23, ratio: 4.0 },
   { itemName: '其他', count: 11, ratio: 1.9 },
 ];
 
 const mockFateCardStats: FateCardStatItem[] = [
-  { cardName: '黑客轉帳', type: 'good', count: 128, probability: 14.2 },
+  { cardName: '駭客轉帳', type: 'good', count: 128, probability: 14.2 },
   { cardName: '獲得獎金', type: 'good', count: 115, probability: 12.8 },
   { cardName: '黑市交易', type: 'good', count: 98, probability: 10.9 },
   { cardName: '獲得補貼', type: 'good', count: 87, probability: 9.7 },
   { cardName: '前進3格', type: 'good', count: 76, probability: 8.4 },
   { cardName: '傳送到起點', type: 'good', count: 62, probability: 6.9 },
   { cardName: '繳納稅款', type: 'bad', count: 110, probability: 12.2 },
-  { cardName: '數據洩露罰款', type: 'bad', count: 89, probability: 9.9 },
+  { cardName: '資料洩露罰款', type: 'bad', count: 89, probability: 9.9 },
   { cardName: '維修費', type: 'bad', count: 82, probability: 9.1 },
   { cardName: '系統維護', type: 'bad', count: 54, probability: 6.0 },
   { cardName: '後退2格', type: 'bad', count: 43, probability: 4.8 },
@@ -129,6 +130,7 @@ const StatsDashboardPage = () => {
   const propertyStats = useMemo(() => calcPropertyStats(matches), [matches]);
   const cardStats = useMemo(() => calcCardStats(matches), [matches]);
   const timeStats = useMemo(() => calcTimeStats(matches), [matches]);
+  const v4Stats = useMemo(() => calcV4EconomyStats(matches), [matches]);
 
   // Tab states
   const [trendRange, setTrendRange] = useState<10 | 20 | 50>(20);
@@ -229,14 +231,14 @@ const StatsDashboardPage = () => {
           <span className="font-cyber tracking-wider">返回</span>
         </button>
         <h1 className="font-cyber text-2xl md:text-3xl text-neon-cyan tracking-wider">
-          數據儀表板
+          資料儀錶板
         </h1>
       </div>
 
       <div className="max-w-6xl w-full mx-auto space-y-6">
         {/* 1. 頂部概覽卡片行 - 6 個數字卡片 */}
         <section data-ai-section-type="card-stat">
-          <SectionHeader icon={Target} title="個人數據總覽" color="var(--cyan)" />
+          <SectionHeader icon={Target} title="個人資料總覽" color="var(--cyan)" />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             <StatCard label="總對局數" value={overview.total} icon={Swords} color="var(--cyan)" />
             <StatCard
@@ -389,11 +391,11 @@ const StatsDashboardPage = () => {
           <div className="flex items-center justify-between mb-4">
             <SectionHeader icon={Landmark} title="地產投資回報率統計" color="#4ade80" noMargin />
             <span className="text-xs px-2 py-0.5 rounded" style={{ color: '#ffcc00', border: '1px solid rgba(255,204,0,0.3)', background: 'rgba(255,204,0,0.08)' }}>
-              示例數據
+              示例資料
             </span>
           </div>
             <div className="mb-3 text-xs" style={{ color: 'var(--text-muted)' }}>
-              （示例數據 · 待接入真實接口）
+              （示例資料 · 待接入真實介面）
             </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -478,11 +480,11 @@ const StatsDashboardPage = () => {
           <div className="flex items-center justify-between mb-4">
             <SectionHeader icon={Dices} title="道具使用頻率統計" color="#ff8c42" noMargin />
             <span className="text-xs px-2 py-0.5 rounded" style={{ color: '#ffcc00', border: '1px solid rgba(255,204,0,0.3)', background: 'rgba(255,204,0,0.08)' }}>
-              示例數據
+              示例資料
             </span>
           </div>
             <div className="mb-3 text-xs" style={{ color: 'var(--text-muted)' }}>
-              （示例數據 · 待接入真實接口）
+              （示例資料 · 待接入真實介面）
             </div>
           <div className="grid md:grid-cols-2 gap-4 items-center">
             <div className="flex items-center justify-center">
@@ -524,7 +526,7 @@ const StatsDashboardPage = () => {
           </div>
         </section>
 
-        {/* 7. 命運卡抽到概率統計 */}
+        {/* 7. 命運卡抽到機率統計 */}
         <section
           className="cyber-card p-4 md:p-6"
           style={{
@@ -533,13 +535,13 @@ const StatsDashboardPage = () => {
           }}
         >
           <div className="flex items-center justify-between mb-4">
-            <SectionHeader icon={Sparkles} title="命運卡抽到概率統計" color="var(--purple)" noMargin />
+            <SectionHeader icon={Sparkles} title="命運卡抽到機率統計" color="var(--purple)" noMargin />
             <span className="text-xs px-2 py-0.5 rounded" style={{ color: '#ffcc00', border: '1px solid rgba(255,204,0,0.3)', background: 'rgba(255,204,0,0.08)' }}>
-              示例數據
+              示例資料
             </span>
           </div>
             <div className="mb-3 text-xs" style={{ color: 'var(--text-muted)' }}>
-              （示例數據 · 待接入真實接口）
+              （示例資料 · 待接入真實介面）
             </div>
           <div className="grid md:grid-cols-2 gap-4">
             {/* 好命運 */}
@@ -723,7 +725,7 @@ const StatsDashboardPage = () => {
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <SectionHeader icon={Activity} title="資產峰值時間線" color="#ffcc00" noMargin />
             <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              （示例數據 · 待接入真實接口）
+              （示例資料 · 待接入真實介面）
             </div>
             <div className="flex gap-1">
               {(['peak', 'valley'] as const).map((mode) => (
@@ -891,7 +893,7 @@ const StatsDashboardPage = () => {
           <div className="space-y-2">
             {matches.length === 0 ? (
               <div className="py-8 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-                尚無對戰數據
+                尚無對戰資料
               </div>
             ) : (
               matches.slice(0, 5).map((match) => {
@@ -1039,7 +1041,7 @@ const StatsDashboardPage = () => {
               boxShadow: '0 0 15px rgba(255, 204, 0, 0.1)',
             }}
           >
-            <SectionHeader icon={PieChart} title="資產構成分布" color="#ffcc00" />
+            <SectionHeader icon={PieChart} title="資產構成分佈" color="#ffcc00" />
             <div className="flex items-center justify-center py-2">
               <SvgDonutChart
                 data={financeStats.assetDistribution.map((item) => ({
@@ -1233,13 +1235,50 @@ const StatsDashboardPage = () => {
                 {modeStats.length === 0 && (
                   <tr>
                     <td colSpan={4} className="py-8 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      尚無模式數據
+                      尚無模式資料
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
+        </section>
+
+        {/* v4.0.0：新經濟系統與新模式資料 */}
+        <section
+          className="cyber-card p-4 md:p-6"
+          style={{
+            borderColor: 'rgba(0, 255, 255, 0.3)',
+            boxShadow: '0 0 15px rgba(0, 255, 255, 0.1)',
+          }}
+        >
+          <SectionHeader icon={Snowflake} title="v4 新經濟系統資料" color="var(--cyan)" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {[
+              { label: '新模式出賽', value: `${v4Stats.gamesInV4Mode} 局（勝 ${v4Stats.v4ModeWins}）`, color: 'var(--purple)' },
+              { label: '加密貨幣盈虧', value: formatBigNumber(v4Stats.cryptoPnl), color: v4Stats.cryptoPnl >= 0 ? 'var(--green)' : 'var(--red)' },
+              { label: 'IPO 累計獲利', value: formatBigNumber(v4Stats.ipoProfit), color: 'var(--yellow)' },
+              { label: '已繳所得稅', value: formatBigNumber(v4Stats.taxPaid), color: 'var(--text-secondary)' },
+              { label: '逃稅 / 被稽查', value: `${v4Stats.taxEvaded} / ${v4Stats.taxAudited} 次`, color: 'var(--pink)' },
+              { label: '敵意收購 / 控股', value: `${v4Stats.hostileTakeovers} / ${v4Stats.controlledCompanies}`, color: 'var(--orange, #ff8c42)' },
+            ].map((tile) => (
+              <div
+                key={tile.label}
+                className="rounded-lg p-3 text-center"
+                style={{ border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)' }}
+              >
+                <div className="text-[11px] font-cyber tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                  {tile.label}
+                </div>
+                <div className="font-cyber text-base md:text-lg font-bold mt-1" style={{ color: tile.color }}>
+                  {tile.value}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] mt-3" style={{ color: 'var(--text-muted)' }}>
+            新模式勝場與職業使用已併入上方「各模式／各職業」統計；經濟類資料自對局紀錄彙整，隨對局進行自動累積。
+          </p>
         </section>
 
         {/* 原有：對局記錄 */}
@@ -1391,7 +1430,7 @@ const SvgLineChart = ({
   if (data.length === 0) {
     return (
       <div className="h-48 flex items-center justify-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-        尚無數據
+        尚無資料
       </div>
     );
   }
@@ -1601,7 +1640,7 @@ const SvgBarChart = ({ data, colors }: SvgBarChartProps) => {
   if (data.length === 0) {
     return (
       <div className="h-48 flex items-center justify-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-        尚無數據
+        尚無資料
       </div>
     );
   }
@@ -1737,7 +1776,7 @@ const SvgDonutChart = ({ data, centerLabel, centerValue }: SvgDonutChartProps) =
   if (total === 0) {
     return (
       <div className="h-48 flex items-center justify-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-        尚無數據
+        尚無資料
       </div>
     );
   }
@@ -1834,7 +1873,7 @@ const SvgPieChart = ({ data }: SvgPieChartProps) => {
   if (total === 0) {
     return (
       <div className="h-48 flex items-center justify-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-        尚無數據
+        尚無資料
       </div>
     );
   }

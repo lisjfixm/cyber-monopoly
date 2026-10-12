@@ -136,7 +136,7 @@ function drawIcon(
   ctx.stroke();
   ctx.restore();
 
-  // 圖標文字（用 Unicode 符號替代）
+  // 圖示文字（用 Unicode 符號替代）
   ctx.save();
   ctx.shadowColor = '#ffcc00';
   ctx.shadowBlur = 20;
@@ -163,7 +163,7 @@ function getIconSymbol(iconName: string | undefined): string {
     Coins: '金幣',
     Crown: '皇冠',
     GraduationCap: '畢業',
-    Backpack: '背包',
+    Backpack: '揹包',
     Dices: '骰子',
     Sun: '太陽',
     Skull: '骷髏',
@@ -184,7 +184,7 @@ export function generateAchievementCard(options: AchievementCardOptions): HTMLCa
 
   const centerX = CANVAS_SIZE / 2;
 
-  // 成就圖標
+  // 成就圖示
   const iconSymbol = getIconSymbol(options.icon);
   drawIcon(ctx, iconSymbol, centerX, 340, 120);
 
@@ -338,7 +338,7 @@ export function generateAchievementCard(options: AchievementCardOptions): HTMLCa
   return canvas;
 }
 
-// 批量生成組合卡（多個成就，3x3 網格最多9個）
+// 批次生成組合卡（多個成就，3x3 網格最多9個）
 export function generateAchievementComboCard(
   achievements: AchievementCardOptions[],
   playerName: string,
@@ -401,7 +401,7 @@ export function generateAchievementComboCard(
     ctx.fill();
     ctx.restore();
 
-    // 小圖標
+    // 小圖示
     const iconSymbol = getIconSymbol(ach.icon);
     ctx.save();
     ctx.shadowColor = '#ffcc00';
@@ -473,7 +473,7 @@ export async function shareImage(dataUrl: string, title: string, text: string): 
       return true;
     }
 
-    // 不支援文件分享時，僅分享文字
+    // 不支援檔案分享時，僅分享文字
     await navigator.share({ title, text });
     return true;
   } catch {

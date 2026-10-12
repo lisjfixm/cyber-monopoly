@@ -23,7 +23,7 @@ export type UseSearchDepartmentsOptions = {
 };
 
 /**
- * 搜索部门的 hook
+ * 搜尋部門的 hook
  */
 export function useSearchDepartments(options: UseSearchDepartmentsOptions) {
   const { query, pageSize = 100, enabled = true } = options;
@@ -35,7 +35,7 @@ export function useSearchDepartments(options: UseSearchDepartmentsOptions) {
 }
 
 /**
- * 清除部门缓存
+ * 清除部門快取
  */
 export function clearDepartmentCache(queryClient: QueryClient): void {
   queryClient.invalidateQueries({ queryKey: departmentQueries.all() });

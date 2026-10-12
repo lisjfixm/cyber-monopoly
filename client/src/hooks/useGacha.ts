@@ -40,7 +40,7 @@ export const SINGLE_PULL_COST = { coins: 100, fragments: 10 };
 export const TEN_PULL_COST = { coins: 900, fragments: 90 };
 export const PITY_MAX = 90; // 90 抽保底傳說
 
-// 獎池：只放入可透過扭蛋取得的項目（排除 default 初始項）
+// 獎池：只放入可透過扭蛋取得的專案（排除 default 初始項）
 const PAWN_POOL: Array<{ id: PawnSkinType; rarity: Rarity }> = [
   { id: 'mecha', rarity: 'rare' },
   { id: 'ufo', rarity: 'epic' },
@@ -159,7 +159,7 @@ export interface DrawOutcome {
  * 並回傳抽完後的新 pity 計數。
  * - 達到 PITY_MAX 時本抽「恰好」一次保證傳說，並把計數歸零；
  * - 其餘各抽正常累加；自然傳說也同樣歸零。
- * 抽卡迴圈應持續把 nextPity 餵給下一抽，避免读到舊的閉包值。
+ * 抽卡迴圈應持續把 nextPity 餵給下一抽，避免讀到舊的閉包值。
  */
 export function rollWithPity(currentPity: number): { outcome: DrawOutcome; nextPity: number } {
   const pityTriggered = currentPity + 1 >= PITY_MAX;

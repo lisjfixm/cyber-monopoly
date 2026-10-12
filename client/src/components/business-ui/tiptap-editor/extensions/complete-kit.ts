@@ -22,7 +22,7 @@ import {
 } from '@/components/business-ui/tiptap-editor/extensions/image';
 
 /**
- * 从 StarterKitOptions 中排除不需要单独配置的选项
+ * 從 StarterKitOptions 中排除不需要單獨配置的選項
  */
 type StarterKitBaseOptions = Omit<
   StarterKitOptions,
@@ -30,107 +30,107 @@ type StarterKitBaseOptions = Omit<
 >;
 
 export interface CompleteKitOptions extends StarterKitBaseOptions {
-  // #region 块级扩展
+  // #region 塊級擴充套件
   /**
-   * Heading 配置。设置为 false 禁用。
+   * Heading 配置。設定為 false 禁用。
    * @default { levels: [1, 2, 3, 4, 5, 6] }
    */
   heading: StarterKitOptions['heading'];
 
   /**
-   * CodeBlock (Shiki 语法高亮) 配置。设置为 false 禁用。
-   * 注意：此扩展使用 CodeBlockShiki 替代官方 CodeBlock。
+   * CodeBlock (Shiki 語法高亮) 配置。設定為 false 禁用。
+   * 注意：此擴充套件使用 CodeBlockShiki 替代官方 CodeBlock。
    */
   codeBlock: false;
   // #endregion
 
-  // #region 行内标记扩展
+  // #region 行內標記擴充套件
   /**
-   * Link 配置。设置为 false 禁用。
+   * Link 配置。設定為 false 禁用。
    * @default { autolink: true, openOnClick: true }
    */
   link: Partial<LinkOptions> | false;
   // #endregion
 
-  // #region 列表扩展
+  // #region 列表擴充套件
   /**
-   * TaskList 配置。设置为 false 禁用。
+   * TaskList 配置。設定為 false 禁用。
    */
   taskList: Partial<TaskListOptions> | false;
 
   /**
-   * TaskItem 配置。设置为 false 禁用。
+   * TaskItem 配置。設定為 false 禁用。
    * @default { nested: true }
    */
   taskItem: Partial<TaskItemOptions> | false;
   // #endregion
 
-  // #region 样式扩展
+  // #region 樣式擴充套件
   /**
-   * TextStyle 配置。设置为 false 禁用。
+   * TextStyle 配置。設定為 false 禁用。
    */
   textStyle: Partial<TextStyleOptions> | false;
 
   /**
-   * Color 配置。设置为 false 禁用。
+   * Color 配置。設定為 false 禁用。
    */
   color: Partial<ColorOptions> | false;
 
   /**
-   * Highlight 配置。设置为 false 禁用。
+   * Highlight 配置。設定為 false 禁用。
    * @default { multicolor: true }
    */
   highlight: Partial<HighlightOptions> | false;
 
   /**
-   * TextAlign 配置。设置为 false 禁用。
+   * TextAlign 配置。設定為 false 禁用。
    * @default { types: ["heading", "paragraph"] }
    */
   textAlign: Partial<TextAlignOptions> | false;
   // #endregion
 
-  // #region 媒体扩展
+  // #region 媒體擴充套件
   /**
-   * Image 配置。设置为 false 禁用。
+   * Image 配置。設定為 false 禁用。
    */
   image: Partial<ImageOptions> | false;
 
   /**
-   * Attachment 配置。设置为 false 禁用。
+   * Attachment 配置。設定為 false 禁用。
    */
   attachment: Partial<AttachmentExtensionOptions> | false;
   // #endregion
 
-  // #region 其他扩展
+  // #region 其他擴充套件
   /**
-   * Placeholder 配置。设置为 false 禁用。
-   * @default { placeholder: "请输入..." }
+   * Placeholder 配置。設定為 false 禁用。
+   * @default { placeholder: "請輸入..." }
    */
   placeholder: Partial<PlaceholderOptions> | false;
   // #endregion
 }
 
 /**
- * CompleteKit 是一个完整的编辑器扩展集合。
+ * CompleteKit 是一個完整的編輯器擴充套件集合。
  *
- * 它是构建富文本编辑器的良好起点，包含了所有常用的编辑功能。
+ * 它是構建富文字編輯器的良好起點，包含了所有常用的編輯功能。
  *
  * @example
  * ```ts
- * // 使用默认配置
+ * // 使用預設配置
  * const editor = useEditor({
  *   extensions: [CompleteKit],
  * })
  *
- * // 自定义配置
+ * // 自定義配置
  * const editor = useEditor({
  *   extensions: [
  *     CompleteKit.configure({
- *       // 禁用 image 扩展
+ *       // 禁用 image 擴充套件
  *       image: false,
- *       // 自定义 placeholder
- *       placeholder: { placeholder: "开始输入..." },
- *       // 自定义 heading
+ *       // 自定義 placeholder
+ *       placeholder: { placeholder: "開始輸入..." },
+ *       // 自定義 heading
  *       heading: { levels: [1, 2, 3] },
  *       // 禁用 link
  *       link: false,
@@ -145,9 +145,9 @@ export const CompleteKit = Extension.create<CompleteKitOptions>({
   addExtensions() {
     const extensions = [];
 
-    // StarterKit 基础扩展（排除 heading、link、codeBlock）
+    // StarterKit 基礎擴充套件（排除 heading、link、codeBlock）
     const starterKitOptions: Partial<StarterKitOptions> = {
-      // 将顶级选项映射到 StarterKit
+      // 將頂級選項對映到 StarterKit
       blockquote: this.options.blockquote,
       bold: this.options.bold,
       bulletList: this.options.bulletList,
@@ -167,7 +167,7 @@ export const CompleteKit = Extension.create<CompleteKitOptions>({
       trailingNode: this.options.trailingNode,
       underline: this.options.underline,
       undoRedo: this.options.undoRedo,
-      // 默认禁用 StarterKit 的 codeBlock，使用 CodeBlockShiki 替代
+      // 預設禁用 StarterKit 的 codeBlock，使用 CodeBlockShiki 替代
       codeBlock: false,
       // 配置 heading
       heading:
@@ -209,7 +209,7 @@ export const CompleteKit = Extension.create<CompleteKitOptions>({
       );
     }
 
-    // 样式扩展
+    // 樣式擴充套件
     if (this.options.textStyle !== false) {
       extensions.push(TextStyle.configure(this.options.textStyle));
     }
@@ -236,7 +236,7 @@ export const CompleteKit = Extension.create<CompleteKitOptions>({
       );
     }
 
-    // 媒体扩展
+    // 媒體擴充套件
     if (this.options.image !== false) {
       extensions.push(Image.configure(this.options.image));
     }
@@ -245,11 +245,11 @@ export const CompleteKit = Extension.create<CompleteKitOptions>({
       extensions.push(Attachment.configure(this.options.attachment));
     }
 
-    // 其他扩展
+    // 其他擴充套件
     if (this.options.placeholder !== false) {
       extensions.push(
         Placeholder.configure({
-          placeholder: '请输入...',
+          placeholder: '請輸入...',
           ...this.options.placeholder,
         }),
       );

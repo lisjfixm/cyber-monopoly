@@ -28,8 +28,8 @@ interface AuctionMasterGameProps {
 
 const ITEM_TEMPLATES = [
   { name: '現金包裹', icon: 'coins' as const, minBid: 300, value: [500, 1500] },
-  { name: '神祕寶箱', icon: 'mystery' as const, minBid: 500, value: [200, 2000] },
-  { name: '數據核心', icon: 'item' as const, minBid: 800, value: [1000, 2500] },
+  { name: '神秘寶箱', icon: 'mystery' as const, minBid: 500, value: [200, 2000] },
+  { name: '資料核心', icon: 'item' as const, minBid: 800, value: [1000, 2500] },
   { name: '霓虹晶片', icon: 'item' as const, minBid: 600, value: [800, 1800] },
   { name: '能源電池', icon: 'mystery' as const, minBid: 400, value: [300, 1200] },
 ];

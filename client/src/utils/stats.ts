@@ -12,7 +12,7 @@ export function calcWinRate(matches: MatchHistoryItem[]): number {
   return (wins / matches.length) * 100;
 }
 
-// 最近N局勝率走勢（返回數組，每局累計勝率）
+// 最近N局勝率走勢（返回陣列，每局累計勝率）
 export function calcWinRateTrend(
   matches: MatchHistoryItem[],
   n: number = 10,
@@ -301,3 +301,58 @@ export function formatBigNumber(num: number): string {
   if (Math.abs(num) >= 10000) return `${(num / 10000).toFixed(1)}萬`;
   return num.toLocaleString();
 }
+
+/**
+ * v4.0.0 新經濟系統資料（局外統計維度）。
+ * MatchHistoryItem 目前尚未持久化這些欄位，故以寬鬆欄位讀取並防 NaN/除零；
+ * 一旦引擎在對局紀錄寫入這些欄位，數字會自動點亮，否則呈 0 並顯示提示。
+ */
+export interface V4EconomyStats {
+  cryptoPnl: number;        // 加密貨幣累計盈虧
+  ipoProfit: number;        // IPO 累計獲利
+  taxPaid: number;          // 累計已繳所得稅
+  taxEvaded: number;        // 累計逃稅成功次數
+  taxAudited: number;       // 累計被稽查次數
+  hostileTakeovers: number; // 發起敵意收購次數
+  controlledCompanies: number; // 曾控股的公司數（跨局合計）
+  gamesInV4Mode: number;    // 參與 v4 新模式對局數
+  v4ModeWins: number;       // v4 新模式勝場
+}
+
+const V4_MODE_IDS = new Set([
+  'heist', 'bounty_hunt', 'gold_rush', 'cyber_olympics', 'rogue_ai', 'time_loop',
+]);
+
+function pickV4Num(m: MatchHistoryItem, key: string): number {
+  const v = (m as unknown as Record<string, unknown>)[key];
+  return typeof v === 'number' && Number.isFinite(v) ? v : 0;
+}
+
+export function calcV4EconomyStats(matches: MatchHistoryItem[]): V4EconomyStats {
+  const acc: V4EconomyStats = {
+    cryptoPnl: 0,
+    ipoProfit: 0,
+    taxPaid: 0,
+    taxEvaded: 0,
+    taxAudited: 0,
+    hostileTakeovers: 0,
+    controlledCompanies: 0,
+    gamesInV4Mode: 0,
+    v4ModeWins: 0,
+  };
+  for (const m of matches) {
+    acc.cryptoPnl += pickV4Num(m, 'cryptoPnl');
+    acc.ipoProfit += pickV4Num(m, 'ipoProfit');
+    acc.taxPaid += pickV4Num(m, 'taxPaid');
+    acc.taxEvaded += pickV4Num(m, 'taxEvadedThisGame');
+    acc.taxAudited += pickV4Num(m, 'taxAuditedCount');
+    acc.hostileTakeovers += pickV4Num(m, 'hostileTakeoverCount');
+    acc.controlledCompanies += pickV4Num(m, 'controlledCompaniesCount');
+    if (typeof m.mode === 'string' && V4_MODE_IDS.has(m.mode)) {
+      acc.gamesInV4Mode += 1;
+      if (m.result === 'win') acc.v4ModeWins += 1;
+    }
+  }
+  return acc;
+}
+

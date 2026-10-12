@@ -22,7 +22,7 @@ import {
 type LinkHoverMode = 'toolbar' | 'edit';
 
 export interface LinkHoverToolbarProps extends React.ComponentProps<'div'> {
-  /** Hover 链接后延时展示工具栏的时长（ms）。默认 700ms。 */
+  /** Hover 連結後延時展示工具欄的時長（ms）。預設 700ms。 */
   openDelay?: number;
 }
 
@@ -86,8 +86,8 @@ export function LinkHoverToolbar({
   }, []);
 
   const scheduleResetAfterClose = React.useCallback(() => {
-    // PopoverContent 有关闭动画（animate-out）。关闭时如果立刻清空 anchor/href/text/mode，
-    // 会出现：内容先变空（布局抖动）或失去 anchor（跳到左上角）再消失。
+    // PopoverContent 有關閉動畫（animate-out）。關閉時如果立刻清空 anchor/href/text/mode，
+    // 會出現：內容先變空（佈局抖動）或失去 anchor（跳到左上角）再消失。
     clearAfterCloseTimer();
 
     afterCloseTimerRef.current = window.setTimeout(() => {
@@ -327,8 +327,8 @@ export function LinkHoverToolbar({
                       size="sm"
                       className="size-6 px-0"
                       onClick={() => {
-                        // NOTE: 不要在这里 focus 编辑器，否则 Radix Popover 会因为 focus outside 直接 dismiss，
-                        // 从而出现“偶尔没切到表单而是关闭弹层”的竞态。
+                        // NOTE: 不要在這裡 focus 編輯器，否則 Radix Popover 會因為 focus outside 直接 dismiss，
+                        // 從而出現“偶爾沒切到表單而是關閉彈層”的競態。
                         clearCloseTimer();
                         selectHoveredLink({ focus: false });
                         setMode('edit');
@@ -336,11 +336,11 @@ export function LinkHoverToolbar({
                       }}
                     >
                       <Pencil className="size-4" />
-                      <span className="sr-only">编辑链接</span>
+                      <span className="sr-only">編輯連結</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>编辑链接</p>
+                    <p>編輯連結</p>
                   </TooltipContent>
                 </Tooltip>
 
@@ -353,11 +353,11 @@ export function LinkHoverToolbar({
                       onClick={unlink}
                     >
                       <Link2Off className="size-4" />
-                      <span className="sr-only">移除链接</span>
+                      <span className="sr-only">移除連結</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>移除链接</p>
+                    <p>移除連結</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

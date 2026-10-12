@@ -141,7 +141,7 @@ const ChatPanel = ({ friend, messages, onSendMessage, currentUserId }: ChatPanel
               還沒有訊息
             </div>
             <div className="text-xs text-[var(--text-muted)]">
-              發送第一條訊息開始對話吧
+              傳送第一條訊息開始對話吧
             </div>
           </div>
         )}

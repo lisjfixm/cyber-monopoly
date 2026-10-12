@@ -10,8 +10,8 @@ export type HighlightTextProps = {
 };
 
 /**
- * 高亮文本组件
- * 将文本中匹配的部分用高亮样式标记
+ * 高亮文字元件
+ * 將文字中匹配的部分用高亮樣式標記
  */
 export const HighlightText = ({
   text,

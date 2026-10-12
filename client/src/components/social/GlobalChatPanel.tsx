@@ -34,7 +34,7 @@ interface GlobalChatPanelProps {
 
 const ONLINE_USERS = [
   { id: 'u1', name: '霓虹夜行者', status: 'online', guild: 'NEON' },
-  { id: 'u2', name: '數據殭屍', status: 'in_game', guild: 'CYBR' },
+  { id: 'u2', name: '資料殭屍', status: 'in_game', guild: 'CYBR' },
   { id: 'u3', name: '影子跑者', status: 'online', guild: '' },
   { id: 'u4', name: '光纖貓', status: 'away', guild: 'PHNT' },
   { id: 'u5', name: '量子駭客', status: 'online', guild: '' },
@@ -410,7 +410,7 @@ export const GlobalChatPanel: React.FC<GlobalChatPanelProps> = ({
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder={currentTab?.type === 'private' ? '發送訊息...' : '在全域頻道說點什麼...'}
+          placeholder={currentTab?.type === 'private' ? '傳送訊息...' : '在全域頻道說點什麼...'}
           className="flex-1 bg-transparent border rounded px-2 py-1 text-sm outline-none focus:border-cyan-400 transition-colors"
           style={{ borderColor: 'var(--border-neon)', color: 'var(--text-primary)' }}
         />
@@ -429,7 +429,7 @@ export const GlobalChatPanel: React.FC<GlobalChatPanelProps> = ({
           <div className="bg-[var(--bg-dark)] border rounded-lg p-4 w-full" style={{ borderColor: 'var(--red)' }}>
             <h3 className="text-sm font-bold mb-2" style={{ color: 'var(--red)' }}>舉報訊息</h3>
             <p className="text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>
-              舉報對象：{showReport.senderName}
+              舉報物件：{showReport.senderName}
             </p>
             <textarea
               value={reportReason}

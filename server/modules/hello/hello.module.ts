@@ -1,4 +1,4 @@
-/* 模板代码 仅作示例 */
+/* 模板程式碼 僅作示例 */
 // import { Module } from '@nestjs/common';
 // import { HelloController } from './hello.controller';
 // import { HelloService } from './hello.service';

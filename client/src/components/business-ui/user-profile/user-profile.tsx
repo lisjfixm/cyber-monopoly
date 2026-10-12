@@ -41,9 +41,9 @@ type WebComponentAPI = {
 };
 
 declare global {
-  // 运行环境标识（可根据需要扩展实际取值范围）
+  // 執行環境標識（可根據需要擴充套件實際取值範圍）
   var ENVIRONMENT: 'staging' | 'local' | 'production' | string;
-  // 飞书 H5 webComponent SDK
+  // 飛書 H5 webComponent SDK
   var webComponent: WebComponentAPI;
 }
 
@@ -82,11 +82,11 @@ type AccountStatus = (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 const AccountStatusMap: Record<AccountStatus, string> = {
   [ACCOUNT_STATUS.UNSPECIFIED]: '',
-  [ACCOUNT_STATUS.Active]: '已启用',
-  [ACCOUNT_STATUS.Inactive]: '未激活',
+  [ACCOUNT_STATUS.Active]: '已啟用',
+  [ACCOUNT_STATUS.Inactive]: '未啟用',
   [ACCOUNT_STATUS.Disabled]: '已停用',
   [ACCOUNT_STATUS.Terminated]: '已停用',
-  [ACCOUNT_STATUS.NotJoined]: '未激活',
+  [ACCOUNT_STATUS.NotJoined]: '未啟用',
   [ACCOUNT_STATUS.Resigned]: '已停用',
 };
 
@@ -115,8 +115,8 @@ interface BaseOfficialProfileProps {
 }
 
 /**
- * 通用响应结构
- * 用于标准化 API 响应格式
+ * 通用響應結構
+ * 用於標準化 API 響應格式
  */
 export interface WithCommonResponse<T> {
   data: T;
@@ -183,7 +183,7 @@ function UserProfile(props: UserProfileProps) {
   const onAuthError = useCallback(() => {
     globalThis.webComponent.onAuthError(function (error: Error) {
       const errorMessage = JSON.parse(error.message);
-      // 存在token过期情况，但后端无法识别，需要前端这边主动识别error，并进行鉴权重定向
+      // 存在token過期情況，但後端無法識別，需要前端這邊主動識別error，並進行鑑權重定向
       if (
         errorMessage?.msg?.code === 20442 &&
         errorMessage?.msg?.msg === 'jsapi-ticket not exist'
@@ -197,7 +197,7 @@ function UserProfile(props: UserProfileProps) {
     });
   }, []);
 
-  // 按需注入飞书 H5 JS SDK，仅在组件使用时加载
+  // 按需注入飛書 H5 JS SDK，僅在元件使用時載入
   const larkSdkURl =
     'https://lf3-cdn-tos.bytegoofy.com/obj/goofy/locl/lark/external_js_sdk/h5-js-sdk-1.2.21.js';
   const scriptOptions = useMemo(
@@ -230,9 +230,9 @@ function UserProfile(props: UserProfileProps) {
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') {
-        // 直接退出，不处理 AbortError
+        // 直接退出，不處理 AbortError
       } else {
-        // 最终的UI反馈
+        // 最終的UI反饋
         setError(true);
         setLoading(false);
       }
@@ -253,17 +253,17 @@ function UserProfile(props: UserProfileProps) {
       >
         <ErrorImage />
         {/* <Button variant="outline" className="border-red-500 text-black hover:bg-red-50" onClick={fetchData}>
-        加载失败 请重试
+        載入失敗 請重試
       </Button> */}
         <div>
-          <span className="text-sm">加载失败 请</span>
+          <span className="text-sm">載入失敗 請</span>
           <Button
             size="sm"
             variant="ghost"
             className="pr-1 pl-1 text-primary! not-disabled:hover:bg-primary/10 not-disabled:hover:text-primary/90 focus-visible:bg-primary/20"
             onClick={fetchData}
           >
-            重试
+            重試
           </Button>
         </div>
       </Card>
@@ -349,7 +349,7 @@ function SimpleUserProfile(props: {
             </div>
             {userProfileInfo.email && (
               <div className="mt-6 grid grid-cols-[84px_1fr] gap-y-3 text-sm">
-                <div className="text-muted-foreground">邮箱</div>
+                <div className="text-muted-foreground">郵箱</div>
                 <div>
                   <a
                     className="break-all text-primary underline-offset-4 hover:underline"

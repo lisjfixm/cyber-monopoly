@@ -18,12 +18,12 @@ import { getI18nText } from '@client/src/components/business-ui/utils/user';
 import type { User } from '@client/src/components/business-ui/types/user';
 
 /**
- * 将 User 转换为 UserSelectItemValue
+ * 將 User 轉換為 UserSelectItemValue
  */
 function userToItemValue(user: User, accountType: AccountType): UserSelectItemValue {
   return {
     id: accountType === 'lark' ? (user.larkUserId || user.user_id || '') : (user.user_id || user.larkUserId || ''),
-    name: getI18nText(user.name) || '未知用户',
+    name: getI18nText(user.name) || '未知使用者',
     avatar: user.avatar,
     raw: user,
   };
@@ -31,19 +31,19 @@ function userToItemValue(user: User, accountType: AccountType): UserSelectItemVa
 
 export type UseUserValueResult = {
   /**
-   * 标准化后的内部 value（UserSelectItemValue 对象格式）
-   * 用于传递给 BaseCombobox
+   * 標準化後的內部 value（UserSelectItemValue 物件格式）
+   * 用於傳遞給 BaseCombobox
    */
   internalValue: UserSelectItemValue | UserSelectItemValue[] | null;
 
   /**
-   * 是否正在加载用户信息
+   * 是否正在載入使用者資訊
    */
   isLoading: boolean;
 
   /**
-   * 将内部 UserSelectItemValue 对象转换回外部格式
-   * ID 模式时返回字符串，对象模式时返回 UserSelectItemValue
+   * 將內部 UserSelectItemValue 物件轉換回外部格式
+   * ID 模式時返回字串，物件模式時返回 UserSelectItemValue
    */
   toExternalValue: (
     internalVal: UserSelectItemValue | UserSelectItemValue[] | null,
@@ -52,16 +52,16 @@ export type UseUserValueResult = {
 };
 
 /**
- * 处理 UserSelect 的 value 类型转换
+ * 處理 UserSelect 的 value 型別轉換
  *
- * - 根据 valueType 决定 value 是 ID 字符串还是 UserSelectItemValue 对象
- * - ID 模式下调用 API 获取完整用户信息（使用 react-query 缓存）
- * - 无效 ID 生成 "未知用户" 占位
+ * - 根據 valueType 決定 value 是 ID 字串還是 UserSelectItemValue 物件
+ * - ID 模式下呼叫 API 獲取完整使用者資訊（使用 react-query 快取）
+ * - 無效 ID 生成 "未知使用者" 佔位
  *
- * @param value - 外部传入的 value
- * @param multiple - 是否多选模式
- * @param accountType - 账户类型
- * @param valueType - 值类型，'string' 表示 ID 模式，'object' 表示 UserSelectItemValue 对象模式
+ * @param value - 外部傳入的 value
+ * @param multiple - 是否多選模式
+ * @param accountType - 賬戶型別
+ * @param valueType - 值型別，'string' 表示 ID 模式，'object' 表示 UserSelectItemValue 物件模式
  */
 export function useUserValue(
   value: UserSelectValue,
@@ -71,19 +71,19 @@ export function useUserValue(
 ): UseUserValueResult {
   const isIdMode = valueType === 'string';
 
-  // 提取当前 value 中的所有 ID
+  // 提取當前 value 中的所有 ID
   const currentIds = useMemo(() => extractIdsFromValue(value), [value]);
 
-  // ID 模式下需要获取的 ID 列表（去重和排序，确保相同的 ID 集合有相同的 queryKey）
+  // ID 模式下需要獲取的 ID 列表（去重和排序，確保相同的 ID 集合有相同的 queryKey）
   const idsToFetch = useMemo(() => {
     if (!isIdMode) return [];
     return [...new Set(currentIds.map(String))].filter(Boolean).sort();
   }, [isIdMode, currentIds]);
 
-  // 使用 react-query hook 获取用户信息
+  // 使用 react-query hook 獲取使用者資訊
   const { data: response, isLoading } = useUsersByIds(idsToFetch, accountType);
 
-  // 构建 ID -> UserSelectItemValue 的映射
+  // 構建 ID -> UserSelectItemValue 的對映
   const usersMap = useMemo(() => {
     const map = new Map<string, UserSelectItemValue>();
     const userInfoMap = response?.data?.userInfoMap || {};
@@ -108,7 +108,7 @@ export function useUserValue(
     }
 
     if (!isIdMode) {
-      // Object 模式：将 User 转换为 UserSelectItemValue
+      // Object 模式：將 User 轉換為 UserSelectItemValue
       if (Array.isArray(value)) {
         return (value as User[]).map((user) => userToItemValue(user, accountType));
       }
@@ -143,7 +143,7 @@ export function useUserValue(
         return String((internalVal as UserSelectItemValue).id);
       }
 
-      // Object 模式：提取 raw 数据，返回标准 User 类型
+      // Object 模式：提取 raw 資料，返回標準 User 型別
       if (isMultiple) {
         return (internalVal as UserSelectItemValue[]).map((u) => u.raw!);
       }

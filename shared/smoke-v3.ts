@@ -102,7 +102,7 @@ function signatureOf(state: GameState): string {
   ].join('|');
 }
 
-/** 推進恰好「一步」AI 決策；若無任何可動作則拋出（軟鎖）。 */
+/** 推進恰好「一步」AI 決策；若無任何可動作則丟擲（軟鎖）。 */
 function driveOneStep(state: GameState): GameState {
   if (state.phase === 'ended') return state;
 
@@ -126,7 +126,7 @@ function driveOneStep(state: GameState): GameState {
     return Math.random() < 0.5 ? acceptAllianceInvite(state, toPlayer) : rejectAllianceInvite(state, toPlayer);
   }
 
-  // 3. NPC 交互
+  // 3. NPC 互動
   if (state.pendingNpcInteraction) {
     const npc = state.pendingNpcInteraction;
     const accept = state.players[npc.playerIndex].money > 2000;

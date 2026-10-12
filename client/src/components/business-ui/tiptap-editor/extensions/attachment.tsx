@@ -92,7 +92,7 @@ function fileToAttachmentAttributes(
 }
 
 function withDownloadParam(url: string) {
-  // blob URL 追加 search 会导致地址失效
+  // blob URL 追加 search 會導致地址失效
   if (url.startsWith('blob:')) return url;
 
   try {
@@ -275,7 +275,7 @@ function AttachmentNodeView(props: NodeViewProps) {
                   aria-label="附件不可用"
                   title="附件不可用"
                   onClick={() => {
-                    toast.error('该附件链接缺失，请重新上传');
+                    toast.error('該附件連結缺失，請重新上傳');
                   }}
                 >
                   <CircleAlert className="size-4 text-destructive" />
@@ -288,8 +288,8 @@ function AttachmentNodeView(props: NodeViewProps) {
                     size="icon"
                     onClick={handlePreview}
                     disabled={!effectiveUrl}
-                    aria-label="预览"
-                    title="预览"
+                    aria-label="預覽"
+                    title="預覽"
                   >
                     <EyeIcon className="size-4" />
                   </Button>
@@ -300,8 +300,8 @@ function AttachmentNodeView(props: NodeViewProps) {
                     size="icon"
                     onClick={handleDownload}
                     disabled={!effectiveUrl}
-                    aria-label="下载"
-                    title="下载"
+                    aria-label="下載"
+                    title="下載"
                   >
                     <DownloadIcon className="size-4" />
                   </Button>
@@ -314,8 +314,8 @@ function AttachmentNodeView(props: NodeViewProps) {
                   variant="ghost"
                   size="icon"
                   onClick={deleteNode}
-                  aria-label="删除"
-                  title="删除"
+                  aria-label="刪除"
+                  title="刪除"
                 >
                   <Trash2Icon className="size-4" />
                 </Button>
@@ -479,7 +479,7 @@ export const Attachment = Node.create<AttachmentExtensionOptions>({
             };
           });
 
-          // 一次性插入多个节点，避免 NodeSelection 导致后续插入替换掉前一个节点
+          // 一次性插入多個節點，避免 NodeSelection 導致後續插入替換掉前一個節點
           const inserted = commands.insertContent([
             ...uploads.map(({ attrs }) => ({
               type: this.name,
@@ -488,7 +488,7 @@ export const Attachment = Node.create<AttachmentExtensionOptions>({
             { type: 'paragraph' },
           ]);
 
-          // 并发上传：不阻塞命令返回
+          // 併發上傳：不阻塞命令返回
           void Promise.all(
             uploads.map(async ({ file, uploadId }) => {
               try {

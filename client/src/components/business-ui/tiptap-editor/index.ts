@@ -1,11 +1,11 @@
-// #region 完整版组件
+// #region 完整版元件
 export {
   TiptapEditorComplete,
   type TiptapEditorCompleteProps,
 } from '@/components/business-ui/tiptap-editor/tiptap-editor-complete';
 // #endregion
 
-// #region 组合式 API
+// #region 組合式 API
 export {
   TiptapEditor,
   TiptapEditorContent,
@@ -15,14 +15,14 @@ export {
 } from '@/components/business-ui/tiptap-editor/tiptap-editor';
 // #endregion
 
-// #region 扩展
+// #region 擴充套件
 export {
   CompleteKit,
   type CompleteKitOptions,
 } from '@/components/business-ui/tiptap-editor/extensions/complete-kit';
 // #endregion
 
-// #region 工具栏可用工具按钮
+// #region 工具欄可用工具按鈕
 export { AttachmentToolbarButton } from '@/components/business-ui/tiptap-editor/components/attachment-toolbar-button';
 export { BlockquoteToolbarButton } from '@/components/business-ui/tiptap-editor/components/blockquote-toolbar-button';
 export { CodeBlockToolbarButton } from '@/components/business-ui/tiptap-editor/components/code-block-toolbar-button';

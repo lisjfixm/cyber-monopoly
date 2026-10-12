@@ -61,7 +61,7 @@ const FirewallBreachGame: FC<FirewallBreachGameProps> = ({
         setHighlighted(null);
         showingRef.current = false;
         setCanInput(true);
-        setStatusText('輪到你了！按順序點擊');
+        setStatusText('輪到你了！按順序點選');
         return;
       }
       setHighlighted(seq[idx] ?? 0);
@@ -96,7 +96,7 @@ const FirewallBreachGame: FC<FirewallBreachGameProps> = ({
     if (sequence.length === 0) return;
     if (playerInput.length === sequence.length && round < ROUND_LENGTHS.length) {
       setCanInput(false);
-      setStatusText(`第 ${round} 輪通過！`);
+      setStatusText(`第 ${round} 輪透過！`);
       timeoutRef.current = setTimeout(() => {
         onNextRound();
       }, 1200);
@@ -181,7 +181,7 @@ const FirewallBreachGame: FC<FirewallBreachGameProps> = ({
             </div>
             <div className="text-xs text-center px-4" style={{ color: 'var(--text-secondary)' }}>
               記住閃爍的密碼格順序<br />
-              3 條生命，通過 3 輪
+              3 條生命，透過 3 輪
             </div>
             <button
               onClick={handleStart}
@@ -232,7 +232,7 @@ const FirewallBreachGame: FC<FirewallBreachGameProps> = ({
       {finished && (
         <div className="flex flex-col items-center gap-1">
           <div className="font-cyber text-xl tracking-wider" style={{ color: reward > 0 ? 'var(--green)' : 'var(--red)' }}>
-            {reward >= 1400 ? '破解成功！' : reward > 0 ? '部分通過' : '破解失敗'}
+            {reward >= 1400 ? '破解成功！' : reward > 0 ? '部分透過' : '破解失敗'}
           </div>
           <div className="font-cyber text-2xl font-bold" style={{
             color: reward > 0 ? 'var(--green)' : 'var(--text-secondary)',

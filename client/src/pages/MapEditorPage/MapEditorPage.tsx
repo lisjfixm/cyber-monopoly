@@ -142,7 +142,7 @@ function createPresetCells(presetId: PresetMapId): CellConfig[] {
     cells[9] = { id: 9, name: '停車場', type: 'parking', basePrice: 0, color: '#38bdf8' };
     cells[18] = { id: 18, name: '奇遇事件', type: 'event', basePrice: 0, color: '#facc15' };
     // Set classic property names and prices
-    const names = ['霓虹區', '舊城區', '能源站', '數據塔', '維修區', '核心區', '深海港', '金融街', '地下街'];
+    const names = ['霓虹區', '舊城區', '能源站', '資料塔', '維修區', '核心區', '深海港', '金融街', '地下街'];
     const prices = [600, 600, 1000, 1000, 1200, 1400, 1400, 1600, 1800];
     for (let i = 1; i <= 8; i++) {
       cells[i] = { ...cells[i], name: names[i - 1], basePrice: prices[i - 1], rent: Math.round(prices[i - 1] * 0.25) };
@@ -435,7 +435,7 @@ const MapEditorPage = () => {
     setPendingDeleteId(null);
   }, [editingMapId]);
 
-  // 由儲存清單點擊刪除鈕時先彈確認框
+  // 由儲存清單點選刪除鈕時先彈確認框
   const requestDeleteMap = useCallback((id: string) => {
     setPendingDeleteId(id);
   }, []);
@@ -514,7 +514,7 @@ const MapEditorPage = () => {
       createdAt: new Date().toISOString(),
     };
     publishMap(mapData, '我');
-    setSaveMsg('已發布到社區！');
+    setSaveMsg('已發布到社群！');
     setTimeout(() => setSaveMsg(''), 2000);
   }, [cells, mapName, runValidation]);
 
@@ -616,7 +616,7 @@ const MapEditorPage = () => {
               className="cyber-btn cyber-btn-sm flex items-center gap-1"
             >
               <Save size={14} />
-              保存
+              儲存
             </button>
             <button
               type="button"
@@ -624,7 +624,7 @@ const MapEditorPage = () => {
               className="cyber-btn cyber-btn-sm flex items-center gap-1"
             >
               <Download size={14} />
-              導出
+              匯出
             </button>
             <button
               type="button"
@@ -635,7 +635,7 @@ const MapEditorPage = () => {
               className="cyber-btn cyber-btn-sm flex items-center gap-1"
             >
               <Upload size={14} />
-              導入
+              匯入
             </button>
              <button
                type="button"
@@ -656,7 +656,7 @@ const MapEditorPage = () => {
                }}
              >
                <Share2 size={14} />
-               發布到社區
+               發布到社群
              </button>
            </div>
         </div>

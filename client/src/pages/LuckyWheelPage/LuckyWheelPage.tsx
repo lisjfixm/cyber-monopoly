@@ -9,7 +9,7 @@ const SEGMENTS = 8;
 const SEGMENT_ANGLE = 360 / SEGMENTS;
 const SPIN_TURNS = 5; // 每次轉 5 圈
 
-// 計算讓第 idx 個扇形對準頂部指針所需的旋轉角度
+// 計算讓第 idx 個扇形對準頂部指標所需的旋轉角度
 function rotationForIndex(idx: number): number {
   // 扇形中心位於：-90 + idx*45 + 22.5 度（從 3 點鐘方向逆時針計算的 CSS rotate 角度）
   // 我們希望中心轉到 -90 度（正上方）
@@ -43,7 +43,7 @@ const LuckyWheelPage = () => {
   // 同步鎖：避免快速連點造成重複領取（spinning 是 state，非同步更新）
   const spinningRef = useRef<boolean>(false);
 
-  // unmount 時清除未定時器，避免對已卸載元件 setState
+  // unmount 時清除未定時器，避免對已解除安裝元件 setState
   useEffect(() => {
     return () => {
       if (spinTimeoutRef.current) clearTimeout(spinTimeoutRef.current);
@@ -119,7 +119,7 @@ const LuckyWheelPage = () => {
             幸運轉盤
           </h1>
           <p className="text-xs font-cyber tracking-wider mt-1" style={{ color: 'var(--text-secondary)' }}>
-            每日一次免費轉盤 · v3.0.0
+            每日一次免費轉盤 · v4.0.0
           </p>
         </div>
         <button
@@ -154,7 +154,7 @@ const LuckyWheelPage = () => {
 
       {/* 轉盤本體 */}
       <div className="relative mx-auto my-8" style={{ width: R * 2 + 40, height: R * 2 + 40 }}>
-        {/* 指針 */}
+        {/* 指標 */}
         <div
           className="absolute left-1/2 -translate-x-1/2 z-20"
           style={{ top: -6, filter: 'drop-shadow(0 0 6px var(--pink))' }}

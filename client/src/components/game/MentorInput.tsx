@@ -161,7 +161,7 @@ const MentorInput: React.FC<MentorInputProps> = ({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="輸入指導內容…（Ctrl+Enter 發送）"
+          placeholder="輸入指導內容…（Ctrl+Enter 傳送）"
           rows={3}
           className="w-full px-3 py-2 text-sm rounded outline-none resize-none"
           style={{
@@ -173,7 +173,7 @@ const MentorInput: React.FC<MentorInputProps> = ({
         />
       </div>
 
-      {/* 發送按鈕 + 提示 */}
+      {/* 傳送按鈕 + 提示 */}
       <div className="flex items-center justify-between gap-2">
         <span
           className="text-xs font-cyber"
@@ -183,7 +183,7 @@ const MentorInput: React.FC<MentorInputProps> = ({
             transition: 'all 0.3s ease',
           }}
         >
-          確認 指導已發送
+          確認 指導已傳送
         </span>
         <button
           type="button"
@@ -197,7 +197,7 @@ const MentorInput: React.FC<MentorInputProps> = ({
           }}
         >
           <Send className="w-3.5 h-3.5" />
-          <span>發送指導</span>
+          <span>傳送指導</span>
         </button>
       </div>
     </div>

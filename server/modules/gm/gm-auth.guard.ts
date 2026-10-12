@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { createHmac } from 'node:crypto';
 
-// 生產環境必須通過環境變量 GM_HMAC_SECRET 注入強隨機密鑰。
+// 生產環境必須透過環境變數 GM_HMAC_SECRET 注入強隨機金鑰。
 // 此處預設值僅供本地開發使用，禁止用於生產。
 const GM_HMAC_SECRET =
   process.env.GM_HMAC_SECRET || 'dev-only-insecure-secret-change-me';

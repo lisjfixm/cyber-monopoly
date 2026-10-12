@@ -1,8 +1,8 @@
 // 後端接入點：在 game-engine.ts 的過路費收取邏輯前增加結盟判斷
 // if (isAllied(currentPlayer, propertyOwner) { skipRent(); return; }
-// 這裡的 isAllied 函數邏輯應與前端一致
+// 這裡的 isAllied 函式邏輯應與前端一致
 //
-// 後端接入點（聲望扣減）：背叛時應調用
+// 後端接入點（聲望扣減）：背叛時應呼叫
 //   changeReputation(betrayerIndex, -10, 'betrayal')
 // 與既有偷地 -10、黑市 -5 等規則同級處理
 
@@ -175,7 +175,7 @@ export function betray(
   return next;
 }
 
-// 聲望本地覆蓋（前端模擬，不影響後端真實數據）
+// 聲望本地覆蓋（前端模擬，不影響後端真實資料）
 export interface ReputationOverride {
   [playerIndex: number]: number; // delta 值，正負皆可
 }

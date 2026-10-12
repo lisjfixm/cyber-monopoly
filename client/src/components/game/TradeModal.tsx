@@ -247,7 +247,7 @@ const TradeModal: FC<TradeModalProps> = ({
       >
         {cellIds.length === 0 ? (
           <div className="text-center py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
-            {emptyText ?? "暂无地块"}
+            {emptyText ?? "暫無地塊"}
           </div>
         ) : (
           cellIds.map((cellId) =>
@@ -296,12 +296,12 @@ const TradeModal: FC<TradeModalProps> = ({
              style={{ borderColor: "color-mix(in srgb, var(--pink) 30%, transparent)" }}
           >
             <div className="text-[10px] font-cyber text-[var(--text-secondary)] tracking-widest mb-1">
-              SELECT TARGET / 選擇交易對象
+              SELECT TARGET / 選擇交易物件
             </div>
             <div className="flex items-center gap-2">
               <Handshake className="w-5 h-5" style={{ color: "var(--pink)" }} />
               <h2 className="text-xl md:text-2xl font-cyber tracking-wider" style={{ color: "var(--pink)" }}>
-                選擇交易對象
+                選擇交易物件
               </h2>
             </div>
           </div>
@@ -352,7 +352,7 @@ const TradeModal: FC<TradeModalProps> = ({
                         </span>
                         <span className="flex items-center gap-1">
                           <MapPin className="w-3 h-3" style={{ color: "var(--cyan)" }} />
-                          {propertyCount} 块
+                          {propertyCount} 塊
                         </span>
                       </div>
                     </div>
@@ -377,7 +377,7 @@ const TradeModal: FC<TradeModalProps> = ({
   }
 
   const titleText =
-    mode === "propose" ? "发起交易" : "交易请求";
+    mode === "propose" ? "發起交易" : "交易請求";
   const subtitleText =
     mode === "propose" ? "PROPOSE TRADE" : "INCOMING TRADE";
 
@@ -429,7 +429,7 @@ const TradeModal: FC<TradeModalProps> = ({
           <div className="flex items-center justify-between gap-2">
             <div className="flex-1 text-center p-2 rounded-lg" style={{ backgroundColor: "var(--bg-mid)" }}>
               <div className="text-[10px] font-cyber tracking-widest" style={{ color: "var(--text-secondary)" }}>
-                {mode === "propose" ? "发起方" : "对方"}
+                {mode === "propose" ? "發起方" : "對方"}
               </div>
               <div
                 className="font-cyber text-sm truncate"
@@ -458,43 +458,43 @@ const TradeModal: FC<TradeModalProps> = ({
           {/* Given properties */}
           {mode === "propose"
             ? renderPropertyList(
-                "我给出的地块",
+                "我給出的地塊",
                  "選擇你想交易給對方的地塊（未抵押空地）",
                 myUnmortgagedProperties,
                 true,
                 givenSelected,
                 handleGivenToggle,
-                "你暂无可交易的地块",
+                "你暫無可交易的地塊",
               )
             : renderPropertyList(
-                "对方给出的地块",
-                "对方将这些地块交给你",
+                "對方給出的地塊",
+                "對方將這些地塊交給你",
                 givenList,
                 false,
                 givenList,
                 undefined,
-                "无",
+                "無",
               )}
 
           {/* Received properties */}
           {mode === "propose"
             ? renderPropertyList(
-                "我想要的地块",
+                "我想要的地塊",
                  "選擇你想從對方獲得的地塊",
                 opponentProperties,
                 true,
                 receivedSelected,
                 handleReceivedToggle,
-                "对方暂无地块",
+                "對方暫無地塊",
               )
             : renderPropertyList(
-                "对方请求的地块",
-                "对方希望获得你这些地块",
+                "對方請求的地塊",
+                "對方希望獲得你這些地塊",
                 receivedList,
                 false,
                 receivedList,
                 undefined,
-                "无",
+                "無",
               )}
 
           {/* Money amount */}
@@ -503,7 +503,7 @@ const TradeModal: FC<TradeModalProps> = ({
               <div className="flex items-center gap-2">
                 <DollarSign className="w-4 h-4" style={{ color: "var(--green)" }} />
                 <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                  {mode === "propose" ? "金额（正=你出钱，负=你收钱）" : "交易金额"}
+                  {mode === "propose" ? "金額（正=你出錢，負=你收錢）" : "交易金額"}
                 </span>
               </div>
               <Landmark className="w-4 h-4" style={{ color: "var(--purple)" }} />
@@ -524,10 +524,10 @@ const TradeModal: FC<TradeModalProps> = ({
               >
                 <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
                   {moneyAmount > 0
-                    ? "对方给你"
+                    ? "對方給你"
                     : moneyAmount < 0
-                      ? "你给对方"
-                      : "无金钱交易"}
+                      ? "你給對方"
+                      : "無金錢交易"}
                 </span>
                 <span
                   className="font-cyber text-lg tracking-wider"
@@ -590,7 +590,7 @@ const TradeModal: FC<TradeModalProps> = ({
             >
               <X className="w-4 h-4 flex-shrink-0" style={{ color: "var(--red)" }} />
               <span className="text-sm" style={{ color: "var(--red)" }}>
-                现金不足，无法支付该金额
+                現金不足，無法支付該金額
               </span>
             </div>
           )}
@@ -615,7 +615,7 @@ const TradeModal: FC<TradeModalProps> = ({
                  onClick={handlePropose}
                  disabled={!canPropose || isProcessing}
                >
-                 发起交易
+                 發起交易
                </button>
             </>
           ) : (
@@ -636,7 +636,7 @@ const TradeModal: FC<TradeModalProps> = ({
                     background: "color-mix(in srgb, var(--red) 5%, transparent)",
                  }}
                >
-                 拒绝
+                 拒絕
                </button>
                <button
                  className="cyber-btn cyber-btn-pink flex-1 text-sm"

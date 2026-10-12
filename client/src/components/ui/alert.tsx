@@ -11,7 +11,7 @@ const alertVariants = cva(
         default: "bg-card text-card-foreground",
         destructive:
           "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
-        // 新增语义化 success/warning variant
+        // 新增語義化 success/warning variant
         success:
           "bg-success text-success-foreground border-success/50 [&>svg]:text-success-foreground *:data-[slot=alert-description]:text-success-foreground/90",
         warning:

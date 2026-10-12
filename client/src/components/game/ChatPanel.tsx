@@ -6,7 +6,7 @@ import type { ChatMessage } from '@shared/api.interface';
 import { PLAYER_COLOR_HEX } from '@shared/game-config';
 import type { PlayerColor } from '@shared/api.interface';
 
-const QUICK_PHRASES: string[] = ['好棋', '等等', '哈哈', '加油', '认输吧'];
+const QUICK_PHRASES: string[] = ['好棋', '等等', '哈哈', '加油', '認輸吧'];
 
 interface ChatPanelProps {
   isOpen: boolean;
@@ -46,13 +46,13 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   const listRef = useRef<HTMLDivElement>(null);
   const markedRef = useRef(false);
 
-  // 自动滚动到底部
+  // 自動滾動到底部
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages.length, isOpen]);
 
-  // 打开面板时标记已读
+  // 開啟面板時標記已讀
   useEffect(() => {
     if (isOpen && !markedRef.current) {
       markedRef.current = true;
@@ -72,7 +72,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
       onSend(trimmed);
       setInputValue('');
     } catch (err) {
-      logger.error('发送聊天消息失败', { error: String(err) });
+      logger.error('傳送聊天訊息失敗', { error: String(err) });
     }
   };
 
@@ -88,13 +88,13 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
     try {
       onSend(phrase);
     } catch (err) {
-      logger.error('发送快捷短语失败', { error: String(err) });
+      logger.error('傳送快捷短語失敗', { error: String(err) });
     }
   };
 
   return (
     <>
-      {/* 右侧滑出面板 - 桌面端固定定位，移动端底部滑出 */}
+      {/* 右側滑出面板 - 桌面端固定定位，移動端底部滑出 */}
       <div
         className={`fixed z-50 transition-all duration-300 ease-out
           bottom-0 left-0 right-0 md:top-20 md:right-0 md:left-auto md:bottom-auto
@@ -111,7 +111,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
             boxShadow: '0 -4px 20px rgba(0, 255, 255, 0.15)',
           }}
         >
-          {/* 标题栏 */}
+          {/* 標題欄 */}
           <div
             className="flex items-center justify-between px-4 py-3 border-b"
             style={{ borderColor: 'var(--border-neon-cyan)' }}
@@ -129,17 +129,17 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
               onClick={onToggle}
               className="w-7 h-7 flex items-center justify-center rounded transition-colors hover:bg-white/10"
               style={{ color: 'var(--text-secondary)' }}
-              aria-label="关闭"
+              aria-label="關閉"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* 消息列表 */}
+          {/* 訊息列表 */}
           <div ref={listRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
             {messages.length === 0 && (
               <div className="text-center text-text-muted text-xs py-8">
-                暂无聊天消息
+                暫無聊天訊息
               </div>
             )}
             {messages.map((msg: ChatMessage) => {
@@ -215,7 +215,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
             })}
           </div>
 
-          {/* 快捷短语 */}
+          {/* 快捷短語 */}
           <div
             className="px-3 py-2 border-t flex flex-wrap gap-1.5"
             style={{ borderColor: 'var(--border-neon-cyan)' }}
@@ -241,7 +241,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
             ))}
           </div>
 
-          {/* 输入区 */}
+          {/* 輸入區 */}
           <div
             className="p-3 border-t flex items-center gap-2"
             style={{ borderColor: 'var(--border-neon-cyan)' }}
@@ -254,7 +254,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
               }
               onKeyDown={handleKeyDown}
               maxLength={500}
-              placeholder={disabled ? '无法发送消息' : '说点什么...'}
+              placeholder={disabled ? '無法傳送訊息' : '說點什麼...'}
               disabled={disabled}
               className="cyber-input flex-1 text-sm"
               style={{ height: '36px' }}
@@ -275,7 +275,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
                   : 'none',
                 cursor: disabled ? 'not-allowed' : 'pointer',
               }}
-              aria-label="发送"
+              aria-label="傳送"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -283,7 +283,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
         </div>
       </div>
 
-      {/* 移动端半透明遮罩 */}
+      {/* 移動端半透明遮罩 */}
       {isOpen && (
         <div
           className="md:hidden fixed inset-0 bg-black/40 z-40"

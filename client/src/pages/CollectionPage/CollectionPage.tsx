@@ -90,7 +90,7 @@ const CollectionPage = () => {
         return `成就：${ACHIEVEMENTS[frame.unlockValue as AchievementId]?.name ?? frame.unlockValue}`;
       case 'battlepass': {
         const parts = String(frame.unlockValue).split('_');
-        return `通行證 ${parts[0]} 級${parts[1] === 'premium' ? '（高級）' : ''}`;
+        return `通行證 ${parts[0]} 級${parts[1] === 'premium' ? '（高階）' : ''}`;
       }
       case 'assets':
         return `資產達到 ${frame.unlockValue}`;

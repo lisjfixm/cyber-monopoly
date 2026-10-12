@@ -53,7 +53,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
         speed: t.speed,
       }));
     } else {
-      // 本地生成靶标
+      // 本地生成靶標
       initialTargets = [];
       for (let i = 0; i < 5; i++) {
         initialTargets.push({
@@ -84,13 +84,13 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
         const updated = prev.map((t) => {
           if (t.hit) return t;
           const newX = t.x + t.speed * 2;
-          // 如果飞出右侧，从左侧重新进入
+          // 如果飛出右側，從左側重新進入
           if (newX > 110) {
             return {
               ...t,
               x: -10 - Math.random() * 20,
               y: 15 + Math.random() * 70,
-              speed: t.speed + 0.1, // 速度递增
+              speed: t.speed + 0.1, // 速度遞增
             };
           }
           return { ...t, x: newX };
@@ -116,7 +116,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
     setMuzzleFlash(true);
     setTimeout(() => setMuzzleFlash(false), 100);
 
-    // 检查是否命中任何靶标
+    // 檢查是否命中任何靶標
     let hitTargetId: number | undefined;
     for (const t of localTargets) {
       if (t.hit) continue;
@@ -147,7 +147,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
 
     if (newBullets <= 0 && !finishedRef.current) {
       finishedRef.current = true;
-      // 子弹用完自动结算（服务端会处理）
+      // 子彈用完自動結算（服務端會處理）
     }
   };
 
@@ -166,7 +166,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      {/* 状态栏 */}
+      {/* 狀態列 */}
       <div className="flex justify-between w-full max-w-xs px-1">
         <div
           className="text-xs font-cyber tracking-wider"
@@ -188,7 +188,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
         </div>
       </div>
 
-      {/* 靶场区域 */}
+      {/* 靶場區域 */}
       <div
         ref={gameAreaRef}
         onClick={handleAreaClick}
@@ -206,7 +206,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
           transition: 'box-shadow 0.1s',
         }}
       >
-        {/* 网格背景 */}
+        {/* 網格背景 */}
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -216,7 +216,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
           }}
         />
 
-        {/* 靶标 */}
+        {/* 靶標 */}
         {gameStarted &&
           localTargets.map((t) => {
             if (t.hit) return null;
@@ -243,7 +243,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
             );
           })}
 
-        {/* 命中标记 */}
+        {/* 命中標記 */}
         {gameStarted &&
           localTargets.map((t) => {
             if (!t.hit) return null;
@@ -265,7 +265,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
             );
           })}
 
-        {/* 准心 */}
+        {/* 準心 */}
         {gameStarted && !finished && localBullets > 0 && (
           <div
             className="absolute pointer-events-none"
@@ -301,7 +301,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
           </div>
         )}
 
-        {/* 枪口闪光效果 */}
+        {/* 槍口閃光效果 */}
         {muzzleFlash && (
           <div
             className="absolute inset-0 pointer-events-none"
@@ -350,7 +350,7 @@ const ShootingChallengeGame: FC<ShootingChallengeGameProps> = ({
             className="text-[10px] font-cyber"
             style={{ color: 'var(--text-secondary)' }}
           >
-            點擊移動靶標射擊，共 {bullets} 發子彈
+            點選移動靶標射擊，共 {bullets} 發子彈
           </div>
         </div>
       )}

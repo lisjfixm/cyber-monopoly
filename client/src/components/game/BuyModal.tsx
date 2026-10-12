@@ -90,7 +90,7 @@ const BuyModal: FC<BuyModalProps> = ({
             <div className="flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-[var(--green)]" />
               <span className="text-sm text-[var(--text-secondary)]">
-                地块价格
+                地塊價格
               </span>
             </div>
             <span
@@ -103,7 +103,7 @@ const BuyModal: FC<BuyModalProps> = ({
           {/* Player money */}
           <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: "var(--bg-mid)" }}>
             <span className="text-sm text-[var(--text-secondary)]">
-              当前现金
+              當前現金
             </span>
             <span
               className="font-cyber text-xl tracking-wider"
@@ -132,7 +132,7 @@ const BuyModal: FC<BuyModalProps> = ({
                 style={{ color: "var(--red)" }}
               />
               <span className="text-sm" style={{ color: "var(--red)" }}>
-                现金不足，无法購買此地块
+                現金不足，無法購買此地塊
               </span>
             </div>
           )}

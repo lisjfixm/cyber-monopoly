@@ -270,7 +270,7 @@ const FateCardModal: FC<FateCardModalProps> = ({ isOpen, card, onClose, onChoice
             className="text-center mt-4 text-xs text-[var(--text-secondary)]"
             style={{ animation: "pulse-glow 2s ease-in-out infinite", color: "var(--purple)" }}
           >
-            点击任意处关闭
+            點選任意處關閉
           </div>
         )}
         {isChoiceCard && (

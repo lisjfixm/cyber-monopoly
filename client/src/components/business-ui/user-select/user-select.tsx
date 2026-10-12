@@ -35,7 +35,7 @@ function createUsersFetcher(options: { accountType?: AccountType; pageSize?: num
   };
 }
 
-// 内部包装组件用于获取 context 中的 size
+// 內部包裝元件用於獲取 context 中的 size
 const UserItemWrapper = ({
   userValue,
   isSelected,
@@ -110,8 +110,8 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
     name,
     className,
     classNames,
-    placeholder = '请选择',
-    emptyText = '没有匹配结果，换个关键词试试吧',
+    placeholder = '請選擇',
+    emptyText = '沒有匹配結果，換個關鍵詞試試吧',
     tagClosable,
     maxTagCount,
     onSelect,
@@ -123,7 +123,7 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
     getOptionDisabled,
   } = props;
 
-  // 使用 useUserValue 处理不同类型的 value（包括 defaultValue）
+  // 使用 useUserValue 處理不同型別的 value（包括 defaultValue）
   const { internalValue, isLoading, toExternalValue } = useUserValue(
     value ?? null,
     multiple,
@@ -131,11 +131,11 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
     valueType,
   );
 
-  // 始终追踪最新 internalValue，避免异步开户回调中闭包捕获过期值
+  // 始終追蹤最新 internalValue，避免非同步開戶回撥中閉包捕獲過期值
   const internalValueRef = useRef(internalValue);
   internalValueRef.current = internalValue;
 
-  // 同样处理 defaultValue，确保 ID 字符串类型的 defaultValue 也能正确解析
+  // 同樣處理 defaultValue，確保 ID 字串型別的 defaultValue 也能正確解析
   const { internalValue: internalDefaultValue } = useUserValue(
     defaultValue ?? null,
     multiple,
@@ -145,16 +145,16 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
 
   const baseFetchFn = useMemo(() => createUsersFetcher({ accountType }), [accountType]);
 
-  // 正在开户中的用户 ID 集合
+  // 正在開戶中的使用者 ID 集合
   const [convertingSet, setConvertingSet] = useState<Set<string>>(() => new Set());
 
-  // 已开户用户映射：旧 ID → 转换后的 UserSelectItemValue，用于回写到待选列表
+  // 已開戶使用者對映：舊 ID → 轉換後的 UserSelectItemValue，用於回寫到待選列表
   const [convertedMap, setConvertedMap] = useState<Map<string, UserSelectItemValue>>(
     () => new Map(),
   );
 
-  // 包装 fetchFn，将已开户用户替换到搜索结果中
-  // convertedMap 变化 → fetchFn 引用变化 → useFetchData 自动 refetch
+  // 包裝 fetchFn，將已開戶使用者替換到搜尋結果中
+  // convertedMap 變化 → fetchFn 引用變化 → useFetchData 自動 refetch
   const fetchFn = useCallback(
     async (search: string) => {
       const result = await baseFetchFn(search);
@@ -167,19 +167,19 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
     [baseFetchFn, convertedMap],
   );
 
-  // 标记是否有即将开户的用户（用于在 handleOpenChange 中阻止关闭）
-  // 时序：handleChange（设置标记）→ handleOpenChange（检查标记）→ handleSelect（开始开户）
+  // 標記是否有即將開戶的使用者（用於在 handleOpenChange 中阻止關閉）
+  // 時序：handleChange（設定標記）→ handleOpenChange（檢查標記）→ handleSelect（開始開戶）
   const pendingConvertRef = useRef(false);
 
-  // 受控 open 状态：开户期间阻止 popover 关闭
+  // 受控 open 狀態：開戶期間阻止 popover 關閉
   const [open, setOpen] = useState(defaultOpen ?? false);
   const handleOpenChange = useCallback((nextOpen: boolean) => {
-    // 有正在开户或即将开户的用户时，不允许关闭下拉
+    // 有正在開戶或即將開戶的使用者時，不允許關閉下拉
     if (!nextOpen && pendingConvertRef.current) return;
     setOpen(nextOpen);
   }, []);
 
-  // 开户中的用户禁止再次点击
+  // 開戶中的使用者禁止再次點選
   const mergedGetOptionDisabled = useCallback(
     (option: UserSelectItemValue) => {
       if (convertingSet.has(option.id)) return true;
@@ -190,8 +190,8 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
   );
 
   /**
-   * onChange 门卫：过滤掉未注册外部联系人，不允许未开户用户进入选中列表。
-   * 同时设置 pendingConvertRef 标记，阻止 handleOpenChange 关闭下拉。
+   * onChange 門衛：過濾掉未註冊外部聯絡人，不允許未開戶使用者進入選中列表。
+   * 同時設定 pendingConvertRef 標記，阻止 handleOpenChange 關閉下拉。
    */
   const handleChange = useCallback(
     (newValue: UserSelectItemValue | UserSelectItemValue[] | null) => {
@@ -208,7 +208,7 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
       } else if (!multiple) {
         const user = newValue as UserSelectItemValue | null;
         if (user && isUnregisteredExternalContact(user)) {
-          // 不允许未注册用户进入选中值，标记即将开户
+          // 不允許未註冊使用者進入選中值，標記即將開戶
           pendingConvertRef.current = true;
           return;
         }
@@ -220,8 +220,8 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
   );
 
   /**
-   * onSelect 拦截：检测未注册外部联系人，触发开户流程。
-   * 开户成功后手动调用 onChange 回填转换后的用户。
+   * onSelect 攔截：檢測未註冊外部聯絡人，觸發開戶流程。
+   * 開戶成功後手動呼叫 onChange 回填轉換後的使用者。
    */
   const handleSelect = useCallback(
     (user: UserSelectItemValue) => {
@@ -235,7 +235,7 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
       if (convertingSet.has(user.id)) return;
 
       setConvertingSet((prev) => new Set(prev).add(user.id));
-      // pendingConvertRef 已在 handleChange 中设置，此处转为正式开户状态
+      // pendingConvertRef 已在 handleChange 中設定，此處轉為正式開戶狀態
 
       void (async () => {
         try {
@@ -248,7 +248,7 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
             raw: user.raw ? { ...user.raw, user_id: forceUserID } : undefined,
           };
 
-          // 回写到待选列表：触发 fetchFn 引用变化 → useFetchData refetch → 列表更新
+          // 回寫到待選列表：觸發 fetchFn 引用變化 → useFetchData refetch → 列表更新
           setConvertedMap((prev) => new Map(prev).set(user.id, convertedUser));
 
           onSelect?.(convertedUser);
@@ -264,18 +264,18 @@ export const UserSelect: React.FC<UserSelectProps> = (props) => {
               (onChange as (value: unknown) => void)(externalValue);
             }
           }
-          // 开户成功后关闭下拉（单选）
+          // 開戶成功後關閉下拉（單選）
           if (!multiple) {
             pendingConvertRef.current = false;
             setOpen(false);
           }
         } catch {
-          toast.error('外部用户添加失败');
+          toast.error('外部使用者新增失敗');
         } finally {
           setConvertingSet((prev) => {
             const next = new Set(prev);
             next.delete(user.id);
-            // 所有开户完成后清除标记
+            // 所有開戶完成後清除標記
             if (next.size === 0) {
               pendingConvertRef.current = false;
             }

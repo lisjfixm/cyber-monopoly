@@ -82,7 +82,7 @@ export class FriendsController {
     }
     const remark = dto.remark?.trim() ? dto.remark.trim().slice(0, 50) : undefined;
     await this.friendsService.addFriend(userId, dto.targetUserId.trim(), remark);
-    return { code: 0, message: '好友邀請已發送', data: { success: true } };
+    return { code: 0, message: '好友邀請已傳送', data: { success: true } };
   }
 
   @Post('action')
@@ -96,7 +96,7 @@ export class FriendsController {
     }
     const validActions: readonly string[] = ['accept', 'reject', 'remove', 'block'];
     if (!validActions.includes(dto.action)) {
-      throw new BadRequestException('無效的操作類型');
+      throw new BadRequestException('無效的操作型別');
     }
     await this.friendsService.handleAction(
       userId,
@@ -158,7 +158,7 @@ export class FriendsController {
   ): Promise<ApiResponse<{ success: boolean }>> {
     const userId = this.resolveUserId(req, dto.visitorId);
     if (!dto.fromUserId?.trim()) {
-      throw new BadRequestException('發送方使用者 ID 不能為空');
+      throw new BadRequestException('傳送方使用者 ID 不能為空');
     }
     await this.friendsService.markAsRead(userId, dto.fromUserId.trim());
     return { code: 0, message: '已標記為已讀', data: { success: true } };
@@ -182,7 +182,7 @@ export class FriendsController {
 
   // ========== 輔助方法 ==========
 
-  // 身份解析：平台環境由中介層注入 req.userContext；
+  // 身份解析：平臺環境由中介層注入 req.userContext；
   // 獨立部署（standalone）沒有中介層時，退回到查詢/請求中的 visitorId，
   // 與 ranking / matchmaking 等訪客制端點保持一致的身份模型。
   private resolveUserId(req: Request, visitorId?: string): string {

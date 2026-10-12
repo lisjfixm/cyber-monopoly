@@ -23,7 +23,7 @@ export type UseUserProfileOptions = {
 };
 
 /**
- * 获取用户 Profile 卡片数据的 hook
+ * 獲取使用者 Profile 卡片資料的 hook
  */
 export function useUserProfile(options: UseUserProfileOptions) {
   const { userId, accountType = 'apaas', enabled = true } = options;
@@ -35,7 +35,7 @@ export function useUserProfile(options: UseUserProfileOptions) {
 }
 
 /**
- * 清除用户 Profile 缓存
+ * 清除使用者 Profile 快取
  */
 export function clearUserProfileCache(queryClient: QueryClient): void {
   queryClient.invalidateQueries({ queryKey: userProfileQueries.all() });

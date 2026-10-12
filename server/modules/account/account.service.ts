@@ -25,14 +25,14 @@ import type {
   Announcement,
 } from '@shared/api.interface';
 
-// 生產環境應透過環境變數 ACCOUNT_TOKEN_SECRET 注入強隨機密鑰；
+// 生產環境應透過環境變數 ACCOUNT_TOKEN_SECRET 注入強隨機金鑰；
 // 預設值僅供本地開發使用，避免在多環境共享同一簽名金鑰。
 const TOKEN_SECRET =
   process.env.ACCOUNT_TOKEN_SECRET || 'cyber_monopoly_secret_2026';
 const TOKEN_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const SCRYPT_KEYLEN = 64;
 
-// 本地存檔合併時接受的最大數值，防止用戶端送出異常大值或負值
+// 本地存檔合併時接受的最大數值，防止使用者端送出異常大值或負值
 const MERGE_VALUE_CAP = 10_000_000;
 
 function base64Encode(str: string): string {
@@ -53,7 +53,7 @@ function verifyPassword(password: string, storedHash: string): boolean {
   const [salt, derivedKey] = storedHash.split(':');
   if (!salt || !derivedKey) return false;
   const inputKey = scryptSync(password, salt, SCRYPT_KEYLEN).toString('hex');
-  // 使用 timingSafeEqual 避免計時洩漏；長度不一致時直接視為不匹配
+  // 使用 timingSafeEqual 避免計時洩漏；長度不一致時直接視為不配對
   if (inputKey.length !== derivedKey.length) return false;
   return timingSafeEqual(
     Buffer.from(inputKey, 'utf-8'),
@@ -164,13 +164,13 @@ export class AccountService {
     }
 
     if (inserted.length === 0) {
-      throw new BadRequestException('注册失败');
+      throw new BadRequestException('註冊失敗');
     }
 
     const account = inserted[0];
     const token = this.generateToken(account.id);
 
-    this.logger.log(`新用户注册成功: ${username}`);
+    this.logger.log(`新使用者註冊成功: ${username}`);
 
     return {
       token,
@@ -188,18 +188,18 @@ export class AccountService {
       .limit(1);
 
     if (accounts.length === 0) {
-      throw new UnauthorizedException('用户名或密码错误');
+      throw new UnauthorizedException('使用者名稱或密碼錯誤');
     }
 
     const account = accounts[0];
 
     if (!verifyPassword(password, account.passwordHash)) {
-      throw new UnauthorizedException('用户名或密码错误');
+      throw new UnauthorizedException('使用者名稱或密碼錯誤');
     }
 
     if (account.isBanned) {
       throw new ForbiddenException(
-        `账号已被封禁${account.banReason ? `：${account.banReason}` : ''}`,
+        `帳號已被封禁${account.banReason ? `：${account.banReason}` : ''}`,
       );
     }
 
@@ -211,7 +211,7 @@ export class AccountService {
 
     const token = this.generateToken(account.id);
 
-    this.logger.log(`用户登录: ${username}`);
+    this.logger.log(`使用者登入: ${username}`);
 
     return {
       token,
@@ -229,7 +229,7 @@ export class AccountService {
       .limit(1);
 
     if (accounts.length === 0) {
-      throw new NotFoundException('账号不存在');
+      throw new NotFoundException('帳號不存在');
     }
 
     return mapToProfile(accounts[0]);
@@ -246,7 +246,7 @@ export class AccountService {
     if (data.avatarFrame !== undefined) patch.avatarFrame = data.avatarFrame;
 
     if (Object.keys(patch).length === 0) {
-      throw new BadRequestException('未提供可更新字段');
+      throw new BadRequestException('未提供可更新欄位');
     }
 
     const updated = await this.db
@@ -256,7 +256,7 @@ export class AccountService {
       .returning();
 
     if (updated.length === 0) {
-      throw new NotFoundException('账号不存在');
+      throw new NotFoundException('帳號不存在');
     }
 
     return mapToProfile(updated[0]);
@@ -324,13 +324,13 @@ export class AccountService {
       .limit(1);
 
     if (accounts.length === 0) {
-      throw new NotFoundException('账号不存在');
+      throw new NotFoundException('帳號不存在');
     }
 
     const account = accounts[0];
     const patch: Partial<typeof monopolyAccountTable.$inferInsert> = {};
 
-    // 伺服器端二次校驗：僅接受有限、非負且在合理上限內的整數，避免用戶端送出
+    // 伺服器端二次校驗：僅接受有限、非負且在合理上限內的整數，避免使用者端送出
     // NaN、負數或超大值導致帳戶資料異常
     const pickMergeValue = (value: number | undefined): number | undefined => {
       if (value === undefined) return undefined;
@@ -369,10 +369,10 @@ export class AccountService {
       .returning();
 
     if (updated.length === 0) {
-      throw new NotFoundException('账号不存在');
+      throw new NotFoundException('帳號不存在');
     }
 
-    this.logger.log(`存档合并完成: ${account.username}`);
+    this.logger.log(`存檔合併完成: ${account.username}`);
 
     return mapToProfile(updated[0]);
   }

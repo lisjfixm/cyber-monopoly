@@ -13,9 +13,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const LIST_OPTIONS = [
-  { type: 'bulletList', label: '无序列表', icon: List },
+  { type: 'bulletList', label: '無序列表', icon: List },
   { type: 'orderedList', label: '有序列表', icon: ListOrdered },
-  { type: 'taskList', label: '任务列表', icon: ListTodo },
+  { type: 'taskList', label: '任務列表', icon: ListTodo },
 ] as const;
 
 export function ListToolbarButton() {

@@ -122,7 +122,7 @@ const RatingReviewSection = ({
               )}
             </div>
             <div className="text-xs text-[var(--text-secondary)]">
-              點擊星星為此內容評分
+              點選星星為此內容評分
             </div>
           </div>
         </div>

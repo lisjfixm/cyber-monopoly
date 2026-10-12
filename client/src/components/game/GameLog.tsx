@@ -109,7 +109,7 @@ const GameLog = ({ logs, inflationRate = 1.0 }: GameLogProps) => {
       >
         {logs.length === 0 && (
           <div className="text-center text-[var(--text-muted)] text-xs py-4">
-            暂无日志
+            暫無日誌
           </div>
         )}
         {logs.map((log) => {

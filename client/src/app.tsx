@@ -13,7 +13,7 @@ import GamePage from './pages/GamePage/GamePage';
 import NotFound from './pages/NotFound/NotFound';
 import { registerServiceWorker } from './utils/register-sw';
 
-// 懶加載頁面（非首屏關鍵路徑）
+// 懶載入頁面（非首屏關鍵路徑）
 const OnlineCreatePage = React.lazy(() => import('./pages/OnlineCreatePage/OnlineCreatePage'));
 const OnlineJoinPage = React.lazy(() => import('./pages/OnlineJoinPage/OnlineJoinPage'));
 const OnlineRoomPage = React.lazy(() => import('./pages/OnlineRoomPage/OnlineRoomPage'));

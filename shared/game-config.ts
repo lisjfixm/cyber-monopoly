@@ -73,67 +73,67 @@ export interface SetConfig {
 }
 
 export const CELLS: CellConfig[] = [
-  { id: 0, name: "起点", type: "start", basePrice: 0, color: "#00ff88" },
-  // 系列1 青蓝
-  { id: 1, name: "霓虹区", type: "property", basePrice: 600, color: "#00e5ff", setId: "set1" },
-  { id: 2, name: "旧城区", type: "property", basePrice: 600, color: "#00e5ff", setId: "set1" },
+  { id: 0, name: "起點", type: "start", basePrice: 0, color: "#00ff88" },
+  // 系列1 青藍
+  { id: 1, name: "霓虹區", type: "property", basePrice: 600, color: "#00e5ff", setId: "set1" },
+  { id: 2, name: "舊城區", type: "property", basePrice: 600, color: "#00e5ff", setId: "set1" },
   { id: 3, name: "能源站", type: "property", basePrice: 1000, color: "#00e5ff", setId: "set1" },
   // 系列2 粉色
-  { id: 4, name: "数据塔", type: "property", basePrice: 1000, color: "#ff6b9d", setId: "set2" },
-  { id: 5, name: "游戏区", type: "minigame", basePrice: 0, color: "#facc15" },
-  { id: 6, name: "核心区", type: "property", basePrice: 1400, color: "#ff6b9d", setId: "set2" },
-  // 系列3 绿色
+  { id: 4, name: "資料塔", type: "property", basePrice: 1000, color: "#ff6b9d", setId: "set2" },
+  { id: 5, name: "遊戲區", type: "minigame", basePrice: 0, color: "#facc15" },
+  { id: 6, name: "核心區", type: "property", basePrice: 1400, color: "#ff6b9d", setId: "set2" },
+  // 系列3 綠色
   { id: 7, name: "深海港", type: "property", basePrice: 1400, color: "#4ade80", setId: "set3" },
   { id: 8, name: "金融街", type: "property", basePrice: 1600, color: "#4ade80", setId: "set3" },
   { id: 9, name: "地下街", type: "property", basePrice: 1800, color: "#4ade80", setId: "set3" },
-  // 禁闭区
-  { id: 10, name: "禁闭区", type: "detention", basePrice: 0, color: "#a855f7" },
-  // 系列4 黄色
+  // 禁閉區
+  { id: 10, name: "禁閉區", type: "detention", basePrice: 0, color: "#a855f7" },
+  // 系列4 黃色
   { id: 11, name: "中央塔", type: "property", basePrice: 2000, color: "#facc15", setId: "set4" },
-  { id: 12, name: "废料场", type: "property", basePrice: 1800, color: "#facc15", setId: "set4" },
-  { id: 13, name: "摩天楼", type: "property", basePrice: 2000, color: "#facc15", setId: "set4" },
-  // 系列5 红色
+  { id: 12, name: "廢料場", type: "property", basePrice: 1800, color: "#facc15", setId: "set4" },
+  { id: 13, name: "摩天大樓", type: "property", basePrice: 2000, color: "#facc15", setId: "set4" },
+  // 系列5 紅色
   { id: 14, name: "空港", type: "property", basePrice: 2200, color: "#ff4d6d", setId: "set5" },
-  { id: 15, name: "卫星城", type: "property", basePrice: 2200, color: "#ff4d6d", setId: "set5" },
-  { id: 16, name: "工业区", type: "property", basePrice: 2400, color: "#ff4d6d", setId: "set5" },
+  { id: 15, name: "衛星城", type: "property", basePrice: 2200, color: "#ff4d6d", setId: "set5" },
+  { id: 16, name: "工業區", type: "property", basePrice: 2400, color: "#ff4d6d", setId: "set5" },
   // 系列6 橙色
-  { id: 17, name: "富豪区", type: "property", basePrice: 2600, color: "#ff8c42", setId: "set6" },
-  { id: 18, name: "后街", type: "property", basePrice: 2800, color: "#ff8c42", setId: "set6" },
+  { id: 17, name: "富豪區", type: "property", basePrice: 2600, color: "#ff8c42", setId: "set6" },
+  { id: 18, name: "後街", type: "property", basePrice: 2800, color: "#ff8c42", setId: "set6" },
   { id: 19, name: "科技城", type: "property", basePrice: 3000, color: "#ff8c42", setId: "set6" },
-  // 命运区
-  { id: 20, name: "命运区", type: "fate", basePrice: 0, color: "#ff4dff" },
-  // 系列7 蓝色
-  { id: 21, name: "贸易区", type: "property", basePrice: 2600, color: "#3b82f6", setId: "set7" },
+  // 命運區
+  { id: 20, name: "命運區", type: "fate", basePrice: 0, color: "#ff4dff" },
+  // 系列7 藍色
+  { id: 21, name: "貿易區", type: "property", basePrice: 2600, color: "#3b82f6", setId: "set7" },
   { id: 22, name: "星光道", type: "property", basePrice: 2800, color: "#3b82f6", setId: "set7" },
-  { id: 23, name: "游戏区", type: "minigame", basePrice: 0, color: "#facc15" },
+  { id: 23, name: "遊戲區", type: "minigame", basePrice: 0, color: "#facc15" },
   // 系列8 紫色
-  { id: 24, name: "外城区", type: "property", basePrice: 2600, color: "#a855f7", setId: "set8" },
-  { id: 25, name: "总部", type: "property", basePrice: 3500, color: "#a855f7", setId: "set8" },
-  { id: 26, name: "废墟", type: "property", basePrice: 2800, color: "#a855f7", setId: "set8" },
-  // 机会区
-  { id: 27, name: "机会区", type: "chance", basePrice: 0, color: "#6366f1" },
+  { id: 24, name: "外城區", type: "property", basePrice: 2600, color: "#a855f7", setId: "set8" },
+  { id: 25, name: "總部", type: "property", basePrice: 3500, color: "#a855f7", setId: "set8" },
+  { id: 26, name: "廢墟", type: "property", basePrice: 2800, color: "#a855f7", setId: "set8" },
+  // 機會區
+  { id: 27, name: "機會區", type: "chance", basePrice: 0, color: "#6366f1" },
   // 系列9 棕色
   { id: 28, name: "主塔", type: "property", basePrice: 3200, color: "#b45309", setId: "set9" },
-  { id: 29, name: "中转站", type: "property", basePrice: 3000, color: "#b45309", setId: "set9" },
-  { id: 30, name: "新城区", type: "property", basePrice: 3400, color: "#b45309", setId: "set9" },
+  { id: 29, name: "中轉站", type: "property", basePrice: 3000, color: "#b45309", setId: "set9" },
+  { id: 30, name: "新城區", type: "property", basePrice: 3400, color: "#b45309", setId: "set9" },
   // 系列10 灰色
-  { id: 31, name: "小街区", type: "property", basePrice: 2800, color: "#9ca3af", setId: "set10" },
-  { id: 32, name: "企业楼", type: "property", basePrice: 3600, color: "#9ca3af", setId: "set10" },
-  { id: 33, name: "补给站", type: "property", basePrice: 3000, color: "#9ca3af", setId: "set10" },
-  // 命运区
-  { id: 34, name: "命运区", type: "fate", basePrice: 0, color: "#ff4dff" },
-  // 机会区
-  { id: 35, name: "机会区", type: "chance", basePrice: 0, color: "#6366f1" },
+  { id: 31, name: "小街區", type: "property", basePrice: 2800, color: "#9ca3af", setId: "set10" },
+  { id: 32, name: "企業樓", type: "property", basePrice: 3600, color: "#9ca3af", setId: "set10" },
+  { id: 33, name: "補給站", type: "property", basePrice: 3000, color: "#9ca3af", setId: "set10" },
+  // 命運區
+  { id: 34, name: "命運區", type: "fate", basePrice: 0, color: "#ff4dff" },
+  // 機會區
+  { id: 35, name: "機會區", type: "chance", basePrice: 0, color: "#6366f1" },
 ];
 
 export const SETS: SetConfig[] = [
-  { id: "set1", name: "青蓝", color: "#00e5ff", cells: [1, 2, 3] },
+  { id: "set1", name: "青藍", color: "#00e5ff", cells: [1, 2, 3] },
   { id: "set2", name: "粉色", color: "#ff6b9d", cells: [4, 6] },
-  { id: "set3", name: "绿色", color: "#4ade80", cells: [7, 8, 9] },
-  { id: "set4", name: "黄色", color: "#facc15", cells: [11, 12, 13] },
-  { id: "set5", name: "红色", color: "#ff4d6d", cells: [14, 15, 16] },
+  { id: "set3", name: "綠色", color: "#4ade80", cells: [7, 8, 9] },
+  { id: "set4", name: "黃色", color: "#facc15", cells: [11, 12, 13] },
+  { id: "set5", name: "紅色", color: "#ff4d6d", cells: [14, 15, 16] },
   { id: "set6", name: "橙色", color: "#ff8c42", cells: [17, 18, 19] },
-  { id: "set7", name: "蓝色", color: "#3b82f6", cells: [21, 22] },
+  { id: "set7", name: "藍色", color: "#3b82f6", cells: [21, 22] },
   { id: "set8", name: "紫色", color: "#a855f7", cells: [24, 25, 26] },
   { id: "set9", name: "棕色", color: "#b45309", cells: [28, 29, 30] },
   { id: "set10", name: "灰色", color: "#9ca3af", cells: [31, 32, 33] },
@@ -164,7 +164,7 @@ const RANDOM_SET_COLORS = [
 ];
 
 const RANDOM_PROPERTY_NAMES = [
-  "霓虹區", "舊城區", "能源站", "數據塔", "核心區", "深海港",
+  "霓虹區", "舊城區", "能源站", "資料塔", "核心區", "深海港",
   "金融街", "地下街", "中央塔", "廢料場", "摩天大樓", "空港",
   "衛星城", "工業區", "富豪區", "後街", "科技城", "貿易區",
   "星光道", "貧民區", "外城區", "總部", "廢墟", "主塔",
@@ -279,7 +279,7 @@ export function generateRandomBoard(seed?: number): {
 
   let propIdx = 0;
   for (const set of sets) {
-    // 套裝基礎地價：按套裝索引在 600-4000 範圍內線性分布
+    // 套裝基礎地價：按套裝索引在 600-4000 範圍內線性分佈
     const setIndex = sets.indexOf(set);
     const baseSetPrice = 600 + (3400 * setIndex) / (sets.length - 1 || 1);
 
@@ -471,106 +471,161 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
     startReward: 1500,
     fateMoneyMultiplier: 1.0,
   },
+  // ===== v4.0 新增模式 =====
+  // 數位劫案：2 劫匪收集資料核心後到逃生點，2 保全攔截
+  heist: {
+    initialMoney: 10000,
+    priceMultiplier: 0.8,
+    tollRate: 0.2,
+    startReward: 1000,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 50,
+  },
+  // 賞金獵殺：隨機玩家頭上懸賞，踩中/擊倒目標得賞金
+  bounty_hunt: {
+    initialMoney: 12000,
+    priceMultiplier: 0.9,
+    tollRate: 0.25,
+    startReward: 1200,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 40,
+  },
+  // 淘金熱：資料礦點隨機出現並會枯竭，先到先得
+  gold_rush: {
+    initialMoney: 10000,
+    priceMultiplier: 0.7,
+    tollRate: 0.2,
+    startReward: 1000,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 40,
+  },
+  // 賽博奧運：連串迷你遊戲，以獎牌總分決勝
+  cyber_olympics: {
+    initialMoney: 8000,
+    priceMultiplier: 0.6,
+    tollRate: 0.15,
+    startReward: 800,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 30,
+  },
+  // 叛逆 AI：1 名玩家扮演失控 AI，關閉核心即勝
+  rogue_ai: {
+    initialMoney: 12000,
+    priceMultiplier: 0.9,
+    tollRate: 0.25,
+    startReward: 1200,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 40,
+  },
+  // 時間迴圈：每 N 回合棋盤重置，玩家保留養成，累積至打破迴圈
+  time_loop: {
+    initialMoney: 10000,
+    priceMultiplier: 0.8,
+    tollRate: 0.25,
+    startReward: 1000,
+    fateMoneyMultiplier: 1.0,
+    maxTurns: 60,
+  },
 };
 
 export const FATE_CARDS: FateCard[] = [
-  { id: 1, name: "奖金发放", description: "获得奖金 1000 元", effect: { type: "money", amount: 1000 } },
-  { id: 2, name: "税务追缴", description: "缴纳税款 1500 元", effect: { type: "money", amount: -1500 } },
-  { id: 3, name: "数据泄露", description: "数据泄露罚款 500 元", effect: { type: "money", amount: -500 } },
-  { id: 4, name: "黑客转账", description: "黑客转账 +2000 元", effect: { type: "money", amount: 2000 } },
-  { id: 5, name: "紧急召回", description: "被传送到起点", effect: { type: "teleport_start" } },
-  { id: 6, name: "加速前进", description: "前进 3 格", effect: { type: "forward", steps: 3 } },
-  { id: 7, name: "系统回退", description: "后退 2 格", effect: { type: "backward", steps: 2 } },
-  { id: 8, name: "随机跃迁", description: "随机传送至任意地块", effect: { type: "random_teleport" } },
-  { id: 9, name: "政府补贴", description: "获得补贴 800 元", effect: { type: "money", amount: 800 } },
-  { id: 10, name: "设备维修", description: "维修费 1200 元", effect: { type: "money", amount: -1200 } },
+  { id: 1, name: "獎金發放", description: "獲得獎金 1000 元", effect: { type: "money", amount: 1000 } },
+  { id: 2, name: "稅務追繳", description: "繳納稅款 1500 元", effect: { type: "money", amount: -1500 } },
+  { id: 3, name: "資料外洩", description: "資料外洩罰款 500 元", effect: { type: "money", amount: -500 } },
+  { id: 4, name: "駭客轉帳", description: "駭客轉帳 +2000 元", effect: { type: "money", amount: 2000 } },
+  { id: 5, name: "緊急召回", description: "被傳送到起點", effect: { type: "teleport_start" } },
+  { id: 6, name: "加速前進", description: "前進 3 格", effect: { type: "forward", steps: 3 } },
+  { id: 7, name: "系統回退", description: "後退 2 格", effect: { type: "backward", steps: 2 } },
+  { id: 8, name: "隨機躍遷", description: "隨機傳送至任意地塊", effect: { type: "random_teleport" } },
+  { id: 9, name: "政府補貼", description: "獲得補貼 800 元", effect: { type: "money", amount: 800 } },
+  { id: 10, name: "裝置維修", description: "維修費 1200 元", effect: { type: "money", amount: -1200 } },
   { id: 11, name: "黑市交易", description: "黑市交易 +1500 元", effect: { type: "money", amount: 1500 } },
-  { id: 12, name: "系统维护", description: "系统维护费 600 元", effect: { type: "money", amount: -600 } },
-  // 普通金钱/移动类
-  { id: 13, name: "股市暴利", description: "股市暴涨，获得 2000 元", effect: { type: "money", amount: 2000 } },
-  { id: 14, name: "系统故障", description: "系统故障，损失 800 元", effect: { type: "money", amount: -800 } },
-  { id: 15, name: "纳税申报", description: "补缴税款 1000 元", effect: { type: "money", amount: -1000 } },
-  { id: 16, name: "创业补助", description: "获得创业补助金 1200 元", effect: { type: "money", amount: 1200 } },
-  { id: 17, name: "数字资产升值", description: "数字资产升值，获得 1800 元", effect: { type: "money", amount: 1800 } },
-  { id: 18, name: "前进四格", description: "前进 4 格", effect: { type: "forward", steps: 4 } },
-  { id: 19, name: "后退三格", description: "后退 3 格", effect: { type: "backward", steps: 3 } },
-  { id: 20, name: "地产机遇", description: "前进到最近的地产", effect: { type: "forward_to_property" } },
-  // 连锁事件卡
-  { id: 21, name: "连锁反应", description: "连续触发 2 张命运卡！", effect: { type: "chain_draw", count: 2 }, isChain: true },
-  { id: 22, name: "好运连连", description: "好运连连！连续触发 2 张命运卡", effect: { type: "chain_draw", count: 2 }, isChain: true },
-  // 选择题卡
+  { id: 12, name: "系統維護", description: "系統維護費 600 元", effect: { type: "money", amount: -600 } },
+  // 普通金錢/移動類
+  { id: 13, name: "股市暴利", description: "股市暴漲，獲得 2000 元", effect: { type: "money", amount: 2000 } },
+  { id: 14, name: "系統故障", description: "系統故障，損失 800 元", effect: { type: "money", amount: -800 } },
+  { id: 15, name: "納稅申報", description: "補繳稅款 1000 元", effect: { type: "money", amount: -1000 } },
+  { id: 16, name: "創業補助", description: "獲得創業補助金 1200 元", effect: { type: "money", amount: 1200 } },
+  { id: 17, name: "數位資產升值", description: "數位資產升值，獲得 1800 元", effect: { type: "money", amount: 1800 } },
+  { id: 18, name: "前進四格", description: "前進 4 格", effect: { type: "forward", steps: 4 } },
+  { id: 19, name: "後退三格", description: "後退 3 格", effect: { type: "backward", steps: 3 } },
+  { id: 20, name: "地產機遇", description: "前進到最近的地產", effect: { type: "forward_to_property" } },
+  // 連鎖事件卡
+  { id: 21, name: "連鎖反應", description: "連續觸發 2 張命運卡！", effect: { type: "chain_draw", count: 2 }, isChain: true },
+  { id: 22, name: "好運連連", description: "好運連連！連續觸發 2 張命運卡", effect: { type: "chain_draw", count: 2 }, isChain: true },
+  // 選擇題卡
   {
     id: 23,
     name: "十字路口",
-    description: "选择：前进 2 格 或 获得 500 元",
+    description: "選擇：前進 2 格 或 獲得 500 元",
     effect: {
       type: "choice",
       options: [{ type: "forward", steps: 2 }, { type: "money", amount: 500 }],
-      optionLabels: ["前进 2 格", "获得 500 元"],
+      optionLabels: ["前進 2 格", "獲得 500 元"],
     },
     isChoice: true,
     choiceOptions: [
-      { label: "前进 2 格", effect: { type: "forward", steps: 2 } },
-      { label: "获得 500 元", effect: { type: "money", amount: 500 } },
+      { label: "前進 2 格", effect: { type: "forward", steps: 2 } },
+      { label: "獲得 500 元", effect: { type: "money", amount: 500 } },
     ],
   },
   {
     id: 24,
-    name: "风险投资",
-    description: "选择：失去 1000 元 或 获得 1500 元",
+    name: "風險投資",
+    description: "選擇：失去 1000 元 或 獲得 1500 元",
     effect: {
       type: "choice",
       options: [{ type: "money", amount: -1000 }, { type: "money", amount: 1500 }],
-      optionLabels: ["失去 1000 元", "获得 1500 元"],
+      optionLabels: ["失去 1000 元", "獲得 1500 元"],
     },
     isChoice: true,
     choiceOptions: [
       { label: "失去 1000 元", effect: { type: "money", amount: -1000 } },
-      { label: "获得 1500 元", effect: { type: "money", amount: 1500 } },
+      { label: "獲得 1500 元", effect: { type: "money", amount: 1500 } },
     ],
   },
   {
     id: 25,
-    name: "道德抉择",
-    description: "选择：捐赠 800 元给对手 或 偷取对手 500 元",
+    name: "道德抉擇",
+    description: "選擇：捐贈 800 元給對手 或 偷取對手 500 元",
     effect: {
       type: "choice",
       options: [{ type: "give_money", amount: 800 }, { type: "steal_money", amount: 500 }],
-      optionLabels: ["捐赠 800 元", "偷取 500 元"],
+      optionLabels: ["捐贈 800 元", "偷取 500 元"],
     },
     isChoice: true,
     choiceOptions: [
-      { label: "捐赠 800 元", effect: { type: "give_money", amount: 800 } },
+      { label: "捐贈 800 元", effect: { type: "give_money", amount: 800 } },
       { label: "偷取 500 元", effect: { type: "steal_money", amount: 500 } },
     ],
   },
-  // 计时卡
+  // 計時卡
   {
     id: 26,
     name: "加速 Buff",
-    description: "移动 +1，持续 3 回合",
-    effect: { type: "buff", buffType: "speed_boost", duration: 3, description: "移动 +1" },
+    description: "移動 +1，持續 3 回合",
+    effect: { type: "buff", buffType: "speed_boost", duration: 3, description: "移動 +1" },
     duration: 3,
     buffType: "speed_boost",
   },
   {
     id: 27,
-    name: "保护罩",
-    description: "3 回合内过路费减半",
-    effect: { type: "buff", buffType: "shield", duration: 3, description: "过路费减半" },
+    name: "保護罩",
+    description: "3 回合內過路費減半",
+    effect: { type: "buff", buffType: "shield", duration: 3, description: "過路費減半" },
     duration: 3,
     buffType: "shield",
   },
   {
     id: 28,
-    name: "财运亨通",
-    description: "3 回合内金钱卡效果 +50%",
-    effect: { type: "buff", buffType: "wealth_luck", duration: 3, description: "金钱卡效果 +50%" },
+    name: "財運亨通",
+    description: "3 回合內金錢卡效果 +50%",
+    effect: { type: "buff", buffType: "wealth_luck", duration: 3, description: "金錢卡效果 +50%" },
     duration: 3,
     buffType: "wealth_luck",
   },
   // 特殊效果
-  { id: 29, name: "地产升值", description: "随机一块自有地产地价 +20%", effect: { type: "property_appreciate", percent: 20 } },
+  { id: 29, name: "地產升值", description: "隨機一塊自有地產地價 +20%", effect: { type: "property_appreciate", percent: 20 } },
   { id: 30, name: "破產保護", description: "獲得一次免破產機會（下次破產保留 2000 元）", effect: { type: "money", amount: 0 } },
   // 賽博龐克主題新卡
   { id: 31, name: "駭客入侵成功", description: "從銀行領取 800 元獎金", effect: { type: "money", amount: 800 } },
@@ -592,7 +647,7 @@ export const FATE_CARDS: FateCard[] = [
   { id: 45, name: "ICO 暴漲", description: "現金立即翻倍（上限 +2000）", effect: { type: "money", amount: 2000 } },
   // 傳送類新卡
   { id: 46, name: "量子躍遷", description: "立即移動到起點並領取薪水", effect: { type: "teleport_start" } },
-  { id: 47, name: "數據傳送", description: "移動到任意一塊你已擁有的地產", effect: { type: "teleport_to_owned" } },
+  { id: 47, name: "資料傳送", description: "移動到任意一塊你已擁有的地產", effect: { type: "teleport_to_owned" } },
   { id: 48, name: "空間錯位", description: "後退 6 步", effect: { type: "backward", steps: 6 } },
   // 連鎖類新卡
   { id: 49, name: "病毒擴散", description: "若你持有地產，隨機 1 塊地產等級 -1；否則支付 200 元", effect: { type: "property_downgrade" } },
@@ -642,7 +697,7 @@ export const FATE_CARDS: FateCard[] = [
   },
   {
     id: 57,
-    name: "數據盜竊",
+    name: "資料盜竊",
     description: "隨機失去 1 個道具，隨機其他玩家獲得該道具",
     effect: { type: "steal_item" },
   },
@@ -713,7 +768,7 @@ export const FATE_CARDS: FateCard[] = [
   // ===== v3.0 新增命運卡 =====
   { id: 100, name: "挖礦獎勵空投", description: "獲得 800 元區塊鏈挖礦分紅", effect: { type: "money", amount: 800 } },
   { id: 101, name: "伺服器電費帳單", description: "支付 600 元雲端伺服器電費", effect: { type: "money", amount: -600 } },
-  { id: 102, name: "快取溢出", description: "後退 5 格清理快取", effect: { type: "backward", steps: 5 } },
+  { id: 102, name: "快取溢位", description: "後退 5 格清理快取", effect: { type: "backward", steps: 5 } },
   { id: 103, name: "CDN 加速", description: "前進 4 格奔向最近的節點", effect: { type: "forward", steps: 4 } },
   { id: 104, name: "DDoS 攻擊受害者", description: "隨機一名對手從你這偷走 350 元", effect: { type: "give_money", amount: 350 } },
   { id: 105, name: "白帽駭客賞金", description: "從隨機對手處竊取 450 元漏洞獎金", effect: { type: "steal_money", amount: 450 } },
@@ -729,118 +784,170 @@ export const FATE_CARDS: FateCard[] = [
   { id: 115, name: "數位淘金熱", description: "獲得 1200 元熱門概念股分紅", effect: { type: "money", amount: 1200 } },
   { id: 116, name: "資安罰單", description: "繳納現金 6% 給銀行做個資罰鍰", effect: { type: "universal_tax", percent: 6 } },
   { id: 117, name: "暗網現金流", description: "花 400 元賭一把：50% 贏 1000，50% 賭注歸零", effect: { type: "lottery", cost: 400, prize: 1000 } },
-];
-
-export const CHANCE_CARDS: ChanceCard[] = [
-  { id: 1, name: "移动到起点", description: "直接传送到起点，获得起点奖励", effect: { type: "teleport_start" } },
-  { id: 2, name: "被通缉！", description: "被系统通缉，直接关进禁闭区", effect: { type: "go_to_detention" } },
-  { id: 3, name: "时空倒流", description: "后退 3 格", effect: { type: "backward", steps: 3 } },
-  { id: 4, name: "收取保护费", description: "从对手那里收取 500 元保护费", effect: { type: "steal_money", amount: 500 } },
-  { id: 5, name: "公益捐款", description: "向对手捐赠 500 元公益款", effect: { type: "give_money", amount: 500 } },
-  { id: 6, name: "免费出狱卡", description: "获得一张免费出狱卡", effect: { type: "get_out_of_jail" } },
-  { id: 7, name: "命运指引", description: "前进到最近的命运区", effect: { type: "forward_to_fate" } },
-  { id: 8, name: "银行分红", description: "获得银行分红 1000 元", effect: { type: "money", amount: 1000 } },
-  { id: 9, name: "维修费", description: "每处房产支付 100 元维修费", effect: { type: "repair_fee", perProperty: 100 } },
-  { id: 10, name: "前进 5 格", description: "加速器启动，前进 5 格", effect: { type: "forward", steps: 5 } },
-  { id: 11, name: "时空回溯", description: "后退到上一次经过的格子（后退 4 格）", effect: { type: "backward", steps: 4 } },
-  { id: 12, name: "幸运星", description: "幸运之星降临！获得 1500 元奖金", effect: { type: "lucky_star", amount: 1500 } },
-  // 普通类
-  { id: 13, name: "地产猎手", description: "前进到最近的地产并购买", effect: { type: "forward_to_property" } },
-  { id: 14, name: "命运回溯", description: "后退到最近的命运区", effect: { type: "backward_to_fate" } },
-  { id: 15, name: "收取红利", description: "从所有玩家处各获得 200 元", effect: { type: "collect_from_all", amount: 200 } },
-  { id: 16, name: "分红派息", description: "向所有玩家各支付 300 元", effect: { type: "pay_to_all", amount: 300 } },
-  { id: 17, name: "股票分红", description: "获得股票分红 1200 元", effect: { type: "money", amount: 1200 } },
-  { id: 18, name: "税务审计", description: "税务审计，罚款 1500 元", effect: { type: "money", amount: -1500 } },
-  { id: 19, name: "前进六格", description: "加速器启动，前进 6 格", effect: { type: "forward", steps: 6 } },
-  { id: 20, name: "后退五格", description: "时空回溯，后退 5 格", effect: { type: "backward", steps: 5 } },
-  // 连锁事件卡
-  { id: 21, name: "连锁机会", description: "连续抽 2 张机会卡！", effect: { type: "chain_draw", count: 2 }, isChain: true },
-  { id: 22, name: "厄运连锁", description: "厄运连锁！连续抽 2 张机会卡", effect: { type: "chain_draw", count: 2 }, isChain: true },
-  // 选择题卡
+  // ===== v4.0 新增命運卡（含新 CardEffect 與兩難選擇） =====
+  { id: 201, name: "迷因幣暴漲", description: "加密貨幣賭一把：投入 500，50% 翻倍成 1500，50% 歸零", effect: { type: "crypto_gamble", amount: 500 } },
+  { id: 202, name: "IPO 中簽", description: "新股申購中籤！立即獲得 800 元承銷價差", effect: { type: "ipo_allotment", amount: 800 } },
   {
-    id: 23,
-    name: "两难选择",
-    description: "选择：获得免狱卡 或 失去 1000 元",
+    id: 203,
+    name: "稅務申報兩難",
+    description: "二選一：逃稅藏 800 元（有 30% 被稽查罰 1500）/ 如實繳納 300 元",
     effect: {
       type: "choice",
-      options: [{ type: "get_out_of_jail" }, { type: "money", amount: -1000 }],
-      optionLabels: ["获得免狱卡", "失去 1000 元"],
+      options: [{ type: "tax_evade_choice", evadeAmount: 800, auditFine: 1500 }, { type: "money", amount: -300 }],
+      optionLabels: ["逃稅藏 800", "如實繳納 300"],
     },
     isChoice: true,
     choiceOptions: [
-      { label: "获得免狱卡", effect: { type: "get_out_of_jail" } },
+      { label: "逃稅藏 800 元", effect: { type: "tax_evade_choice", evadeAmount: 800, auditFine: 1500 } },
+      { label: "如實繳納 300 元", effect: { type: "money", amount: -300 } },
+    ],
+  },
+  { id: 204, name: "央行降息", description: "央行降息 1%！全場貸款利息本回合減半", effect: { type: "interest_rate_shock", percent: -1 } },
+  { id: 205, name: "敵意收購要約", description: "華爾街揮軍！你獲得 1000 元收購預備金", effect: { type: "hostile_tender", amount: 1000 } },
+  { id: 206, name: "時間裂縫", description: "時間裂縫出現！你回到上一個回合開始的位置", effect: { type: "loop_reset" } },
+  { id: 207, name: "金礦脈衝", description: "隨機一格湧現金礦（淘金熱模式適用）", effect: { type: "mine_spawn", amount: 500 } },
+  { id: 208, name: "賞金公告", description: "你頭上被懸賞 600 元（賞金模式適用）", effect: { type: "bounty_place", amount: 600 } },
+  { id: 209, name: "奧運金牌", description: "賽博奧運奪金！+10 分（奧運模式適用）", effect: { type: "olympic_medal", medal: 'gold', points: 10 } },
+  { id: 210, name: "幻影部署", description: "部署幻影分身，下三次過路費由分身代付", effect: { type: "decoy_deploy" } },
+  { id: 211, name: "避稅天堂存款", description: "將 600 元移入避稅天堂，永久免稅", effect: { type: "tax_haven_deposit", amount: 600 } },
+  { id: 212, name: "量子糾纏轉移", description: "與隨機對手交換現金餘額的一半", effect: { type: "trade_exchange_money", amount: 500 } },
+  { id: 213, name: "黑天鵝降臨", description: "黑天鵝事件！你損失 1000 元現金", effect: { type: "money", amount: -1000 } },
+  { id: 214, name: "央行升息", description: "央行升息 1%！全場存款利息增加但貸款利息上升", effect: { type: "interest_rate_shock", percent: 1 } },
+  { id: 215, name: "全民普發現金", description: "政府發放 UBI！你獲得 500 元", effect: { type: "money", amount: 500 } },
+  { id: 216, name: "反壟斷調查", description: "反壟斷機構找麻煩！你支付 700 元律師費", effect: { type: "money", amount: -700 } },
+  { id: 217, name: "太陽能補貼", description: "綠能補貼入帳！你獲得 400 元", effect: { type: "money", amount: 400 } },
+  { id: 218, name: "偽造護照", description: "獲得偽造護照：下次進監禁自動釋放", effect: { type: "get_out_of_jail" } },
+  { id: 219, name: "奈米蜂群釋放", description: "釋放蜂群！未來 2 回合每回合吸取 150 元", effect: { type: "buff", buffType: "nano_swarm", duration: 2, description: "蜂群吸取（2 回合）" } },
+  { id: 220, name: "映象命運", description: "映象複製上一張命運卡效果", effect: { type: "chain_draw", count: 1 }, isChain: true },
+  {
+    id: 221,
+    name: "收購攻防兩難",
+    description: "二選一：投入 800 元收購（50% 成功賺 1500）/ 保守獲得 300 元",
+    effect: {
+      type: "choice",
+      options: [{ type: "crypto_gamble", amount: 800 }, { type: "money", amount: 300 }],
+      optionLabels: ["賭一把收購", "保守領 300"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "投入 800 收購", effect: { type: "crypto_gamble", amount: 800 } },
+      { label: "保守領 300", effect: { type: "money", amount: 300 } },
+    ],
+  },
+  { id: 222, name: "奧運銀牌", description: "賽博奧運奪銀！+6 分", effect: { type: "olympic_medal", medal: 'silver', points: 6 } },
+  { id: 223, name: "奧運銅牌", description: "賽博奧運奪銅！+3 分", effect: { type: "olympic_medal", medal: 'bronze', points: 3 } },
+];
+
+export const CHANCE_CARDS: ChanceCard[] = [
+  { id: 1, name: "移動到起點", description: "直接傳送到起點，獲得起點獎勵", effect: { type: "teleport_start" } },
+  { id: 2, name: "被通緝！", description: "被系統通緝，直接關進禁閉區", effect: { type: "go_to_detention" } },
+  { id: 3, name: "時空倒流", description: "後退 3 格", effect: { type: "backward", steps: 3 } },
+  { id: 4, name: "收取保護費", description: "從對手那裡收取 500 元保護費", effect: { type: "steal_money", amount: 500 } },
+  { id: 5, name: "公益捐款", description: "向對手捐贈 500 元公益款", effect: { type: "give_money", amount: 500 } },
+  { id: 6, name: "免費出獄卡", description: "獲得一張免費出獄卡", effect: { type: "get_out_of_jail" } },
+  { id: 7, name: "命運指引", description: "前進到最近的命運區", effect: { type: "forward_to_fate" } },
+  { id: 8, name: "銀行分紅", description: "獲得銀行分紅 1000 元", effect: { type: "money", amount: 1000 } },
+  { id: 9, name: "維修費", description: "每處房產支付 100 元維修費", effect: { type: "repair_fee", perProperty: 100 } },
+  { id: 10, name: "前進 5 格", description: "加速器啟動，前進 5 格", effect: { type: "forward", steps: 5 } },
+  { id: 11, name: "時空回溯", description: "後退到上一次經過的格子（後退 4 格）", effect: { type: "backward", steps: 4 } },
+  { id: 12, name: "幸運星", description: "幸運之星降臨！獲得 1500 元獎金", effect: { type: "lucky_star", amount: 1500 } },
+  // 普通類
+  { id: 13, name: "地產獵手", description: "前進到最近的地產並購買", effect: { type: "forward_to_property" } },
+  { id: 14, name: "命運回溯", description: "後退到最近的命運區", effect: { type: "backward_to_fate" } },
+  { id: 15, name: "收取紅利", description: "從所有玩家處各獲得 200 元", effect: { type: "collect_from_all", amount: 200 } },
+  { id: 16, name: "分紅派息", description: "向所有玩家各支付 300 元", effect: { type: "pay_to_all", amount: 300 } },
+  { id: 17, name: "股票分紅", description: "獲得股票分紅 1200 元", effect: { type: "money", amount: 1200 } },
+  { id: 18, name: "稅務審計", description: "稅務審計，罰款 1500 元", effect: { type: "money", amount: -1500 } },
+  { id: 19, name: "前進六格", description: "加速器啟動，前進 6 格", effect: { type: "forward", steps: 6 } },
+  { id: 20, name: "後退五格", description: "時空回溯，後退 5 格", effect: { type: "backward", steps: 5 } },
+  // 連鎖事件卡
+  { id: 21, name: "連鎖機會", description: "連續抽 2 張機會卡！", effect: { type: "chain_draw", count: 2 }, isChain: true },
+  { id: 22, name: "厄運連鎖", description: "厄運連鎖！連續抽 2 張機會卡", effect: { type: "chain_draw", count: 2 }, isChain: true },
+  // 選擇題卡
+  {
+    id: 23,
+    name: "兩難選擇",
+    description: "選擇：獲得免獄卡 或 失去 1000 元",
+    effect: {
+      type: "choice",
+      options: [{ type: "get_out_of_jail" }, { type: "money", amount: -1000 }],
+      optionLabels: ["獲得免獄卡", "失去 1000 元"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "獲得免獄卡", effect: { type: "get_out_of_jail" } },
       { label: "失去 1000 元", effect: { type: "money", amount: -1000 } },
     ],
   },
   {
     id: 24,
-    name: "投机选择",
-    description: "选择：花 2000 元买随机地产 或 什么都不做",
+    name: "投機選擇",
+    description: "選擇：花 2000 元買隨機地產 或 什麼都不做",
     effect: {
       type: "choice",
       options: [{ type: "money", amount: -2000 }, { type: "money", amount: 0 }],
-      optionLabels: ["花 2000 元", "什么都不做"],
+      optionLabels: ["花 2000 元", "什麼都不做"],
     },
     isChoice: true,
     choiceOptions: [
       { label: "花 2000 元", effect: { type: "money", amount: -2000 } },
-      { label: "什么都不做", effect: { type: "money", amount: 0 } },
+      { label: "什麼都不做", effect: { type: "money", amount: 0 } },
     ],
   },
   {
     id: 25,
-    name: "对赌选择",
-    description: "选择：和对手对赌 1000 元 50%赢50%输",
+    name: "對賭選擇",
+    description: "選擇：和對手對賭 1000 元 50%贏50%輸",
     effect: {
       type: "choice",
       options: [{ type: "steal_money", amount: 1000 }, { type: "give_money", amount: 1000 }],
-      optionLabels: ["赌赢 +1000", "赌输 -1000"],
+      optionLabels: ["賭贏 +1000", "賭輸 -1000"],
     },
     isChoice: true,
     choiceOptions: [
-      { label: "赌赢 +1000", effect: { type: "steal_money", amount: 1000 } },
-      { label: "赌输 -1000", effect: { type: "give_money", amount: 1000 } },
+      { label: "賭贏 +1000", effect: { type: "steal_money", amount: 1000 } },
+      { label: "賭輸 -1000", effect: { type: "give_money", amount: 1000 } },
     ],
   },
-  // 计时卡
+  // 計時卡
   {
     id: 26,
-    name: "地产增值",
-    description: "所有地产过路费 +20%，持续 3 回合",
-    effect: { type: "buff", buffType: "toll_boost", duration: 3, description: "过路费 +20%" },
+    name: "地產增值",
+    description: "所有地產過路費 +20%，持續 3 回合",
+    effect: { type: "buff", buffType: "toll_boost", duration: 3, description: "過路費 +20%" },
     duration: 3,
     buffType: "toll_boost",
   },
   {
     id: 27,
-    name: "节税优惠",
-    description: "3 回合内所有金钱损失 -30%",
-    effect: { type: "buff", buffType: "tax_relief", duration: 3, description: "金钱损失 -30%" },
+    name: "節稅優惠",
+    description: "3 回合內所有金錢損失 -30%",
+    effect: { type: "buff", buffType: "tax_relief", duration: 3, description: "金錢損失 -30%" },
     duration: 3,
     buffType: "tax_relief",
   },
   {
     id: 28,
-    name: "超速行驶",
-    description: "移动翻倍，持续 2 回合",
-    effect: { type: "buff", buffType: "double_move", duration: 2, description: "移动翻倍" },
+    name: "超速行駛",
+    description: "移動翻倍，持續 2 回合",
+    effect: { type: "buff", buffType: "double_move", duration: 2, description: "移動翻倍" },
     duration: 2,
     buffType: "double_move",
   },
   // 特殊效果
-  { id: 29, name: "建筑奖励", description: "每处房产获得 200 元奖励", effect: { type: "repair_fee", perProperty: -200 } },
+  { id: 29, name: "建築獎勵", description: "每處房產獲得 200 元獎勵", effect: { type: "repair_fee", perProperty: -200 } },
   { id: 30, name: "地產交易所", description: "隨機與對手交換一塊地產", effect: { type: "money", amount: 0 } },
   // 賽博龐克主題新卡
   { id: 31, name: "地下賭場贏錢", description: "從地下賭場贏得 500 元", effect: { type: "money", amount: 500 } },
-  { id: 32, name: "網絡追蹤", description: "隨機傳送到任意地塊", effect: { type: "random_teleport" } },
-  { id: 33, name: "數據竊取", description: "從隨機一位對手處偷取 300 元", effect: { type: "steal_money", amount: 300 } },
+  { id: 32, name: "網路追蹤", description: "隨機傳送到任意地塊", effect: { type: "random_teleport" } },
+  { id: 33, name: "資料竊取", description: "從隨機一位對手處偷取 300 元", effect: { type: "steal_money", amount: 300 } },
   { id: 34, name: "合規審查罰款", description: "向銀行支付 400 元違規罰款", effect: { type: "money", amount: -400 } },
   { id: 35, name: "合作夥伴分紅", description: "其他每位玩家給你 150 元分紅", effect: { type: "collect_from_all", amount: 150 } },
   { id: 36, name: "緊急系統重啟", description: "前進 3 格", effect: { type: "forward", steps: 3 } },
   // 第二波賽博龐克主題新卡
   { id: 37, name: "閃提優惠", description: "從銀行領取 300 元現金", effect: { type: "money", amount: 300 } },
   { id: 38, name: "資料外洩賠償", description: "向銀行支付 500 元賠償金", effect: { type: "money", amount: -500 } },
-  { id: 39, name: "分身帳號登錄", description: "隨機傳送到任意地塊", effect: { type: "random_teleport" } },
+  { id: 39, name: "分身帳號登入", description: "隨機傳送到任意地塊", effect: { type: "random_teleport" } },
   { id: 40, name: "礦池獎勵結算", description: "獲得 700 元礦池分紅", effect: { type: "money", amount: 700 } },
   { id: 41, name: "駭客勒索信", description: "從隨機對手處偷取 400 元", effect: { type: "steal_money", amount: 400 } },
   // 第三波：賽博龐克主題新卡（機會卡）
@@ -963,27 +1070,88 @@ export const CHANCE_CARDS: ChanceCard[] = [
   { id: 112, name: "Beta 版機會", description: "再抽 1 張機會卡", effect: { type: "chain_draw", count: 1 }, isChain: true },
   { id: 113, name: "駭客拋售持股", description: "隨機一塊自有地產以 70% 價格賣出換現", effect: { type: "force_sell_property" } },
   { id: 114, name: "凌晨緊急維運", description: "被強制送進監獄關押一回合", effect: { type: "go_to_detention" } },
+  // ===== v4.0 新增機會卡（含新 CardEffect 與兩難選擇） =====
+  { id: 201, name: "迷因幣做空", description: "做空迷因幣：投入 500，50% 賺 1200，50% 賠光", effect: { type: "crypto_gamble", amount: 500 } },
+  { id: 202, name: "IPO 熱門股", description: "熱門 IPO 開盤！你獲得 600 元申購紅利", effect: { type: "ipo_allotment", amount: 600 } },
+  {
+    id: 203,
+    name: "稽查突擊兩難",
+    description: "二選一：主動補報 500 元免罰 / 僥倖逃過（30% 被罰 1200）",
+    effect: {
+      type: "choice",
+      options: [{ type: "money", amount: -500 }, { type: "tax_evade_choice", evadeAmount: 0, auditFine: 1200 }],
+      optionLabels: ["補報 500", "僥倖逃過"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "主動補報 500", effect: { type: "money", amount: -500 } },
+      { label: "僥倖逃過", effect: { type: "tax_evade_choice", evadeAmount: 0, auditFine: 1200 } },
+    ],
+  },
+  { id: 204, name: "央行緊急降息", description: "央行緊急降息！你現有貸款利息減免一半", effect: { type: "interest_rate_shock", percent: -2 } },
+  { id: 205, name: "華爾街收購函", description: "收到收購要約！你獲得 900 元現金", effect: { type: "hostile_tender", amount: 900 } },
+  { id: 206, name: "時間迴圈裂縫", description: "時間迴圈！你回到起點重新出發", effect: { type: "loop_reset" } },
+  { id: 207, name: "金礦脈衝爆發", description: "金礦脈衝！隨機一格湧現金礦", effect: { type: "mine_spawn", amount: 400 } },
+  { id: 208, name: "賞金獵人通緝", description: "你被通緝！頭上懸賞 500 元", effect: { type: "bounty_place", amount: 500 } },
+  { id: 209, name: "奧運金牌衝刺", description: "奧運金牌！+10 分", effect: { type: "olympic_medal", medal: 'gold', points: 10 } },
+  { id: 210, name: "幻影分身誘餌", description: "部署幻影誘餌！下兩次過路費由分身代付", effect: { type: "decoy_deploy" } },
+  { id: 211, name: "離岸帳戶開戶", description: "開立離岸帳戶，存入 500 元避稅", effect: { type: "tax_haven_deposit", amount: 500 } },
+  { id: 212, name: "量子糾纏套利", description: "量子套利！你獲得 700 元", effect: { type: "money", amount: 700 } },
+  { id: 213, name: "黑天鵝事件爆發", description: "黑天鵝！隨機對手損失 1200 元", effect: { type: "extort", amount: 1200 } },
+  { id: 214, name: "央行升息迴圈", description: "央行升息！存款利息增加但你現有貸款多付 300", effect: { type: "money", amount: -300 } },
+  { id: 215, name: "UBI 全民紅利", description: "UBI 發放！你獲得 400 元", effect: { type: "money", amount: 400 } },
+  { id: 216, name: "反壟斷罰單", description: "反壟斷罰單！你支付 600 元", effect: { type: "money", amount: -600 } },
+  { id: 217, name: "太陽風暴警報", description: "太陽風暴！你隨機一個道具失效（損失 200 元）", effect: { type: "money", amount: -200 } },
+  { id: 218, name: "偽造護照入手", description: "獲得偽造護照！下次進監禁自動釋放", effect: { type: "get_out_of_jail" } },
+  { id: 219, name: "奈米蜂群啟動", description: "蜂群啟動！未來 2 回合每回合吸取 120 元", effect: { type: "buff", buffType: "nano_swarm", duration: 2, description: "蜂群吸取（2 回合）" } },
+  { id: 220, name: "映象機會", description: "映象複製上一張機會卡", effect: { type: "chain_draw", count: 1 }, isChain: true },
+  {
+    id: 221,
+    name: "加密貨幣兩難",
+    description: "二選一：投入 600 買迷因幣（50% 賺 1500）/ 保守獲得 250 元",
+    effect: {
+      type: "choice",
+      options: [{ type: "crypto_gamble", amount: 600 }, { type: "money", amount: 250 }],
+      optionLabels: ["買迷因幣", "保守領 250"],
+    },
+    isChoice: true,
+    choiceOptions: [
+      { label: "投入 600 買迷因幣", effect: { type: "crypto_gamble", amount: 600 } },
+      { label: "保守領 250", effect: { type: "money", amount: 250 } },
+    ],
+  },
+  { id: 222, name: "奧運銀牌", description: "奧運銀牌！+6 分", effect: { type: "olympic_medal", medal: 'silver', points: 6 } },
+  { id: 223, name: "奧運銅牌", description: "奧運銅牌！+3 分", effect: { type: "olympic_medal", medal: 'bronze', points: 3 } },
+  { id: 224, name: "敵意收購失敗", description: "收購失敗！你賠償 500 元律師費", effect: { type: "money", amount: -500 } },
+  { id: 225, name: "時間穿越紅利", description: "時間穿越！你獲得 500 元時光紅利", effect: { type: "money", amount: 500 } },
 ];
 
 export const MODE_LABELS: Record<string, string> = {
-  classic: "经典模式",
+  classic: "經典模式",
   fast: "快速模式",
-  crazy: "疯狂模式",
-  custom: "自定义模式",
+  crazy: "瘋狂模式",
+  custom: "自定義模式",
   coop2v2: "合作模式 2v2",
-  battle_royale: "大逃杀模式",
-  race: "竞速模式",
+  battle_royale: "大逃殺模式",
+  race: "競速模式",
   survival: "生存模式",
   coop_boss: "合作打Boss",
-  treasure: "夺宝模式",
+  treasure: "奪寶模式",
   emperor: "皇帝模式",
   dark: "黑暗模式",
-  lightning: "闪电战",
-  resource: "资源争夺",
-  team_deathmatch: "团队死斗",
-  darknet: "暗网",
+  lightning: "閃電戰",
+  resource: "資源爭奪",
+  team_deathmatch: "團隊死鬥",
+  darknet: "暗網",
   casino: "霓虹賭城",
   dynasty: "金融王朝",
+  // v4.0 新增模式
+  heist: "數位劫案",
+  bounty_hunt: "賞金獵殺",
+  gold_rush: "淘金熱",
+  cyber_olympics: "賽博奧運",
+  rogue_ai: "叛逆AI",
+  time_loop: "時間迴圈",
 };
 
 export const DEFAULT_CUSTOM_RULES: CustomGameRules = {
@@ -1014,68 +1182,68 @@ export const DEFAULT_CUSTOM_RULES: CustomGameRules = {
 export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
   engineer: {
     id: "engineer",
-    name: "工程师",
+    name: "工程師",
     icon: "Wrench",
     color: "#00e5ff",
-    description: "建造大师，精于工程成本控制",
+    description: "建造大師，精於工程成本控制",
     skills: [
-      "建造房屋/酒店费用打7折",
-      "拆除建筑返还70%（默认50%）",
+      "建造房屋/酒店費用打7折",
+      "拆除建築返還70%（預設50%）",
     ],
   },
   banker: {
     id: "banker",
-    name: "银行家",
+    name: "銀行家",
     icon: "Landmark",
     color: "#facc15",
-    description: "金融巨鳄，操纵资金流转",
+    description: "金融巨鱷，操縱資金流轉",
     skills: [
-      "抵押赎回利息降为5%（默认10%）",
-      "起点奖励+500元",
+      "抵押贖回利息降為5%（預設10%）",
+      "起點獎勵+500元",
     ],
   },
   speculator: {
     id: "speculator",
-    name: "投机者",
+    name: "投機者",
     icon: "TrendingUp",
     color: "#ff6b9d",
-    description: "风险偏好，高风险高回报",
+    description: "風險偏好，高風險高回報",
     skills: [
-      "命运卡/机会卡金钱效果×2",
-      "抽卡时有30%概率重抽一次",
+      "命運卡/機會卡金錢效果×2",
+      "抽卡時有30%機率重抽一次",
     ],
   },
   tycoon: {
     id: "tycoon",
-    name: "地产大亨",
+    name: "地產大亨",
     icon: "Building2",
     color: "#4ade80",
-    description: "房产专家，低买高卖",
+    description: "房產專家，低買高賣",
     skills: [
-      "购买地块价格打9折",
-      "过路费收入+20%",
+      "購買地塊價格打9折",
+      "過路費收入+20%",
     ],
   },
   hacker: {
     id: "hacker",
-    name: "黑客",
+    name: "駭客",
     icon: "Cpu",
     color: "#a855f7",
-    description: "系统入侵，总能找到漏洞",
+    description: "系統入侵，總能找到漏洞",
     skills: [
-      "进入禁闭区50%概率直接逃脱",
-      "踩对手地块20%概率免过路费",
+      "進入禁閉區50%機率直接逃脫",
+      "踩對手地塊20%機率免過路費",
     ],
   },
   doctor: {
     id: "doctor",
-    name: "医生",
+    name: "醫生",
     icon: "Heart",
     color: "#ff4d6d",
-    description: "生命守护者，绝境逢生",
+    description: "生命守護者，絕境逢生",
     skills: [
-      "每回合开始恢复200元",
-      "破产时可复活一次（保留1000元，地产归银行）",
+      "每回合開始恢復200元",
+      "破產時可復活一次（保留1000元，地產歸銀行）",
     ],
   },
   lawyer: {
@@ -1086,7 +1254,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     description: "訴訟高手，精通規則漏洞",
     skills: [
       "每局可免費偷取對手一塊無建築地產",
-      "進入法庭/罰款時30%概率豁免",
+      "進入法庭/罰款時30%機率豁免",
     ],
   },
   journalist: {
@@ -1096,8 +1264,8 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     color: "#f97316",
     description: "情報專家，洞悉對手一舉一動",
     skills: [
-      "可查看對手道具欄和股票持倉",
-      "踩命運/機會區時40%概率查看內容後選擇是否觸發",
+      "可檢視對手道具欄和股票持倉",
+      "踩命運/機會區時40%機率檢視內容後選擇是否觸發",
     ],
   },
   gambler: {
@@ -1138,9 +1306,9 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     name: "旅行家",
     icon: "Compass",
     color: "#facc15",
-    description: "環球旅人，足跡遍布各處",
+    description: "環球旅人，足跡遍佈各處",
     skills: [
-      "移動時10%概率多走1步",
+      "移動時10%機率多走1步",
       "過路費收入+10%（每經過一塊自己的地）",
     ],
   },
@@ -1152,7 +1320,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     description: "系統入侵，操控對手地產",
     skills: [
       "主動：入侵對手一塊地產，使其過路費減半 3 回合",
-      "每局限 3 次入侵機會",
+      "每侷限 3 次入侵機會",
     ],
   },
   quantum_physicist: {
@@ -1185,7 +1353,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     description: "地下管道，道具交易",
     skills: [
       "被動：道具商店購買打 8 折",
-      "主動：可將道具賣給其他玩家（每局限 3 次）",
+      "主動：可將道具賣給其他玩家（每侷限 3 次）",
     ],
   },
   cyberborg: {
@@ -1223,12 +1391,12 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
   },
   data_priest: {
     id: "data_priest",
-    name: "數據牧師",
+    name: "資料牧師",
     icon: "Zap",
     color: "#fde047",
-    description: "數據即信仰，獻祭換奇蹟",
+    description: "資料即信仰，獻祭換奇蹟",
     skills: [
-      "主動（每局限 1 次）：支付當前現金 20% 進行獻祭",
+      "主動（每侷限 1 次）：支付當前現金 20% 進行獻祭",
       "隨機獲得一個 buff：過路費翻倍 1 回合 / 免疫 1 次負面 / 下次擲骰必出 7",
     ],
   },
@@ -1261,7 +1429,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     color: "#60a5fa",
     description: "時鐘守護，操控時間流",
     skills: [
-      "主動（每局限 1 次）：自己回合結束後立即獲得一個額外回合",
+      "主動（每侷限 1 次）：自己回合結束後立即獲得一個額外回合",
       "時間回溯時可額外保留 1 塊地產不被重置",
     ],
   },
@@ -1283,8 +1451,8 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     color: "#38bdf8",
     description: "空中之眼，全域偵察",
     skills: [
-      "被動：每回合開始時有 30% 概率獲得 150 元偵察津貼",
-      "主動（每局限 3 次）：部署偵察機，立即獲得 300 元並使下次買地 9 折",
+      "被動：每回合開始時有 30% 機率獲得 150 元偵察津貼",
+      "主動（每侷限 3 次）：部署偵察機，立即獲得 300 元並使下次買地 9 折",
     ],
   },
   auctioneer: {
@@ -1292,10 +1460,10 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     name: "拍賣師",
     icon: "Gavel",
     color: "#f59e0b",
-    description: "槌聲一响，利益我有",
+    description: "槌聲一響，利益我有",
     skills: [
       "被動：競標時出價永久 95 折（少付 5%）",
-      "主動（每局限 2 次）：壓價拍賣，指定一塊對手地產過路費減半 2 回合",
+      "主動（每侷限 2 次）：壓價拍賣，指定一塊對手地產過路費減半 2 回合",
     ],
   },
   bounty_hunter: {
@@ -1317,7 +1485,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     description: "地板油門，絕不放慢",
     skills: [
       "被動：擲出 3 或更低時，本回合移動 +1 格",
-      "主動（每局限 2 次）：氮氣加速，本回合立即額外前進 3 格",
+      "主動（每侷限 2 次）：氮氣加速，本回合立即額外前進 3 格",
     ],
   },
   media_mogul: {
@@ -1339,7 +1507,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     description: "一擊必殺，遠距離精準打擊",
     skills: [
       "被動：攻擊類道具（炸彈/勒索病毒）效果 +50%",
-      "主動（每局限 1 次）：狙擊，直接將一名對手送入監禁室",
+      "主動（每侷限 1 次）：狙擊，直接將一名對手送入監禁室",
     ],
   },
   // ===== v3.0 新增職業 =====
@@ -1350,7 +1518,7 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     color: "#22d3ee",
     description: "潛入數位深網，掠奪對手資金",
     skills: [
-      "主動（每局限 2 次）：數位掠襲，從現金最多的對手處盜取 400 元",
+      "主動（每侷限 2 次）：數位掠襲，從現金最多的對手處盜取 400 元",
       "被動：使用掠奪類道具時效果 +20%",
     ],
   },
@@ -1359,9 +1527,9 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     name: "賽博醫護",
     icon: "Stethoscope",
     color: "#f472b6",
-    description: "奈米醫護，绝境回血，戰鬥續航",
+    description: "奈米醫護，絕境回血，戰鬥續航",
     skills: [
-      "主動（每局限 2 次）：奈米修復，生存模式回血 30，其他模式變現 800 元",
+      "主動（每侷限 2 次）：奈米修復，生存模式回血 30，其他模式變現 800 元",
       "被動：起點額外回復 100 元醫療補貼",
     ],
   },
@@ -1372,8 +1540,119 @@ export const PROFESSIONS: Record<Profession, ProfessionConfig> = {
     color: "#fbbf24",
     description: "低吸高拋，操縱股市節奏",
     skills: [
-      "主動（每局限 2 次）：低吸高拋，立即獲得 600 元股市操作盈餘",
+      "主動（每侷限 2 次）：低吸高拋，立即獲得 600 元股市操作盈餘",
       "被動：股票買賣手續費減免",
+    ],
+  },
+  // ===== v4.0 新增職業 =====
+  quantum_trader: {
+    id: "quantum_trader",
+    name: "量子操盤手",
+    icon: "Atom",
+    color: "#22d3ee",
+    description: "疊加平行時空套利，操縱加密貨幣波動",
+    skills: [
+      "主動（每侷限 2 次）：量子套利，隨機獲得 800~2000 元加密貨幣盈餘",
+      "被動：加密貨幣波動對自己有利（50% 機率避開暴跌）",
+    ],
+  },
+  memory_broker: {
+    id: "memory_broker",
+    name: "記憶商人",
+    icon: "Brain",
+    color: "#a78bfa",
+    description: "收購與轉售記憶，操縱玩家位置",
+    skills: [
+      "主動（每侷限 2 次）：記憶交換，與現金最多的對手交換位置",
+      "被動：每次起點額外獲得 200 元記憶權利金",
+    ],
+  },
+  drone_king: {
+    id: "drone_king",
+    name: "無人機之王",
+    icon: "Plane",
+    color: "#60a5fa",
+    description: "編隊空襲，精準打擊對手地產",
+    skills: [
+      "主動（每侷限 2 次）：編隊空襲，摧毀隨機對手一棟建築",
+      "被動：道具商店價格 9 折",
+    ],
+  },
+  smuggler: {
+    id: "smuggler",
+    name: "走私客",
+    icon: "Package",
+    color: "#f59e0b",
+    description: "夾帶違禁品，黑市交易抽成減半",
+    skills: [
+      "主動（每侷限 2 次）：夾帶貨物，免費獲得一個隨機道具",
+      "被動：地下市場買入價格 8 折",
+    ],
+  },
+  street_oracle: {
+    id: "street_oracle",
+    name: "街頭先知",
+    icon: "Eye",
+    color: "#f472b6",
+    description: "預言接下來的命運卡，趨吉避兇",
+    skills: [
+      "主動（每侷限 2 次）：預言窺視，下張命運/機會卡可重新抽一次",
+      "被動：正面金錢卡效果 +20%",
+    ],
+  },
+  ai_whisperer: {
+    id: "ai_whisperer",
+    name: "AI訓練師",
+    icon: "Cpu",
+    color: "#34d399",
+    description: "調校AI引數，降低對手AI攻擊性",
+    skills: [
+      "主動（每侷限 2 次）：校準模型，全場過路費本回合 -20%",
+      "被動：被動收入（起點/股息）+10%",
+    ],
+  },
+  tax_auditor: {
+    id: "tax_auditor",
+    name: "稅務稽查官",
+    icon: "Search",
+    color: "#f87171",
+    description: "稽查逃稅，罰沒歸公",
+    skills: [
+      "主動（每侷限 2 次）：稽查令，指定玩家繳交 1000 元稅金",
+      "被動：自己逃稅被抓機率 -50%",
+    ],
+  },
+  negotiator: {
+    id: "negotiator",
+    name: "談判專家",
+    icon: "Handshake",
+    color: "#fb923c",
+    description: "斡旋交易，買賣雙方都讓步",
+    skills: [
+      "主動（每侷限 2 次）：斡旋，下次交易/買地價格再減 15%",
+      "被動：交易時對手接受率 +30%",
+    ],
+  },
+  domain_architect: {
+    id: "domain_architect",
+    name: "網域建築師",
+    icon: "Building",
+    color: "#c084fc",
+    description: "區域規劃，成套地產過路費提升",
+    skills: [
+      "主動（每侷限 1 次）：區域規劃，下次成套地產過路費 +50%（1回合）",
+      "被動：建造成本 95 折",
+    ],
+  },
+  forensic_hacker: {
+    id: "forensic_hacker",
+    name: "鑑識駭客",
+    icon: "FileSearch",
+    color: "#2dd4bf",
+    description: "數位蒐證，恢復被銷毀的地產資訊",
+    skills: [
+      "主動（每侷限 1 次）：數位蒐證，從破產玩家處免費繼承一塊地",
+      "被動：破產轉移時多獲 10% 資產",
     ],
   },
 };
@@ -1633,8 +1912,8 @@ export const BUILTIN_MODS: Mod[] = [
   // ===== 內建視覺美化模組 =====
   {
     id: 'builtin_retro_pixel',
-    name: '懷舊像素風',
-    description: '復古像素畫質',
+    name: '懷舊畫素風',
+    description: '復古畫素畫質',
     version: '1.0.0',
     author: '內建',
     category: 'visual',
@@ -1644,7 +1923,7 @@ export const BUILTIN_MODS: Mod[] = [
   {
     id: 'builtin_minimal',
     name: '極簡模式',
-    description: '關閉所有特效，提升性能',
+    description: '關閉所有特效，提升效能',
     version: '1.0.0',
     author: '內建',
     category: 'visual',
@@ -1673,9 +1952,9 @@ export const BUILTIN_MODS: Mod[] = [
   },
 ];
 
-// ========== 语音聊天配置 ==========
+// ========== 語音聊天配置 ==========
 
-export const VOICE_ENABLED = true;     // 语音功能开关
+export const VOICE_ENABLED = true;     // 語音功能開關
 
 // ========== 語音包配置 ==========
 
@@ -1725,11 +2004,11 @@ export const VOICE_PACKS: Record<VoicePackType, VoicePackConfig> = {
   },
 };
 
-// ========== 观战模式配置 ==========
+// ========== 觀戰模式配置 ==========
 
-export const MAX_SPECTATORS = 50;      // 最大观战人数
-export const DANMAKU_MAX_LENGTH = 50;  // 弹幕最大长度
-export const MAX_DANMAKU = 100;        // 弹幕最大保留条数
+export const MAX_SPECTATORS = 50;      // 最大觀戰人數
+export const DANMAKU_MAX_LENGTH = 50;  // 彈幕最大長度
+export const MAX_DANMAKU = 100;        // 彈幕最大保留條數
 
 export function getCellSet(cellId: number): string | null {
   const cell = CELLS[cellId];
@@ -1744,7 +2023,7 @@ export function forwardToNearestFate(fromPos: number): number {
   for (const pos of fatePositions) {
     if (pos > fromPos) return pos;
   }
-  // 绕一圈回到第一个命运区
+  // 繞一圈回到第一個命運區
   return fatePositions[0] + CELL_COUNT;
 }
 
@@ -1753,8 +2032,8 @@ export function forwardToNearestFate(fromPos: number): number {
 export const STOCKS: Record<StockSymbol, StockConfig> = {
   NEON: { symbol: "NEON", name: "霓虹科技", initialPrice: 100, volatility: "high", color: "#00e5ff", linkedSetIds: ["set1", "set3"] },
   QNTM: { symbol: "QNTM", name: "量子能源", initialPrice: 80, volatility: "medium", color: "#4ade80", linkedSetIds: ["set5", "set6"] },
-  DATA: { symbol: "DATA", name: "数据集团", initialPrice: 120, volatility: "low", color: "#a855f7", linkedSetIds: ["set2", "set8"] },
-  CYBR: { symbol: "CYBR", name: "赛博医药", initialPrice: 90, volatility: "medium", color: "#ff6b9d", linkedSetIds: ["set4", "set7"] },
+  DATA: { symbol: "DATA", name: "資料集團", initialPrice: 120, volatility: "low", color: "#a855f7", linkedSetIds: ["set2", "set8"] },
+  CYBR: { symbol: "CYBR", name: "賽博醫藥", initialPrice: 90, volatility: "medium", color: "#ff6b9d", linkedSetIds: ["set4", "set7"] },
 };
 
 export const STOCK_PRICE_MIN = 10;
@@ -1763,19 +2042,51 @@ export const STOCK_TOTAL_SHARES = 100; // 每支股票總流通股數
 
 export const STOCK_SYMBOLS: StockSymbol[] = ["NEON", "QNTM", "DATA", "CYBR"];
 
-// ========== 全局事件配置 ==========
+// ========== v4.0 加密迷因幣市場 ==========
+
+export interface CryptoCoinConfig {
+  symbol: string;
+  name: string;
+  initialPrice: number;
+  volatility: number;   // 0~1 波動幅度
+  crashRisk: number;    // 0~1 崩盤機率
+  color: string;
+}
+
+export const CRYPTO_COINS: CryptoCoinConfig[] = [
+  { symbol: "DOGE", name: "狗狗幣", initialPrice: 50, volatility: 0.35, crashRisk: 0.15, color: "#facc15" },
+  { symbol: "PEPE", name: "蛙蛙幣", initialPrice: 30, volatility: 0.45, crashRisk: 0.25, color: "#4ade80" },
+  { symbol: "MOON", name: "登月幣", initialPrice: 80, volatility: 0.55, crashRisk: 0.20, color: "#a855f7" },
+  { symbol: "FOMO", name: "FOMO幣", initialPrice: 60, volatility: 0.40, crashRisk: 0.30, color: "#f472b6" },
+];
+
+export const CRYPTO_PRICE_MIN = 5;
+export const CRYPTO_PRICE_MAX = 500;
+
+// ========== v4.0 央行政策引數 ==========
+
+export const CENTRAL_BANK_BASE_RATE = 0.02;       // 基準利率 2%
+export const CENTRAL_BANK_RATE_MIN = -0.02;       // 最低 -2%
+export const CENTRAL_BANK_RATE_MAX = 0.08;       // 最高 8%
+export const TAX_RATE_NORMAL = 0.05;              // 一般所得稅 5%
+export const TAX_EVADE_CAUGHT_CHANCE = 0.3;      // 逃稅被抓機率 30%
+export const TAX_AUDIT_FINE_MULTIPLIER = 1.5;    // 逃稅罰款 = 逃稅額 × 1.5
+export const HOSTILE_TAKEOVER_THRESHOLD = 0.5;   // 持有 50% 股份取得控制權
+export const HOSTILE_TAKEOVER_DIVIDEND = 0.03;   // 控股者每回合收 3% 紅利
+
+// ========== 全域性事件配置 ==========
 
 export const GLOBAL_EVENTS: Record<GlobalEventType, GlobalEvent> = {
-  economic_crisis: { type: "economic_crisis", name: "经济危机", description: "所有玩家现金-15%，股票价格-20%", icon: "TrendingDown" },
-  tech_boom: { type: "tech_boom", name: "科技爆发", description: "所有地块过路费本回合+50%，股票价格+15%", icon: "Zap" },
-  neon_festival: { type: "neon_festival", name: "霓虹节日", description: "所有玩家现金+1000元", icon: "PartyPopper" },
-  hacker_attack: { type: "hacker_attack", name: "黑客攻击", description: "随机一位玩家现金-2000元", icon: "Skull" },
-  real_estate_bubble: { type: "real_estate_bubble", name: "地产泡沫", description: "所有地块价格临时+30%（持续到下次事件）", icon: "Building" },
-  energy_shortage: { type: "energy_shortage", name: "能源短缺", description: "有建筑的玩家每栋房屋支付100元维护费，酒店500元", icon: "Battery" },
-  data_dividend: { type: "data_dividend", name: "数据红利", description: "持有股票最多的玩家获得2000元", icon: "Gift" },
-  urban_reconstruction: { type: "urban_reconstruction", name: "城市重建", description: "所有抵押的地产自动解除抵押（免费）", icon: "RefreshCw" },
-  space_immigration: { type: "space_immigration", name: "太空移民", description: "所有玩家前进3格（不触发格子事件）", icon: "Rocket" },
-  ai_rebellion: { type: "ai_rebellion", name: "AI叛乱", description: "随机一位玩家获得一张免费出狱卡", icon: "Bot" },
+  economic_crisis: { type: "economic_crisis", name: "經濟危機", description: "所有玩家現金-15%，股票價格-20%", icon: "TrendingDown" },
+  tech_boom: { type: "tech_boom", name: "科技爆發", description: "所有地塊過路費本回合+50%，股票價格+15%", icon: "Zap" },
+  neon_festival: { type: "neon_festival", name: "霓虹節日", description: "所有玩家現金+1000元", icon: "PartyPopper" },
+  hacker_attack: { type: "hacker_attack", name: "駭客攻擊", description: "隨機一位玩家現金-2000元", icon: "Skull" },
+  real_estate_bubble: { type: "real_estate_bubble", name: "地產泡沫", description: "所有地塊價格臨時+30%（持續到下次事件）", icon: "Building" },
+  energy_shortage: { type: "energy_shortage", name: "能源短缺", description: "有建築的玩家每棟房屋支付100元維護費，酒店500元", icon: "Battery" },
+  data_dividend: { type: "data_dividend", name: "資料紅利", description: "持有股票最多的玩家獲得2000元", icon: "Gift" },
+  urban_reconstruction: { type: "urban_reconstruction", name: "城市重建", description: "所有抵押的地產自動解除抵押（免費）", icon: "RefreshCw" },
+  space_immigration: { type: "space_immigration", name: "太空移民", description: "所有玩家前進3格（不觸發格子事件）", icon: "Rocket" },
+  ai_rebellion: { type: "ai_rebellion", name: "AI叛亂", description: "隨機一位玩家獲得一張免費出獄卡", icon: "Bot" },
   investment_hint: { type: "investment_hint", name: "投資熱點", description: "神秘投資者預言某地塊即將漲價，把握良機！", icon: "TrendingUp" },
   bank_crisis: { type: "bank_crisis", name: "銀行危機", description: "銀行倒閉！存款半數蒸發、所有貸款一筆勾銷！", icon: "Landmark" },
   quantum_storm: { type: "quantum_storm", name: "量子風暴", description: "現實不穩！所有玩家隨機移動 1~4 格，金錢卡效果翻倍", icon: "Atom" },
@@ -1784,11 +2095,20 @@ export const GLOBAL_EVENTS: Record<GlobalEventType, GlobalEvent> = {
   ad_storm: { type: "ad_storm", name: "廣告風暴", description: "海量廣告轟炸！所有玩家本回合收入 ×1.5", icon: "Megaphone" },
   subsidy_carnival: { type: "subsidy_carnival", name: "補貼狂歡", description: "政府撒錢！每位存活玩家立即獲得 600 元補貼", icon: "PartyPopper" },
   black_market_crackdown: { type: "black_market_crackdown", name: "黑市取締", description: "警方突擊黑市！聲望最低者被罰款，交易型玩家受創", icon: "ShieldAlert" },
-  // ===== v3.0 新增全局事件 =====
+  // ===== v3.0 新增全域性事件 =====
   satellite_airdrop: { type: "satellite_airdrop", name: "衛星空投", description: "低軌衛星拋下補給！每位存活玩家獲得 400 元", icon: "Satellite" },
   data_thunder: { type: "data_thunder", name: "數位雷擊", description: "隨機一位玩家被雷擊，現金 -800 元", icon: "Zap" },
   chip_boom: { type: "chip_boom", name: "晶片狂潮", description: "全球晶片缺貨！股價全線上漲 12%", icon: "Cpu" },
   mega_subsidy: { type: "mega_subsidy", name: "全民普發現金", description: "政府大撒幣！每位存活玩家立即獲得 500 元", icon: "Banknote" },
+  // ===== v4.0 新增全域性事件 =====
+  quantum_leap: { type: "quantum_leap", name: "量子躍遷", description: "現實撕裂！所有玩家隨機瞬移 1~6 格，加密貨幣波動加劇", icon: "Atom" },
+  crypto_winter: { type: "crypto_winter", name: "加密寒冬", description: "迷因幣全線暴跌 40%，持倉者套牢", icon: "Snowflake" },
+  ipo_wave: { type: "ipo_wave", name: "IPO 狂潮", description: "新股密集上市！開放全員申購，中籤者賺取承銷價差", icon: "Rocket" },
+  central_bank_rate: { type: "central_bank_rate", name: "央行利率決議", description: "央行宣佈政策利率調整！存貸利率同步波動", icon: "Landmark" },
+  trade_war: { type: "trade_war", name: "貿易戰", description: "關稅壁壘升起！所有地產過路費 +30% 但建造成本 +20%", icon: "Briefcase" },
+  solar_flare: { type: "solar_flare", name: "太陽風暴", description: "電磁脈衝襲來！隨機兩名玩家道具失效，現金 -500", icon: "Zap" },
+  ubi: { type: "ubi", name: "全民基本收入", description: "政府發放 UBI！每位存活玩家立即獲得 800 元（含避稅天堂）", icon: "HeartHandshake" },
+  antitrust: { type: "antitrust", name: "反壟斷審查", description: "監管機構介入！控股公司被強制拆分，控股者罰款 2000", icon: "Scale" },
 };
 
 export const GLOBAL_EVENT_TYPES: GlobalEventType[] = [
@@ -1810,11 +2130,20 @@ export const GLOBAL_EVENT_TYPES: GlobalEventType[] = [
   "ad_storm",
   "subsidy_carnival",
   "black_market_crackdown",
-  // v3.0 新增全局事件
+  // v3.0 新增全域性事件
   "satellite_airdrop",
   "data_thunder",
   "chip_boom",
   "mega_subsidy",
+  // v4.0 新增全域性事件
+  "quantum_leap",
+  "crypto_winter",
+  "ipo_wave",
+  "central_bank_rate",
+  "trade_war",
+  "solar_flare",
+  "ubi",
+  "antitrust",
 ];
 
 // ========== 成就配置 ==========
@@ -1829,7 +2158,7 @@ export const ACHIEVEMENTS: Record<AchievementId, Achievement> = {
   jailbird: { id: "jailbird", name: "監獄常客", description: "單局進入禁閉區3次以上", icon: "Lock", category: "special", rarity: "common", points: 10, target: 3 },
   fate_favorite: { id: "fate_favorite", name: "命運寵兒", description: "單局抽到5張以上命運/機會卡", icon: "Sparkles", category: "beginner", rarity: "common", points: 10, target: 5 },
   trade_master: { id: "trade_master", name: "交易達人", description: "單局完成3次以上交易", icon: "Handshake", category: "wealth", rarity: "rare", points: 20, target: 3 },
-  auction_hunter: { id: "auction_hunter", name: "拍賣獵手", description: "單局通過拍賣獲得2塊以上地塊", icon: "Gavel", category: "wealth", rarity: "rare", points: 20, target: 2 },
+  auction_hunter: { id: "auction_hunter", name: "拍賣獵手", description: "單局透過拍賣獲得2塊以上地塊", icon: "Gavel", category: "wealth", rarity: "rare", points: 20, target: 2 },
   rags_to_riches: { id: "rags_to_riches", name: "白手起家", description: "資金低於1000後最終獲勝", icon: "Coins", category: "special", rarity: "epic", points: 40 },
   perfect_victory: { id: "perfect_victory", name: "完美勝利", description: "對手破產時自己資金超過20000", icon: "Crown", category: "wealth", rarity: "epic", points: 30 },
   beginner: { id: "beginner", name: "初學者", description: "完成新手教學", icon: "GraduationCap", category: "beginner", rarity: "common", points: 5 },
@@ -1863,8 +2192,8 @@ export const ACHIEVEMENTS: Record<AchievementId, Achievement> = {
   collect_all_items: { id: "collect_all_items", name: "道具大全", description: "收集全部道具", icon: "Package", category: "collection", rarity: "rare", points: 25 },
   collect_all_themes: { id: "collect_all_themes", name: "主題收藏家", description: "收集全部主題", icon: "Palette", category: "collection", rarity: "epic", points: 35 },
   collect_all_skins: { id: "collect_all_skins", name: "時尚達人", description: "收集全部皮膚", icon: "Shirt", category: "collection", rarity: "legendary", points: 50 },
-  friend_10: { id: "friend_10", name: "交友廣闊", description: "添加 10 個好友", icon: "Users", category: "social", rarity: "rare", points: 20, target: 10 },
-  create_guild: { id: "create_guild", name: "開山立派", description: "創建戰隊", icon: "Shield", category: "social", rarity: "epic", points: 30 },
+  friend_10: { id: "friend_10", name: "交友廣闊", description: "新增 10 個好友", icon: "Users", category: "social", rarity: "rare", points: 20, target: 10 },
+  create_guild: { id: "create_guild", name: "開山立派", description: "建立戰隊", icon: "Shield", category: "social", rarity: "epic", points: 30 },
   guild_quest_complete: { id: "guild_quest_complete", name: "戰隊先鋒", description: "完成一次戰隊任務", icon: "Flag", category: "social", rarity: "rare", points: 25 },
   bankruptcy_comeback: { id: "bankruptcy_comeback", name: "破產逆轉", description: "面臨破產後逆轉獲勝", icon: "RotateCcw", category: "special", rarity: "legendary", points: 60 },
   zero_property_win: { id: "zero_property_win", name: "零地產獲勝", description: "不擁有任何地產卻贏得比賽", icon: "XCircle", category: "special", rarity: "epic", points: 40 },
@@ -1895,6 +2224,31 @@ export const ACHIEVEMENTS: Record<AchievementId, Achievement> = {
   survival_master: { id: "survival_master", name: "生存大師", description: "贏一局生存模式", icon: "HeartPulse", category: "mode", rarity: "legendary", points: 50 },
   emperor_crowned: { id: "emperor_crowned", name: "登基稱帝", description: "贏一局皇帝模式", icon: "Crown", category: "mode", rarity: "epic", points: 30 },
   race_finisher: { id: "race_finisher", name: "完賽選手", description: "贏一局競速模式", icon: "Flag", category: "mode", rarity: "rare", points: 20 },
+  // ===== v4.0 新增成就 =====
+  heist_mastermind: { id: "heist_mastermind", name: "劫案首腦", description: "贏一局數位劫案模式", icon: "Mask", category: "mode", rarity: "epic", points: 30 },
+  bounty_legend: { id: "bounty_legend", name: "賞金獵人傳奇", description: "贏一局賞金獵殺模式", icon: "Crosshair", category: "mode", rarity: "epic", points: 30 },
+  gold_rush_king: { id: "gold_rush_king", name: "淘金之王", description: "贏一局淘金熱模式", icon: "Gem", category: "mode", rarity: "epic", points: 30 },
+  olympic_champion: { id: "olympic_champion", name: "奧運全能冠軍", description: "贏一局賽博奧運模式", icon: "Medal", category: "mode", rarity: "epic", points: 30 },
+  rogue_ai_overlord: { id: "rogue_ai_overlord", name: "叛逆AI主宰", description: "贏一局叛逆AI模式", icon: "Bot", category: "mode", rarity: "legendary", points: 50 },
+  loop_breaker: { id: "loop_breaker", name: "破環者", description: "贏一局時間迴圈模式", icon: "Repeat", category: "mode", rarity: "legendary", points: 50 },
+  crypto_whale: { id: "crypto_whale", name: "加密鯨魚", description: "單場加密貨幣盈餘超過 3000 元", icon: "Bitcoin", category: "wealth", rarity: "epic", points: 35, target: 3000 },
+  ipo_subscriber: { id: "ipo_subscriber", name: "申購達人", description: "單場 IPO 申購獲利超過 1500 元", icon: "Rocket", category: "wealth", rarity: "rare", points: 20, target: 1500 },
+  rate_surfer: { id: "rate_surfer", name: "利率浪人", description: "在央行利率波動下仍維持正盈餘", icon: "TrendingUp", category: "special", rarity: "rare", points: 20 },
+  tax_evader: { id: "tax_evader", name: "逃稅者", description: "單場逃稅成功 2 次以上", icon: "Umbrella", category: "special", rarity: "rare", points: 20, target: 2 },
+  tax_audited: { id: "tax_audited", name: "被稽查的狐狸", description: "逃稅被抓罰款一次", icon: "ShieldAlert", category: "special", rarity: "common", points: 10 },
+  hostile_takeover: { id: "hostile_takeover", name: "股市掠奪者", description: "成功發起一次敵意收購並取得控制權", icon: "Swords", category: "wealth", rarity: "legendary", points: 50 },
+  quantum_trader_pro: { id: "quantum_trader_pro", name: "量子操盤手", description: "以量子操盤手職業完成一次套利", icon: "Atom", category: "profession", rarity: "epic", points: 30 },
+  memory_broker_pro: { id: "memory_broker_pro", name: "記憶商人", description: "以記憶商人職業完成一次記憶交換", icon: "Brain", category: "profession", rarity: "epic", points: 30 },
+  drone_king_pro: { id: "drone_king_pro", name: "無人機之王", description: "以無人機之王職業完成一次空襲", icon: "Plane", category: "profession", rarity: "epic", points: 30 },
+  smuggler_pro: { id: "smuggler_pro", name: "走私客", description: "以走私客職業完成一次夾帶", icon: "Package", category: "profession", rarity: "rare", points: 20 },
+  oracle_pro: { id: "oracle_pro", name: "街頭先知", description: "以街頭先知職業完成一次預言", icon: "Eye", category: "profession", rarity: "rare", points: 20 },
+  ai_whisperer_pro: { id: "ai_whisperer_pro", name: "AI訓練師", description: "以AI訓練師職業完成一次校準", icon: "Cpu", category: "profession", rarity: "rare", points: 20 },
+  auditor_pro: { id: "auditor_pro", name: "稅務稽查官", description: "以稅務稽查官職業完成一次稽查", icon: "Search", category: "profession", rarity: "epic", points: 30 },
+  negotiator_pro: { id: "negotiator_pro", name: "談判專家", description: "以談判專家職業完成一次斡旋", icon: "Handshake", category: "profession", rarity: "rare", points: 20 },
+  architect_pro: { id: "architect_pro", name: "網域建築師", description: "以網域建築師職業完成一次區域規劃", icon: "Building", category: "profession", rarity: "epic", points: 30 },
+  forensic_hacker_pro: { id: "forensic_hacker_pro", name: "鑑識駭客", description: "以鑑識駭客職業完成一次數位蒐證", icon: "FileSearch", category: "profession", rarity: "epic", points: 30 },
+  black_swan_survivor: { id: "black_swan_survivor", name: "黑天鵝倖存者", description: "在黑天鵝事件中存活下來", icon: "Skull", category: "special", rarity: "rare", points: 20 },
+  ubi_recipient: { id: "ubi_recipient", name: "UBI領取者", description: "領取一次全民基本收入", icon: "HeartHandshake", category: "special", rarity: "common", points: 10 },
 };
 
 export const ACHIEVEMENT_IDS: AchievementId[] = [
@@ -1960,6 +2314,31 @@ export const ACHIEVEMENT_IDS: AchievementId[] = [
   "survival_master",
   "emperor_crowned",
   "race_finisher",
+  // v4.0 新增成就
+  "heist_mastermind",
+  "bounty_legend",
+  "gold_rush_king",
+  "olympic_champion",
+  "rogue_ai_overlord",
+  "loop_breaker",
+  "crypto_whale",
+  "ipo_subscriber",
+  "rate_surfer",
+  "tax_evader",
+  "tax_audited",
+  "hostile_takeover",
+  "quantum_trader_pro",
+  "memory_broker_pro",
+  "drone_king_pro",
+  "smuggler_pro",
+  "oracle_pro",
+  "ai_whisperer_pro",
+  "auditor_pro",
+  "negotiator_pro",
+  "architect_pro",
+  "forensic_hacker_pro",
+  "black_swan_survivor",
+  "ubi_recipient",
 ];
 
 // ========== 道具配置 ==========
@@ -1967,45 +2346,45 @@ export const ACHIEVEMENT_IDS: AchievementId[] = [
 export const ITEMS: Record<ItemType, ItemConfig> = {
   double_dice: {
     type: "double_dice",
-    name: "双倍骰",
-    description: "下次掷骰时，两个骰子都为最大值6",
+    name: "雙倍骰",
+    description: "下次擲骰時，兩個骰子都為最大值6",
     price: 1500,
     icon: "骰子",
   },
   teleport: {
     type: "teleport",
-    name: "传送卡",
-    description: "传送到指定地块，不触发落地事件",
+    name: "傳送卡",
+    description: "傳送到指定地塊，不觸發落地事件",
     price: 2000,
     icon: "星光",
   },
   steal_property: {
     type: "steal_property",
-    name: "掠夺卡",
-    description: "偷取对手一块地价不超过2000的无建筑地产",
+    name: "掠奪卡",
+    description: "偷取對手一塊地價不超過2000的無建築地產",
     price: 3000,
     icon: "卡牌",
   },
   shield: {
     type: "shield",
-    name: "护盾",
-    description: "抵挡接下来3次过路费",
+    name: "護盾",
+    description: "抵擋接下來3次過路費",
     price: 1200,
     icon: "護盾",
   },
   free_pass: {
     type: "free_pass",
-    name: "免费过路卡",
-    description: "接下来1次踩对手地块免过路费",
+    name: "免費過路卡",
+    description: "接下來1次踩對手地塊免過路費",
     price: 2500,
     icon: "門票",
   },
   remote_dice: {
     type: "remote_dice",
-    name: "遥控骰子",
-    description: "下一次掷骰子时，可以自己选择两个骰子的点数（2-12之间任意组合）",
+    name: "遙控骰子",
+    description: "下一次擲骰子時，可以自己選擇兩個骰子的點數（2-12之間任意組合）",
     price: 1000,
-    icon: "控制台",
+    icon: "控制檯",
   },
   bomb: {
     type: "bomb",
@@ -2038,7 +2417,7 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
   x_ray: {
     type: "x_ray",
     name: "透視鏡",
-    description: "查看下一張命運/機會卡",
+    description: "檢視下一張命運/機會卡",
     price: 800,
     icon: "水晶球",
   },
@@ -2052,7 +2431,7 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
   time_travel: {
     type: "time_travel",
     name: "時間旅行",
-    description: "回到上回合的位置與金錢狀態（地產變化保留），每局限用1次",
+    description: "回到上回合的位置與金錢狀態（地產變化保留），每侷限用1次",
     price: 5000,
     icon: "漩渦",
   },
@@ -2121,7 +2500,7 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
   },
   data_courier: {
     type: "data_courier",
-    name: "數據快遞",
+    name: "資料快遞",
     description: "立即從銀行獲得 500 元現金",
     price: 400,
     icon: "快遞",
@@ -2156,7 +2535,7 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
   },
   data_backup: {
     type: "data_backup",
-    name: "數據備份",
+    name: "資料備份",
     description: "自動抵消下一次負面金錢效果（一次性護盾）",
     price: 1500,
     icon: "備份",
@@ -2200,7 +2579,7 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
   cash_injection: {
     type: "cash_injection",
     name: "現金注入",
-    description: "銀行紧急注資，立即獲得 1500 元",
+    description: "銀行緊急注資，立即獲得 1500 元",
     price: 1200,
     icon: "鈔票",
   },
@@ -2260,6 +2639,105 @@ export const ITEMS: Record<ItemType, ItemConfig> = {
     price: 1500,
     icon: "醫療",
   },
+  // ===== v4.0 新增道具 =====
+  quantum_safe: {
+    type: "quantum_safe",
+    name: "量子保險箱",
+    description: "將 2000 元存入保險箱，免於任何金錢損失（破產時仍可取出）",
+    price: 1800,
+    icon: "保險箱",
+  },
+  causality_rewind: {
+    type: "causality_rewind",
+    name: "因果逆轉",
+    description: "回到上一個回合開始的位置（不影響金錢與地產）",
+    price: 3200,
+    icon: "逆轉",
+  },
+  decoy_hologram: {
+    type: "decoy_hologram",
+    name: "幻影分身",
+    description: "部署分身，下三次過路費由分身代付",
+    price: 2400,
+    icon: "分身",
+  },
+  patent_trap: {
+    type: "patent_trap",
+    name: "專利地雷",
+    description: "在自己隨機一塊地佈雷，對手踩中額外付出 800 元授權費",
+    price: 2000,
+    icon: "地雷",
+  },
+  orbital_strike: {
+    type: "orbital_strike",
+    name: "軌道轟炸",
+    description: "軌道武器打擊指定對手，使其損失 1500 元現金",
+    price: 3000,
+    icon: "衛星",
+  },
+  digital_will: {
+    type: "digital_will",
+    name: "數位遺囑",
+    description: "預立遺囑：若破產，將 30% 剩餘資產轉移給隨機一名盟友",
+    price: 1500,
+    icon: "遺囑",
+  },
+  takeover_bid: {
+    type: "takeover_bid",
+    name: "收購要約",
+    description: "發起敵意收購，買進 10 股隨機股票（若達門檻取得控制權）",
+    price: 4000,
+    icon: "收購",
+  },
+  debt_restructure: {
+    type: "debt_restructure",
+    name: "債務重組",
+    description: "免除當前所有貸款利息，並將本金延後 5 回合償還",
+    price: 2200,
+    icon: "重組",
+  },
+  black_swan: {
+    type: "black_swan",
+    name: "黑天鵝",
+    description: "製造黑天鵝事件：隨機一名對手現金 -2500 元",
+    price: 3500,
+    icon: "黑天鵝",
+  },
+  tax_haven: {
+    type: "tax_haven",
+    name: "避稅天堂",
+    description: "將 1500 元移入避稅天堂，永久免稅（不計入破產清算）",
+    price: 2000,
+    icon: "棕櫚",
+  },
+  insider_tip: {
+    type: "insider_tip",
+    name: "內線訊息",
+    description: "獲得內線訊息：下次股票買入價格 8 折",
+    price: 1600,
+    icon: "訊息",
+  },
+  mirror_card: {
+    type: "mirror_card",
+    name: "映象卡",
+    description: "映象複製上一張你抽到的命運/機會卡效果",
+    price: 2800,
+    icon: "鏡子",
+  },
+  nano_swarm: {
+    type: "nano_swarm",
+    name: "奈米蜂群",
+    description: "釋放蜂群：未來 3 回合每回合從隨機對手處吸取 200 元",
+    price: 2600,
+    icon: "蜂群",
+  },
+  forged_passport: {
+    type: "forged_passport",
+    name: "偽造護照",
+    description: "偽造身份：下次進入監禁時自動釋放，且不被罰款",
+    price: 1400,
+    icon: "護照",
+  },
 };
 
 export const ITEM_TYPES: ItemType[] = [
@@ -2306,6 +2784,21 @@ export const ITEM_TYPES: ItemType[] = [
   "loot_drone",
   "warp_token",
   "heal_synth",
+  // v4.0 新增道具
+  "quantum_safe",
+  "causality_rewind",
+  "decoy_hologram",
+  "patent_trap",
+  "orbital_strike",
+  "digital_will",
+  "takeover_bid",
+  "debt_restructure",
+  "black_swan",
+  "tax_haven",
+  "insider_tip",
+  "mirror_card",
+  "nano_swarm",
+  "forged_passport",
 ];
 
 export const BAIL_AMOUNT = 500;
@@ -2335,7 +2828,7 @@ export const PROPERTY_UPGRADE_PATHS: Record<PropertyUpgradePath, PropertyUpgrade
   tech: {
     id: 'tech',
     name: '科技路線',
-    description: '數據感染，過路費中等提升，停留的對手有概率被感染跳過下回合',
+    description: '資料感染，過路費中等提升，停留的對手有機率被感染跳過下回合',
     color: 'hsl(270, 80%, 60%)',
     tollBonus: 0.3,
     buildingCostMultiplier: 1.0,
@@ -2379,7 +2872,7 @@ export const NPC_CONFIG: Record<NpcType, { name: string; description: string; ic
   },
   hacker: {
     name: '駭客',
-    description: '花 $1000 偷取對手情報（查看資產/現金）',
+    description: '花 $1000 偷取對手情報（檢視資產/現金）',
     icon: 'UserSearch',
   },
 };
@@ -2417,48 +2910,48 @@ export const DISASTERS: Record<DisasterType, {
 };
 
 export const DISASTER_INTERVAL = 10;  // 每10回合判定一次
-export const DISASTER_PROBABILITY = 0.1;  // 10% 概率
+export const DISASTER_PROBABILITY = 0.1;  // 10% 機率
 
 export const DISASTER_TYPES: DisasterType[] = ['earthquake', 'fire', 'flood'];
 
-// ========== 天气配置 ==========
+// ========== 天氣配置 ==========
 
 export const WEATHERS: Record<WeatherType, WeatherConfig> = {
   sunny: {
     type: "sunny",
     name: "晴天",
     icon: "晴天",
-    description: "阳光明媚，起点奖励+20%",
+    description: "陽光明媚，起點獎勵+20%",
   },
   rain: {
     type: "rain",
     name: "暴雨",
     icon: "暴雨",
-    description: "暴雨倾盆，所有过路费×1.3",
+    description: "暴雨傾盆，所有過路費×1.3",
   },
   fog: {
     type: "fog",
-    name: "雾霾",
+    name: "霧霾",
     icon: "濃霧",
-    description: "能见度低，移动步数-1（最低1步）",
+    description: "能見度低，移動步數-1（最低1步）",
   },
   em_storm: {
     type: "em_storm",
-    name: "电磁风暴",
+    name: "電磁風暴",
     icon: "閃電",
-    description: "电磁干扰，命运/机会卡金钱效果×2，移动效果翻倍",
+    description: "電磁幹擾，命運/機會卡金錢效果×2，移動效果翻倍",
   },
   neon_night: {
     type: "neon_night",
     name: "霓虹夜",
     icon: "星夜",
-    description: "夜色璀璨，买地/建房打8折",
+    description: "夜色璀璨，買地/建房打8折",
   },
   space_calm: {
     type: "space_calm",
-    name: "太空宁静",
+    name: "太空寧靜",
     icon: "星光",
-    description: "无特殊效果，所有玩家每回合恢复100元",
+    description: "無特殊效果，所有玩家每回合恢復100元",
   },
 };
 
@@ -2480,7 +2973,7 @@ export const WEATHER_WEIGHTS: Record<WeatherType, number> = {
   space_calm: 10,
 };
 
-// ========== 迷你游戏配置 ==========
+// ========== 迷你遊戲配置 ==========
 
 export const MINIGAME_TYPES: MiniGameType[] = [
   "slot_machine",
@@ -2496,23 +2989,23 @@ export const MINIGAME_TYPES: MiniGameType[] = [
 ];
 
 export const MINIGAME_NAMES: Record<MiniGameType, string> = {
-  slot_machine: "霓虹老虎机",
-  blackjack: "赛博21点",
+  slot_machine: "霓虹老虎機",
+  blackjack: "賽博21點",
   guess_number: "猜大小",
   memory_match: "記憶翻牌",
   rhythm_master: "節奏大師",
   shooting_challenge: "射擊挑戰",
-  data_miner: "數據挖掘",
+  data_miner: "資料探勘",
   firewall_breach: "防火牆突破",
   cyber_racer: "賽博賽車",
   auction_master: "拍賣大師",
 };
 
-// ========== 合作模式队伍配置 ==========
+// ========== 合作模式隊伍配置 ==========
 
 export const TEAM_CONFIGS: Record<TeamId, { name: string; color: string }> = {
-  red: { name: '红队', color: '#ff4757' },
-  blue: { name: '蓝队', color: '#3742fa' },
+  red: { name: '紅隊', color: '#ff4757' },
+  blue: { name: '藍隊', color: '#3742fa' },
 };
 
 export const COOP_TEAM_ASSIGNMENT: Record<number, TeamId> = {
@@ -2522,7 +3015,7 @@ export const COOP_TEAM_ASSIGNMENT: Record<number, TeamId> = {
   3: 'blue',
 };
 
-// ========== 大逃杀模式配置 ==========
+// ========== 大逃殺模式配置 ==========
 
 export const BOARD_SIDES: Record<BoardSide, number[]> = {
   bottom: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -2536,24 +3029,24 @@ export const BATTLE_ROYALE_FINAL_BATTLE_CELLS = 4;
 export const BATTLE_ROYALE_POISON_DAMAGE = 500;
 export const BATTLE_ROYALE_TOLL_MULTIPLIER = 2;
 
-// ========== 贷款系统配置 ==========
+// ========== 貸款系統配置 ==========
 
-export const LOAN_MAX = 5000;      // 贷款上限
+export const LOAN_MAX = 5000;      // 貸款上限
 export const LOAN_INTEREST_RATE = 0.05; // 每回合利息率5%
 export const SAVINGS_INTEREST_RATE = 0.02; // 存款每回合利息率2%
 
-// ========== 通货膨胀系统配置 ==========
+// ========== 通貨膨脹系統配置 ==========
 
 export const INFLATION_INITIAL_RATE = 1.0;
-export const INFLATION_INTERVAL = 10;  // 每10回合涨一次
-export const INFLATION_STEP = 0.1;     // 每次涨10%
+export const INFLATION_INTERVAL = 10;  // 每10回合漲一次
+export const INFLATION_STEP = 0.1;     // 每次漲10%
 export const INFLATION_MAX = 3.0;      // 通脹上限 300%
 
-// ========== 保险系统配置 ==========
+// ========== 保險系統配置 ==========
 
-export const INSURANCE_RATE = 0.05; // 保费率 = 地价的 5%
+export const INSURANCE_RATE = 0.05; // 保費率 = 地價的 5%
 
-// ========== 债券系统配置 ==========
+// ========== 債券系統配置 ==========
 
 export const BOND_MIN_AMOUNT = 1000;
 export const BOND_MAX_AMOUNT = 5000;
@@ -2562,7 +3055,7 @@ export const BOND_MAX_INTEREST = 0.30;
 export const BOND_MIN_TURNS = 5;
 export const BOND_MAX_TURNS = 20;
 
-// ========== 每日挑战配置 ==========
+// ========== 每日挑戰配置 ==========
 
 export const DAILY_CHALLENGES: DailyChallenge[] = [
   {
@@ -2576,7 +3069,7 @@ export const DAILY_CHALLENGES: DailyChallenge[] = [
   {
     id: 'double_move',
     type: 'double_move',
-    name: '疾風奔馳',
+    name: '疾風賓士',
     description: '擲骰點數翻倍，節奏超快',
     rules: ['擲骰點數 × 2', '其他規則同經典模式'],
     reward: { exp: 100, coins: 500 },
@@ -2628,7 +3121,7 @@ export const DAILY_CHALLENGES: DailyChallenge[] = [
 export const BATTLE_PASS_EXP_PER_LEVEL = 100;
 export const BATTLE_PASS_MAX_LEVEL = 50;
 
-// ========== 技能树系统 ==========
+// ========== 技能樹系統 ==========
 
 export const SKILL_IDS: SkillId[] = [
   'buy_discount',
@@ -2667,25 +3160,25 @@ export const SKILLS: Record<SkillId, SkillConfig> = {
   lucky_draw: {
     id: 'lucky_draw',
     name: '抽卡幸運',
-    description: '抽取命運/機會卡時有概率重抽，取較好結果',
+    description: '抽取命運/機會卡時有機率重抽，取較好結果',
     icon: 'Sparkles',
     maxLevel: 3,
     effects: [
-      { level: 1, value: 0.10, description: '重抽概率 10%' },
-      { level: 2, value: 0.20, description: '重抽概率 20%' },
-      { level: 3, value: 0.30, description: '重抽概率 30%' },
+      { level: 1, value: 0.10, description: '重抽機率 10%' },
+      { level: 2, value: 0.20, description: '重抽機率 20%' },
+      { level: 3, value: 0.30, description: '重抽機率 30%' },
     ],
   },
   jail_master: {
     id: 'jail_master',
     name: '越獄大師',
-    description: '進入監獄時有概率直接越獄',
+    description: '進入監獄時有機率直接越獄',
     icon: 'ShieldAlert',
     maxLevel: 3,
     effects: [
-      { level: 1, value: 0.15, description: '越獄概率 15%' },
-      { level: 2, value: 0.30, description: '越獄概率 30%' },
-      { level: 3, value: 0.50, description: '越獄概率 50%' },
+      { level: 1, value: 0.15, description: '越獄機率 15%' },
+      { level: 2, value: 0.30, description: '越獄機率 30%' },
+      { level: 3, value: 0.50, description: '越獄機率 50%' },
     ],
   },
   build_master: {
@@ -2832,7 +3325,7 @@ function generateBattlePassRewards(): BattlePassReward[] {
     },
     {
       level: 25,
-      free: { type: 'ticket', value: 'premium_ticket', name: '高級抽獎券 x3', amount: 3, rarity: 'rare' },
+      free: { type: 'ticket', value: 'premium_ticket', name: '高階抽獎券 x3', amount: 3, rarity: 'rare' },
       premium: { type: 'profession', value: 'cyber_hacker', name: '職業解鎖：駭客', rarity: 'epic' },
     },
     {
@@ -2909,7 +3402,7 @@ export const STORY_LEVELS: StoryLevelConfig[] = [
   { id: 2, name: '街頭爭霸', description: '小規模地產爭奪戰', difficulty: 'easy', startingMoney: 18000, aiCount: 1, aiAggression: 0.5, reward: '街頭霸主', gameMode: 'classic' },
   { id: 3, name: '資本對決', description: '資本實力的較量', difficulty: 'normal', startingMoney: 25000, aiCount: 1, aiAggression: 0.6, reward: '資本家', gameMode: 'classic' },
   { id: 4, name: '命運輪盤', description: '命運卡效果翻倍', difficulty: 'normal', startingMoney: 15000, aiCount: 1, aiAggression: 0.5, specialRule: '命運卡金錢倍率×2', reward: '命運之子', gameMode: 'crazy' },
-  { id: 5, name: '職業限制', description: '只能購買特定類型地產', difficulty: 'hard', startingMoney: 20000, aiCount: 2, aiAggression: 0.7, specialRule: '每個玩家只能買3種顏色套裝', reward: '職業玩家', gameMode: 'classic' },
+  { id: 5, name: '職業限制', description: '只能購買特定型別地產', difficulty: 'hard', startingMoney: 20000, aiCount: 2, aiAggression: 0.7, specialRule: '每個玩家只能買3種顏色套裝', reward: '職業玩家', gameMode: 'classic' },
   { id: 6, name: '地產大亨', description: '瘋狂建房，爭奪地產帝國', difficulty: 'hard', startingMoney: 30000, aiCount: 2, aiAggression: 0.8, specialRule: '建房成本-50%', reward: '地產大亨', gameMode: 'classic' },
   { id: 7, name: '大逃殺', description: '資源緊張，只有最後一人存活', difficulty: 'hard', startingMoney: 10000, aiCount: 3, aiAggression: 0.9, reward: '大逃殺冠軍', gameMode: 'battle_royale' },
   { id: 8, name: '經濟危機', description: '高通脹，物價飛漲', difficulty: 'extreme', startingMoney: 50000, aiCount: 2, aiAggression: 0.8, specialRule: '物價每回合+5%', reward: '危機倖存者', gameMode: 'crazy' },
@@ -2969,7 +3462,7 @@ export const DICE_SKINS: Record<DiceSkinType, SkinConfig> = {
   default: { id: 'default', name: '預設骰子', type: 'dice', unlockCondition: '初始擁有', rarity: 'common' },
   gold: { id: 'gold', name: '黃金骰子', type: 'dice', unlockCondition: '累計獲勝20場', rarity: 'rare' },
   neon: { id: 'neon', name: '霓虹骰子', type: 'dice', unlockCondition: '通關劇情模式第3關', rarity: 'epic' },
-  pixel: { id: 'pixel', name: '像素骰子', type: 'dice', unlockCondition: '擁有所有棋子皮膚', rarity: 'legendary' },
+  pixel: { id: 'pixel', name: '畫素骰子', type: 'dice', unlockCondition: '擁有所有棋子皮膚', rarity: 'legendary' },
   blood: { id: 'blood', name: '赤紅骰子', type: 'dice', unlockCondition: '解鎖成就「賭城豪客」', rarity: 'epic' },
   cosmic: { id: 'cosmic', name: '星際骰子', type: 'dice', unlockCondition: '觸發量子風暴事件', rarity: 'legendary' },
 };
@@ -3007,7 +3500,7 @@ export const PETS: Record<PetType, PetConfig> = {
   neon_cat: {
     id: 'neon_cat',
     name: '霓虹貓',
-    description: '每回合開始 20% 概率撿到 200 元',
+    description: '每回合開始 20% 機率撿到 200 元',
     passiveEffect: 'coin_find_200',
     color: '#f472b6',
     rarity: 'rare',
@@ -3016,7 +3509,7 @@ export const PETS: Record<PetType, PetConfig> = {
   ghost_hacker: {
     id: 'ghost_hacker',
     name: '鬼魂駭客',
-    description: '被罰款時 15% 概率無效（信用卡款）',
+    description: '被罰款時 15% 機率無效（信用卡款）',
     passiveEffect: 'fine_immunity_15pct',
     color: '#818cf8',
     rarity: 'epic',
@@ -3026,7 +3519,7 @@ export const PETS: Record<PetType, PetConfig> = {
   cyber_bunny: {
     id: 'cyber_bunny',
     name: '賽博兔',
-    description: '每回合開始 25% 概率撿到 200 元',
+    description: '每回合開始 25% 機率撿到 200 元',
     passiveEffect: 'coin_find_200',
     color: '#fde047',
     rarity: 'rare',
@@ -3364,7 +3857,7 @@ export const AVATAR_FRAMES: AvatarFrameConfig[] = [
   },
   {
     id: 'pixel',
-    name: '像素復古',
+    name: '畫素復古',
     rarity: 'rare',
     color: '#84cc16',
     unlockType: 'all_pawn_skins',

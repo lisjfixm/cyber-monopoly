@@ -51,7 +51,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({
 
   return (
     <div className="relative">
-      {/* 主按钮 + 展开触发器 */}
+      {/* 主按鈕 + 展開觸發器 */}
       <div className="flex items-center gap-0.5">
         <button
           type="button"
@@ -99,7 +99,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({
         </button>
       </div>
 
-      {/* 展开面板 */}
+      {/* 展開面板 */}
       {isExpanded && (
         <div
           className="absolute top-full right-0 mt-2 w-64 z-50 cyber-card border-neon-cyan p-3 space-y-3"

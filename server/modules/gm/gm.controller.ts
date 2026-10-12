@@ -25,7 +25,7 @@ import type {
 export class GmController {
   constructor(private readonly gmService: GmService) {}
 
-  // ====== 登录 ======
+  // ====== 登入 ======
 
   @Post('login')
   async login(
@@ -34,7 +34,7 @@ export class GmController {
     return this.gmService.login(dto.password);
   }
 
-  // ====== 用户管理 ======
+  // ====== 使用者管理 ======
 
   @UseGuards(GmAuthGuard)
   @Get('users')
@@ -91,7 +91,7 @@ export class GmController {
     return this.gmService.grantTitleOrFrame(id, dto);
   }
 
-  // GM 儀表板總覽
+  // GM 儀錶板總覽
   @UseGuards(GmAuthGuard)
   @Get('dashboard')
   async getDashboard(): Promise<Record<string, number | string>> {
@@ -135,7 +135,7 @@ export class GmController {
     return this.gmService.deleteAnnouncement(id);
   }
 
-  // ====== 活动管理 ======
+  // ====== 活動管理 ======
 
   @UseGuards(GmAuthGuard)
   @Get('events')
@@ -184,7 +184,7 @@ export class GmController {
     return this.gmService.deleteEvent(id);
   }
 
-  // ====== 在线用户 ======
+  // ====== 線上使用者 ======
 
   @UseGuards(GmAuthGuard)
   @Get('online-users')

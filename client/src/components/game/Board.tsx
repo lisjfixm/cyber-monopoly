@@ -36,7 +36,7 @@ function getCellRotation(id: number): number {
   return -90;
 }
 
-// ===== 棋子渲染組件（memo 優化） =====
+// ===== 棋子渲染元件（memo 最佳化） =====
 interface PlayerTokenProps {
   player: PlayerState;
   currentPlayerIndex: number;
@@ -128,7 +128,7 @@ const PlayerToken: FC<PlayerTokenProps> = memo(({ player, currentPlayerIndex, co
   );
 });
 
-// ===== 棋盤格子組件（memo 優化，避免無關 state 變化導致整盤重渲染） =====
+// ===== 棋盤格子元件（memo 最佳化，避免無關 state 變化導致整盤重渲染） =====
 interface BoardCellProps {
   cell: CellConfig;
   resolvedCell: CellConfig;
@@ -886,7 +886,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
     };
   }, [tokenAnim, onJumpLand]);
 
-  // 計算動畫中棋子的像素位置（用於獨立渲染層）
+  // 計算動畫中棋子的畫素位置（用於獨立渲染層）
   const jumpingPawnStyle = useMemo(() => {
     if (!tokenAnim) return null;
     const cellId = tokenAnim.path[tokenAnim.step];
@@ -966,7 +966,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
       ref.pinchMidY = (touches[0].clientY + touches[1].clientY) / 2;
       ref.startOffsetX = offsetX;
       ref.startOffsetY = offsetY;
-      ref.moved = true; // 雙指不當點擊
+      ref.moved = true; // 雙指不當點選
       ref.isGesturing = true;
     }
   }, [offsetX, offsetY, scale]);
@@ -987,7 +987,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
       if (scale > 1) {
         const boardWidth = boardRef.current?.offsetWidth ?? 0;
         const boardHeight = boardRef.current?.offsetHeight ?? 0;
-        // 將像素位移轉換為百分比（相對於棋盤大小）
+        // 將畫素位移轉換為百分比（相對於棋盤大小）
         const dxPercent = boardWidth > 0 ? (dx / boardWidth) * 100 : 0;
         const dyPercent = boardHeight > 0 ? (dy / boardHeight) * 100 : 0;
 
@@ -1037,7 +1037,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
       setOffsetY(0);
     }
 
-    // 單指輕觸（未移動）當作點擊 — 手動觸發以避免 touch-action:none 的 click 延遲/失效
+    // 單指輕觸（未移動）當作點選 — 手動觸發以避免 touch-action:none 的 click 延遲/失效
     if (
       !ref.moved &&
       e.changedTouches.length === 1 &&
@@ -1093,7 +1093,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
     return map;
   }, [players]);
 
-  // ===== #16 地產鏈×3 可視化：計算已齊全套裝 =====
+  // ===== #16 地產鏈×3 視覺化：計算已齊全套裝 =====
   const completedSets = useMemo(() => {
     const set = new Set<string>();
     for (const s of SETS) {
@@ -1475,7 +1475,7 @@ const Board: FC<BoardProps> = ({ gameState, onCellClick, targetMode = null, targ
                 transformStyle: 'preserve-3d',
               }}
             >
-              {/* 拖尾残影：三層延遲漸變 */}
+              {/* 拖尾殘影：三層延遲漸變 */}
               <div
                 className="absolute inset-0 rounded-full"
                 style={{

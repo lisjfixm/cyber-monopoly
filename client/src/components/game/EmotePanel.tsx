@@ -34,7 +34,7 @@ const EmotePanel: React.FC<EmotePanelProps> = ({ currentPlayerIndex = 0 }) => {
   const handleEmoteClick = useCallback((emote: EmoteItem) => {
     setIsOpen(false);
     const newId = (idCounterRef.current += 1);
-    // 從底部中間偏玩家方向飄出，簡化處理不做像素級對齊
+    // 從底部中間偏玩家方向飄出，簡化處理不做畫素級對齊
     const baseX = 50;
     const offset = (currentPlayerIndex % 2 === 0 ? -1 : 1) * 8;
     const randomJitter = (Math.random() - 0.5) * 20;

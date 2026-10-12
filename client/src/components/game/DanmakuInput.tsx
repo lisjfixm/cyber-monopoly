@@ -25,7 +25,7 @@ const NEON_COLORS: string[] = [
 const DanmakuInput: React.FC<DanmakuInputProps> = ({
   onSend,
   disabled = false,
-  placeholder = '發送彈幕...',
+  placeholder = '傳送彈幕...',
   selectedColor,
   onColorChange,
 }) => {
@@ -45,7 +45,7 @@ const DanmakuInput: React.FC<DanmakuInputProps> = ({
       setValue('');
       setShowColorPicker(false);
     } catch (err) {
-      logger.error('發送彈幕失敗', { error: String(err) });
+      logger.error('傳送彈幕失敗', { error: String(err) });
     }
   };
 
@@ -137,7 +137,7 @@ const DanmakuInput: React.FC<DanmakuInputProps> = ({
         }
         onKeyDown={handleKeyDown}
         maxLength={DANMAKU_MAX_LENGTH}
-        placeholder={disabled ? '無法發送彈幕' : placeholder}
+        placeholder={disabled ? '無法傳送彈幕' : placeholder}
         disabled={disabled}
         className="cyber-input flex-1 text-sm"
         style={{ height: '32px' }}
@@ -165,7 +165,7 @@ const DanmakuInput: React.FC<DanmakuInputProps> = ({
             : 'none',
           cursor: disabled ? 'not-allowed' : 'pointer',
         }}
-        aria-label="發送彈幕"
+        aria-label="傳送彈幕"
       >
         <Send className="w-3.5 h-3.5" />
       </button>

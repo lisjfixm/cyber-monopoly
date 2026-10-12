@@ -16,7 +16,7 @@ const PropertyPanel: FC<PropertyPanelProps> = ({ cell, onUpdate, onApplyToSameCo
       <div className="cyber-card p-3 md:p-4 h-full flex items-center justify-center">
         <div className="text-center text-[var(--text-secondary)]">
           <p className="font-cyber tracking-wider text-sm mb-1">未選中格子</p>
-          <p className="text-xs">點擊棋盤上的格子以編輯屬性</p>
+          <p className="text-xs">點選棋盤上的格子以編輯屬性</p>
         </div>
       </div>
     );
@@ -35,7 +35,7 @@ const PropertyPanel: FC<PropertyPanelProps> = ({ cell, onUpdate, onApplyToSameCo
 
       {/* Type display */}
       <div className="text-xs text-[var(--text-secondary)] font-cyber tracking-wider">
-        類型：
+        型別：
         <span className="text-neon-cyan ml-1">
           {cell.type === 'start' && '起點'}
           {cell.type === 'property' && '地產'}
@@ -202,7 +202,7 @@ const PropertyPanel: FC<PropertyPanelProps> = ({ cell, onUpdate, onApplyToSameCo
         <div className="text-[10px] text-[var(--text-muted)] font-cyber space-y-0.5">
           <p>ID：{cell.id}</p>
           <p>位置：{cell.id >= 0 && cell.id <= 9 ? '底邊' : cell.id >= 10 && cell.id <= 18 ? '右邊' : cell.id >= 19 && cell.id <= 27 ? '頂邊' : '左邊'}</p>
-          <p>類型：{cell.type}</p>
+          <p>型別：{cell.type}</p>
           {isProperty && cell.setId && <p>套裝：{cell.setId}</p>}
           {allCells && isProperty && cell.setId && (
             <p>

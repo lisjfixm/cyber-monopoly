@@ -18,7 +18,7 @@ interface UseAutoReplayOptions {
 /**
  * 自動錄制回放 hook
  * 監聽 gameState 變化，自動記錄關鍵事件到 replayLog
- * 遊戲結束時自動保存到 localStorage（最多 MAX_REPLAYS 局）
+ * 遊戲結束時自動儲存到 localStorage（最多 MAX_REPLAYS 局）
  */
 export function useAutoReplay({
   gameState,
@@ -75,7 +75,7 @@ export function useAutoReplay({
     [],
   );
 
-  // 添加日誌條目
+  // 新增日誌條目
   const addEntry = useCallback(
     (
       turn: number,
@@ -97,7 +97,7 @@ export function useAutoReplay({
     [],
   );
 
-  // 保存回放
+  // 儲存回放
   const saveReplay = useCallback(
     (finalState: GameState) => {
       if (savedRef.current) return;
@@ -130,10 +130,10 @@ export function useAutoReplay({
         const updated = [replay, ...existing].slice(0, MAX_REPLAYS);
         saveReplays(updated);
         savedRef.current = true;
-        logger.info(`回放已自動保存，共 ${replay.log.length} 條記錄`);
+        logger.info(`回放已自動儲存，共 ${replay.log.length} 條記錄`);
       } catch (err) {
         logger.error(
-          '自動保存回放失敗:',
+          '自動儲存回放失敗:',
           err instanceof Error ? err.message : String(err),
         );
       }
@@ -313,7 +313,7 @@ export function useAutoReplay({
         gameState, // 最終狀態快照
       );
 
-      // 保存到 localStorage
+      // 儲存到 localStorage
       saveReplay(gameState);
     }
 
@@ -329,10 +329,10 @@ export function useAutoReplay({
     saveReplay,
   ]);
 
-  // 組件卸載或遊戲重置時清理
+  // 元件解除安裝或遊戲重置時清理
   useEffect(() => {
     return () => {
-      // 頁面離開時，如果遊戲已結束但沒保存，這裡不強制保存（避免中途退出產生殘缺回放）
+      // 頁面離開時，如果遊戲已結束但沒儲存，這裡不強制儲存（避免中途退出產生殘缺回放）
     };
   }, []);
 

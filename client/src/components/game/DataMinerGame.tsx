@@ -173,10 +173,10 @@ const DataMinerGame: FC<DataMinerGameProps> = ({
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
             <Database className="w-12 h-12" style={{ color: 'var(--cyan)' }} />
             <div className="font-cyber text-lg tracking-wider" style={{ color: 'var(--text-primary)' }}>
-              數據挖掘
+              資料探勘
             </div>
             <div className="text-xs text-center px-4" style={{ color: 'var(--text-secondary)' }}>
-              點擊數據塊挖取資料<br />
+              點選資料塊挖取資料<br />
               連擊越多，得分越高
             </div>
             <button

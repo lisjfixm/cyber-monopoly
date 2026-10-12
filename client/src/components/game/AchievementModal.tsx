@@ -217,7 +217,7 @@ const AchievementModal: FC<AchievementModalProps> = ({
         <div className="px-4 md:px-5 py-3 border-b" style={{ borderColor: 'hsla(45, 100%, 60%, 0.3)' }}>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs md:text-sm font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-              解锁进度
+              解鎖進度
             </span>
             <span
               className="font-cyber text-base md:text-lg tracking-wider"

@@ -38,6 +38,9 @@ import {
   BadgePercent,
   Rocket,
   HeartPulse,
+  Lock,
+  AlertTriangle,
+  Wallet,
 } from 'lucide-react';
 import { ITEMS, ITEM_TYPES, MAX_ITEMS } from '@shared/game-config';
 import type { GameState, ItemState, ItemType, PlayerState } from '@shared/api.interface';
@@ -49,7 +52,7 @@ interface ItemBarProps {
   gameState: GameState;
 }
 
-// 使用 Partial 容納引擎後續新增的道具類型（未知道具以 Package 兜底）
+// 使用 Partial 容納引擎後續新增的道具型別（未知道具以 Package 兜底）
 const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   double_dice: Dices,
   teleport: Sparkles,
@@ -94,9 +97,24 @@ const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   loot_drone: Satellite,
   warp_token: Rocket,
   heal_synth: HeartPulse,
+  // v4.0 新道具
+  quantum_safe: Lock,
+  causality_rewind: RotateCcw,
+  decoy_hologram: Ghost,
+  patent_trap: Bomb,
+  orbital_strike: Rocket,
+  digital_will: FileText,
+  takeover_bid: Coins,
+  debt_restructure: Banknote,
+  black_swan: AlertTriangle,
+  tax_haven: Wallet,
+  insider_tip: Eye,
+  mirror_card: Repeat,
+  nano_swarm: Bug,
+  forged_passport: IdCard,
 };
 
-// 取得道具圖標（未知類型兜底 Package）
+// 取得道具圖示（未知型別兜底 Package）
 function getItemIcon(type: ItemType): typeof Shield {
   return ITEM_ICON_COMPONENTS[type] ?? Package;
 }
@@ -143,14 +161,14 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
     setPendingRemoteItemId(null);
   }, []));
 
-  // 按类型聚合并计数
+  // 按型別聚合並計數
   const aggregated = aggregateItems(items);
   const clickable = isCurrentPlayer && gameState.phase === 'rolling' && gameState.winner === null;
 
   const handleItemClick = (agg: AggregatedItem) => {
     if (!clickable) return;
     if (usingRef.current) return;
-    // 找到第一个可用的该类型道具
+    // 找到第一個可用的該型別道具
     const firstItem = items.find((it) => it.type === agg.type);
     if (!firstItem) return;
     setConfirmItem(firstItem);
@@ -162,14 +180,14 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
     usingRef.current = true;
     const itemType = confirmItem.type;
 
-    // 传送卡、偷地卡和炸彈需要选择目标
+    // 傳送卡、偷地卡和炸彈需要選擇目標
     if (itemType === 'teleport' || itemType === 'steal_property' || itemType === 'bomb' || itemType === 'land_bomb') {
       const result = onUseItem(confirmItem.id);
       if (result === 'target_needed') {
-        // 父组件会进入选目标模式
+        // 父元件會進入選目標模式
       }
     } else if (itemType === 'remote_dice') {
-      // 遥控骰子需要选择点数
+      // 遙控骰子需要選擇點數
       setPendingRemoteItemId(confirmItem.id);
       setDice1(3);
       setDice2(3);
@@ -203,14 +221,14 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
     <div className="w-full">
       <div className="flex items-center justify-between mb-2">
         <span className="text-[10px] md:text-xs font-cyber tracking-wider text-[var(--text-secondary)]">
-          道具栏
+          道具欄
         </span>
         <span className="text-[10px] font-cyber text-[var(--text-muted)]">
           {items.length}/{MAX_ITEMS}
         </span>
       </div>
 
-      {/* 激活状态标记 */}
+      {/* 啟用狀態標記 */}
       <div className="flex flex-wrap gap-1.5 mb-2">
         {player.shieldCharges > 0 && (
           <div
@@ -223,10 +241,10 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, var(--cyan) 40%, transparent), inset 0 0 4px color-mix(in srgb, var(--cyan) 20%, transparent)',
               textShadow: '0 0 4px var(--cyan-glow)',
             }}
-            title={`护盾剩余 ${player.shieldCharges} 次`}
+            title={`護盾剩餘 ${player.shieldCharges} 次`}
           >
             <Shield className="w-3 h-3" />
-            护盾 x{player.shieldCharges}
+            護盾 x{player.shieldCharges}
           </div>
         )}
         {player.doubleDiceActive && (
@@ -240,10 +258,10 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, var(--yellow) 40%, transparent), inset 0 0 4px color-mix(in srgb, var(--yellow) 20%, transparent)',
               textShadow: '0 0 4px var(--yellow)',
             }}
-            title="双倍骰已激活"
+            title="雙倍骰已啟用"
           >
             <Dices className="w-3 h-3" />
-            双倍骰
+            雙倍骰
           </div>
         )}
         {player.remoteDiceActive && (
@@ -257,10 +275,10 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, var(--purple) 40%, transparent), inset 0 0 4px color-mix(in srgb, var(--purple) 20%, transparent)',
               textShadow: '0 0 4px var(--purple)',
             }}
-            title="遥控骰子已激活"
+            title="遙控骰子已啟用"
           >
             <Settings2 className="w-3 h-3" />
-            遥控骰
+            遙控骰
           </div>
         )}
         {player.freePassRemaining > 0 && (
@@ -274,10 +292,10 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, var(--pink) 40%, transparent), inset 0 0 4px color-mix(in srgb, var(--pink) 20%, transparent)',
               textShadow: '0 0 4px var(--pink-glow)',
             }}
-            title={`免费过路剩余 ${player.freePassRemaining} 次`}
+            title={`免費過路剩餘 ${player.freePassRemaining} 次`}
           >
             <Ticket className="w-3 h-3" />
-            免费过路 x{player.freePassRemaining}
+            免費過路 x{player.freePassRemaining}
           </div>
         )}
         {player.invisibilityTurns !== undefined && player.invisibilityTurns > 0 && (
@@ -291,7 +309,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, #a78bfa 40%, transparent), inset 0 0 4px color-mix(in srgb, #a78bfa 20%, transparent)',
               textShadow: '0 0 4px #c4b5fd',
             }}
-            title={`隐身剩余 ${player.invisibilityTurns} 回合`}
+            title={`隱身剩餘 ${player.invisibilityTurns} 回合`}
           >
             <Ghost className="w-3 h-3" />
             隱身 x{player.invisibilityTurns}
@@ -308,7 +326,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, var(--green) 40%, transparent), inset 0 0 4px color-mix(in srgb, var(--green) 20%, transparent)',
               textShadow: '0 0 4px var(--green)',
             }}
-            title={`金钱树剩余 ${player.moneyTreeTurns} 回合`}
+            title={`金錢樹剩餘 ${player.moneyTreeTurns} 回合`}
           >
             <TreeDeciduous className="w-3 h-3" />
             金錢樹 x{player.moneyTreeTurns}
@@ -325,7 +343,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, #facc15 40%, transparent), inset 0 0 4px color-mix(in srgb, #facc15 20%, transparent)',
               textShadow: '0 0 4px #fde047',
             }}
-            title="克隆骰已激活"
+            title="克隆骰已啟用"
           >
             <Target className="w-3 h-3" />
             克隆骰
@@ -342,7 +360,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
                 '0 0 8px color-mix(in srgb, #22d3ee 40%, transparent), inset 0 0 4px color-mix(in srgb, #22d3ee 20%, transparent)',
               textShadow: '0 0 4px #67e8f9',
             }}
-            title="透视镜已激活"
+            title="透視鏡已啟用"
           >
             <Eye className="w-3 h-3" />
             透視鏡
@@ -413,7 +431,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
               >
                 {itemConfig.name.slice(0, 4)}
               </span>
-              {/* 数量角标 */}
+              {/* 數量角標 */}
               {agg.count > 1 && (
                 <span
                   className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-cyber font-bold flex items-center justify-center"
@@ -433,7 +451,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
       {/* 保留 ITEM_TYPES 引用避免未使用告警（未來可作為"全部道具"索引入口） */}
       <span className="hidden">{ITEM_TYPES.length}</span>
 
-      {/* 确认使用弹窗 */}
+      {/* 確認使用彈窗 */}
       {confirmItem && config && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -478,17 +496,17 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
             </p>
             {(confirmItem.type === 'teleport' || confirmItem.type === 'swap_portal') && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
-                提示：使用后请在棋盘上選擇目标格子
+                提示：使用後請在棋盤上選擇目標格子
               </p>
             )}
             {(confirmItem.type === 'steal_property' || confirmItem.type === 'bomb' || confirmItem.type === 'land_bomb') && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
-                提示：使用后请選擇对手的目标地产
+                提示：使用後請選擇對手的目標地產
               </p>
             )}
             {confirmItem.type === 'remote_dice' && (
               <p className="text-xs mb-3 text-[var(--yellow)]">
-                提示：使用后请選擇两个骰子的点数（2-12）
+                提示：使用後請選擇兩個骰子的點數（2-12）
               </p>
             )}
             {confirmItem.type === 'emp_gun' && (
@@ -516,13 +534,13 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
         </div>
       )}
 
-      {/* 遥控骰子选择弹窗 */}
+      {/* 遙控骰子選擇彈窗 */}
       {remoteDiceModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
-          aria-label="遥控骰子"
+          aria-label="遙控骰子"
           style={{
             backgroundColor: 'color-mix(in srgb, var(--bg-deep) 80%, transparent)',
             backdropFilter: 'blur(3px)',
@@ -548,10 +566,10 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
               className="font-cyber text-lg tracking-wider mb-4"
               style={{ color: 'var(--purple)', textShadow: '0 0 8px var(--purple)' }}
             >
-              遥控骰子
+              遙控骰子
             </div>
             <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-              選擇你想要的两个骰子点数
+              選擇你想要的兩個骰子點數
             </p>
 
             <div className="flex items-center justify-center gap-4 mb-4">
@@ -564,7 +582,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
               className="text-sm font-cyber mb-4"
               style={{ color: 'var(--cyan)' }}
             >
-              总点数：{dice1 + dice2}
+              總點數：{dice1 + dice2}
             </div>
 
             <div className="flex gap-2">
@@ -593,7 +611,7 @@ const ItemBar: FC<ItemBarProps> = ({ player, isCurrentPlayer, onUseItem, gameSta
   );
 };
 
-// 骰子选择器子组件
+// 骰子選擇器子元件
 interface DiceSelectorProps {
   value: number;
   onChange: (v: number) => void;
@@ -608,7 +626,7 @@ const DiceSelector: FC<DiceSelectorProps> = ({ value, onChange, label }) => {
       </span>
       <button
         type="button"
-        aria-label={`${label} 目前點數 ${value}，點擊切換`}
+        aria-label={`${label} 目前點數 ${value}，點選切換`}
         className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl cursor-pointer hover:scale-105 transition-transform"
         style={{
           border: '2px solid var(--cyan)',
@@ -642,7 +660,7 @@ const DiceSelector: FC<DiceSelectorProps> = ({ value, onChange, label }) => {
   );
 };
 
-// 聚合道具的工具函数
+// 聚合道具的工具函式
 function aggregateItems(items: ItemState[]): AggregatedItem[] {
   const map = new Map<ItemType, { count: number; firstItemId: number }>();
   for (const item of items) {

@@ -44,12 +44,12 @@ function calculateEloChange(
 }
 
 function determineTitle(wins: number, elo: number): string {
-  if (elo >= 2000 || wins >= 500) return '传奇霸主';
-  if (elo >= 1800 || wins >= 200) return '赛博大亨';
-  if (elo >= 1600 || wins >= 100) return '地产巨头';
+  if (elo >= 2000 || wins >= 500) return '傳奇霸主';
+  if (elo >= 1800 || wins >= 200) return '賽博大亨';
+  if (elo >= 1600 || wins >= 100) return '地產巨頭';
   if (elo >= 1400 || wins >= 50) return '商界精英';
-  if (elo >= 1200 || wins >= 20) return '新锐玩家';
-  if (wins >= 5) return '初露头角';
+  if (elo >= 1200 || wins >= 20) return '新銳玩家';
+  if (wins >= 5) return '初露頭角';
   return '新手玩家';
 }
 
@@ -98,7 +98,7 @@ export class RankingService {
     @Inject(DRIZZLE_DATABASE) private readonly db: PostgresJsDatabase,
   ) {}
 
-  // ====== 赛季检查 ======
+  // ====== 賽季檢查 ======
 
   private async checkSeasonResetForPlayer(visitorId: string): Promise<void> {
     const currentSeason = getCurrentSeason();
@@ -138,7 +138,7 @@ export class RankingService {
       .execute();
   }
 
-  // ====== 玩家查询 ======
+  // ====== 玩家查詢 ======
 
   private async findPlayerByVisitorId(
     visitorId: string,
@@ -151,23 +151,23 @@ export class RankingService {
     return rows[0] ?? null;
   }
 
-  // ====== 公开 API ======
+  // ====== 公開 API ======
 
   async getOrCreatePlayer(
     visitorId: string,
     nickname?: string,
   ): Promise<{ player: PlayerProfile; isNew: boolean }> {
     if (!visitorId || visitorId.length === 0) {
-      throw new BadRequestException('访客ID不能为空');
+      throw new BadRequestException('訪客ID不能為空');
     }
     if (visitorId.length > 64) {
-      throw new BadRequestException('访客ID过长');
+      throw new BadRequestException('訪客ID過長');
     }
 
     const cleanNickname = nickname?.trim();
     if (cleanNickname !== undefined && cleanNickname !== '') {
       if (cleanNickname.length < MIN_NICKNAME_LENGTH || cleanNickname.length > MAX_NICKNAME_LENGTH) {
-        throw new BadRequestException(`昵称长度需在 ${MIN_NICKNAME_LENGTH}-${MAX_NICKNAME_LENGTH} 字符之间`);
+        throw new BadRequestException(`暱稱長度需在 ${MIN_NICKNAME_LENGTH}-${MAX_NICKNAME_LENGTH} 字元之間`);
       }
     }
 
@@ -175,7 +175,7 @@ export class RankingService {
     if (existing) {
       await this.checkSeasonResetForPlayer(visitorId);
 
-      // 如果传了昵称且不同，更新昵称
+      // 如果傳了暱稱且不同，更新暱稱
       if (cleanNickname && cleanNickname !== existing.nickname) {
         await this.db
           .update(monopolyPlayer)
@@ -196,7 +196,7 @@ export class RankingService {
       };
     }
 
-    // 创建新玩家
+    // 建立新玩家
     const currentSeason = getCurrentSeason();
     const finalNickname = cleanNickname || '匿名玩家';
     const title = determineTitle(0, DEFAULT_ELO);
@@ -234,10 +234,10 @@ export class RankingService {
   ): Promise<{ success: boolean; player: PlayerProfile }> {
     const cleanNickname = nickname?.trim();
     if (!cleanNickname) {
-      throw new BadRequestException('昵称不能为空');
+      throw new BadRequestException('暱稱不能為空');
     }
     if (cleanNickname.length < MIN_NICKNAME_LENGTH || cleanNickname.length > MAX_NICKNAME_LENGTH) {
-      throw new BadRequestException(`昵称长度需在 ${MIN_NICKNAME_LENGTH}-${MAX_NICKNAME_LENGTH} 字符之间`);
+      throw new BadRequestException(`暱稱長度需在 ${MIN_NICKNAME_LENGTH}-${MAX_NICKNAME_LENGTH} 字元之間`);
     }
 
     await this.checkSeasonResetForPlayer(visitorId);
@@ -355,7 +355,7 @@ export class RankingService {
     return aboveCount + 1;
   }
 
-  // ====== 游戏结果记录 ======
+  // ====== 遊戲結果記錄 ======
 
   async recordGameResult(
     visitorIds: string[],
@@ -372,10 +372,10 @@ export class RankingService {
       return;
     }
 
-    // 先做赛季重置
+    // 先做賽季重置
     await this.checkSeasonResetBatch(visitorIds);
 
-    // 批量获取所有玩家
+    // 批次獲取所有玩家
     const players = await this.db
       .select()
       .from(monopolyPlayer)
@@ -397,8 +397,8 @@ export class RankingService {
       return;
     }
 
-    // 计算 ELO 变化
-    // 简化处理：每个输家各与胜者比较一次
+    // 計算 ELO 變化
+    // 簡化處理：每個輸家各與勝者比較一次
     let totalWinnerEloGain = 0;
     const loserEloLosses = new Map<string, number>();
 
@@ -412,7 +412,7 @@ export class RankingService {
       loserEloLosses.set(vid, loserLoss);
     }
 
-    // 更新胜者
+    // 更新勝者
     const winnerHighestAssets = highestAssetsPerPlayer[winnerVisitorId] ?? 0;
     const winnerNewHighest = Math.max(winner.highestAssets, winnerHighestAssets);
     const winnerNewElo = winner.elo + totalWinnerEloGain;
@@ -432,7 +432,7 @@ export class RankingService {
       .where(eq(monopolyPlayer.visitorId, winnerVisitorId))
       .execute();
 
-    // 更新败者
+    // 更新敗者
     for (const vid of visitorIds) {
       if (vid === winnerVisitorId) continue;
       const loser = playerMap.get(vid);

@@ -38,32 +38,32 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
 
   const applyPreset = (presetRules: CustomGameRules, name: string) => {
     onChange({ ...presetRules });
-    toast.success(`已应用预设「${name}」`);
+    toast.success(`已應用預設「${name}」`);
   };
 
   const handleSavePreset = () => {
     if (!presetName.trim()) {
-      toast.error('请输入预设名称');
+      toast.error('請輸入預設名稱');
       return;
     }
     const ok = savePreset(presetName.trim(), rules);
     if (ok) {
-      toast.success(`预设「${presetName.trim()}」已保存`);
+      toast.success(`預設「${presetName.trim()}」已儲存`);
       setPresetName('');
       setShowSaveInput(false);
     } else {
-      toast.error('预设数量已达上限（最多3个）');
+      toast.error('預設數量已達上限（最多3個）');
     }
   };
 
   const handleDeletePreset = (index: number, name: string) => {
     deletePreset(index);
-    toast.success(`已删除预设「${name}」`);
+    toast.success(`已刪除預設「${name}」`);
   };
 
   const resetToDefault = () => {
     onChange({ ...DEFAULT_CUSTOM_RULES });
-    toast.info('已恢复默认规则');
+    toast.info('已恢復預設規則');
   };
 
   if (!isOpen) return null;
@@ -80,12 +80,12 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-          aria-label="关闭"
+          aria-label="關閉"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* 标题 */}
+        {/* 標題 */}
         <div className="text-center mb-6">
           <h2
             className="font-cyber text-2xl md:text-3xl tracking-wider mb-2"
@@ -94,20 +94,20 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
               textShadow: '0 0 10px rgba(168, 85, 247, 0.6)',
             }}
           >
-            設定 自定义规则
+            設定 自定義規則
           </h2>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            定制你的赛博大富翁世界
+            定製你的賽博大富翁世界
           </p>
         </div>
 
-        {/* 预设区域 */}
+        {/* 預設區域 */}
         <div className="mb-6">
           <h3
             className="font-cyber text-sm tracking-wider border-b pb-1 mb-3"
             style={{ borderColor: 'rgba(168, 85, 247, 0.3)', color: 'var(--purple)' }}
           >
-            预设方案
+            預設方案
           </h3>
 
           {presets.length > 0 ? (
@@ -140,7 +140,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
                     onClick={() => handleDeletePreset(idx, preset.name)}
                     className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     style={{ backgroundColor: 'var(--red)', color: 'white' }}
-                    title="删除预设"
+                    title="刪除預設"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -149,11 +149,11 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
             </div>
           ) : (
             <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-              暂无保存的预设
+              暫無儲存的預設
             </p>
           )}
 
-          {/* 保存预设 */}
+          {/* 儲存預設 */}
           {!showSaveInput ? (
             <div className="flex gap-2">
               <button
@@ -166,7 +166,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
                 }}
               >
                 <Save className="w-3.5 h-3.5 inline mr-1.5" />
-                保存当前配置
+                儲存當前配置
               </button>
               <button
                 onClick={resetToDefault}
@@ -181,7 +181,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
                 type="text"
                 value={presetName}
                 onChange={(e) => setPresetName(e.target.value)}
-                placeholder="输入预设名称"
+                placeholder="輸入預設名稱"
                 className="flex-1 px-3 py-2 rounded text-sm bg-[var(--bg-mid)] border"
                 style={{
                   borderColor: 'rgba(168, 85, 247, 0.3)',
@@ -199,7 +199,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
                   color: 'var(--purple)',
                 }}
               >
-                保存
+                儲存
               </button>
               <button
                 onClick={() => {
@@ -214,17 +214,17 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
           )}
         </div>
 
-        {/* 滑块配置区 */}
+        {/* 滑塊配置區 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
           <h3
             className="md:col-span-2 font-cyber text-sm tracking-wider border-b pb-1"
             style={{ borderColor: 'rgba(168, 85, 247, 0.3)', color: 'var(--purple)' }}
           >
-            数值设定
+            數值設定
           </h3>
 
           <SliderSetting
-            label="起始资金"
+            label="起始資金"
             value={rules.initialMoney}
             min={5000}
             max={30000}
@@ -234,7 +234,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
           />
 
           <SliderSetting
-            label="过路费比例"
+            label="過路費比例"
             value={rules.tollPercent}
             min={0.1}
             max={0.8}
@@ -245,7 +245,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
           />
 
           <SliderSetting
-            label="起点奖励"
+            label="起點獎勵"
             value={rules.goBonus}
             min={0}
             max={5000}
@@ -268,7 +268,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
             className="md:col-span-2 font-cyber text-sm tracking-wider border-b pb-1 pt-2"
             style={{ borderColor: 'rgba(168, 85, 247, 0.3)', color: 'var(--purple)' }}
           >
-            功能开关
+            功能開關
           </h3>
 
           <ToggleSetting
@@ -284,13 +284,13 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
           />
 
           <ToggleSetting
-            label="启用全局事件"
+            label="啟用全域性事件"
             checked={rules.enableGlobalEvents}
             onChange={(v) => updateRule('enableGlobalEvents', v)}
           />
 
           <ToggleSetting
-            label="启用股票市场"
+            label="啟用股票市場"
             checked={rules.enableStockMarket}
             onChange={(v) => updateRule('enableStockMarket', v)}
           />
@@ -373,31 +373,31 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
             className="md:col-span-2 font-cyber text-sm tracking-wider border-b pb-1 pt-2"
             style={{ borderColor: 'rgba(168, 85, 247, 0.3)', color: 'var(--purple)' }}
           >
-            高级选项
+            高階選項
           </h3>
 
           <SegmentedSetting
-            label="建筑过路费模式"
+            label="建築過路費模式"
             value={rules.buildingTollMode}
             options={[
-              { value: 'standard', label: '标准' },
-              { value: 'aggressive', label: '激进' },
+              { value: 'standard', label: '標準' },
+              { value: 'aggressive', label: '激進' },
             ]}
             onChange={(v) => updateRule('buildingTollMode', v as 'standard' | 'aggressive')}
           />
 
           <SegmentedSetting
-            label="破产线"
+            label="破產線"
             value={rules.bankruptcyLine === 0 ? '0' : '-5000'}
             options={[
               { value: '0', label: '0元' },
-              { value: '-5000', label: '负债-5000' },
+              { value: '-5000', label: '負債-5000' },
             ]}
             onChange={(v) => updateRule('bankruptcyLine', Number(v))}
           />
         </div>
 
-        {/* 开始游戏按钮 */}
+        {/* 開始遊戲按鈕 */}
         {onStartGame && (
           <div className="flex justify-center">
             <button
@@ -413,7 +413,7 @@ const CustomRulesPanel: FC<CustomRulesPanelProps> = ({
   );
 };
 
-// ========== 子组件 ==========
+// ========== 子元件 ==========
 
 interface SliderSettingProps {
   label: string;

@@ -168,7 +168,7 @@ const AchievementToast: FC<AchievementToastProps> = ({ achievementId, onClose })
               textShadow: '0 0 6px hsla(45, 100%, 60%, 0.6)',
             }}
           >
-            獎盃 成就解锁！
+            獎盃 成就解鎖！
           </div>
           <div
             className="font-cyber text-sm tracking-wider truncate"

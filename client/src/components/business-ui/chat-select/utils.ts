@@ -1,7 +1,7 @@
 import type { Chat, ChatInfo, ChatSelectValue, I18nText } from './types';
 
 /**
- * 获取国际化文本显示值（独立实现，不依赖其他组件）
+ * 獲取國際化文字顯示值（獨立實現，不依賴其他元件）
  */
 function getI18nText(text: I18nText | string | undefined): string {
   if (!text) return '';
@@ -10,14 +10,14 @@ function getI18nText(text: I18nText | string | undefined): string {
 }
 
 /**
- * 获取群组显示名称
+ * 獲取群組顯示名稱
  */
 export function getChatDisplayName(name: ChatInfo['name']): string {
   return getI18nText(name);
 }
 
 /**
- * ChatInfo → Chat 标准化转换
+ * ChatInfo → Chat 標準化轉換
  */
 export function chatInfoToChat(chatInfo: ChatInfo): Chat {
   return {
@@ -29,19 +29,19 @@ export function chatInfoToChat(chatInfo: ChatInfo): Chat {
 }
 
 /**
- * 创建未知群组占位（ID 无法解析时使用）
+ * 建立未知群組佔位（ID 無法解析時使用）
  */
 export function createUnknownChat(id: string): Chat {
   return {
     id,
-    name: '未知群组',
+    name: '未知群組',
     avatar: '',
     raw: undefined,
   };
 }
 
 /**
- * 判断 value 是否为 ID 模式（字符串或字符串数组）
+ * 判斷 value 是否為 ID 模式（字串或字串陣列）
  */
 export function isIdModeValue(
   value: ChatSelectValue,
@@ -59,7 +59,7 @@ export function isIdModeValue(
 }
 
 /**
- * 从 value 中提取 ID 列表
+ * 從 value 中提取 ID 列表
  */
 export function extractIdsFromValue(value: ChatSelectValue): string[] {
   if (value === null || value === undefined) {

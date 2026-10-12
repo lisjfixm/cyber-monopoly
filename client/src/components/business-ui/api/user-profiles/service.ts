@@ -8,7 +8,7 @@ import {
 const userProfileService = new UserProfileService();
 
 /**
- * 获取用户 Profile 卡片数据
+ * 獲取使用者 Profile 卡片資料
  */
 export async function fetchUserProfile(
   userId: string,

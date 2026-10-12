@@ -35,10 +35,10 @@ export function BaseCombobox<
     showSearch = true,
     renderItem,
     renderTag,
-    placeholder = '请选择',
+    placeholder = '請選擇',
     searchPlaceholder = '',
-    emptyText = '没有匹配结果，换个关键词试试吧',
-    loadingText = '加载中...',
+    emptyText = '沒有匹配結果，換個關鍵詞試試吧',
+    loadingText = '載入中...',
     className,
     classNames = {},
     tagClosable = true,
@@ -71,7 +71,7 @@ export function BaseCombobox<
     children,
   } = props;
 
-  // 浮层包装组件的通用 props
+  // 浮層包裝元件的通用 props
   const popoverProps = {
     size,
     triggerType,
@@ -123,7 +123,7 @@ export function BaseCombobox<
   );
 }
 
-// 导出子组件以支持自定义使用
+// 匯出子元件以支援自定義使用
 BaseCombobox.Content = BaseComboboxContent;
 BaseCombobox.Search = BaseComboboxSearch;
 BaseCombobox.List = BaseComboboxList;

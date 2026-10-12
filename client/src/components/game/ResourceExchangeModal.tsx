@@ -53,7 +53,7 @@ const ResourceExchangeModal: FC<ResourceExchangeModalProps> = ({
               資源兌換
             </h3>
             <p className="text-xs text-[var(--text-secondary)]">
-              消耗數據資源，獲得強力增益
+              消耗資料資源，獲得強力增益
             </p>
           </div>
         </div>
@@ -66,7 +66,7 @@ const ResourceExchangeModal: FC<ResourceExchangeModalProps> = ({
             border: '1px solid rgba(0, 255, 128, 0.3)',
           }}
         >
-          <span className="text-sm text-[var(--text-secondary)]">當前數據資源</span>
+          <span className="text-sm text-[var(--text-secondary)]">當前資料資源</span>
           <span
             className="font-cyber text-xl tracking-wider"
             style={{ color: 'var(--green)', textShadow: '0 0 8px rgba(0, 255, 128, 0.6)' }}

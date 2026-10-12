@@ -17,19 +17,19 @@ import { logger } from '@lark-apaas/client-toolkit/logger';
 
 export type UseChatValueResult = {
   /**
-   * 标准化后的内部 value（Chat 对象格式）
-   * 用于传递给 BaseCombobox
+   * 標準化後的內部 value（Chat 物件格式）
+   * 用於傳遞給 BaseCombobox
    */
   internalValue: Chat | Chat[] | null;
 
   /**
-   * 是否正在加载群组信息
+   * 是否正在載入群組資訊
    */
   isLoading: boolean;
 
   /**
-   * 将内部 Chat 对象转换回外部格式
-   * ID 模式时返回字符串，对象模式时返回 Chat
+   * 將內部 Chat 物件轉換回外部格式
+   * ID 模式時返回字串，物件模式時返回 Chat
    */
   toExternalValue: (
     internalVal: Chat | Chat[] | null,
@@ -38,15 +38,15 @@ export type UseChatValueResult = {
 };
 
 /**
- * 处理 ChatSelect 的 value 类型转换
+ * 處理 ChatSelect 的 value 型別轉換
  *
- * - 根据 valueType 决定 value 是 chatID 字符串还是 Chat 对象
- * - ID 模式下调用搜索 API 获取完整群组信息
- * - 无效 ID 生成 "未知群组" 占位
+ * - 根據 valueType 決定 value 是 chatID 字串還是 Chat 物件
+ * - ID 模式下呼叫搜尋 API 獲取完整群組資訊
+ * - 無效 ID 生成 "未知群組" 佔位
  *
- * @param value - 外部传入的 value
- * @param multiple - 是否多选模式
- * @param valueType - 值类型，'string' 表示 ID 模式，'object' 表示 Chat 对象模式
+ * @param value - 外部傳入的 value
+ * @param multiple - 是否多選模式
+ * @param valueType - 值型別，'string' 表示 ID 模式，'object' 表示 Chat 物件模式
  */
 export function useChatValue(
   value: ChatSelectValue,
@@ -67,7 +67,7 @@ export function useChatValue(
     return currentIds.filter((id) => !resolvedChats.has(String(id)));
   }, [isIdMode, currentIds, resolvedChats]);
 
-  // 稳定化 missingIds 引用
+  // 穩定化 missingIds 引用
   const missingIdsKey = missingIds.join(',');
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export function useChatValue(
             const chat = chatInfoToChat(chatInfo);
             next.set(String(chatId), chat);
           }
-          // 标记未找到的 ID 为未知群组
+          // 標記未找到的 ID 為未知群組
           for (const id of ids) {
             if (!next.has(String(id))) {
               next.set(String(id), createUnknownChat(id));
@@ -167,7 +167,7 @@ export function useChatValue(
         return String((internalVal as Chat).id);
       }
 
-      // Object 模式：直接返回 Chat 对象
+      // Object 模式：直接返回 Chat 物件
       return internalVal;
     },
     [isIdMode],

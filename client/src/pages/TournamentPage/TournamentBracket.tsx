@@ -222,7 +222,7 @@ const TournamentBracket = ({ rounds, format }: TournamentBracketProps) => {
                   textShadow: '0 0 10px rgba(250, 204, 21, 0.8)',
                 }}
               >
-                頒獎台
+                頒獎臺
               </div>
               <div
                 className="cyber-card p-4 flex flex-col items-center justify-center relative overflow-hidden"

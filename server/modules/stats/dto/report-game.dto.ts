@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-// 完賽結果回報：所有輸入皆有明確邊界，防止用戶端送出異常數值污染戰績統計。
+// 完賽結果回報：所有輸入皆有明確邊界，防止使用者端送出異常數值汙染戰績統計。
 export class ReportGameDto {
   @IsString()
   @Length(1, 64, { message: 'visitorId 長度需在 1-64 字元' })

@@ -224,3 +224,54 @@ CREATE TABLE IF NOT EXISTS monopoly_game_record (
 
 CREATE INDEX IF NOT EXISTS idx_game_record_visitor_season ON monopoly_game_record (visitor_id, season);
 CREATE INDEX IF NOT EXISTS idx_game_record_visitor_created ON monopoly_game_record (visitor_id, _created_at);
+
+-- ===== v4.0.0：monopoly_gang（幫派系統）=====
+CREATE TABLE IF NOT EXISTS monopoly_gang (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name varchar(20) NOT NULL UNIQUE,
+  announcement varchar(100),
+  description varchar(200),
+  leader_id uuid NOT NULL,
+  _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  _updated_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE UNIQUE INDEX IF NOT EXISTS monopoly_gang_name_key ON monopoly_gang (name);
+CREATE INDEX IF NOT EXISTS idx_monopoly_gang_leader ON monopoly_gang (leader_id);
+
+-- ===== v4.0.0：monopoly_gang_member（幫派成員）=====
+CREATE TABLE IF NOT EXISTS monopoly_gang_member (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  gang_id uuid NOT NULL,
+  account_id uuid NOT NULL,
+  role varchar(20) NOT NULL DEFAULT 'member',
+  joined_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_monopoly_gang_member_unique ON monopoly_gang_member (gang_id, account_id);
+CREATE INDEX IF NOT EXISTS idx_monopoly_gang_member_account ON monopoly_gang_member (account_id);
+
+-- ===== v4.0.0：monopoly_season_score（賽季積分）=====
+CREATE TABLE IF NOT EXISTS monopoly_season_score (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  season_id varchar(40) NOT NULL,
+  account_id uuid NOT NULL,
+  score integer NOT NULL DEFAULT 0,
+  games_played integer NOT NULL DEFAULT 0,
+  wins integer NOT NULL DEFAULT 0,
+  _updated_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_monopoly_season_score_unique ON monopoly_season_score (season_id, account_id);
+CREATE INDEX IF NOT EXISTS idx_monopoly_season_score_season ON monopoly_season_score (season_id, score);
+
+-- ===== v4.0.0：monopoly_economy_event（經濟事件：加密貨幣/稅務/股息）=====
+CREATE TABLE IF NOT EXISTS monopoly_economy_event (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  account_id uuid NOT NULL,
+  event_type varchar(30) NOT NULL,
+  amount integer NOT NULL DEFAULT 0,
+  asset_symbol varchar(40),
+  note varchar(100),
+  room_code varchar(6) NOT NULL,
+  _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_monopoly_economy_account ON monopoly_economy_event (account_id, event_type);
+CREATE INDEX IF NOT EXISTS idx_monopoly_economy_type ON monopoly_economy_event (event_type);

@@ -35,7 +35,7 @@ const MemoryMatchGame: FC<MemoryMatchGameProps> = ({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const matchedSet = new Set(matched);
 
-  // 初始化卡片：若 props 有卡片则用 props，否则本地生成
+  // 初始化卡片：若 props 有卡片則用 props，否則本地生成
   useEffect(() => {
     if (cards.length > 0) {
       setLocalCards(cards);
@@ -108,7 +108,7 @@ const MemoryMatchGame: FC<MemoryMatchGameProps> = ({
         setFlipped([]);
         setIsChecking(false);
         if (isMatch) {
-          // 匹配成功，不做额外处理，matched 会从 props 更新
+          // 匹配成功，不做額外處理，matched 會從 props 更新
         }
       }, 800);
     }
@@ -130,7 +130,7 @@ const MemoryMatchGame: FC<MemoryMatchGameProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      {/* 状态栏 */}
+      {/* 狀態列 */}
       <div className="flex justify-between w-full max-w-xs px-1">
         <div
           className="text-xs font-cyber tracking-wider"
@@ -148,11 +148,11 @@ const MemoryMatchGame: FC<MemoryMatchGameProps> = ({
           className="text-xs font-cyber tracking-wider"
           style={{ color: 'var(--pink)' }}
         >
-          配对：{matchedPairs}/6
+          配對：{matchedPairs}/6
         </div>
       </div>
 
-      {/* 卡片网格 */}
+      {/* 卡片網格 */}
       <div
         className="grid gap-2"
         style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}

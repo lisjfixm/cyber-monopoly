@@ -27,7 +27,7 @@ interface LanguageProviderProps {
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   const [language, setLanguageState] = useState<Language>(() => getStoredLanguage());
 
-  // 同步語言到 document（方便其他樣式/組件偵測）
+  // 同步語言到 document（方便其他樣式/元件偵測）
   useEffect(() => {
     try {
       document.documentElement.setAttribute('lang', language);

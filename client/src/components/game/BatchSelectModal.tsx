@@ -85,7 +85,7 @@ const BatchSelectModal: FC<BatchSelectModalProps> = ({
     }
   };
 
-  const titleText = type === 'build' ? '批量建造' : type === 'mortgage' ? '批量抵押' : '批量贖回';
+  const titleText = type === 'build' ? '批次建造' : type === 'mortgage' ? '批次抵押' : '批次贖回';
   const titleColor = type === 'build' ? 'var(--green)' : type === 'mortgage' ? 'hsl(45, 100%, 60%)' : 'var(--cyan)';
   const amountLabel = type === 'mortgage' ? '獲得現金' : '總花費';
 

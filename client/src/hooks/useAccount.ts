@@ -115,7 +115,7 @@ export function useAccount() {
       const account = await accountApi.getMe();
       setState({ account, isLoading: false, error: null });
     } catch (err) {
-      const message = err instanceof Error ? err.message : '刷新失敗';
+      const message = err instanceof Error ? err.message : '重新整理失敗';
       setState({ isLoading: false, error: message });
     }
   }, []);

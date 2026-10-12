@@ -81,7 +81,7 @@ function MiniMapPreview({ cells }: { cells: CellConfig[] }) {
   );
 }
 
-// 地圖類型網格預覽（依格子類型著色，用於詳情頁）
+// 地圖型別網格預覽（依格子型別著色，用於詳情頁）
 const CELL_TYPE_COLORS: Record<CellType, string> = {
   property: 'var(--cyan)',
   fate: 'var(--purple)',
@@ -230,7 +230,7 @@ const CommunityMapsPage = () => {
     const success = installMap(id);
     refreshMaps();
     if (success) {
-      showToast('安裝成功！已加入本地地圖庫');
+      showToast('安裝成功！已加入本地地相簿');
     } else {
       showToast('安裝失敗：地圖已存在或格式錯誤');
     }
@@ -283,7 +283,7 @@ const CommunityMapsPage = () => {
 
   const featuredSortedMaps = sortByFeatured(filteredMaps, 'map');
 
-  // 列表視圖
+  // 列表檢視
   if (!selectedMap) {
     return (
       <div className="min-h-screen w-full px-4 py-6 scanlines relative">
@@ -309,11 +309,11 @@ const CommunityMapsPage = () => {
               <span className="font-cyber tracking-wider">返回</span>
             </button>
             <h1 className="font-cyber text-2xl md:text-3xl text-neon-cyan tracking-wider">
-              社區地圖
+              社群地圖
             </h1>
           </div>
 
-           {/* 視圖切換與上傳 */}
+           {/* 檢視切換與上傳 */}
            <div className="flex items-center gap-3 mb-4">
              <div className="flex gap-2">
                {[
@@ -541,7 +541,7 @@ const CommunityMapsPage = () => {
      );
    }
 
-   // 詳情視圖
+   // 詳情檢視
   return (
     <div className="min-h-screen w-full px-4 py-6 scanlines relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -622,7 +622,7 @@ const CommunityMapsPage = () => {
                  </div>
                )}
 
-              {/* 地圖類型網格縮覽圖 */}
+              {/* 地圖型別網格縮覽圖 */}
               <div className="mb-4">
                 <div
                   className="text-xs font-cyber tracking-wider mb-2"

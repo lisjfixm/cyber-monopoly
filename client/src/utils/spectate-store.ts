@@ -37,7 +37,7 @@ const MOCK_ROOMS: SpectateRoom[] = [
     gameMode: 'classic',
     modeLabel: '經典模式',
     players: [
-      { id: 'p3', name: '數據殭屍', color: PLAYER_COLORS[0], cash: 15000, propertyValue: 18000, propertyCount: 5, position: 8, items: 1, rank: '宗師I' },
+      { id: 'p3', name: '資料殭屍', color: PLAYER_COLORS[0], cash: 15000, propertyValue: 18000, propertyCount: 5, position: 8, items: 1, rank: '宗師I' },
       { id: 'p4', name: '光纖貓', color: PLAYER_COLORS[1], cash: 13800, propertyValue: 15500, propertyCount: 4, position: 19, items: 2, rank: '白金IV' },
     ],
     spectatorCount: 5,
@@ -160,7 +160,7 @@ const DEFAULT_TIPS_MAP: Record<string, MentorTip[]> = {
       id: 'tip3',
       mentorId: 'mentor_1',
       mentorName: '導師·影子',
-      content: '命運區抽到傳送卡的概率是 1/6，兩人都在命運區附近要小心。',
+      content: '命運區抽到傳送卡的機率是 1/6，兩人都在命運區附近要小心。',
       timestamp: '2088-09-28T22:15:00Z',
       type: 'info',
     },
@@ -227,7 +227,7 @@ export function getSpectateChatMessages(roomId: string): SpectateChatMessage[] {
     {
       id: 'sc2',
       senderId: 'viewer_2',
-      senderName: '數據分析師',
+      senderName: '資料分析師',
       content: '玩家1 地產組合更合理，看好他贏',
       timestamp: '2088-09-28T22:17:20Z',
     },

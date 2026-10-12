@@ -106,7 +106,7 @@ const PlayerList: FC<PlayerListProps> = ({
               玩家 ({activeCount}/{players.length})
               {bankruptCount > 0 && (
                 <span className="text-[var(--text-secondary)] ml-1">
-                  破产{bankruptCount}
+                  破產{bankruptCount}
                 </span>
               )}
             </span>

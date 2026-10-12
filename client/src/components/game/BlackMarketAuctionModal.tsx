@@ -500,7 +500,7 @@ const BlackMarketAuctionModal: FC<BlackMarketAuctionModalProps> = ({
           {isRevealPhase && (
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                點擊確認收取道具並關閉拍賣
+                點選確認收取道具並關閉拍賣
               </p>
               <button
                 className="cyber-btn text-sm px-6 py-2"

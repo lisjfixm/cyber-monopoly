@@ -189,7 +189,7 @@ const DiceOverlay: FC<DiceOverlayProps> = ({
             className="absolute -bottom-12 left-1/2 -translate-x-1/2 font-cyber text-lg md:text-2xl text-neon-cyan tracking-widest whitespace-nowrap"
             style={{ animation: "float-up 0.3s ease-out" }}
           >
-            {values[0]} + {values[1]} = {total} 点
+            {values[0]} + {values[1]} = {total} 點
           </div>
         )}
 

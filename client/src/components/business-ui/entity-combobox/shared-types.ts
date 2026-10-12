@@ -2,12 +2,12 @@ import type { FocusEvent, ReactNode } from 'react';
 
 import { PopoverContent } from '@client/src/components/ui/popover';
 
-// 重新导出 size 相关类型
+// 重新匯出 size 相關型別
 export type { ComboboxSize } from '@client/src/components/business-ui/entity-combobox/size-variants';
 
 /**
- * 通用选项值类型
- * @template TRaw - 原始数据类型，用于保留完整的原始对象
+ * 通用選項值型別
+ * @template TRaw - 原始資料型別，用於保留完整的原始物件
  */
 export type ItemValue<TRaw = unknown> = {
   id: string;
@@ -17,12 +17,12 @@ export type ItemValue<TRaw = unknown> = {
 };
 
 /**
- * 触发器类型
+ * 觸發器型別
  */
 export type TriggerType = 'button' | 'search' | 'custom';
 
 /**
- * 触发器渲染属性
+ * 觸發器渲染屬性
  */
 export type TriggerRenderProps<TRaw = unknown> = {
   selectedValue: ItemValue<TRaw> | ItemValue<TRaw>[] | null;
@@ -32,131 +32,131 @@ export type TriggerRenderProps<TRaw = unknown> = {
 };
 
 /**
- * 样式类名配置
- * 用于统一配置各个内部元素的自定义 className
+ * 樣式類名配置
+ * 用於統一配置各個內部元素的自定義 className
  */
 export type ClassNamesConfig = {
   /** 根容器的 className */
   root?: string;
-  /** 触发器的 className */
+  /** 觸發器的 className */
   trigger?: string;
-  /** 弹层内容的 className */
+  /** 彈層內容的 className */
   popover?: string;
-  /** 搜索框的 className */
+  /** 搜尋框的 className */
   search?: string;
   /** 列表容器的 className */
   list?: string;
-  /** 列表项的 className */
+  /** 列表項的 className */
   listItem?: string;
-  /** 标签的 className（多选模式） */
+  /** 標籤的 className（多選模式） */
   tag?: string;
-  /** 空状态的 className */
+  /** 空狀態的 className */
   empty?: string;
-  /** 异常态的 className */
+  /** 異常態的 className */
   error?: string;
-  /** 加载状态的 className */
+  /** 載入狀態的 className */
   loading?: string;
-  /** 清除按钮元素的 className */
+  /** 清除按鈕元素的 className */
   clear?: string;
-  /** 后缀元素的 className */
+  /** 字尾元素的 className */
   suffix?: string;
 };
 
 /**
- * 弹层容器配置
+ * 彈層容器配置
  */
 export type PopoverSlotProps = {
   popover?: React.ComponentProps<typeof PopoverContent>;
 };
 
 /**
- * 基础 Select 组件共享的 Props
- * 适用于 UserSelect、DepartmentSelect 等所有实体选择器
+ * 基礎 Select 元件共享的 Props
+ * 適用於 UserSelect、DepartmentSelect 等所有實體選擇器
  */
 export type BaseEntitySelectProps<TValue = ItemValue<unknown>> = {
   /**
-   * 组件尺寸
+   * 元件尺寸
    * @default "medium"
    */
   size?: 'medium' | 'small' | 'xs';
 
   /**
-   * 触发器类型
-   * - "button": 按钮样式触发器
-   * - "search": 搜索框样式触发器
-   * - "custom": 自定义触发器，需配合 renderTrigger 使用
+   * 觸發器型別
+   * - "button": 按鈕樣式觸發器
+   * - "search": 搜尋框樣式觸發器
+   * - "custom": 自定義觸發器，需配合 renderTrigger 使用
    */
   triggerType?: TriggerType;
 
   /**
-   * 自定义渲染触发器
-   * @param props - 触发器渲染属性，包含选中值、多选状态、展开状态、禁用状态
-   * @returns 自定义触发器的 ReactNode
+   * 自定義渲染觸發器
+   * @param props - 觸發器渲染屬性，包含選中值、多選狀態、展開狀態、禁用狀態
+   * @returns 自定義觸發器的 ReactNode
    */
   renderTrigger?: (props: TriggerRenderProps<unknown>) => ReactNode;
 
   /**
-   * 是否多选模式
+   * 是否多選模式
    * @default false
    */
   multiple?: boolean;
 
   /**
-   * 当前选中的值（受控模式）
-   * - 单选时为 TValue | null
-   * - 多选时为 TValue[] | null
+   * 當前選中的值（受控模式）
+   * - 單選時為 TValue | null
+   * - 多選時為 TValue[] | null
    */
   value?: TValue | TValue[] | null;
 
   /**
-   * 默认选中的值（非受控模式）
-   * - 单选时为 TValue | null
-   * - 多选时为 TValue[] | null
+   * 預設選中的值（非受控模式）
+   * - 單選時為 TValue | null
+   * - 多選時為 TValue[] | null
    */
   defaultValue?: TValue | TValue[] | null;
 
   /**
-   * 选中值变化时的回调
-   * @param value - 新的选中值
+   * 選中值變化時的回撥
+   * @param value - 新的選中值
    */
   onChange?: (value: TValue | TValue[] | null) => void;
 
   /**
-   * 弹层默认是否展开（非受控模式）
+   * 彈層預設是否展開（非受控模式）
    * @default false
    */
   defaultOpen?: boolean;
 
   /**
-   * 是否禁用组件
+   * 是否禁用元件
    * @default false
    */
   disabled?: boolean;
 
   /**
-   * 是否自动聚焦
+   * 是否自動聚焦
    * @default false
    */
   autoFocus?: boolean;
 
   /**
-   * 是否必填（用于表单校验）
+   * 是否必填（用於表單校驗）
    * @default false
    */
   required?: boolean;
 
   /**
-   * 表单字段名称
+   * 表單欄位名稱
    */
   name?: string;
 
   /**
-   * 根元素的自定义类名
+   * 根元素的自定義類名
    */
   className?: string;
 
   /**
-   * 各元素的自定义类名配置
+   * 各元素的自定義類名配置
    * @example
    * classNames={{
    *   root: 'my-root',
@@ -168,72 +168,72 @@ export type BaseEntitySelectProps<TValue = ItemValue<unknown>> = {
   classNames?: ClassNamesConfig;
 
   /**
-   * 未选中时显示的占位文本
+   * 未選中時顯示的佔位文字
    */
   placeholder?: string;
 
   /**
-   * 选项列表为空时显示的文本
+   * 選項列表為空時顯示的文字
    */
   emptyText?: string;
 
   /**
-   * 多选模式下，标签是否可关闭（显示删除按钮）
+   * 多選模式下，標籤是否可關閉（顯示刪除按鈕）
    * @default true
    */
   tagClosable?: boolean;
 
   /**
-   * 多选模式下，最多显示的标签数量
-   * - 数字: 最多显示指定数量的标签，超出部分显示 "+N"
-   * - "responsive": 根据容器宽度自动计算显示数量
+   * 多選模式下，最多顯示的標籤數量
+   * - 數字: 最多顯示指定數量的標籤，超出部分顯示 "+N"
+   * - "responsive": 根據容器寬度自動計算顯示數量
    */
   maxTagCount?: number | 'responsive';
 
   /**
-   * 判断选项是否禁用
-   * @param value 选项值
-   * @returns 如果返回 true，该选项将被禁用，不能改变选中状态，已选中项的 tag 不显示删除按钮
+   * 判斷選項是否禁用
+   * @param value 選項值
+   * @returns 如果返回 true，該選項將被禁用，不能改變選中狀態，已選中項的 tag 不顯示刪除按鈕
    */
   getOptionDisabled?: (value: TValue) => boolean;
 
   /**
-   * 选中选项时的回调
-   * @param value - 被选中的选项值
+   * 選中選項時的回撥
+   * @param value - 被選中的選項值
    */
   onSelect?: (value: TValue) => void;
 
   /**
-   * 取消选中选项时的回调（多选模式下生效）
-   * @param value - 被取消选中的选项值
+   * 取消選中選項時的回撥（多選模式下生效）
+   * @param value - 被取消選中的選項值
    */
   onDeselect?: (value: TValue) => void;
 
   /**
-   * 清空所有选中值时的回调
+   * 清空所有選中值時的回撥
    */
   onClear?: () => void;
 
   /**
-   * 组件获得焦点时的回调
-   * @param event - 焦点事件对象
+   * 元件獲得焦點時的回撥
+   * @param event - 焦點事件物件
    */
   onFocus?: (event: FocusEvent<HTMLElement>) => void;
 
   /**
-   * 组件失去焦点时的回调
-   * @param event - 焦点事件对象
+   * 元件失去焦點時的回撥
+   * @param event - 焦點事件物件
    */
   onBlur?: (event: FocusEvent<HTMLElement>) => void;
 
   /**
-   * 插槽属性配置，用于自定义内部组件的 props
+   * 插槽屬性配置，用於自定義內部元件的 props
    */
   slotProps?: PopoverSlotProps;
 };
 
 /**
- * Combobox 配置相关的 Props
+ * Combobox 配置相關的 Props
  */
 export type ComboboxConfigProps = {
   pageSize?: number;
@@ -247,7 +247,7 @@ export type ComboboxConfigProps = {
 };
 
 /**
- * Combobox 样式相关的 Props
+ * Combobox 樣式相關的 Props
  */
 export type ComboboxStyleProps = {
   className?: string;
@@ -256,7 +256,7 @@ export type ComboboxStyleProps = {
 };
 
 /**
- * Combobox Placeholder 相关的 Props
+ * Combobox Placeholder 相關的 Props
  */
 export type ComboboxPlaceholderProps = {
   placeholder?: string;
@@ -266,7 +266,7 @@ export type ComboboxPlaceholderProps = {
 };
 
 /**
- * Combobox 标签相关的 Props
+ * Combobox 標籤相關的 Props
  */
 export type ComboboxTagProps = {
   tagClosable?: boolean;
@@ -275,7 +275,7 @@ export type ComboboxTagProps = {
 };
 
 /**
- * Combobox 弹层配置相关的 Props
+ * Combobox 彈層配置相關的 Props
  */
 export type ComboboxPopoverProps = {
   placement?: 'top' | 'bottom' | 'left' | 'right';
@@ -284,7 +284,7 @@ export type ComboboxPopoverProps = {
 };
 
 /**
- * Combobox 回调相关的 Props
+ * Combobox 回撥相關的 Props
  */
 export type ComboboxCallbackProps<TRaw = unknown> = {
   onSelect?: (value: ItemValue<TRaw>) => void;

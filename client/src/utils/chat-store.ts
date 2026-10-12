@@ -50,7 +50,7 @@ export function getGlobalMessages(limit = 200): ChatMessage[] {
     {
       id: uid(),
       senderId: 'bot_02',
-      senderName: '數據殭屍',
+      senderName: '資料殭屍',
       senderGuildTag: 'CYBR',
       content: '賽博軍團招生中，活躍玩家優先！',
       type: 'text',

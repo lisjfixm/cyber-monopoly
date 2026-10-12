@@ -18,8 +18,8 @@ export interface FieldLayoutProps {
   layout?: 'horizontal' | 'vertical' | 'responsive';
   name?: string;
   required?: boolean;
-  classNames?: Partial<FieldLayoutClassNames>; // 自定义样式
-  styles?: Partial<FieldLayoutStyles>; // 内联样式
+  classNames?: Partial<FieldLayoutClassNames>; // 自定義樣式
+  styles?: Partial<FieldLayoutStyles>; // 內聯樣式
 }
 
 export interface CommonFieldProps {

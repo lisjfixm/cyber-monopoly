@@ -1,12 +1,12 @@
 /**
- * 用户状态枚举
+ * 使用者狀態列舉
  */
 enum IUserStatus {
   active = 1,
   inactive = 2,
 }
 /**
- * 用户信息类型
+ * 使用者資訊型別
  */
 export type IUserProfile = {
   user_id: string;
@@ -19,7 +19,7 @@ export type IUserProfile = {
 
 
 /**
- * 文件类型
+ * 檔案型別
  */
 export type IFileAttachment = {
   bucket_id: string;

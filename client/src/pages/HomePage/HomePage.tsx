@@ -23,6 +23,7 @@ import {
   User,
   ChevronDown,
   ChevronRight,
+  ChevronUp,
   Dices,
   BarChart3,
   Megaphone,
@@ -140,7 +141,6 @@ const SectionGroup = ({ title, color = 'var(--cyan)', defaultOpen = true, childr
 // ---------- 主頁 ----------
 
 const HomePage = () => {
-  const [showRules] = useState<boolean>(false);
   const [showAchievements, setShowAchievements] = useState<boolean>(false);
   const [showCustomRules, setShowCustomRules] = useState<boolean>(false);
   const [customRules, setCustomRules] = useState<CustomGameRules>({ ...DEFAULT_CUSTOM_RULES });
@@ -520,7 +520,7 @@ const HomePage = () => {
             CYBER MONOPOLY
           </p>
           <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 text-[10px] md:text-xs font-cyber tracking-widest" style={{ border: '1px solid var(--border-neon)', color: 'var(--text-secondary)' }}>
-            <span>v3.0.0</span>
+            <span>v4.0.0</span>
             <span style={{ color: 'var(--cyan)' }}>NEON · FORTUNE · DOMINATION</span>
           </div>
         </div>
@@ -593,7 +593,9 @@ const HomePage = () => {
             >
               <Globe size={28} />
               <span className="font-cyber tracking-wider text-sm">聯機對戰</span>
-              <span className="text-[10px]">{onlineExpanded ? '收起 ▲' : '展開 ▼'}</span>
+              <span className="flex items-center gap-0.5 text-[10px]">
+                {onlineExpanded ? <><ChevronUp size={12} />收起</> : <><ChevronDown size={12} />展開</>}
+              </span>
             </button>
             <button
               type="button"
@@ -617,7 +619,7 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* 分區入口 */}
+        {/* 分割槽入口 */}
         <div className="relative z-10 max-w-md mx-auto md:max-w-2xl space-y-3">
           {/* 對戰中心 */}
           <SectionGroup title="對戰中心" color="var(--yellow)">
@@ -654,7 +656,7 @@ const HomePage = () => {
             <EntryButton label="自製卡牌" icon={<FileEdit size={20} />} onClick={go('/card-editor')} color="var(--purple)" />
             <EntryButton label="劇本製作器" icon={<ScrollText size={20} />} onClick={go('/scenario-editor')} color="var(--green)" />
             <EntryButton label="模組管理" icon={<Puzzle size={20} />} onClick={go('/mods')} color="var(--green)" />
-            <EntryButton label="社區地圖" icon={<Globe size={20} />} onClick={go('/community-maps')} color="var(--cyan)" />
+            <EntryButton label="社群地圖" icon={<Globe size={20} />} onClick={go('/community-maps')} color="var(--cyan)" />
           </SectionGroup>
 
           {/* 社交 */}
@@ -668,7 +670,7 @@ const HomePage = () => {
 
           {/* 系統 */}
           <SectionGroup title="系統" color="var(--purple)" defaultOpen={false}>
-            <EntryButton label="數據統計" icon={<BarChart3 size={20} />} onClick={go('/stats')} color="var(--cyan)" />
+            <EntryButton label="資料統計" icon={<BarChart3 size={20} />} onClick={go('/stats')} color="var(--cyan)" />
             <EntryButton label="公告" icon={<Megaphone size={20} />} onClick={go('/announcements')} color="var(--yellow)" />
             <EntryButton label="新手教學" icon={<GraduationCap size={20} />} onClick={startTutorial} color="var(--cyan)" />
             <EntryButton label="幸運轉盤" icon={<Dices size={20} />} onClick={go('/lucky-wheel')} color="var(--yellow)" />
@@ -695,7 +697,7 @@ const HomePage = () => {
 
         {/* 版本號 */}
         <div className="relative z-10 mt-8 text-center text-[var(--text-muted)] text-xs font-cyber tracking-wider">
-          v3.0.0 · CYBER MONOPOLY
+          v4.0.0 · CYBER MONOPOLY
         </div>
 
         {/* 新手教學提示 */}
@@ -706,7 +708,7 @@ const HomePage = () => {
                 歡迎來到賽博大富翁
               </DialogTitle>
               <DialogDescription className="text-center text-[var(--text-secondary)] text-sm">
-                看起來你是第一次來到這座霓虹都市。<br />是否開啟新手教學，快速了解遊戲規則？
+                看起來你是第一次來到這座霓虹都市。<br />是否開啟新手教學，快速瞭解遊戲規則？
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="flex-col sm:flex-row gap-2">
@@ -722,8 +724,6 @@ const HomePage = () => {
         <AchievementModal isOpen={showAchievements} onClose={() => setShowAchievements(false)} unlockedAchievements={unlockedAchievements} />
         <CustomRulesPanel isOpen={showCustomRules} onClose={() => setShowCustomRules(false)} rules={customRules} onChange={setCustomRules} onStartGame={handleCustomStart} />
         <SaveSlotPanel isOpen={showLoadPanel} mode="load" slots={slots} onClose={() => setShowLoadPanel(false)} onSave={() => { /* 唯讀 */ }} onLoad={handleLoadSlot} onDelete={deleteSlot} />
-
-        {showRules && null}
       </div>
     </>
   );

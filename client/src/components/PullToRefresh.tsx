@@ -141,11 +141,11 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const getLabel = (): string => {
     switch (pullState) {
       case 'pulling':
-        return '下拉刷新';
+        return '下拉重新整理';
       case 'ready':
-        return '釋放刷新';
+        return '釋放重新整理';
       case 'refreshing':
-        return '刷新中...';
+        return '重新整理中...';
       default:
         return '';
     }

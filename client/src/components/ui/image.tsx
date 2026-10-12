@@ -116,7 +116,7 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       [],
     );
 
-    // 当 src 不在白名单时，直接渲染原生 img，保留所有原生属性
+    // 當 src 不在白名單時，直接渲染原生 img，保留所有原生屬性
     if (typeof src !== 'string' || !isTargetSrc(src)) {
       return (
         <img
@@ -137,10 +137,10 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       );
     }
 
-    // 只有当 width 是数字类型时才进行 srcSet 优化
+    // 只有當 width 是數字型別時才進行 srcSet 最佳化
     const numericWidth = typeof width === 'number' ? width : undefined;
 
-    // 用户传入的 srcSet 优先，否则生成优化的 srcSet
+    // 使用者傳入的 srcSet 優先，否則生成最佳化的 srcSet
     const srcSet =
       userSrcSet ??
       buildSrcSet(

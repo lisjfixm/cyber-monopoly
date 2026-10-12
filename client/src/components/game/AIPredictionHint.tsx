@@ -341,7 +341,7 @@ const AIPredictionHint: FC<AIPredictionHintProps> = ({ gameState, humanPlayerInd
         <div className="p-2 max-h-64 overflow-y-auto space-y-2">
           {predictions.length === 0 ? (
             <div className="py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
-              暂无有效預判
+              暫無有效預判
             </div>
           ) : (
             predictions.map((pred, idx) => {

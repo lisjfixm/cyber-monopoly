@@ -50,7 +50,7 @@ type SystemKey =
   | "mount"
   | "pet";
 
-// 寵物圖標映射（未知寵物以 Dog 兜底）
+// 寵物圖示對映（未知寵物以 Dog 兜底）
 const PET_ICON_MAP: Partial<Record<PetType, FC<{ className?: string; style?: React.CSSProperties }>>> = {
   mechDog: Dog,
   ufo: Sparkles,
@@ -61,7 +61,7 @@ const PET_ICON_MAP: Partial<Record<PetType, FC<{ className?: string; style?: Rea
   data_fairy: Wand2,
 };
 
-// 坐騎圖標映射（未知坐騎以 Bike 兜底）
+// 坐騎圖示對映（未知坐騎以 Bike 兜底）
 const MOUNT_ICON_MAP: Partial<Record<MountType, FC<{ className?: string; style?: React.CSSProperties }>>> = {
   flyer: Plane,
   diver: Fish,
@@ -71,7 +71,7 @@ const MOUNT_ICON_MAP: Partial<Record<MountType, FC<{ className?: string; style?:
   hover_car: Car,
 };
 
-// 取得坐騎剩餘次數（兼容舊型別與 v3 新欄位）
+// 取得坐騎剩餘次數（相容舊型別與 v3 新欄位）
 function getMountUses(mounts: PlayerState["mounts"], type: MountType): number {
   if (!mounts) return 0;
   switch (type) {
@@ -236,7 +236,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
               <div className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
                 {sys.key === "war" && (gameState.wars?.length ?? 0) > 0 ? `交戰中：${gameState.wars?.length} 場` : "宣戰 / 停戰"}
                 {sys.key === "spy" && "派遣間諜 / 獲取情報 / 反間諜"}
-                {sys.key === "robot" && (isRobotActive ? `AI 托管中（剩 ${robotTurns} 回合）` : "開啟 / 關閉 AI 代打")}
+                {sys.key === "robot" && (isRobotActive ? `AI 託管中（剩 ${robotTurns} 回合）` : "開啟 / 關閉 AI 代打")}
                 {sys.key === "timeTravel" && (timeTravelUsed ? "本場已使用" : hasTimeTravelSnapshot ? "可回溯至快照" : "尚無快照")}
                 {sys.key === "parallel" && (isInParallelWorld ? `平行世界（剩 ${parallelRemaining} 回合）` : "切換至平行世界")}
                 {sys.key === "mount" && (mounts
@@ -408,7 +408,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
           </div>
           <div>
             <div className="font-cyber tracking-wide" style={{ color: "var(--text-primary)" }}>
-              {isRobotActive ? "AI 托管中" : "AI 代打"}
+              {isRobotActive ? "AI 託管中" : "AI 代打"}
             </div>
             <div className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
               {isRobotActive ? `剩餘 ${robotTurns} 回合` : "尚未開啟"}
@@ -443,7 +443,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
         className="text-xs px-3 py-2 rounded"
         style={{ background: "rgba(255, 215, 0, 0.1)", color: "var(--gold, #ffd700)" }}
       >
-        時間旅行可回溯到 3 回合前的金錢與位置（地產保留）。每局限用 1 次。
+        時間旅行可回溯到 3 回合前的金錢與位置（地產保留）。每侷限用 1 次。
       </div>
       <div className="p-4 rounded-lg text-center" style={{ border: "1px solid var(--border-neon-cyan)" }}>
         <div
@@ -586,7 +586,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
       </div>
       {!mounts && (
         <div className="text-center text-xs py-2" style={{ color: "var(--text-secondary)" }}>
-          尚未解鎖任何坐騎，可通過商店或命運卡獲得
+          尚未解鎖任何坐騎，可透過商店或命運卡獲得
         </div>
       )}
     </div>
@@ -718,7 +718,7 @@ const WorldviewSystemsPanel: FC<WorldviewSystemsPanelProps> = ({
       if (confirmAction === "timeTravel") {
         return {
           title: "時間旅行",
-          desc: "回溯到 3 回合前的狀態？（金錢與位置回滾，地產保留。每局限 1 次）",
+          desc: "回溯到 3 回合前的狀態？（金錢與位置回滾，地產保留。每侷限 1 次）",
           onConfirm: () => {
             onUseTimeTravel();
             setConfirmAction(null);

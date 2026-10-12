@@ -19,9 +19,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const ALIGN_OPTIONS = [
-  { value: 'left', label: '左对齐', icon: AlignLeft },
-  { value: 'center', label: '居中对齐', icon: AlignCenter },
-  { value: 'right', label: '右对齐', icon: AlignRight },
+  { value: 'left', label: '左對齊', icon: AlignLeft },
+  { value: 'center', label: '居中對齊', icon: AlignCenter },
+  { value: 'right', label: '右對齊', icon: AlignRight },
 ] as const;
 
 export function TextAlignToolbarButton() {
@@ -50,7 +50,7 @@ export function TextAlignToolbarButton() {
         <Button variant="ghost" size="sm" className="h-6 gap-0.5 px-2">
           <Icon className="size-4" />
           <ChevronDown className="size-3.5 text-muted-foreground" />
-          <span className="sr-only">文字对齐</span>
+          <span className="sr-only">文字對齊</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-50">

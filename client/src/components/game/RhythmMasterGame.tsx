@@ -21,10 +21,10 @@ interface RhythmMasterGameProps {
 
 const LANE_COLORS = ['var(--cyan)', 'var(--pink)', 'var(--purple)'];
 const LANE_KEYS = ['A', 'S', 'D'];
-const GAME_DURATION = 10000; // 10秒游戏时长
-const NOTE_FALL_DURATION = 2000; // 音符下落时间
-const JUDGE_LINE_PERCENT = 85; // 判定线位置（底部百分比）
-const HIT_WINDOW = 15; // 判定窗口（像素容差）
+const GAME_DURATION = 10000; // 10秒遊戲時長
+const NOTE_FALL_DURATION = 2000; // 音符下落時間
+const JUDGE_LINE_PERCENT = 85; // 判定線位置（底部百分比）
+const HIT_WINDOW = 15; // 判定視窗（畫素容差）
 
 const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
   notes,
@@ -66,17 +66,17 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
       const elapsed = now - startTime;
       setCurrentTime(elapsed);
 
-      // 检查已过判定线的音符（未命中）
+      // 檢查已過判定線的音符（未命中）
       activeNotes.forEach((note) => {
         if (localHits.has(note.id) || localMissed.has(note.id)) return;
-        // 音符到达判定线后还没 hit，算 miss
+        // 音符到達判定線後還沒 hit，算 miss
         if (elapsed > note.time + NOTE_FALL_DURATION * 0.2) {
           setLocalMissed((prev) => new Set(prev).add(note.id));
           setCombo(0);
         }
       });
 
-      // 检查游戏是否结束
+      // 檢查遊戲是否結束
       const allProcessed =
         localHits.size + localMissed.size >= activeTotalNotes || elapsed > GAME_DURATION + 1000;
       if (allProcessed && !finishedRef.current) {
@@ -116,7 +116,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
     const areaHeight = gameArea.clientHeight;
     const judgeLineY = areaHeight * (JUDGE_LINE_PERCENT / 100);
 
-    // 找当前轨道最接近判定线的未命中音符
+    // 找當前軌道最接近判定線的未命中音符
     let closestNote: RhythmNote | null = null;
     let closestDist = Infinity;
 
@@ -124,7 +124,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
       if (note.lane !== laneIdx) return;
       if (localHits.has(note.id) || localMissed.has(note.id)) return;
 
-      // 计算音符当前 Y 位置
+      // 計算音符當前 Y 位置
       const noteProgress = (elapsed - note.time) / NOTE_FALL_DURATION;
       const noteY = areaHeight * noteProgress;
       const dist = Math.abs(noteY - judgeLineY);
@@ -180,7 +180,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      {/* 状态栏 */}
+      {/* 狀態列 */}
       <div className="flex justify-between w-full max-w-xs px-1">
         <div
           className="text-xs font-cyber tracking-wider"
@@ -202,7 +202,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
         </div>
       </div>
 
-      {/* 游戏区域 */}
+      {/* 遊戲區域 */}
       <div
         ref={gameAreaRef}
         className="relative w-full max-w-xs rounded-lg overflow-hidden"
@@ -214,7 +214,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
             '0 0 12px color-mix(in srgb, var(--purple) 40%, transparent), inset 0 0 20px color-mix(in srgb, var(--purple) 10%, transparent)',
         }}
       >
-        {/* 轨道分隔线 */}
+        {/* 軌道分隔線 */}
         {[1, 2].map((i) => (
           <div
             key={i}
@@ -227,7 +227,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
           />
         ))}
 
-        {/* 判定线 */}
+        {/* 判定線 */}
         <div
           className="absolute left-0 right-0 h-0.5"
           style={{
@@ -260,7 +260,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
           })}
       </div>
 
-      {/* 点击区域 */}
+      {/* 點選區域 */}
       {gameStarted && !finished && (
         <div className="flex gap-2 w-full max-w-xs">
           {[0, 1, 2].map((laneIdx) => (
@@ -319,7 +319,7 @@ const RhythmMasterGame: FC<RhythmMasterGameProps> = ({
             className="text-[10px] font-cyber"
             style={{ color: 'var(--text-secondary)' }}
           >
-            按 A/S/D 或點擊下方按鈕
+            按 A/S/D 或點選下方按鈕
           </div>
         </div>
       )}

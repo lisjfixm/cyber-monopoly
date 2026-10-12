@@ -1,4 +1,4 @@
-// 社區地圖分享工具
+// 社群地圖分享工具
 import type { CellConfig, CustomMapData } from '@shared/api.interface';
 import { CELL_COUNT } from '@shared/game-config';
 import { getAuthorScore } from './reviewStorage';
@@ -124,7 +124,7 @@ export function getCommunityMaps(): CommunityMap[] {
   } catch {
     // ignore
   }
-  // 初始化 mock 數據
+  // 初始化 mock 資料
   const mocks = defaultMockMaps();
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(mocks));

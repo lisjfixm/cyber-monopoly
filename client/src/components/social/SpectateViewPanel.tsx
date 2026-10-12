@@ -110,7 +110,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 头部 */}
+        {/* 頭部 */}
         <div
           className="flex items-center gap-3 px-4 py-3 border-b"
           style={{
@@ -178,7 +178,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
           </div>
         </div>
 
-        {/* Tab 切换 */}
+        {/* Tab 切換 */}
         <div
           className="flex gap-1 px-4 py-2 border-b"
           style={{ borderColor: 'rgba(255,255,255,0.08)' }}
@@ -205,11 +205,11 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
           ))}
         </div>
 
-        {/* 内容区 */}
+        {/* 內容區 */}
         <div className="flex-1 overflow-y-auto p-4">
           {activeTab === 'overview' && currentPlayer && (
             <div className="flex flex-col gap-4">
-              {/* 视角切换 */}
+              {/* 視角切換 */}
               <div
                 className="cyber-card p-4"
                 style={{ borderColor: currentPlayer.color }}
@@ -262,7 +262,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
                   </button>
                 </div>
 
-                {/* 资产数据 */}
+                {/* 資產資料 */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div
                     className="p-3 rounded text-center"
@@ -325,7 +325,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
                 </div>
               </div>
 
-              {/* 全部玩家资产排行 */}
+              {/* 全部玩家資產排行 */}
               <div className="cyber-card p-4" style={{ borderColor: 'var(--border-neon)' }}>
                 <h3 className="text-sm font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <Trophy size={16} style={{ color: '#ffd700' }} />
@@ -380,7 +380,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
                 </div>
               </div>
 
-              {/* 房间信息 */}
+              {/* 房間資訊 */}
               <div className="cyber-card p-4" style={{ borderColor: 'var(--border-neon)' }}>
                 <h3 className="text-sm font-bold mb-2" style={{ color: 'var(--text-primary)' }}>房間資訊</h3>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -473,7 +473,7 @@ export const SpectateViewPanel: React.FC<SpectateViewPanelProps> = ({
           {activeTab === 'chat' && (
             <div className="flex flex-col h-full gap-2" style={{ minHeight: '300px' }}>
               <div className="text-xs text-center" style={{ color: 'var(--text-secondary)' }}>
-                觀眾聊天頻道 · 僅觀眾可見，不干擾遊戲玩家
+                觀眾聊天頻道 · 僅觀眾可見，不幹擾遊戲玩家
               </div>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1" style={{ maxHeight: '40vh' }}>
                 {chatMessages.map((msg: SpectateChatMessage) => {

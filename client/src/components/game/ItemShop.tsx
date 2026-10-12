@@ -38,6 +38,9 @@ import {
   BadgePercent,
   Rocket,
   HeartPulse,
+  Lock,
+  AlertTriangle,
+  Wallet,
 } from 'lucide-react';
 import { ITEMS, MAX_ITEMS } from '@shared/game-config';
 import type { GameState, ItemType } from '@shared/api.interface';
@@ -50,7 +53,7 @@ interface ItemShopProps {
   onBuy: (itemType: ItemType) => void;
 }
 
-// 與 ItemBar 保持一致的道具圖標映射（未知道具以 Package 兜底）
+// 與 ItemBar 保持一致的道具圖示對映（未知道具以 Package 兜底）
 const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   double_dice: Dices,
   teleport: Sparkles,
@@ -94,6 +97,21 @@ const ITEM_ICON_COMPONENTS: Partial<Record<ItemType, typeof Shield>> = {
   loot_drone: Satellite,
   warp_token: Rocket,
   heal_synth: HeartPulse,
+  // v4.0 新道具
+  quantum_safe: Lock,
+  causality_rewind: RotateCcw,
+  decoy_hologram: Ghost,
+  patent_trap: Bomb,
+  orbital_strike: Rocket,
+  digital_will: FileText,
+  takeover_bid: Coins,
+  debt_restructure: Banknote,
+  black_swan: AlertTriangle,
+  tax_haven: Wallet,
+  insider_tip: Eye,
+  mirror_card: Repeat,
+  nano_swarm: Bug,
+  forged_passport: IdCard,
 };
 
 function getItemIcon(type: ItemType): typeof Shield {
@@ -185,7 +203,7 @@ const ItemShop: FC<ItemShopProps> = ({ open, onClose, gameState, playerIndex, on
                 textShadow: '0 0 6px var(--yellow)',
               }}
             >
-              注意 道具栏已满（{itemsHeld}/{MAX_ITEMS}），请先使用道具
+              注意 道具欄已滿（{itemsHeld}/{MAX_ITEMS}），請先使用道具
             </div>
           )}
 
@@ -194,7 +212,7 @@ const ItemShop: FC<ItemShopProps> = ({ open, onClose, gameState, playerIndex, on
               className="py-10 text-center text-xs font-cyber tracking-wider"
               style={{ color: 'var(--text-muted)' }}
             >
-              商店尚無商品，下輪刷新
+              商店尚無商品，下輪重新整理
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -273,10 +291,10 @@ const ItemShop: FC<ItemShopProps> = ({ open, onClose, gameState, playerIndex, on
           }}
         >
           <span style={{ color: 'var(--text-secondary)' }}>
-            下次刷新：<span style={{ color: 'var(--cyan)' }}>{turnsUntilRefresh} 回合</span>
+            下次重新整理：<span style={{ color: 'var(--cyan)' }}>{turnsUntilRefresh} 回合</span>
           </span>
           <span style={{ color: 'var(--text-secondary)' }}>
-            道具栏：
+            道具欄：
             <span style={{ color: isFull ? 'var(--red)' : 'var(--pink)' }}>
               {itemsHeld}/{MAX_ITEMS}
             </span>

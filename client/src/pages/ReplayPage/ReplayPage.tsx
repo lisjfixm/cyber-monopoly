@@ -24,7 +24,7 @@ const ReplayPage = () => {
     const list = loadReplays();
     setReplays(list);
 
-    // 如果 URL 有 share 參數，從分享存儲中加載回放
+    // 如果 URL 有 share 引數，從分享儲存中載入回放
     const shareId = getReplayFromUrl();
     if (shareId) {
       const sharedReplay = getReplayByShareId(shareId);
@@ -72,12 +72,12 @@ const ReplayPage = () => {
     setSelectedReplay(replay);
   }, []);
 
-  // 播放器視圖
+  // 播放器檢視
   if (selectedReplay) {
     return <ReplayPlayer replay={selectedReplay} onBack={handleBackToList} />;
   }
 
-  // 列表視圖
+  // 列表檢視
   return (
     <div className="min-h-screen w-full flex flex-col px-4 py-6 scanlines">
       {/* Header */}

@@ -97,7 +97,7 @@ interface PlayerPanelProps {
   isInParallelWorld?: boolean;
   buildingMaterials?: number;
   hasMounts?: boolean;
-  resources?: number; // 資源爭奪模式：數據資源點數
+  resources?: number; // 資源爭奪模式：資料資源點數
   // 新模式視覺狀態
   isBoss?: boolean;
   isEmperor?: boolean;

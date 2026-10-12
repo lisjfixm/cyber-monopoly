@@ -125,7 +125,7 @@ export const gmApi = {
   deleteEvent: (id: string) =>
     gmRequest<{ success: boolean }>(`/api/gm/events/${encodeURIComponent(id)}`, 'DELETE'),
 
-  // ===== 在線使用者 =====
+  // ===== 線上使用者 =====
   getOnlineUsers: () =>
     gmRequest<GmOnlineUser[]>('/api/gm/online-users', 'GET'),
 };

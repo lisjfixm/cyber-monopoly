@@ -10,7 +10,7 @@ import {
 const userService = new UserService();
 
 /**
- * 搜索用户
+ * 搜尋使用者
  */
 export async function searchUsers(
   params: SearchUsersParams,
@@ -19,7 +19,7 @@ export async function searchUsers(
 }
 
 /**
- * 批量根据用户 ID 查询用户信息
+ * 批次根據使用者 ID 查詢使用者資訊
  */
 export async function listUsersByIds(
   userIds: string[],
@@ -29,7 +29,7 @@ export async function listUsersByIds(
 }
 
 /**
- * 调用开户接口，将外部联系人的 larkUserID 转换为已注册用户
+ * 呼叫開戶介面，將外部聯絡人的 larkUserID 轉換為已註冊使用者
  */
 export async function convertExternalContact(
   larkUserID: string,

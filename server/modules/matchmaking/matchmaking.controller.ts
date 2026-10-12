@@ -15,18 +15,18 @@ export class MatchmakingController {
   constructor(private readonly matchmakingService: MatchmakingService) {}
 
   /**
-   * 加入匹配队列
+   * 加入配對佇列
    */
   @Post('join')
   async joinQueue(@Body() dto: MatchJoinRequest): Promise<ApiResponse<MatchJoinResponse>> {
     if (!dto.visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
     if (!dto.nickname?.trim()) {
-      throw new BadRequestException('昵称不能为空');
+      throw new BadRequestException('暱稱不能為空');
     }
     if (dto.nickname.trim().length > 20) {
-      throw new BadRequestException('昵称长度不能超过 20 字符');
+      throw new BadRequestException('暱稱長度不能超過 20 字元');
     }
 
     const { position, waitedSeconds } = await this.matchmakingService.joinQueue(
@@ -48,12 +48,12 @@ export class MatchmakingController {
   }
 
   /**
-   * 离开匹配队列
+   * 離開配對佇列
    */
   @Post('leave')
   async leaveQueue(@Body() dto: MatchLeaveRequest): Promise<ApiResponse<MatchLeaveResponse>> {
     if (!dto.visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
 
     const success = await this.matchmakingService.leaveQueue(dto.visitorId.trim());
@@ -66,14 +66,14 @@ export class MatchmakingController {
   }
 
   /**
-   * 查询匹配状态（轮询接口）
+   * 查詢配對狀態（輪詢介面）
    */
   @Get('status')
   async getStatus(
     @Query('visitorId') visitorId: string,
   ): Promise<ApiResponse<MatchStatusResponse>> {
     if (!visitorId?.trim()) {
-      throw new BadRequestException('visitorId 不能为空');
+      throw new BadRequestException('visitorId 不能為空');
     }
 
     const status = await this.matchmakingService.getQueueStatus(visitorId.trim());

@@ -133,7 +133,7 @@ function sortByFeatured<T extends { id: string }>(
 
 export { sortByFeatured };
 
-// 作者積分：從各社區列表統計總點讚數 + 總下載數 × 2
+// 作者積分：從各社群列表統計總點讚數 + 總下載數 × 2
 // 傳入 contentItems 格式：{ author: string; likes: number; downloads: number }[]
 export function calcAuthorScoreFromItems(
   items: Array<{ author: string; likes: number; downloads: number }>,

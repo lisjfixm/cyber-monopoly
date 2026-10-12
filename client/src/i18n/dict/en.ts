@@ -163,7 +163,7 @@ const en: Record<string, string> = {
 
   // Language
   'lang.zhTW': '繁體中文',
-  'lang.zhCN': '简体中文',
+  'lang.zhCN': '簡體中文',
   'lang.en': 'English',
   'lang.ja': '日本語',
 

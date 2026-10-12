@@ -65,12 +65,12 @@ function getTokenInlineStyle(token: {
 }
 
 /**
- * 使用 Shiki 为单个代码块生成 ProseMirror 装饰器
+ * 使用 Shiki 為單個程式碼塊生成 ProseMirror 裝飾器
  *
- * @param code - 代码块的文本内容
- * @param lang - 代码语言
- * @param pos - 代码块在文档中的绝对起始位置
- * @returns 解析生成的高亮装饰器数组
+ * @param code - 程式碼塊的文字內容
+ * @param lang - 程式碼語言
+ * @param pos - 程式碼塊在文件中的絕對起始位置
+ * @returns 解析生成的高亮裝飾器陣列
  */
 async function getDecorationsForCodeBlock(
   code: string,
@@ -93,22 +93,22 @@ async function getDecorationsForCodeBlock(
         const style = getTokenInlineStyle(token);
         if (!style) continue;
 
-        // 计算 token 在 ProseMirror 中的绝对位置
+        // 計算 token 在 ProseMirror 中的絕對位置
         const from = pos + 1 + token.offset;
         const to = from + content.length;
         decorations.push(Decoration.inline(from, to, { style }));
       }
     }
   } catch {
-    // 如果 Shiki 无法进行 tokenize（未知语言等），则回退到纯文本
+    // 如果 Shiki 無法進行 tokenize（未知語言等），則回退到純文字
   }
 
   return decorations;
 }
 
 async function buildDecorationsForDoc(doc: import('@tiptap/pm/model').Node) {
-  // 遍历整个 doc，为所有 codeBlock 生成高亮 Decorations。
-  // 注意：tokenize 是重操作，所以这里采用异步 + 合并 Promise 的方式。
+  // 遍歷整個 doc，為所有 codeBlock 生成高亮 Decorations。
+  // 注意：tokenize 是重操作，所以這裡採用非同步 + 合併 Promise 的方式。
   const tasks: Array<Promise<Decoration[]>> = [];
 
   doc.descendants((node, pos) => {
@@ -138,7 +138,7 @@ function CodeBlockShikiNodeView(props: NodeViewProps) {
           'flex flex-col gap-2 rounded-md border border-border bg-muted/30 p-3',
         )}
       >
-        <div className="text-xs text-muted-foreground select-none">代码块</div>
+        <div className="text-xs text-muted-foreground select-none">程式碼塊</div>
 
         <div className="flex items-start gap-2 overflow-x-auto">
           <div className="shrink-0 select-none">

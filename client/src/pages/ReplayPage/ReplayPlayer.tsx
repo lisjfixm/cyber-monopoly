@@ -121,10 +121,10 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
   // 是否使用樣本回放資料（當 replay 本身沒有足夠日誌時）
   const useSampleData = replay.log.length < 5;
 
-  // 樣本回合數據
+  // 樣本回合資料
   const sampleTurns: SampleTurn[] = SAMPLE_REPLAY_TURNS;
 
-  // 當前回合（基於 step 或樣本數據計算）
+  // 當前回合（基於 step 或樣本資料計算）
   const currentTurn = useMemo(() => {
     if (useSampleData) {
       return sampleTurns[Math.min(currentStep, sampleTurns.length - 1)]?.turn ?? 1;
@@ -362,11 +362,11 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
             borderColor: viewMode === 'follow' ? 'var(--pink)' : 'var(--purple)',
             color: viewMode === 'follow' ? 'var(--pink)' : 'var(--purple)',
           }}
-          title={viewMode === 'follow' ? '跟隨視角' : '全局視角'}
+          title={viewMode === 'follow' ? '跟隨視角' : '全域性視角'}
         >
           <Eye size={16} />
           <span className="font-cyber tracking-wider hidden md:inline">
-            {viewMode === 'follow' ? '跟隨' : '全局'}
+            {viewMode === 'follow' ? '跟隨' : '全域性'}
           </span>
         </button>
 
@@ -383,7 +383,7 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
         </button>
       </div>
 
-      {/* Main Content: 三欄布局 */}
+      {/* Main Content: 三欄佈局 */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* 左側：時間線列表 */}
         <div
@@ -1065,27 +1065,27 @@ const ReplayPlayer = ({ replay, onBack }: ReplayPlayerProps) => {
   );
 };
 
-// 回合分析文本
+// 回合分析文字
 function getTurnAnalysis(turn: number): string {
   const analyses: Record<number, string> = {
     1: '雙方開局穩健，各自購買起點附近地產，奠定基礎。',
-    2: '暗影黑客跳過能源站，顯示其傾向高價值核心地產的策略。',
+    2: '暗影駭客跳過能源站，顯示其傾向高價值核心地產的策略。',
     3: '核心區與中央塔的爭奪揭開序幕，這兩塊是中期關鍵資產。',
     4: '命運卡帶來隨機波動，霓虹行者繳稅導致現金暫時緊張。',
     5: '霓虹行者進入禁閉區，錯過寶貴的購地機會，節奏被打斷。',
-    6: '暗影黑客利用對方入獄期間加速擴張，購入後街增強套裝潛力。',
-    7: '暗影黑客率先升級建築，開始建立收租優勢。',
+    6: '暗影駭客利用對方入獄期間加速擴張，購入後街增強套裝潛力。',
+    7: '暗影駭客率先升級建築，開始建立收租優勢。',
     8: '關鍵轉折！霓虹行者踩中央塔付出高額過路費，現金大幅縮水。',
     9: '霓虹行者反擊，購入星光道佈局頂級資產線。',
-    10: '雙方雙雙通過起點，獲得營運資金補血。',
+    10: '雙方雙雙透過起點，獲得營運資金補血。',
     11: '霓虹行者開始建房，雙方進入收租對壘階段。',
-    12: '暗影黑客首次支付霓虹區過路費，金額雖小但預示反撲開始。',
-    13: '命運卡罰款進一步打擊暗影黑客的現金流。',
-    14: '霓虹行者升級核心區至酒店級，釋放強烈進攻信號。',
-    15: '致命一擊！暗影黑客踩到核心區酒店，現金幾乎見底。',
-    16: '暗影黑客被迫拆房套現，進入被動防守狀態。',
+    12: '暗影駭客首次支付霓虹區過路費，金額雖小但預示反撲開始。',
+    13: '命運卡罰款進一步打擊暗影駭客的現金流。',
+    14: '霓虹行者升級核心區至酒店級，釋放強烈進攻訊號。',
+    15: '致命一擊！暗影駭客踩到核心區酒店，現金幾乎見底。',
+    16: '暗影駭客被迫拆房套現，進入被動防守狀態。',
     17: '霓虹行者持續擴張版圖，勝利天平傾斜。',
-    18: '暗影黑客破產，霓虹行者以壓倒性資產優勢獲勝。',
+    18: '暗影駭客破產，霓虹行者以壓倒性資產優勢獲勝。',
   };
   return analyses[turn] || '雙方繼續佈局，積累資產優勢。';
 }

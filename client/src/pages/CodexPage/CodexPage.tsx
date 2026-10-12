@@ -15,6 +15,29 @@ import {
   Trophy,
   Gift,
   CheckCircle,
+  RefreshCw,
+  TrendingDown,
+  PartyPopper,
+  Skull,
+  Building,
+  Battery,
+  Rocket,
+  Bot,
+  TrendingUp,
+  Landmark,
+  Atom,
+  BarChart2,
+  Globe,
+  Megaphone,
+  ShieldAlert,
+  Satellite,
+  Cpu,
+  Banknote,
+  Snowflake,
+  HeartHandshake,
+  Scale,
+  Shuffle,
+  Radio,
 } from 'lucide-react';
 import { useCodex } from '@client/src/hooks/useCodex';
 import {
@@ -29,6 +52,10 @@ import {
   DICE_SKINS,
   MINIGAME_TYPES,
   MINIGAME_NAMES,
+  GLOBAL_EVENTS,
+  GLOBAL_EVENT_TYPES,
+  GAME_MODES,
+  MODE_LABELS,
 } from '@shared/game-config';
 import { THEMES } from '@client/src/contexts/ThemeContext';
 import type { MountType, SkinConfig } from '@shared/api.interface';
@@ -38,6 +65,8 @@ type TabType =
   | 'properties'
   | 'cards'
   | 'items'
+  | 'modes'
+  | 'events'
   | 'pets'
   | 'mounts'
   | 'professions'
@@ -45,6 +74,23 @@ type TabType =
   | 'skins'
   | 'minigames'
   | 'rewards';
+
+// v4.0.0 新模式條目說明（使用者端展示，對照引擎 manifest）
+const V4_MODES: Record<string, { name: string; description: string }> = {
+  heist: { name: '數位劫案', description: '2 劫匪收集資料核心並抵達逃生點，2 保全攔截封鎖的非對稱對抗' },
+  bounty_hunt: { name: '賞金獵殺', description: '隨機玩家頭上懸賞，擊倒目標得賞金，賞金每 5 輪輪換' },
+  gold_rush: { name: '淘金熱', description: '資料礦點隨機出現並會枯竭，先到先得、可佔礦跳礦' },
+  cyber_olympics: { name: '賽博奧運', description: '一連串迷你遊戲，以金銀銅牌總分決勝負' },
+  rogue_ai: { name: '叛逆AI', description: '一名玩家扮演失控 AI 放出災難，其餘追獵者關閉核心即勝' },
+  time_loop: { name: '時間迴圈', description: '每 8 回合棋盤重置，玩家保留養成，累積分數打破迴圈' },
+};
+
+// 全域性事件圖示字串 → lucide 元件（未知事件以 Radio 兜底，不白屏）
+const EVENT_ICON_MAP: Record<string, typeof Zap> = {
+  TrendingDown, Zap, PartyPopper, Skull, Building, Battery, Gift, RefreshCw, Rocket, Bot,
+  TrendingUp, Landmark, Atom, BarChart2, Globe, Megaphone, ShieldAlert, Satellite, Cpu,
+  Banknote, Snowflake, HeartHandshake, Scale,
+};
 
 // 坐騎名稱表：用 Partial 避免引擎新增 MountType 成員時 tsc 列舉崩潰；
 // 未知坐騎以 key 作為名稱兜底，不白屏。
@@ -84,6 +130,8 @@ const CodexPage = () => {
     { id: 'properties', label: '地塊', icon: Map },
     { id: 'cards', label: '卡牌', icon: Swords },
     { id: 'items', label: '道具', icon: Package },
+    { id: 'modes', label: '模式', icon: Shuffle },
+    { id: 'events', label: '全域性事件', icon: Radio },
     { id: 'pets', label: '寵物', icon: PawPrint },
     { id: 'mounts', label: '坐騎', icon: Zap },
     { id: 'professions', label: '職業', icon: Briefcase },
@@ -180,6 +228,74 @@ const CodexPage = () => {
             >
               {unlocked ? itemConfig?.name ?? itemType : '??? 未解鎖'}
             </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const renderModes = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {Object.keys(GAME_MODES).map((modeId) => {
+        const isV4 = Object.prototype.hasOwnProperty.call(V4_MODES, modeId);
+        const name = MODE_LABELS[modeId] ?? V4_MODES[modeId]?.name ?? modeId;
+        const description = V4_MODES[modeId]?.description ?? '依規則採取對應取勝條件；在對局中體驗以解鎖紀錄。';
+        return (
+          <div
+            key={modeId}
+            className="rounded-lg border p-3 transition-all"
+            style={{
+              borderColor: isV4 ? 'var(--purple)' : 'rgba(255,255,255,0.12)',
+              backgroundColor: isV4 ? 'rgba(168, 85, 247, 0.08)' : 'rgba(255,255,255,0.03)',
+              boxShadow: isV4 ? '0 0 10px rgba(168,85,247,0.25)' : 'none',
+            }}
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Shuffle size={16} style={{ color: isV4 ? 'var(--purple)' : 'var(--text-secondary)' }} />
+              <span className="font-cyber font-bold text-sm" style={{ color: isV4 ? 'var(--purple)' : 'var(--text-primary)' }}>
+                {name}
+              </span>
+              {isV4 && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'var(--purple)', color: '#fff' }}>
+                  v4
+                </span>
+              )}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{description}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const renderEvents = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {GLOBAL_EVENT_TYPES.map((eventType) => {
+        const ev = GLOBAL_EVENTS[eventType];
+        if (!ev) return null;
+        const isV4 = ['quantum_leap','crypto_winter','ipo_wave','central_bank_rate','trade_war','solar_flare','ubi','antitrust'].includes(eventType);
+        const IconCmp = EVENT_ICON_MAP[ev.icon] ?? Radio;
+        return (
+          <div
+            key={eventType}
+            className="rounded-lg border p-3 transition-all"
+            style={{
+              borderColor: isV4 ? 'var(--cyan)' : 'rgba(255,255,255,0.12)',
+              backgroundColor: isV4 ? 'rgba(0, 255, 255, 0.06)' : 'rgba(255,255,255,0.03)',
+            }}
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <IconCmp size={16} style={{ color: isV4 ? 'var(--cyan)' : 'var(--text-secondary)' }} />
+              <span className="font-cyber font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
+                {ev.name}
+              </span>
+              {isV4 && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'var(--cyan)', color: '#000' }}>
+                  v4
+                </span>
+              )}
+            </div>
+            <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{ev.description}</div>
           </div>
         );
       })}
@@ -542,6 +658,8 @@ const CodexPage = () => {
       case 'properties': return renderProperties();
       case 'cards': return renderCards();
       case 'items': return renderItems();
+      case 'modes': return renderModes();
+      case 'events': return renderEvents();
       case 'pets': return renderPets();
       case 'mounts': return renderMounts();
       case 'professions': return renderProfessions();
@@ -570,7 +688,7 @@ const CodexPage = () => {
       </div>
 
       <div className="max-w-5xl w-full mx-auto">
-        {/* 总收集进度 */}
+        {/* 總收集進度 */}
         <section
           className="cyber-card p-4 md:p-6 mb-6"
           style={{
@@ -607,7 +725,7 @@ const CodexPage = () => {
           </div>
         </section>
 
-        {/* Tab 栏 */}
+        {/* Tab 欄 */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -637,7 +755,7 @@ const CodexPage = () => {
           })}
         </div>
 
-        {/* Tab 内容 */}
+        {/* Tab 內容 */}
         <div className="rounded-lg border border-white/10 bg-bg-dark/50 p-4 md:p-6">
           {renderTabContent()}
         </div>

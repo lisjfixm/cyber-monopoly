@@ -43,10 +43,10 @@ const ShareCardModal: FC<ShareCardModalProps> = ({
     try {
       const success = await shareImage(imageUrl, '賽博大富翁成就', '我在賽博大富翁解鎖了新成就！');
       if (!success) {
-        setShareError('您的瀏覽器不支援分享，請長按圖片保存後分享');
+        setShareError('您的瀏覽器不支援分享，請長按圖片儲存後分享');
       }
     } catch {
-      setShareError('分享失敗，請長按圖片保存後分享');
+      setShareError('分享失敗，請長按圖片儲存後分享');
     } finally {
       setSharing(false);
     }
@@ -113,7 +113,7 @@ const ShareCardModal: FC<ShareCardModalProps> = ({
             className="text-center text-xs px-4 py-2"
             style={{ color: 'var(--text-secondary)' }}
           >
-            請長按圖片保存後分享
+            請長按圖片儲存後分享
           </div>
         )}
 

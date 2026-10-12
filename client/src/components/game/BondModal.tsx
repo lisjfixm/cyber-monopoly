@@ -42,14 +42,14 @@ const BondModal: FC<BondModalProps> = ({
 
   if (!open) return null;
 
-  // 可认购债券：已发行但未被认购且不是自己发行的
+  // 可認購債券：已發行但未被認購且不是自己發行的
   const availableBonds = bonds.filter(
     (b: Bond) => b.status === 'issued' && b.holderId === null && b.issuerId !== playerIndex,
   );
 
-  // 我发行的债券
+  // 我發行的債券
   const myIssuedBonds = bonds.filter((b: Bond) => b.issuerId === playerIndex && b.active);
-  // 我持有的债券
+  // 我持有的債券
   const myHeldBonds = bonds.filter((b: Bond) => b.holderId === playerIndex && b.active);
 
   const repaymentAmount = Math.floor(amount * (1 + interestRate));
@@ -158,7 +158,7 @@ const BondModal: FC<BondModalProps> = ({
           {/* 發行債券 Tab */}
           {activeTab === 'issue' && (
             <div className="space-y-5">
-              {/* 可用现金 */}
+              {/* 可用現金 */}
               <div
                 className="p-3 rounded-lg text-center"
                 style={{
@@ -485,7 +485,7 @@ const BondModal: FC<BondModalProps> = ({
           {/* 我的債券 Tab */}
           {activeTab === 'mine' && (
             <div className="space-y-4">
-              {/* 我发行的 */}
+              {/* 我發行的 */}
               <div>
                 <div
                   className="text-xs font-cyber tracking-wider mb-2"

@@ -173,7 +173,7 @@ const BattlePassPage: FC = () => {
     saveBattlePassState(newState);
     setState(newState);
     toast.success(`已領取 Lv.${level} ${isPremium ? '豪華' : '免費'}獎勵`);
-    // 解鎖延遲一幀釋放，避免同批次重複點擊
+    // 解鎖延遲一幀釋放，避免同批次重複點選
     setTimeout(() => {
       claimingRef.current = false;
     }, 0);

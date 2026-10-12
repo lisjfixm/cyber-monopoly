@@ -15,7 +15,7 @@ import {
 
 export interface IUserDisplayProps {
   /**
-   * 用户列表
+   * 使用者列表
    */
   value?: string | string[] | UserInput | UserInput[];
   size?: 'small' | 'medium' | 'large';
@@ -36,12 +36,12 @@ export const UserDisplay: React.FC<IUserDisplayProps> = ({
   style,
   showLabel = true,
 }) => {
-  // 统一规范化为 User[]，兼容所有格式
+  // 統一規範化為 User[]，相容所有格式
   const normalizedUsers = React.useMemo(() => {
     let list: UserInput[];
 
     if (value) {
-      // 处理 value 的不同类型
+      // 處理 value 的不同型別
       if (Array.isArray(value)) {
         // string[] 或 UserInput[]
         list = value.map((item: string | UserInput) =>
@@ -52,16 +52,16 @@ export const UserDisplay: React.FC<IUserDisplayProps> = ({
         list = [typeof value === 'string' ? { user_id: value } : value];
       }
     } else if (userId) {
-      // userId 快捷方式：转换为对象
+      // userId 快捷方式：轉換為物件
       list = [{ user_id: userId }];
     } else if (user_id) {
-      // user_id 快捷方式：转换为对象
+      // user_id 快捷方式：轉換為物件
       list = [{ user_id }];
     } else {
       return [];
     }
 
-    // 转换为标准 User 类型并过滤无效 ID
+    // 轉換為標準 User 型別並過濾無效 ID
     return list
       .map(normalizeUser)
       .filter((user) => isValidUserId(user.user_id));

@@ -101,21 +101,21 @@ export function UserWithAvatar({
   showLabel = true,
   accountType = 'apaas',
 }: UserWithAvatarProps) {
-  // 统一转换为标准 User 类型
+  // 統一轉換為標準 User 型別
   const user: User = normalizeUser(data);
   const { user_id, avatar: propsAvatar, name: propsName } = user;
 
-  // 判断是否需要从 API 获取用户信息
+  // 判斷是否需要從 API 獲取使用者資訊
   const needsFetch = !propsName && !propsAvatar && !!user_id;
 
-  // 使用 react-query hook 获取用户信息
+  // 使用 react-query hook 獲取使用者資訊
   const idsToFetch = useMemo(
     () => (needsFetch ? [user_id] : []),
     [needsFetch, user_id],
   );
   const { data: response, isLoading } = useUsersByIds(idsToFetch, accountType);
 
-  // 从原始 API 响应中提取并转换用户信息
+  // 從原始 API 響應中提取並轉換使用者資訊
   const fetchedUser = useMemo(() => {
     if (!needsFetch) return null;
     const userInfoMap = response?.data?.userInfoMap || {};
@@ -128,8 +128,8 @@ export function UserWithAvatar({
   const avatar = propsAvatar || fetchedUser?.avatar;
   const name = propsName || fetchedUser?.name;
 
-  // 直接使用已合并的 name，通过 getI18nText 处理国际化
-  const displayName = isLoading ? '' : (getI18nText(name) || '无效人员');
+  // 直接使用已合併的 name，透過 getI18nText 處理國際化
+  const displayName = isLoading ? '' : (getI18nText(name) || '無效人員');
   const formatSize = ['small', 'medium', 'large'].includes(size)
     ? size
     : 'medium';

@@ -171,7 +171,7 @@ const NeonParticles: React.FC<NeonParticlesProps> = ({
     const isAnimationEnabled = (): boolean =>
       document.documentElement.getAttribute('data-animation') !== 'off';
 
-    /** 系統層級「減少動態效果」偏好：最高優先級，一律靜止 */
+    /** 系統層級「減少動態效果」偏好：最高優先順序，一律靜止 */
     const prefersReducedMotion = (): boolean => {
       if (typeof window === 'undefined' || !window.matchMedia) return false;
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches;

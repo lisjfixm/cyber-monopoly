@@ -62,7 +62,7 @@ function makeDefaultTasks(): GuildTask[] {
 
 function makeMockMembers(seed: string, count: number): GuildMember[] {
   const names = [
-    '霓虹死神', '電流公主', '影子跑者', '數據殭屍', '光纖貓',
+    '霓虹死神', '電流公主', '影子跑者', '資料殭屍', '光纖貓',
     '鐵血副官', '機械先鋒', '電馭叛客', '量子駭客', '夜之城守',
     '虛擬幽靈', '暗夜行者', '黃金算盤', '地產大亨', '現金流水',
   ];
@@ -107,7 +107,7 @@ const DEFAULT_AVAILABLE_GUILDS: Guild[] = [
     id: 'guild_cyber',
     name: '賽博軍團',
     tag: 'CYBR',
-    description: '鋼鐵與代碼的結合，無人能擋的戰隊。',
+    description: '鋼鐵與程式碼的結合，無人能擋的戰隊。',
     color: '#ff00ff',
     badgeIcon: 'shield',
     level: 9,

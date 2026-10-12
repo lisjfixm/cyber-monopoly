@@ -34,7 +34,7 @@ const MODE_LABELS: Record<GameMode, string> = {
 
 const MOCK_FRIENDS = [
   { userId: 'mock_friend_01', nickname: '霓虹獵人' },
-  { userId: 'mock_friend_02', nickname: '數據遊俠' },
+  { userId: 'mock_friend_02', nickname: '資料遊俠' },
   { userId: 'mock_friend_03', nickname: '暗影駭客' },
   { userId: 'mock_friend_04', nickname: '電馭祭司' },
   { userId: 'mock_friend_05', nickname: '賽博忍者' },
@@ -108,7 +108,7 @@ function writeStorage(records: MatchRecord[]): void {
   }
 }
 
-// === 導出工具函式 ===
+// === 匯出工具函式 ===
 
 export function getFriendMatchHistory(friendUserId?: string): MatchRecord[] {
   const all = readStorage();

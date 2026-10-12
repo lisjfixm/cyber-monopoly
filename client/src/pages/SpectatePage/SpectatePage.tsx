@@ -54,7 +54,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
     });
   }, [rooms, filter, search]);
 
-  // 記錄目前開啟的觀戰房間，供卸載時歸還觀戰人數，避免計數外洩
+  // 記錄目前開啟的觀戰房間，供解除安裝時歸還觀戰人數，避免計數外洩
   const openRoomIdRef = useRef<string | null>(null);
 
   const handleEnterSpectate = useCallback((room: SpectateRoom) => {
@@ -76,7 +76,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
     setSelectedRoom(null);
   }, [selectedRoom]);
 
-  // 卸載時若仍開著觀戰面板，主動歸還一次觀戰人數
+  // 解除安裝時若仍開著觀戰面板，主動歸還一次觀戰人數
   useEffect(() => {
     return () => {
       if (openRoomIdRef.current) {
@@ -120,11 +120,11 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
           style={{ borderColor: 'var(--green)', color: 'var(--green)' }}
         >
           <Users size={14} />
-          <span>{rooms.reduce((sum: number, r: SpectateRoom) => sum + r.spectatorCount, 0)} 人在線觀戰</span>
+          <span>{rooms.reduce((sum: number, r: SpectateRoom) => sum + r.spectatorCount, 0)} 人線上觀戰</span>
         </div>
       </div>
 
-      {/* 筛选栏 */}
+      {/* 篩選欄 */}
       <div className="w-full max-w-5xl cyber-card p-4 mb-4" style={{ borderColor: 'var(--border-neon)' }}>
         <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
           <div className="flex flex-wrap gap-2">
@@ -169,7 +169,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
         </div>
       </div>
 
-      {/* 房间列表 */}
+      {/* 房間列表 */}
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredRooms.length === 0 && (
           <div className="col-span-full cyber-card p-10 text-center" style={{ borderColor: 'var(--border-neon)' }}>
@@ -183,7 +183,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
             className="cyber-card p-4 flex flex-col gap-3 hover:scale-[1.01] transition-transform"
             style={{ borderColor: room.isMentorRoom ? 'var(--pink)' : 'var(--border-neon)' }}
           >
-            {/* 房间头部 */}
+            {/* 房間頭部 */}
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -247,7 +247,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
               </div>
             </div>
 
-            {/* 玩家信息 */}
+            {/* 玩家資訊 */}
             <div className="flex flex-wrap gap-2">
               {room.players.map((p) => (
                 <div
@@ -272,7 +272,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
               ))}
             </div>
 
-            {/* 房间信息底部 */}
+            {/* 房間資訊底部 */}
             <div className="flex items-center justify-between pt-2 border-t border-white/10">
               <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--text-secondary)' }}>
                 <span className="flex items-center gap-1">
@@ -302,7 +302,7 @@ const SpectatePage: React.FC<SpectatePageProps> = () => {
         ))}
       </div>
 
-      {/* 观战面板 */}
+      {/* 觀戰面板 */}
       {selectedRoom && (
         <SpectateViewPanel
           open={viewOpen}

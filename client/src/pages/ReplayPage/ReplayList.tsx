@@ -127,7 +127,7 @@ const ReplayList = ({ replays, onSelect, onDelete, onImport }: ReplayListProps) 
           style={{ borderColor: 'var(--pink)', color: 'var(--pink)' }}
         >
           <Upload size={16} />
-          <span className="font-cyber tracking-wider">導入回放碼</span>
+          <span className="font-cyber tracking-wider">匯入回放碼</span>
         </button>
       </div>
 
@@ -140,7 +140,7 @@ const ReplayList = ({ replays, onSelect, onDelete, onImport }: ReplayListProps) 
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-cyber text-xl tracking-wider text-neon-pink">
-                導入回放碼
+                匯入回放碼
               </h3>
               <button
                 type="button"
@@ -174,7 +174,7 @@ const ReplayList = ({ replays, onSelect, onDelete, onImport }: ReplayListProps) 
               className="cyber-btn w-full mt-4 py-2"
               style={{ borderColor: 'var(--pink)', color: 'var(--pink)' }}
             >
-              <span className="font-cyber tracking-wider">導入</span>
+              <span className="font-cyber tracking-wider">匯入</span>
             </button>
           </div>
         </div>
@@ -201,7 +201,7 @@ const ReplayList = ({ replays, onSelect, onDelete, onImport }: ReplayListProps) 
             尚無回放紀錄
           </div>
           <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            完成一局遊戲後，回放將自動保存
+            完成一局遊戲後，回放將自動儲存
           </div>
         </div>
       ) : (

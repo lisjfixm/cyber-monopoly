@@ -22,14 +22,14 @@ export class AuthGuard implements CanActivate {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('未提供认证令牌');
+      throw new UnauthorizedException('未提供認證令牌');
     }
 
     const token = authHeader.slice(7);
     const accountId = this.accountService.verifyToken(token);
 
     if (!accountId) {
-      throw new UnauthorizedException('令牌无效或已过期');
+      throw new UnauthorizedException('令牌無效或已過期');
     }
 
     req.accountId = accountId;

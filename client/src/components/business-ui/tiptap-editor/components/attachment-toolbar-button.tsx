@@ -35,7 +35,7 @@ export function AttachmentToolbarButton({
       .insertAttachments(Array.from(files))
       .run();
     if (!ok) {
-      toast.error('插入附件失败（请确认 attachment 扩展已启用且提供 upload）');
+      toast.error('插入附件失敗（請確認 attachment 擴充套件已啟用且提供 upload）');
     }
 
     if (fileInputRef.current) {
@@ -54,11 +54,11 @@ export function AttachmentToolbarButton({
             onClick={() => fileInputRef.current?.click()}
           >
             <Paperclip className="size-4" />
-            <span className="sr-only">上传附件</span>
+            <span className="sr-only">上傳附件</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>上传附件</p>
+          <p>上傳附件</p>
         </TooltipContent>
       </Tooltip>
       <input

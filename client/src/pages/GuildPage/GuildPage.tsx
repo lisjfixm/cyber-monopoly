@@ -244,7 +244,7 @@ const GuildPage = () => {
     setFormDesc('');
     setFormColor('#00ffff');
     setFormBadge('shield');
-    toast.success(`戰隊「${newGuild.name}」已創建！`);
+    toast.success(`戰隊「${newGuild.name}」已建立！`);
   }, [formName, formTag, formDesc, formColor, formBadge, visitorId, nickname, refreshState]);
 
   // ========== Request Join ==========
@@ -257,7 +257,7 @@ const GuildPage = () => {
       joinMessage.trim() || undefined,
     );
     if (ok) {
-      toast.success('申請已發送，等待隊長審批');
+      toast.success('申請已傳送，等待隊長審批');
       setJoinRequestGuild(null);
       setJoinMessage('');
     } else {
@@ -271,7 +271,7 @@ const GuildPage = () => {
     const ok = approveJoinRequest(guildState.currentGuild.id, req.id);
     if (ok) {
       refreshState();
-      toast.success(`已通過 ${req.nickname} 的申請`);
+      toast.success(`已透過 ${req.nickname} 的申請`);
     }
   }, [guildState.currentGuild, refreshState]);
 
@@ -440,7 +440,7 @@ const GuildPage = () => {
             }}
           >
             <Plus size={16} />
-            創建戰隊
+            建立戰隊
           </button>
         </div>
 
@@ -611,7 +611,7 @@ const GuildPage = () => {
                 style={{ color: 'var(--green)', textShadow: '0 0 8px var(--green)' }}
               >
                 <Plus size={22} />
-                創建戰隊
+                建立戰隊
               </h2>
               <div className="space-y-4">
                 <div>
@@ -669,7 +669,7 @@ const GuildPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--text-secondary)] mb-2">徽章圖標</label>
+                  <label className="block text-sm text-[var(--text-secondary)] mb-2">徽章圖示</label>
                   <div className="flex gap-2 flex-wrap">
                     {BADGE_ICONS.map((b) => (
                       <button
@@ -702,7 +702,7 @@ const GuildPage = () => {
                     boxShadow: '0 0 15px rgba(0,255,128,0.3)',
                   }}
                 >
-                  確認創建
+                  確認建立
                 </button>
               </div>
             </div>
@@ -760,7 +760,7 @@ const GuildPage = () => {
                     boxShadow: `0 0 15px ${joinRequestGuild.color}40`,
                   }}
                 >
-                  發送申請
+                  傳送申請
                 </button>
               </div>
             </div>
@@ -880,7 +880,7 @@ const GuildPage = () => {
                           backgroundColor: `${guild.color}15`,
                         }}
                       >
-                        保存
+                        儲存
                       </button>
                     </div>
                   </div>
@@ -1357,7 +1357,7 @@ const GuildPage = () => {
                         color: 'var(--green)',
                         background: 'rgba(0,255,128,0.1)',
                       }}
-                      title="通過"
+                      title="透過"
                     >
                       <Check size={16} />
                     </button>
@@ -1401,7 +1401,7 @@ const GuildPage = () => {
                     background: 'rgba(0,255,255,0.1)',
                   }}
                 >
-                  保存公告
+                  儲存公告
                 </button>
               </div>
             </div>

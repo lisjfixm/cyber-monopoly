@@ -34,7 +34,7 @@ const DEFAULT_FRIENDS: FriendInfo[] = [
   },
   {
     userId: 'f2',
-    nickname: '數據殭屍',
+    nickname: '資料殭屍',
     avatarSeed: 'f2_avatar',
     status: 'accepted',
     onlineStatus: 'in_game',
@@ -147,7 +147,7 @@ const DEFAULT_RECENT: RecentPlayer[] = [
   },
   {
     userId: 'f2',
-    nickname: '數據殭屍',
+    nickname: '資料殭屍',
     avatarSeed: 'f2_avatar',
     rank: '宗師I',
     lastPlayedAt: '2088-09-28T21:00:00Z',
@@ -160,7 +160,7 @@ const DEFAULT_ACTIVITY: FriendActivity[] = [
   {
     id: 'a1',
     userId: 'f2',
-    userName: '數據殭屍',
+    userName: '資料殭屍',
     type: 'rank_up',
     content: '段位提升至 宗師 I',
     detail: '連勝 7 場達成晉級',
@@ -190,7 +190,7 @@ const DEFAULT_ACTIVITY: FriendActivity[] = [
     userName: '影子跑者',
     type: 'new_title',
     content: '獲得頭銜「暗夜行者」',
-    detail: '連續 30 天登錄獎勵',
+    detail: '連續 30 天登入獎勵',
     timestamp: '2088-09-26T10:00:00Z',
   },
 ];
@@ -373,9 +373,9 @@ export function searchUsers(query: string): Array<{ userId: string; nickname: st
     { userId: 'search_1', nickname: '霓虹刀客', rank: '黃金I' },
     { userId: 'search_2', nickname: '霓虹女神', rank: '鑽石V' },
     { userId: 'search_3', nickname: '賽博武士', rank: '白銀II' },
-    { userId: 'search_4', nickname: '數據學徒', rank: '新手' },
+    { userId: 'search_4', nickname: '資料學徒', rank: '新手' },
     { userId: 'f1', nickname: '霓虹夜行者', rank: '鑽石III' },
-    { userId: 'f2', nickname: '數據殭屍', rank: '宗師I' },
+    { userId: 'f2', nickname: '資料殭屍', rank: '宗師I' },
     { userId: 'rp1', nickname: '地產大亨', rank: '鑽石I' },
   ];
   return all

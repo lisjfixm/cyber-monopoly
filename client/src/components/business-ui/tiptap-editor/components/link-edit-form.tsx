@@ -12,7 +12,7 @@ export interface LinkEditFormProps extends React.ComponentProps<'div'> {
   open: boolean;
   initialText?: string;
   initialHref?: string;
-  /** 打开时自动聚焦到链接输入框。 */
+  /** 開啟時自動聚焦到連結輸入框。 */
   autoFocusHref?: boolean;
   onDone?: () => void;
 }
@@ -92,12 +92,12 @@ export function LinkEditForm({
     <div className={cn('flex flex-col gap-4', className)} {...props}>
       <div className="flex items-center gap-4">
         <Label htmlFor={textId} className="w-10 shrink-0">
-          文本
+          文字
         </Label>
         <Input
           id={textId}
           className="h-8"
-          placeholder="请输入文本"
+          placeholder="請輸入文字"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -105,12 +105,12 @@ export function LinkEditForm({
 
       <div className="flex items-center gap-4">
         <Label htmlFor={hrefId} className="w-10 shrink-0">
-          链接
+          連結
         </Label>
         <Input
           id={hrefId}
           className="h-8"
-          placeholder="粘贴或输入链接"
+          placeholder="貼上或輸入連結"
           value={href}
           onChange={(e) => setHref(e.target.value)}
           ref={hrefInputRef}
@@ -119,7 +119,7 @@ export function LinkEditForm({
 
       <div className="flex justify-end">
         <Button size="sm" disabled={!canSubmit} onClick={applyLink}>
-          确定
+          確定
         </Button>
       </div>
     </div>

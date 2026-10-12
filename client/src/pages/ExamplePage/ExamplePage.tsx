@@ -9,7 +9,7 @@ type DemoStatus = 'idle' | 'loading' | 'error' | 'ready';
 // 純前端模擬，不依賴後端；任何非預期錯誤都會降級到錯誤卡，不白屏。
 const EXAMPLE_STEPS = [
   { title: '載入骨架屏', desc: '資料讀取期間以 Skeleton/Spinner 呈現，避免版面跳動。' },
-  { title: '空態引導', desc: '無資料時顯示圖標＋說明＋主要操作按鈕，告訴玩家下一步。' },
+  { title: '空態引導', desc: '無資料時顯示圖示＋說明＋主要操作按鈕，告訴玩家下一步。' },
   { title: '錯誤降級', desc: '後端或資料失敗時顯示錯誤卡與重試按鈕，不整頁白屏。' },
 ];
 
@@ -24,7 +24,7 @@ const ExamplePage = () => {
       setStatus('ready');
       toast.success('範例資料載入完成');
     }, 900);
-    // unmount 清除，避免對已卸載元件 setState
+    // unmount 清除，避免對已解除安裝元件 setState
     return () => clearTimeout(timer);
   }, []);
 
@@ -65,7 +65,7 @@ const ExamplePage = () => {
             </h2>
           </div>
           <p className="text-xs text-[var(--text-secondary)] mb-4">
-            此頁示範賽博大富翁 v3.0.0 統一的介面狀態處理：載入、空態、錯誤重試。
+            此頁示範賽博大富翁 v4.0.0 統一的介面狀態處理：載入、空態、錯誤重試。
           </p>
           <div className="flex gap-2 flex-wrap">
             <button
@@ -155,7 +155,7 @@ const ExamplePage = () => {
                 這是空態範例
               </div>
               <div className="text-xs text-[var(--text-muted)]">
-                當沒有資料時，以圖標＋說明引導玩家下一步操作。
+                當沒有資料時，以圖示＋說明引導玩家下一步操作。
               </div>
             </div>
           </>

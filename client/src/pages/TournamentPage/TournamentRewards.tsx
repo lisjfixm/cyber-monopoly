@@ -20,7 +20,7 @@ const REWARD_DATA: Record<8 | 16 | 32, TournamentReward[]> = {
     { position: '四強', currency: 1500, reward: '參加獎·修復套件', rarity: 'common' },
   ],
   16: [
-    { position: '冠軍', currency: 20000, reward: '史詩收藏品·數據核心', rarity: 'epic' },
+    { position: '冠軍', currency: 20000, reward: '史詩收藏品·資料核心', rarity: 'epic' },
     { position: '亞軍', currency: 10000, reward: '稀有道具·霓虹晶片', rarity: 'rare' },
     { position: '四強', currency: 5000, reward: '強化模組 x2', rarity: 'rare' },
     { position: '八強', currency: 2000, reward: '參加獎·修復套件', rarity: 'common' },

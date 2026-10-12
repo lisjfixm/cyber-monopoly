@@ -41,7 +41,7 @@ export function useCustomPresets() {
     if (!trimmed) return false;
 
     const current = loadPresetsFromStorage();
-    // 同名覆盖
+    // 同名覆蓋
     const existingIdx = current.findIndex((p: CustomPreset) => p.name === trimmed);
     if (existingIdx >= 0) {
       current[existingIdx] = { name: trimmed, rules: { ...rules } };
@@ -49,7 +49,7 @@ export function useCustomPresets() {
       setPresets(current);
       return true;
     }
-    // 超过3个返回false
+    // 超過3個返回false
     if (current.length >= MAX_PRESETS) return false;
 
     const updated = [...current, { name: trimmed, rules: { ...rules } }];

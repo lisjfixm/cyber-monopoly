@@ -4,19 +4,19 @@ import { useCallback, useEffect, useRef } from 'react';
 
 export type UseInfiniteScrollOptions = {
   /**
-   * 加载更多数据的回调函数
+   * 載入更多資料的回撥函式
    */
   onLoadMore: () => void;
   /**
-   * 是否还有更多数据
+   * 是否還有更多資料
    */
   hasMore: boolean;
   /**
-   * 是否正在加载中
+   * 是否正在載入中
    */
   isLoading: boolean;
   /**
-   * 是否启用无限滚动
+   * 是否啟用無限滾動
    * @default true
    */
   enabled?: boolean;
@@ -26,7 +26,7 @@ export type UseInfiniteScrollOptions = {
    */
   threshold?: number;
   /**
-   * IntersectionObserver 的 rootMargin，用于提前触发加载
+   * IntersectionObserver 的 rootMargin，用於提前觸發載入
    * @default '50px'
    */
   rootMargin?: string;
@@ -34,14 +34,14 @@ export type UseInfiniteScrollOptions = {
 
 export type UseInfiniteScrollResult = {
   /**
-   * 绑定到触发元素的 ref
+   * 繫結到觸發元素的 ref
    */
   triggerRef: React.RefObject<HTMLDivElement | null>;
 };
 
 /**
- * 无限滚动加载 hook
- * 使用 IntersectionObserver 检测滚动触底，自动触发加载更多
+ * 無限滾動載入 hook
+ * 使用 IntersectionObserver 檢測滾動觸底，自動觸發載入更多
  *
  * @example
  * ```tsx

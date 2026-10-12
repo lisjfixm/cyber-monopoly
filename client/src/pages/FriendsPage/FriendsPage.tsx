@@ -196,23 +196,23 @@ const FriendsPage = () => {
     setSelectedFriend(friend);
   }, []);
 
-  // 發送好友邀請
+  // 傳送好友邀請
   const handleAddFriend = useCallback(
     (userId: string, nickname: string) => {
       setActionLoading(userId);
       try {
         const success = addFriend(userId, nickname, '一起來玩賽博大富翁吧！');
         if (success) {
-          toast.success(`已向 ${nickname} 發送好友請求`);
+          toast.success(`已向 ${nickname} 傳送好友請求`);
           loadAllData();
           setSearchResults((prev) =>
             prev.map((u) => (u.userId === userId ? { ...u, isFriend: true } : u)),
           );
         } else {
-          toast.error('發送失敗，可能已是好友');
+          toast.error('傳送失敗，可能已是好友');
         }
       } catch {
-        toast.error('發送好友請求失敗');
+        toast.error('傳送好友請求失敗');
       } finally {
         setActionLoading(null);
       }
@@ -265,7 +265,7 @@ const FriendsPage = () => {
       try {
         const all = getFriendRequests();
         const filtered = all.filter((r: FriendRequest) => r.id !== requestId);
-        // 直接存儲（通過 saveRequests 不可用，手動處理）
+        // 直接儲存（透過 saveRequests 不可用，手動處理）
         try {
           localStorage.setItem('monopoly_friends_requests', JSON.stringify(filtered));
         } catch {
@@ -287,10 +287,10 @@ const FriendsPage = () => {
       try {
         const success = addFriend(player.userId, player.nickname, '上次對戰很精彩！');
         if (success) {
-          toast.success(`已向 ${player.nickname} 發送好友請求`);
+          toast.success(`已向 ${player.nickname} 傳送好友請求`);
           loadAllData();
         } else {
-          toast.error('發送失敗');
+          toast.error('傳送失敗');
         }
       } finally {
         setActionLoading(null);
@@ -304,7 +304,7 @@ const FriendsPage = () => {
     toast.success(`已向 ${friend.nickname} 發出組隊邀請`);
   }, []);
 
-  // 打開刪除確認
+  // 開啟刪除確認
   const handleDeleteClick = useCallback((friend: FriendInfo) => {
     setFriendToDelete(friend);
     setShowDeleteDialog(true);
@@ -788,7 +788,7 @@ const FriendsPage = () => {
                           background: 'rgba(255, 217, 61, 0.08)',
                         }}
                       >
-                        已發送
+                        已傳送
                       </span>
                       <button
                         type="button"
@@ -978,7 +978,7 @@ const FriendsPage = () => {
                   }}
                 >
                   <div className="text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>
-                    點擊右側面板查看詳細對戰記錄
+                    點選右側面板檢視詳細對戰記錄
                   </div>
                   <Swords size={32} className="mx-auto mb-2" style={{ color: 'var(--cyan)' }} />
                   <div
@@ -1018,7 +1018,7 @@ const FriendsPage = () => {
                 好友中心
               </div>
               <div className="text-sm text-[var(--text-secondary)]">
-                從左側「好友」分頁選擇一位好友查看詳情
+                從左側「好友」分頁選擇一位好友檢視詳情
               </div>
             </div>
           )}
@@ -1036,7 +1036,7 @@ const FriendsPage = () => {
                 <UserCheck size={36} style={{ color: 'var(--cyan)' }} />
               </div>
               <div className="font-cyber text-lg tracking-wider text-neon-cyan mb-2">
-                選擇一位好友查看詳情
+                選擇一位好友檢視詳情
               </div>
               <div className="text-sm text-[var(--text-secondary)]">
                 從左側好友列表中選擇一位好友

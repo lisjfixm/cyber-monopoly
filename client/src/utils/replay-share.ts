@@ -98,7 +98,7 @@ export function generateShareUrl(shareId: string): string {
 }
 
 /**
- * 從 URL 查詢參數讀取分享 ID
+ * 從 URL 查詢引數讀取分享 ID
  */
 export function getReplayFromUrl(): string | null {
   try {

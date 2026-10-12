@@ -1,15 +1,15 @@
 import { cva } from 'class-variance-authority';
 
 /**
- * Combobox 尺寸类型
- * - medium: 默认大小，适用于大多数场景
- * - small: 较小尺寸
+ * Combobox 尺寸型別
+ * - medium: 預設大小，適用於大多數場景
+ * - small: 較小尺寸
  * - xs: 最小尺寸
  */
 export type ComboboxSize = 'medium' | 'small' | 'xs';
 
 /**
- * Search 模式下的搜索框容器样式
+ * Search 模式下的搜尋框容器樣式
  * medium: 高度36px, padding上下6px左右6px
  * small: 高度32px, padding上下4px左右4px
  * xs: 高度28px, padding上下4px左右4px
@@ -39,7 +39,7 @@ export const searchTriggerVariants = cva(
 );
 
 /**
- * Search 模式下输入框文字样式
+ * Search 模式下輸入框文字樣式
  * medium/small: text-sm
  * xs: text-xs
  */
@@ -57,9 +57,9 @@ export const searchInputVariants = cva('', {
 });
 
 /**
- * Search 模式下的标签样式
- * medium/small: 高度24px, 头像20px, 文字text-sm line-height 22px
- * xs: 高度20px, 头像16px, 文字text-xs line-height 16px
+ * Search 模式下的標籤樣式
+ * medium/small: 高度24px, 頭像20px, 文字text-sm line-height 22px
+ * xs: 高度20px, 頭像16px, 文字text-xs line-height 16px
  */
 export const searchTagVariants = cva('gap-1 pr-1 font-normal', {
   variants: {
@@ -75,7 +75,7 @@ export const searchTagVariants = cva('gap-1 pr-1 font-normal', {
 });
 
 /**
- * 标签内头像尺寸
+ * 標籤內頭像尺寸
  * medium/small: 20px
  * xs: 16px
  */
@@ -93,7 +93,7 @@ export const tagAvatarVariants = cva('', {
 });
 
 /**
- * 标签内图标尺寸 (如部门图标)
+ * 標籤內圖示尺寸 (如部門圖示)
  * medium/small: 16px
  * xs: 12px
  */
@@ -111,7 +111,7 @@ export const tagIconVariants = cva('', {
 });
 
 /**
- * 标签内关闭按钮图标尺寸
+ * 標籤內關閉按鈕圖示尺寸
  */
 export const tagCloseIconVariants = cva('text-foreground', {
   variants: {
@@ -127,7 +127,7 @@ export const tagCloseIconVariants = cva('text-foreground', {
 });
 
 /**
- * Button 模式下的添加按钮样式
+ * Button 模式下的新增按鈕樣式
  * medium/small: 24px
  * xs: 16px
  */
@@ -152,7 +152,7 @@ export const addButtonVariants = cva(
 );
 
 /**
- * Button 模式下的加号图标尺寸
+ * Button 模式下的加號圖示尺寸
  */
 export const addButtonIconVariants = cva('', {
   variants: {
@@ -168,7 +168,7 @@ export const addButtonIconVariants = cva('', {
 });
 
 /**
- * 列表项容器样式
+ * 列表項容器樣式
  * medium/small: 高度50px
  * xs: 高度46px
  */
@@ -186,7 +186,7 @@ export const listItemVariants = cva('flex items-center gap-2', {
 });
 
 /**
- * 列表项头像尺寸
+ * 列表項頭像尺寸
  * medium/small: 32px
  * xs: 28px
  */
@@ -204,7 +204,7 @@ export const listItemAvatarVariants = cva('', {
 });
 
 /**
- * 列表项名称文字样式
+ * 列表項名稱文字樣式
  * medium/small: text-sm, line-height 22px
  * xs: text-xs, line-height 16px
  */
@@ -222,7 +222,7 @@ export const listItemNameVariants = cva('truncate', {
 });
 
 /**
- * 列表项副文本样式 (如 userId)
+ * 列表項副文字樣式 (如 userId)
  * 所有尺寸: text-xs, line-height 16px
  */
 export const listItemSubTextVariants = cva(
@@ -242,7 +242,7 @@ export const listItemSubTextVariants = cva(
 );
 
 /**
- * ItemPill 标签组件样式 (用于 tag 渲染)
+ * ItemPill 標籤元件樣式 (用於 tag 渲染)
  */
 export const itemPillVariants = cva(
   [
@@ -264,7 +264,7 @@ export const itemPillVariants = cva(
 );
 
 /**
- * ItemPill 内文本样式
+ * ItemPill 內文字樣式
  */
 export const itemPillTextVariants = cva(
   'max-w-[120px] truncate text-foreground',
@@ -283,7 +283,7 @@ export const itemPillTextVariants = cva(
 );
 
 /**
- * 列表骨架屏项容器样式 (与 listItemVariants 保持一致)
+ * 列表骨架屏項容器樣式 (與 listItemVariants 保持一致)
  * medium/small: 高度50px
  * xs: 高度46px
  */
@@ -304,7 +304,7 @@ export const skeletonItemVariants = cva(
 );
 
 /**
- * 列表骨架屏头像尺寸 (与 listItemAvatarVariants 保持一致)
+ * 列表骨架屏頭像尺寸 (與 listItemAvatarVariants 保持一致)
  * medium/small: 32px
  * xs: 28px
  */

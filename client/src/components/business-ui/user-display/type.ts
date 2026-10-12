@@ -3,7 +3,7 @@ import type { UserInput } from '@client/src/components/business-ui/types/user';
 
 export interface UserWithAvatarProps {
   /**
-   * 用户数据，可以只传 userId，组件会自动查询 name 和 avatar
+   * 使用者資料，可以只傳 userId，元件會自動查詢 name 和 avatar
    */
   data: UserInput;
   /**
@@ -20,7 +20,7 @@ export interface UserWithAvatarProps {
    */
   showLabel?: boolean;
   /**
-   * 账户类型，用于查询用户信息
+   * 賬戶型別，用於查詢使用者資訊
    * @default 'apaas'
    */
   accountType?: AccountType;

@@ -131,7 +131,7 @@ export const THEMES: ThemeInfo[] = [
   {
     id: 'virtual-reality',
     name: '虛擬實境',
-    description: '純黑底，螢光綠+暗綠，矩陣代碼雨風格',
+    description: '純黑底，螢光綠+暗綠，矩陣程式碼雨風格',
     previewColors: ['#00ff41', '#000000', '#1b5e20', '#76ff03'],
   },
 ];

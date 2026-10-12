@@ -402,6 +402,60 @@ export const monopolyGameRecord = pgTable("monopoly_game_record", {
   index("idx_game_record_visitor_created").on(table.visitorId, table.createdAt),
 ]);
 
+// ===== v4.0.0 新增：幫派系統 =====
+export const monopolyGang = pgTable("monopoly_gang", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 20 }).notNull().unique(),
+  announcement: varchar("announcement", { length: 100 }),
+  description: varchar("description", { length: 200 }),
+  leaderId: uuid("leader_id").notNull(),
+  createdAt: customTimestamptz("_created_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: customTimestamptz("_updated_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex("monopoly_gang_name_key").on(table.name),
+  index("idx_monopoly_gang_leader").on(table.leaderId),
+]);
+
+export const monopolyGangMember = pgTable("monopoly_gang_member", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  gangId: uuid("gang_id").notNull(),
+  accountId: uuid("account_id").notNull(),
+  role: varchar("role", { length: 20 }).notNull().default('member'),
+  joinedAt: customTimestamptz("joined_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex("idx_monopoly_gang_member_unique").on(table.gangId, table.accountId),
+  index("idx_monopoly_gang_member_account").on(table.accountId),
+]);
+
+// ===== v4.0.0 新增：賽季積分 =====
+export const monopolySeasonScore = pgTable("monopoly_season_score", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  seasonId: varchar("season_id", { length: 40 }).notNull(),
+  accountId: uuid("account_id").notNull(),
+  score: integer("score").notNull().default(0),
+  gamesPlayed: integer("games_played").notNull().default(0),
+  wins: integer("wins").notNull().default(0),
+  updatedAt: customTimestamptz("_updated_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex("idx_monopoly_season_score_unique").on(table.seasonId, table.accountId),
+  index("idx_monopoly_season_score_season").on(table.seasonId, table.score),
+]);
+
+// ===== v4.0.0 新增：經濟事件（加密貨幣/稅務/股息）=====
+export const monopolyEconomyEvent = pgTable("monopoly_economy_event", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  accountId: uuid("account_id").notNull(),
+  eventType: varchar("event_type", { length: 30 }).notNull(),
+  amount: integer("amount").notNull().default(0),
+  assetSymbol: varchar("asset_symbol", { length: 40 }),
+  note: varchar("note", { length: 100 }),
+  roomCode: varchar("room_code", { length: 6 }).notNull(),
+  createdAt: customTimestamptz("_created_at", { precision: 3 }).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index("idx_monopoly_economy_account").on(table.accountId, table.eventType),
+  index("idx_monopoly_economy_type").on(table.eventType),
+]);
+
 // table aliases
 export const monopolyAccountTable = monopolyAccount;
 export const monopolyAccountProviderTable = monopolyAccountProvider;
@@ -414,3 +468,7 @@ export const monopolyGmLogTable = monopolyGmLog;
 export const monopolyMatchQueueTable = monopolyMatchQueue;
 export const monopolyPlayerTable = monopolyPlayer;
 export const monopolyRoomTable = monopolyRoom;
+export const monopolyGangTable = monopolyGang;
+export const monopolyGangMemberTable = monopolyGangMember;
+export const monopolySeasonScoreTable = monopolySeasonScore;
+export const monopolyEconomyEventTable = monopolyEconomyEvent;

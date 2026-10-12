@@ -52,7 +52,7 @@ export const TUTORIAL_STEPS: TutorialStepConfig[] = [
     id: "rollDice",
     title: "擲骰子前進",
     description:
-      "點擊「擲骰子」按鈕投擲兩枚骰子，按點數之和在棋盤上順時針移動。如果擲出雙骰（兩枚點數相同），停在目標格後還能再擲一次。連續三次雙骰？抱歉，你被懷疑出老千，直接進禁閉區！",
+      "點選「擲骰子」按鈕投擲兩枚骰子，按點數之和在棋盤上順時針移動。如果擲出雙骰（兩枚點數相同），停在目標格後還能再擲一次。連續三次雙骰？抱歉，你被懷疑出老千，直接進禁閉區！",
     placement: "left",
     targetSelector: "[data-tutorial='roll-dice']",
   },
@@ -68,7 +68,7 @@ export const TUTORIAL_STEPS: TutorialStepConfig[] = [
     id: "colorSets",
     title: "地產套裝加成",
     description:
-      "棋盤上同顏色的地塊屬於同一個系列。當你集齊一個系列的所有地塊時，該系列的過路費會翻倍！盡早收集成套地塊，是致富的關鍵策略。",
+      "棋盤上同顏色的地塊屬於同一個系列。當你集齊一個系列的所有地塊時，該系列的過路費會翻倍！盡早收整合套地塊，是致富的關鍵策略。",
     placement: "top",
     targetSelector: "[data-tutorial='board']",
   },
@@ -92,7 +92,7 @@ export const TUTORIAL_STEPS: TutorialStepConfig[] = [
     id: "building",
     title: "建築升級與抵押",
     description:
-      "擁有成套地塊後，你可以在上面建造房屋（最多 4 棟）和酒店（1 棟），大幅提高過路費。點擊自己的地塊可以查看操作選項。如果現金緊張，還可以抵押地產換取現金，但抵押期間不能收過路費。",
+      "擁有成套地塊後，你可以在上面建造房屋（最多 4 棟）和酒店（1 棟），大幅提高過路費。點選自己的地塊可以檢視操作選項。如果現金緊張，還可以抵押地產換取現金，但抵押期間不能收過路費。",
     placement: "left",
     targetSelector: "[data-tutorial='building']",
   },

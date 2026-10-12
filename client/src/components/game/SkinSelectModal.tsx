@@ -348,7 +348,7 @@ function SkinCard<T extends string>({
             className="text-[10px] text-center font-cyber tracking-wide py-1"
             style={{ color: 'var(--text-muted)' }}
           >
-            未解锁
+            未解鎖
           </div>
         ) : isCurrent ? (
           <div
@@ -407,7 +407,7 @@ function SkinCard<T extends string>({
   );
 }
 
-// ========== 主組件 ==========
+// ========== 主元件 ==========
 
 const SkinSelectModal: FC<SkinSelectModalProps> = ({
   isOpen,

@@ -20,7 +20,7 @@ export const BaseComboboxError = ({
       )}
     >
       <div className="max-w-full truncate text-muted-foreground">
-        加载失败，请检查网络后重试
+        載入失敗，請檢查網路後重試
       </div>
       <Button
         variant="ghost"
@@ -28,7 +28,7 @@ export const BaseComboboxError = ({
         onClick={onRetry}
         className="h-auto px-0 text-primary"
       >
-        刷新
+        重新整理
       </Button>
     </div>
   );

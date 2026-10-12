@@ -4,11 +4,11 @@ import { logger } from '@lark-apaas/client-toolkit/logger';
 export interface UseVoiceOptions {
   roomCode?: string;
   playerIndex?: number;
-  /** 由 roomState 同步的开麦玩家索引列表 */
+  /** 由 roomState 同步的開麥玩家索引列表 */
   serverVoiceParticipants?: number[];
-  /** 切换静音的 API 调用（可选，没有时仅本地状态） */
+  /** 切換靜音的 API 呼叫（可選，沒有時僅本地狀態） */
   toggleApi?: (muted: boolean) => Promise<unknown>;
-  /** 語音轉文字識別完成後發送消息的回調 */
+  /** 語音轉文字識別完成後傳送訊息的回撥 */
   onSendMessage?: (text: string) => void;
 }
 
@@ -28,7 +28,7 @@ export interface UseVoiceReturn {
 
 const DEFAULT_VOLUME = 70;
 
-// SpeechRecognition 類型聲明
+// SpeechRecognition 型別宣告
 type SpeechRecognitionEvent = {
   resultIndex: number;
   results: {
@@ -173,7 +173,7 @@ export function useVoice(options: UseVoiceOptions = {}): UseVoiceReturn {
           try {
             onSendMessage(trimmed);
           } catch (err) {
-            logger.error('語音消息發送失敗', { error: String(err) });
+            logger.error('語音訊息傳送失敗', { error: String(err) });
           }
         }
         setTranscript('');
@@ -182,7 +182,7 @@ export function useVoice(options: UseVoiceOptions = {}): UseVoiceReturn {
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent): void => {
       logger.error('語音識別錯誤', { error: event.error, message: event.message });
-      // not-allowed / service-not-allowed 是權限問題，不再重啟
+      // not-allowed / service-not-allowed 是許可權問題，不再重啟
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
         shouldRestartRef.current = false;
         setSttEnabled(false);

@@ -1,4 +1,4 @@
 // client/src/types/index.ts
 
-// 导出其他类型
+// 匯出其他型別
 export * from './common';

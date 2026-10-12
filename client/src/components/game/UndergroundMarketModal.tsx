@@ -233,7 +233,7 @@ const UndergroundMarketModal: FC<UndergroundMarketModalProps> = ({
                         style={{ color: 'var(--yellow)' }}
                       >
                         <AlertTriangle className="w-3 h-3" />
-                        30% 概率被警察沒收
+                        30% 機率被警察沒收
                       </div>
 
                        <button

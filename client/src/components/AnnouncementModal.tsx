@@ -131,7 +131,7 @@ const AnnouncementModal = ({ open, onClose }: AnnouncementModalProps) => {
           </button>
         </div>
 
-        {/* 類型標籤 */}
+        {/* 型別標籤 */}
         <div className="mb-3">
           <span
             className="inline-block px-2 py-0.5 text-xs font-cyber tracking-wider rounded"

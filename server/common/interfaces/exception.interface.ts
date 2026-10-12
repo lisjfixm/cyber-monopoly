@@ -1,4 +1,4 @@
-// 业务异常类
+// 業務異常類
 import { HttpStatus } from '@nestjs/common';
 import { RESPONSE_CODE_TO_HTTP_STATUS_MAP, ResponseCode } from '../constants/api_response_code';
 

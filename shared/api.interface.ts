@@ -27,7 +27,10 @@ export type GameMode = "classic" | "fast" | "crazy" | "custom" | "coop2v2" | "ba
   | "race" | "survival" | "coop_boss" | "treasure" | "emperor" | "dark"
   | "lightning" | "resource" | "team_deathmatch" | "darknet"
   | "casino" | "dynasty"
-  | "stock_frenzy" | "black_market_race" | "twin_strike";
+  | "stock_frenzy" | "black_market_race" | "twin_strike"
+  // ===== v4.0 新增模式 =====
+  | "heist" | "bounty_hunt" | "gold_rush"
+  | "cyber_olympics" | "rogue_ai" | "time_loop";
 
 // ========== 劇情模式 ==========
 
@@ -108,7 +111,7 @@ export interface TournamentHistory {
   rewards: string;
 }
 
-// 進行中的錦標賽（官方賽事模擬數據）
+// 進行中的錦標賽（官方賽事模擬資料）
 export interface LiveTournament {
   id: string;
   format: 8 | 16 | 32;
@@ -131,7 +134,7 @@ export interface CustomMapData {
 
 export type MapEditorTool = 'select' | 'paint' | 'erase';
 
-// ========== 每日挑战 ==========
+// ========== 每日挑戰 ==========
 
 export type DailyChallengeType =
   | 'fate_only'
@@ -151,7 +154,7 @@ export interface DailyChallenge {
   reward: { exp: number; coins: number; item?: string };
 }
 
-// ========== 赛季通行证 ==========
+// ========== 賽季通行證 ==========
 
 export interface BattlePassReward {
   level: number;
@@ -227,7 +230,7 @@ export type PlayMode = "local" | "ai" | "online";
 export type CellType = "start" | "property" | "detention" | "fate" | "chance" | "minigame" | "parking" | "jail" | "event" | "teleport";
 export type PlayerColor = "red" | "blue" | "green" | "yellow" | "purple" | "orange";
 
-// ========== 股票系统 ==========
+// ========== 股票系統 ==========
 
 export type StockSymbol = "NEON" | "QNTM" | "DATA" | "CYBR";
 
@@ -254,9 +257,10 @@ export interface StockState {
 export interface PlayerStock {
   symbol: StockSymbol;
   quantity: number;
+  buyPrice?: number;  // v4.0：IPO 申購記錄成本
 }
 
-// ========== 全局事件 ==========
+// ========== 全域性事件 ==========
 
 export type GlobalEventType =
   | "economic_crisis"
@@ -277,11 +281,20 @@ export type GlobalEventType =
   | "ad_storm"
   | "subsidy_carnival"
   | "black_market_crackdown"
-  // v3.0 新增全局事件
+  // v3.0 新增全域性事件
   | "satellite_airdrop"
   | "data_thunder"
   | "chip_boom"
-  | "mega_subsidy";
+  | "mega_subsidy"
+  // ===== v4.0 新增全域性事件 =====
+  | "quantum_leap"
+  | "crypto_winter"
+  | "ipo_wave"
+  | "central_bank_rate"
+  | "trade_war"
+  | "solar_flare"
+  | "ubi"
+  | "antitrust";
 
 export interface GlobalEvent {
   type: GlobalEventType;
@@ -298,7 +311,7 @@ export interface GlobalEventMultipliers {
   stockPriceMultiplier?: number;
 }
 
-// ========== 道具系统 ==========
+// ========== 道具系統 ==========
 
 export type ItemType =
   | 'double_dice'
@@ -343,7 +356,22 @@ export type ItemType =
   | 'buy_coupon'
   | 'loot_drone'
   | 'warp_token'
-  | 'heal_synth';
+  | 'heal_synth'
+  // ===== v4.0 新增道具 =====
+  | 'quantum_safe'
+  | 'causality_rewind'
+  | 'decoy_hologram'
+  | 'patent_trap'
+  | 'orbital_strike'
+  | 'digital_will'
+  | 'takeover_bid'
+  | 'debt_restructure'
+  | 'black_swan'
+  | 'tax_haven'
+  | 'insider_tip'
+  | 'mirror_card'
+  | 'nano_swarm'
+  | 'forged_passport';
 
 export type MountType = 'flyer' | 'diver' | 'rocket' | 'hoverboard' | 'drone_mount' | 'hover_car';
 
@@ -391,7 +419,7 @@ export interface DisasterState {
   active: boolean;
 }
 
-// ========== 天气系统 ==========
+// ========== 天氣系統 ==========
 
 export type WeatherType = 'sunny' | 'rain' | 'fog' | 'em_storm' | 'neon_night' | 'space_calm';
 
@@ -413,7 +441,7 @@ export interface WeatherMultipliers {
   spaceCalmBonus?: number;
 }
 
-// ========== 迷你游戏系统 ==========
+// ========== 迷你遊戲系統 ==========
 
 export type MiniGameType = 'slot_machine' | 'blackjack' | 'guess_number' | 'memory_match' | 'rhythm_master' | 'shooting_challenge' | 'data_miner' | 'firewall_breach' | 'cyber_racer' | 'auction_master';
 
@@ -425,23 +453,23 @@ export interface MiniGameState {
   playerCards?: number[];
   dealerCards?: number[];
   diceResult?: number;
-  // 记忆翻牌
+  // 記憶翻牌
   memoryCards?: number[];
   memoryFlipped?: number[];
   memoryMatched?: number[];
   memoryTimeLeft?: number;
   memoryMoves?: number;
-  // 节奏大师
+  // 節奏大師
   rhythmNotes?: Array<{ id: number; time: number; lane: number; hit: boolean }>;
   rhythmScore?: number;
   rhythmHitCount?: number;
   rhythmTotalNotes?: number;
   rhythmPlaying?: boolean;
-  // 射击挑战
+  // 射擊挑戰
   shootingTargets?: Array<{ id: number; x: number; y: number; speed: number; hit: boolean }>;
   shootingBullets?: number;
   shootingScore?: number;
-  // 數據挖掘
+  // 資料探勘
   minerScore?: number;
   minerCombo?: number;
   minerTimeLeft?: number;
@@ -468,7 +496,7 @@ export interface MiniGameState {
   finished: boolean;
 }
 
-// ========== 成就系统 ==========
+// ========== 成就係統 ==========
 
 export type AchievementId =
   | "first_win"
@@ -545,7 +573,32 @@ export type AchievementId =
   | "chip_mogul"
   | "survival_master"
   | "emperor_crowned"
-  | "race_finisher";
+  | "race_finisher"
+  // ===== v4.0 新增成就 =====
+  | "heist_mastermind"
+  | "bounty_legend"
+  | "gold_rush_king"
+  | "olympic_champion"
+  | "rogue_ai_overlord"
+  | "loop_breaker"
+  | "crypto_whale"
+  | "ipo_subscriber"
+  | "rate_surfer"
+  | "tax_evader"
+  | "tax_audited"
+  | "hostile_takeover"
+  | "quantum_trader_pro"
+  | "memory_broker_pro"
+  | "drone_king_pro"
+  | "smuggler_pro"
+  | "oracle_pro"
+  | "ai_whisperer_pro"
+  | "auditor_pro"
+  | "negotiator_pro"
+  | "architect_pro"
+  | "forensic_hacker_pro"
+  | "black_swan_survivor"
+  | "ubi_recipient";
 
 export interface Achievement {
   id: AchievementId;
@@ -603,7 +656,18 @@ export type Profession =
   // v3.0 新增職業
   | "netrunner"
   | "cyber_medic"
-  | "stock_broker";
+  | "stock_broker"
+  // ===== v4.0 新增職業 =====
+  | "quantum_trader"
+  | "memory_broker"
+  | "drone_king"
+  | "smuggler"
+  | "street_oracle"
+  | "ai_whisperer"
+  | "tax_auditor"
+  | "negotiator"
+  | "domain_architect"
+  | "forensic_hacker";
 
 export type GamePhase =
   | "waiting"
@@ -652,7 +716,19 @@ export type CardEffect =
   | { type: "swap_position" }
   | { type: "lottery"; cost: number; prize: number }
   | { type: "extort"; amount: number }
-  | { type: "universal_tax"; percent: number };
+  | { type: "universal_tax"; percent: number }
+  // ===== v4.0 新增 CardEffect =====
+  | { type: "crypto_gamble"; amount: number }          // 加密貨幣賭一把：50% 翻倍，50% 歸零
+  | { type: "ipo_allotment"; amount: number }          // IPO 申購中簽，獲得股票等值現金
+  | { type: "tax_evade_choice"; evadeAmount: number; auditFine: number }  // 兩難：逃稅 or 如實繳納
+  | { type: "interest_rate_shock"; percent: number }  // 央行利率衝擊：全場存貸利率波動
+  | { type: "hostile_tender"; amount: number }          // 敵意收購要約：收現金
+  | { type: "loop_reset" }                              // 時間迴圈：重置本回合位置
+  | { type: "mine_spawn"; amount: number }               // 金礦出現在某格
+  | { type: "bounty_place"; amount: number }             // 在某玩家頭上懸賞
+  | { type: "olympic_medal"; medal: 'gold'|'silver'|'bronze'; points: number }  // 奧運獎牌
+  | { type: "decoy_deploy" }                            // 部署幻影分身
+  | { type: "tax_haven_deposit"; amount: number };      // 避稅天堂：藏一筆免稅金
 
 export type SpecialBuildingType = "mall" | "factory" | "lab";
 
@@ -766,14 +842,14 @@ export interface PropertyState {
   hackedByPlayer?: number; // 入侵的駭客玩家索引
 }
 
-// 交易提议
+// 交易提議
 export interface TradeOffer {
   id: number;
-  fromPlayer: number;          // 发起方（玩家索引）
+  fromPlayer: number;          // 發起方（玩家索引）
   toPlayer: number;            // 接收方（玩家索引）
-  givenProperties: number[];   // 发起方给出的地块ID列表
-  receivedProperties: number[];// 发起方想要的地块ID列表
-  moneyAmount: number;         // 发起方给出的金额（正数=给钱，负数=收钱）
+  givenProperties: number[];   // 發起方給出的地塊ID列表
+  receivedProperties: number[];// 發起方想要的地塊ID列表
+  moneyAmount: number;         // 發起方給出的金額（正數=給錢，負數=收錢）
 }
 
 export interface ProfessionConfig {
@@ -788,16 +864,16 @@ export interface ProfessionConfig {
 export interface AuctionState {
   cellId: number;
   currentBid: number;
-  currentBidder: number;       // 当前最高出价者（玩家索引）
-  activeBidders: number[];     // 仍在参与竞价的玩家索引数组
-  activeBidderIndex: number;   // 当前轮到行动的玩家在 activeBidders 中的索引
+  currentBidder: number;       // 當前最高出價者（玩家索引）
+  activeBidders: number[];     // 仍在參與競價的玩家索引陣列
+  activeBidderIndex: number;   // 當前輪到行動的玩家在 activeBidders 中的索引
   active: boolean;
   startingPrice: number;
   minIncrement: number;
-  // 暗拍模式字段
+  // 暗拍模式欄位
   isBlind?: boolean;           // 是否暗拍模式
-  blindBids?: Record<number, number | null>;  // 玩家索引 -> 出价（null=未出价）
-  blindDeadline?: string;      // 暗拍截止时间（联机模式用）
+  blindBids?: Record<number, number | null>;  // 玩家索引 -> 出價（null=未出價）
+  blindDeadline?: string;      // 暗拍截止時間（聯機模式用）
   revealed?: boolean;          // 是否已揭曉
 }
 
@@ -823,7 +899,7 @@ export type BlackMarketAuctionPhase = 'countdown' | 'bidding' | 'reveal' | 'fini
 export interface BlackMarketAuctionItem {
   itemType: ItemType;
   startingPrice: number;
-  bids: Record<number, number | null>;  // playerIndex -> bid amount (null=未出价)
+  bids: Record<number, number | null>;  // playerIndex -> bid amount (null=未出價)
   winner?: number | null;
   finalPrice?: number;
 }
@@ -832,8 +908,8 @@ export interface BlackMarketAuctionState {
   phase: BlackMarketAuctionPhase;
   items: BlackMarketAuctionItem[];
   currentItemIndex: number;
-  timeLeft: number;            // 剩余秒数（倒计时用）
-  turnTriggered: number;       // 触发的回合数
+  timeLeft: number;            // 剩餘秒數（倒計時用）
+  turnTriggered: number;       // 觸發的回合數
 }
 
 // ========== 皮膚系統 ==========
@@ -933,8 +1009,8 @@ export interface AvatarFrameConfig {
 
 export interface PlayerState {
   name: string;
-  playerNumber: number;        // 玩家编号（1-based，显示用）
-  playerIndex: number;         // 玩家索引 0~5（数组中自证身份）
+  playerNumber: number;        // 玩家編號（1-based，顯示用）
+  playerIndex: number;         // 玩家索引 0~5（陣列中自證身份）
   money: number;
   pawnSkin?: PawnSkinType;     // 棋子皮膚
   diceSkin?: DiceSkinType;     // 骰子皮膚
@@ -946,42 +1022,42 @@ export interface PlayerState {
   totalHouses: number;
   totalHotels: number;
   totalAssets: number;
-  color: PlayerColor;          // 玩家颜色标识
+  color: PlayerColor;          // 玩家顏色標識
   isAI: boolean;               // 是否是AI
   aiDifficulty?: "easy" | "normal" | "hard" | "hell";
   aiPersonality?: "conservative" | "aggressive" | "speculator" | "trader" | "vengeful" | "gambler";
-  isBankrupt: boolean;         // 是否已破产
+  isBankrupt: boolean;         // 是否已破產
   health?: number | null;      // 生存模式生命值
-  teamId?: TeamId;             // 所属队伍（仅合作模式有值）
+  teamId?: TeamId;             // 所屬隊伍（僅合作模式有值）
   profession?: Profession;
   hasUsedRevival?: boolean;
-  // 股票系统
+  // 股票系統
   stocks: PlayerStock[];
   stockBoughtTotal: number;
   stockSoldTotal: number;
-  // 过路费统计
+  // 過路費統計
   tollPaid: number;
   tollEarned: number;
   tollIncome: number;
   tollExpense: number;
-  // 抽卡统计
+  // 抽卡統計
   fateCardDraws: number;
   chanceCardDraws: number;
-  // 成就追踪
+  // 成就追蹤
   detentionCount: number;
   cardDrawCount: number;
   tradeCount: number;
   auctionWins: number;
   hasBeenPoor: boolean;
   unlockedAchievements: AchievementId[];
-  // 道具系统
+  // 道具系統
   items: ItemState[];
   shieldCharges: number;
   freePassRemaining: number;
   doubleDiceActive: boolean;
   remoteDiceActive: boolean;
   remoteDiceValues?: [number, number];
-  // 新道具状态
+  // 新道具狀態
   invisibilityTurns?: number;
   moneyTreeTurns?: number;
   xRayActive?: boolean;
@@ -993,28 +1069,28 @@ export interface PlayerState {
   nextBuyDiscount?: number;
   skipNextTurn?: boolean;
   stealthCloakTurns?: number;
-  // 迷你游戏
+  // 迷你遊戲
   minigameWins: number;
-  // 道具追踪（成就用）
+  // 道具追蹤（成就用）
   itemsUsedThisGame: number;
-  // 天气追踪（成就用）
+  // 天氣追蹤（成就用）
   sunnyWeatherCount: number;
-  // 贷款系统
+  // 貸款系統
   loan?: number;
   // 存款系統
   savings?: number;
-  // 技能树系统
+  // 技能樹系統
   skillTree?: SkillTreeState;
   skillPoints?: number;
-  // 卡牌 buff 系统
+  // 卡牌 buff 系統
   cardBuffs?: CardBuff[];
-  // 地下市场 / 声望系统（可选，默认100）
+  // 地下市場 / 聲望系統（可選，預設100）
   reputation?: number;
   // 坐騎系統
   mounts?: MountState | null;
   // 時間旅行使用次數（每局每人限1次）
   timeTravelUsed?: boolean;
-  // 資源爭奪模式：數據資源點數
+  // 資源爭奪模式：資料資源點數
   resources?: number;
   // 資源兌換效果：下次過路費減免比例（0-1）
   nextTollDiscount?: number;
@@ -1038,13 +1114,13 @@ export interface PlayerState {
   lastQuantumJumpTurn?: number;
   // 賽博改造人：本回合是否已用過機械強化
   diceAdjustedThisTurn?: boolean;
-  // 駭客：剩餘入侵次數（每局限 3 次）
+  // 駭客：剩餘入侵次數（每侷限 3 次）
   hackUsesRemaining?: number;
-  // 黑市商人：已出售道具次數（每局限 3 次）
+  // 黑市商人：已出售道具次數（每侷限 3 次）
   itemSellCount?: number;
   // 賽博道士：本次負面卡減免已觸發標記（每回合重置）
   daoistDebuffReduced?: boolean;
-  // 數據牧師：本局是否已用過「獻祭」主動
+  // 資料牧師：本局是否已用過「獻祭」主動
   priestSacrificeUsed?: boolean;
   // 時間守望者：本局是否已用過額外回合主動
   timeWatcherExtraTurnUsed?: boolean;
@@ -1056,9 +1132,9 @@ export interface PlayerState {
   negativeImmunityShield?: boolean;
   // 幸運模組：下次擲骰取較大值
   luckyDiceActive?: boolean;
-  // 本回合過路费加成（百分比，0.5 = +50%）
+  // 本回合過路費加成（百分比，0.5 = +50%）
   tollBoostThisTurn?: number;
-  // 數據牧師獻祭獲得的必出 7 狀態（下次擲骰時生效）
+  // 資料牧師獻祭獲得的必出 7 狀態（下次擲骰時生效）
   sacrificeLuckySeven?: boolean;
   // 聯盟系統：本局是否已毀約（毀約後不能再結盟）
   hasBrokenAlliance?: boolean;
@@ -1067,7 +1143,7 @@ export interface PlayerState {
   // ===== v2.0 新增 =====
   // 被凍結回合數（冰凍射線/卡牌）：>0 時下回合跳過
   frozenTurns?: number;
-  // 數據備份：抵消下一次負面金錢效果（一次性）
+  // 資料備份：抵消下一次負面金錢效果（一次性）
   dataBackupActive?: boolean;
   // 過路費磁吸：下次過路費收入翻倍
   tollMagnetActive?: boolean;
@@ -1103,9 +1179,53 @@ export interface PlayerState {
   stockBrokerPlayUses?: number;
   // v3.0 成就追蹤：領取衛星空投次數
   airdropReceived?: number;
+  // ===== v4.0 新增玩家欄位 =====
+  // 加密迷因幣持倉（symbol -> quantity）
+  cryptoHoldings?: Record<string, number>;
+  // IPO 申購紀錄（symbol -> quantity）
+  ipoSubscriptions?: Record<string, number>;
+  // 避稅天堂藏金（免稅，回合結算不扣稅）
+  taxHavenBalance?: number;
+  // 本回合已逃稅次數（用於稽查判定）
+  taxEvadedThisGame?: number;
+  // 被稽查次數
+  taxAuditedCount?: number;
+  // 敵意收購：已控制的公司 symbol 列表
+  controlledCompanies?: string[];
+  // 奧運獎牌分數
+  olympicScore?: number;
+  olympicGold?: number;
+  olympicSilver?: number;
+  olympicBronze?: number;
+  // 金礦模式：已開採金礦數
+  minesMined?: number;
+  // 賞金模式：當前懸賞金額（>0 表示頭上有賞金）
+  bountyOnHead?: number;
+  // 劫案模式：已收集資料核心數
+  heistDataCores?: number;
+  heistEscaped?: boolean;
+  // v4 新職業：主動技能剩餘次數
+  quantumTraderArbUses?: number;
+  memoryBrokerSwapUses?: number;
+  droneKingStrikeUses?: number;
+  smugglerContrabandUses?: number;
+  oraclePredictUses?: number;
+  aiWhispererCalibrateUses?: number;
+  auditorInspectUses?: number;
+  negotiatorMediateUses?: number;
+  architectZoneUses?: number;
+  forensicHackerRecoverUses?: number;
+  // 成就追蹤：本場加密貨幣盈虧
+  cryptoPnl?: number;
+  // 成就追蹤：本場 IPO 獲利
+  ipoProfit?: number;
+  // 成就追蹤：本場發起敵意收購次數
+  hostileTakeoverCount?: number;
+  // 成就追蹤：本場使用黑天鵝次數
+  blackSwanSurvived?: number;
 }
 
-// ========== 技能树系统 ==========
+// ========== 技能樹系統 ==========
 
 export type SkillId =
   | 'buy_discount'       // 買地折扣
@@ -1175,22 +1295,26 @@ export interface LogEntry {
            | "evolution"
            | "mount"
            | "pet"
-           | "codex";
+           | "codex"
+           // v4.0 新增日誌型別
+           | "crypto"
+           | "ipo"
+           | "tax";
     text: string;
   }
 
 export interface GameState {
   mode: GameMode;
-  playerCount: number;          // 实际玩家数
+  playerCount: number;          // 實際玩家數
   players: PlayerState[];
   currentPlayerIndex: number;
-  roundStartPlayer: number;     // 当前轮的起始玩家索引
-  playersActedThisRound: boolean[]; // 当前轮已行动过的玩家标记
-  bankruptPlayers: number[];    // 破产玩家索引列表
+  roundStartPlayer: number;     // 當前輪的起始玩家索引
+  playersActedThisRound: boolean[]; // 當前輪已行動過的玩家標記
+  bankruptPlayers: number[];    // 破產玩家索引列表
   phase: GamePhase;
   diceValues: [number, number];
   lastDiceValues: [number, number];
-  ownedProperties: Record<number, number>; // 向后兼容（存玩家索引）
+  ownedProperties: Record<number, number>; // 向後相容（存玩家索引）
   properties: Record<number, PropertyState>;
   pendingTrade?: TradeOffer | null;
   auction?: AuctionState | null;
@@ -1204,40 +1328,40 @@ export interface GameState {
     cardType: 'fate' | 'chance';
     options: Array<{ label: string; effect: CardEffect }>;
   } | null;
-  // 股票系统
+  // 股票系統
   stocks: Record<StockSymbol, number>;
   stockStates?: Record<StockSymbol, StockState>;
-  // 全局事件系统
+  // 全域性事件系統
   globalEventTurnCounter: number;
   currentGlobalEvent: GlobalEventType | null;
   globalEventMultipliers: GlobalEventMultipliers;
-  // 自定义规则（custom 模式使用）
+  // 自定義規則（custom 模式使用）
   customRules?: CustomGameRules;
-  // 游戏统计
+  // 遊戲統計
   totalTurns: number;
-  // 天气系统
+  // 天氣系統
   currentWeather: WeatherType;
   weatherMultipliers: WeatherMultipliers;
   // 道具商店
   shopItems: ItemType[];
   shopRefreshTurn: number;
-  // 迷你游戏
+  // 迷你遊戲
   pendingMiniGame: MiniGameState | null;
   // 合作模式
   isCoopMode?: boolean;
   teams?: Record<TeamId, TeamState>;
-  // 大逃杀模式
+  // 大逃殺模式
   isBattleRoyale?: boolean;
   destroyedCells?: number[];
   destroyedSides?: BoardSide[];
   shrinkTurnCountdown?: number;
   finalBattle?: boolean;
   alivePlayersCount?: number;
-  // 通货膨胀系统
+  // 通貨膨脹系統
   inflationRate?: number;
-  // 债券系统
+  // 債券系統
   bonds?: Bond[];
-  // 每日挑战
+  // 每日挑戰
   challengeType?: DailyChallengeType;
   maxTurns?: number;
   // 模組（啟用的模組ID列表）
@@ -1301,7 +1425,7 @@ export interface GameState {
   cardCombo?: Record<number, CardComboState>;
   // 地產進化建材（playerIndex -> 建材數量）
   buildingMaterials?: Record<number, number>;
-  // 命運卡/機會卡牌堆（索引數組，抽完自動重洗）
+  // 命運卡/機會卡牌堆（索引陣列，抽完自動重洗）
   fateDeck?: number[];
   fateDeckIndex?: number;
   chanceDeck?: number[];
@@ -1345,6 +1469,142 @@ export interface GameState {
   casinoMode?: CasinoModeState | null;
   // 金融王朝模式
   dynastyMode?: DynastyModeState | null;
+  // ===== v4.0 新增：經濟系統 =====
+  // 加密迷因幣市場（symbol -> 價格）
+  cryptoMarket?: Record<string, CryptoCoinState>;
+  // IPO 申購池（symbol -> 承銷價/發行量）
+  ipoPool?: Record<string, IpoState>;
+  // 央行政策利率（基準點，0.02 = 2%）
+  centralBankRate?: number;
+  // 稅務：本局已繳所得稅總額（玩家 -> 金額）
+  taxPaidThisGame?: Record<number, number>;
+  // 敵意收購：每支股票的控股權 threshold 與當前控股率
+  stockControl?: Record<StockSymbol, StockControlState>;
+  // ===== v4.0 新增：模式狀態 =====
+  // 劫案模式
+  heistMode?: HeistModeState | null;
+  // 賞金模式
+  bountyHuntMode?: BountyHuntModeState | null;
+  // 淘金熱模式
+  goldRushMode?: GoldRushModeState | null;
+  // 賽博奧運模式
+  cyberOlympicsMode?: CyberOlympicsModeState | null;
+  // 叛逆 AI 模式
+  rogueAiMode?: RogueAiModeState | null;
+  // 時間迴圈模式
+  timeLoopMode?: TimeLoopModeState | null;
+}
+
+// ========== v4.0 經濟系統型別 ==========
+
+export interface CryptoCoinState {
+  symbol: string;
+  name: string;
+  price: number;
+  volatility: number;   // 0~1 波動幅度
+  lastChange: number;  // 最近一次漲跌百分比
+  crashRisk: number;   // 0~1 崩盤機率
+}
+
+export interface IpoState {
+  symbol: StockSymbol;
+  name: string;
+  offerPrice: number;
+  totalShares: number;
+  // playerIndex -> 申購數量
+  subscriptions?: Record<number, number>;
+  // 是否已開盤（開盤後進入正規股票市場）
+  opened: boolean;
+}
+
+export interface StockControlState {
+  symbol: StockSymbol;
+  // 控股門檻（% of total shares）
+  threshold: number;
+  // 當前控股玩家 index（null = 無人控股）
+  controllingPlayer?: number | null;
+  // 本回合已發放紅利標記
+  dividendPaid?: boolean;
+}
+
+// ========== v4.0 模式狀態型別 ==========
+
+export interface HeistModeState {
+  // 0 = 劫匪，1 = 保全（按 playerIndex 分配）
+  roles: Record<number, 'robber' | 'guard'>;
+  // 資料核心已收集數（劫匪）
+  dataCoresCollected: Record<number, number>;
+  // 逃生點 cellId
+  escapeCellId: number;
+  // 資料核心所在 cellId（初始）
+  dataCoreCellId: number;
+  // 已逃脫劫匪數
+  escapedRobbers: number;
+}
+
+export interface BountyHuntModeState {
+  // 當前被懸賞的玩家 index（-1 = 無）
+  currentBountyTarget: number;
+  // 當前懸賞金額
+  currentBountyAmount: number;
+  // 懸賞已持續回合數
+  bountyTurns: number;
+  // 每次懸賞輪換間隔
+  rotationInterval: number;
+}
+
+export interface GoldRushModeState {
+  // 金礦所在 cellId 列表
+  activeMines: number[];
+  // 已枯竭金礦 cellId 列表
+  depletedMines: number[];
+  // 每個金礦的剩餘存量（cellId -> 數量）
+  mineStock: Record<number, number>;
+  // 下個金礦出現倒數
+  nextMineTurn: number;
+}
+
+export interface CyberOlympicsModeState {
+  // 已完成的比賽場次
+  eventsCompleted: number;
+  // 總比賽場次
+  totalEvents: number;
+  // 獎牌榜（playerIndex -> 分數）
+  scoreboard: Record<number, number>;
+  // 當前進行中的比賽型別
+  currentEvent?: string | null;
+}
+
+export interface RogueAiModeState {
+  // 叛逆 AI 玩家 index
+  rogueAiIndex: number;
+  // 核心生命值
+  coreHealth: number;
+  // 核心最大生命值
+  coreMaxHealth: number;
+  // 災難/陷阱已部署次數
+  disastersDeployed: number;
+  // 追獵者是否已關閉核心
+  coreShutdown: boolean;
+}
+
+export interface TimeLoopModeState {
+  // 迴圈長度（回合數）
+  loopLength: number;
+  // 當前迴圈已過回合
+  loopTurns: number;
+  // 已打破迴圈次數
+  loopsBroken: number;
+  // 打破迴圈所需累積分數
+  breakThreshold: number;
+  // 玩家養成累積（保留）：playerIndex -> 累積分數
+  accumulatedScore: Record<number, number>;
+  // 上一次迴圈快照（用於重置位置/金錢）
+  loopSnapshot?: {
+    positions: number[];
+    money: number[];
+    turn: number;
+  } | null;
 }
 
 export interface CodexState {
@@ -1369,7 +1629,7 @@ export interface CasinoModeState {
 export interface DynastyModeState {
   // 每個成套地產每回合被動股息倍率（相對於該組地產 basePrice 之和）
   dividendRate: number;
-  // 併購強化：成套數量提供的全局過路費加成
+  // 併購強化：成套數量提供的全域性過路費加成
   acquisitionBonus: number;
 }
 
@@ -1498,27 +1758,27 @@ export interface SpyState {
   remainingTurns: number;
 }
 
-// ========== 地下市场 ==========
+// ========== 地下市場 ==========
 
 export interface StolenProperty {
   cellId: number;
   stolenFrom: number;  // 原主人索引
   stolenBy: number;    // 偷走的玩家索引（不一定在售）
-  forSale: boolean;    // 是否在地下市场出售
-  price: number;       // 售价（市价的 discount 比例）
-  discount?: number;   // 折扣比例（0~1），默認 0.4
+  forSale: boolean;    // 是否在地下市場出售
+  price: number;       // 售價（市價的 discount 比例）
+  discount?: number;   // 折扣比例（0~1），預設 0.4
 }
 
-// ========== 债券系统 ==========
+// ========== 債券系統 ==========
 
 export interface Bond {
   id: string;
-  issuerId: number;          // 发行者玩家索引
-  holderId: number | null;   // 持有者（认购者），null=未被认购
-  amount: number;            // 债券面额（本金）
+  issuerId: number;          // 發行者玩家索引
+  holderId: number | null;   // 持有者（認購者），null=未被認購
+  amount: number;            // 債券面額（本金）
   interestRate: number;      // 利息率（如 0.2 表示 20%）
-  turnsRemaining: number;    // 剩余回合数（到期时为0触发偿还）
-  active: boolean;           // 是否有效（已偿还则为false）
+  turnsRemaining: number;    // 剩餘回合數（到期時為0觸發償還）
+  active: boolean;           // 是否有效（已償還則為false）
   status: 'issued' | 'subscribed' | 'matured' | 'defaulted' | 'repaid';
 }
 
@@ -1560,14 +1820,14 @@ export interface ChanceCard {
 
 export interface ChatMessage {
   id: number;          // 自增id
-  sender: -1 | number; // -1=系统, 其余为玩家索引
+  sender: -1 | number; // -1=系統, 其餘為玩家索引
   senderName: string;
   content: string;
-  type: "player" | "system" | "voice"; // 玩家消息/系统消息/語音轉文字
+  type: "player" | "system" | "voice"; // 玩家訊息/系統訊息/語音轉文字
   timestamp: string;   // ISO string
 }
 
-// ========== 语音聊天 ==========
+// ========== 語音聊天 ==========
 
 export interface VoiceToggleRequest {
   roomCode: string;
@@ -1575,18 +1835,18 @@ export interface VoiceToggleRequest {
   muted: boolean;
 }
 
-// ========== 观战模式 ==========
+// ========== 觀戰模式 ==========
 
 export interface Spectator {
-  id: string;          // 观战者ID（visitorId）
-  nickname: string;    // 昵称
-  following?: number;  // 跟随的玩家索引，undefined=自由视角
+  id: string;          // 觀戰者ID（visitorId）
+  nickname: string;    // 暱稱
+  following?: number;  // 跟隨的玩家索引，undefined=自由視角
 }
 
 export interface DanmakuMessage {
   id: number;
   sender: string;      // visitorId
-  senderName: string;  // 昵称
+  senderName: string;  // 暱稱
   content: string;
   color?: string;      // 霓虹顏色
   timestamp: string;   // ISO string
@@ -1645,7 +1905,7 @@ export interface HeartbeatRequest {
 export interface HeartbeatResponse {
   success: boolean;
   disconnectedPlayers: number[];
-  /** @deprecated 向后兼容 */
+  /** @deprecated 向後相容 */
   disconnectedPlayer: number | null;
 }
 
@@ -1676,22 +1936,22 @@ export interface RoomState {
   hostIndex: number; // 房主索引
   status: RoomStatus;
   gameState: GameState | null;
-  myPlayerIndex?: number; // 请求者的索引（返回时填充）
-  // 聊天相关
+  myPlayerIndex?: number; // 請求者的索引（返回時填充）
+  // 聊天相關
   messages: ChatMessage[];
-  unreadCount: number; // 请求者的未读数
-  // 语音相关
-  voiceActive?: boolean;           // 是否开启语音
-  voiceParticipants?: number[];    // 当前开麦的玩家索引列表
-  // 观战相关
-  spectators?: Spectator[];        // 观战者列表
-  danmaku?: DanmakuMessage[];      // 弹幕列表
-  // 断线相关
-  disconnectedPlayers: number[]; // 断线的玩家索引列表
-  // 房间公开与密码
-  isPublic?: boolean;            // 是否公开房间，默认 true
-  hasPassword?: boolean;         // 是否有密码（列表对外暴露用）
-  // ===== 向后兼容字段（旧客户端） =====
+  unreadCount: number; // 請求者的未讀數
+  // 語音相關
+  voiceActive?: boolean;           // 是否開啟語音
+  voiceParticipants?: number[];    // 當前開麥的玩家索引列表
+  // 觀戰相關
+  spectators?: Spectator[];        // 觀戰者列表
+  danmaku?: DanmakuMessage[];      // 彈幕列表
+  // 斷線相關
+  disconnectedPlayers: number[]; // 斷線的玩家索引列表
+  // 房間公開與密碼
+  isPublic?: boolean;            // 是否公開房間，預設 true
+  hasPassword?: boolean;         // 是否有密碼（列表對外暴露用）
+  // ===== 向後相容欄位（舊客戶端） =====
   hostName: string;
   guestName: string | null;
   unreadHost: number;
@@ -1708,21 +1968,21 @@ export interface RoomState {
 export interface CreateRoomRequest {
   hostName: string;
   gameMode?: GameMode;
-  maxPlayers?: number; // 默认 2，支持 2/4/6
+  maxPlayers?: number; // 預設 2，支援 2/4/6
   visitorId?: string;
-  password?: string;   // 4位数字密码（可选，空表示无密码）
-  isPublic?: boolean;  // 是否公开房间，默认 true
-  defaultAuctionMode?: 'open' | 'blind';  // 默认拍卖模式
+  password?: string;   // 4位數字密碼（可選，空表示無密碼）
+  isPublic?: boolean;  // 是否公開房間，預設 true
+  defaultAuctionMode?: 'open' | 'blind';  // 預設拍賣模式
   turnTimeLimit?: number;  // 回合時間限制（秒），0 或 undefined 表示無限
 }
 
 export interface JoinRoomRequest {
   roomCode: string;
   playerName: string;
-  /** @deprecated 向后兼容，等同于 playerName */
+  /** @deprecated 向後相容，等同於 playerName */
   guestName?: string;
   visitorId?: string;
-  password?: string;   // 房间密码（有密码的房间需提供）
+  password?: string;   // 房間密碼（有密碼的房間需提供）
 }
 
 export interface LeaveRoomRequest {
@@ -1738,7 +1998,7 @@ export interface TransferHostRequest {
 export interface StartGameRequest {
   roomCode: string;
   gameMode: GameMode;
-  playerIndex: number; // 必须等于 hostIndex 才能开始
+  playerIndex: number; // 必須等於 hostIndex 才能開始
   challenge?: DailyChallengeType;
 }
 
@@ -2041,7 +2301,7 @@ export interface ApiResponse<T = unknown> {
   data?: T;
 }
 
-// ========== 排行榜 & 玩家资料 ==========
+// ========== 排行榜 & 玩家資料 ==========
 
 export type LeaderboardType =
   | 'elo'
@@ -2202,7 +2462,7 @@ export interface LeaderboardResponse {
   total: number;
 }
 
-// ========== 跨平台存檔同步 ==========
+// ========== 跨平臺存檔同步 ==========
 
 export interface UserSettings {
   theme?: 'cyber' | string;
@@ -2239,11 +2499,26 @@ export interface MatchHistoryItem {
   mostDrawnCard?: string;      // 抽中最多的卡牌名
   currentStreak?: number;      // 結束時當前連勝
   isWinStreak?: boolean;       // 是否為勝利連勝狀態
+  // ===== v4.0 新增：對局紀錄擴充欄位 =====
+  cryptoPnl?: number;           // 加密貨幣盈虧
+  ipoProfit?: number;           // IPO 申購獲利
+  taxPaid?: number;             // 本局已繳稅額
+  taxEvaded?: number;           // 逃稅成功次數
+  taxAudited?: number;          // 被稽查次數
+  hostileTakeovers?: number;    // 發起敵意收購次數
+  controlledCompanies?: number; // 結束時控制的公司數
+  taxHavenBalance?: number;     // 避稅天堂結存
+  bountyIncome?: number;        // 賞金收入
+  goldMined?: number;           // 開採金礦數
+  olympicMedals?: number;       // 獲得奧運獎牌總數
+  heistRole?: string;           // 劫案模式角色（robber/guard）
+  coreDamageDealt?: number;     // 叛逆AI模式：對核心造成的傷害
+  loopsBroken?: number;         // 時間迴圈模式：打破迴圈次數
 }
 
 export interface UserSaveData {
   achievements: string[];          // 已解鎖成就ID列表
-  settings: UserSettings;          // 用戶設置
+  settings: UserSettings;          // 使用者設定
   skins: { pawn?: string; dice?: string }; // 皮膚選擇
   battlePass: BattlePassState;     // 通行證狀態
   dailyChallenge: DailyChallenge;  // 每日挑戰進度
@@ -2264,7 +2539,7 @@ export interface SyncSaveResponse {
   serverUpdatedAt: string;
 }
 
-// ========== 模組支持 ==========
+// ========== 模組支援 ==========
 
 export interface ModCardEffect {
   type: 'money' | 'teleport' | 'move' | 'jail' | 'card';
@@ -2554,7 +2829,7 @@ export interface Announcement {
   createdAt: string;
 }
 
-// ========== 每日签到 ==========
+// ========== 每日簽到 ==========
 
 export interface CheckinStatusResponse {
   canCheckin: boolean;

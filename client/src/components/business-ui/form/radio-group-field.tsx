@@ -130,7 +130,7 @@ export function RadioGroupField(props: RadioGroupFieldProps) {
           children ||
           (options && renderRadioOptions(options, name, disabled ?? false))
         ) : (
-          <div className="text-sm text-muted-foreground">暂无选项</div>
+          <div className="text-sm text-muted-foreground">暫無選項</div>
         )}
       </RadioGroup>
     </FieldLayout>

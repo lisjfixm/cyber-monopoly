@@ -41,12 +41,12 @@ export function UndoRedoToolbarButton({ action }: UndoRedoToolbarButtonProps) {
           >
             <Icon className="size-4" />
             <span className="sr-only">
-              {action === 'undo' ? '撤销' : '重做'}
+              {action === 'undo' ? '撤銷' : '重做'}
             </span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{action === 'undo' ? '撤销(⌘+Z)' : '重做(⌘+Shift+Z)'}</p>
+          <p>{action === 'undo' ? '撤銷(⌘+Z)' : '重做(⌘+Shift+Z)'}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

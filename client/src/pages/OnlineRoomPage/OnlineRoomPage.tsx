@@ -56,7 +56,7 @@ const OnlineRoomPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const playerParam = searchParams.get('player');
 
-  // 从 URL 或 sessionStorage 读取 myPlayerIndex
+  // 從 URL 或 sessionStorage 讀取 myPlayerIndex
   const getInitialPlayerIndex = (): number => {
     if (playerParam !== null) {
       const idx = parseInt(playerParam, 10);
@@ -102,13 +102,13 @@ const OnlineRoomPage: React.FC = () => {
   const [showStatsPanel, setShowStatsPanel] = useState(false);
   const [showPlayerList, setShowPlayerList] = useState(false);
 
-  // 聊天相关状态
+  // 聊天相關狀態
   const [showChatPanel, setShowChatPanel] = useState(false);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
   const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [nowTick, setNowTick] = useState(Date.now()); // 用于倒计时刷新
+  const [nowTick, setNowTick] = useState(Date.now()); // 用於倒計時重新整理
 
-  // 断线重连状态
+  // 斷線重連狀態
   type ConnectionStatus = 'normal' | 'reconnecting' | 'failed';
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('normal');
   const [retryCount, setRetryCount] = useState(0);
@@ -121,7 +121,7 @@ const OnlineRoomPage: React.FC = () => {
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollIntervalRef = useRef<number>(1500);
 
-  // 其他玩家断线状态（多人模式：记录每个断线玩家的断线时间）
+  // 其他玩家斷線狀態（多人模式：記錄每個斷線玩家的斷線時間）
   const [disconnectMap, setDisconnectMap] = useState<Record<number, number>>({});
   const tickIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -152,19 +152,19 @@ const OnlineRoomPage: React.FC = () => {
       monopoly.monopolyApi.toggleVoice(roomCode, myPlayerIndex, muted),
     onSendMessage: (text: string) => {
       monopoly.monopolyApi.sendChat(roomCode, myPlayerIndex, text, 'voice').catch((err: unknown) => {
-        logger.error('語音轉文字發送失敗', { error: String(err) });
+        logger.error('語音轉文字傳送失敗', { error: String(err) });
       });
       fetchRoom().catch(() => {});
     },
   });
 
-  // 觀戰模式（從 URL 參數判斷）
+  // 觀戰模式（從 URL 引數判斷）
   const isSpectatorMode = searchParams.get('spectator') === '1';
   const spectatorId = searchParams.get('visitorId') || `spec_${Date.now()}`;
   const spectatorNickname = searchParams.get('nickname') || '觀戰者';
   const [followView, setFollowView] = useState<number | 'free'>('free');
 
-  // 本地彈幕緩存（用於即時顯示自己發送的彈幕）
+  // 本地彈幕快取（用於即時顯示自己傳送的彈幕）
   const [localDanmaku, setLocalDanmaku] = useState<DanmakuMsg[]>([]);
   const [danmakuColor, setDanmakuColor] = useState<string>('#00f5ff');
 
@@ -179,7 +179,7 @@ const OnlineRoomPage: React.FC = () => {
     return [...serverMsgs, ...localDanmaku];
   }, [roomState?.danmaku, localDanmaku]);
 
-  // 發送彈幕（實際通過輪詢同步到列表）
+  // 傳送彈幕（實際透過輪詢同步到列表）
   const handleSendDanmaku = useCallback(async (content: string, color?: string): Promise<void> => {
     try {
       await monopoly.monopolyApi.sendDanmaku(
@@ -189,14 +189,14 @@ const OnlineRoomPage: React.FC = () => {
         content,
         color,
       );
-      // 立即本地添加一條，無需等輪詢
+      // 立即本地新增一條，無需等輪詢
       const tempId = `temp_${Date.now()}`;
       setLocalDanmaku((prev: DanmakuMsg[]) => [
         ...prev,
         { id: tempId, sender: spectatorId, content, color },
       ]);
     } catch (err) {
-      logger.error('發送彈幕失敗', { error: String(err) });
+      logger.error('傳送彈幕失敗', { error: String(err) });
     }
   }, [roomCode, spectatorId, spectatorNickname, danmakuColor]);
 
@@ -212,7 +212,7 @@ const OnlineRoomPage: React.FC = () => {
       try {
         await monopoly.monopolyApi.spectatorFollow(roomCode, spectatorId, playerIndex);
       } catch (err) {
-        logger.error('設置跟隨視角失敗', { error: String(err) });
+        logger.error('設定跟隨視角失敗', { error: String(err) });
       }
     }
   }, [isSpectatorMode, roomCode, spectatorId]);
@@ -224,7 +224,7 @@ const OnlineRoomPage: React.FC = () => {
   const lastFateIdRef = useRef<number | null>(null);
   const lastChanceIdRef = useRef<number | null>(null);
 
-  // 玩家颜色映射（从 roomState.players 提取，供聊天面板使用）
+  // 玩家顏色對映（從 roomState.players 提取，供聊天面板使用）
   const playerColors = useMemo<Record<number, PlayerColor>>(() => {
     if (!roomState) return {};
     const map: Record<number, PlayerColor> = {};
@@ -234,14 +234,14 @@ const OnlineRoomPage: React.FC = () => {
     return map;
   }, [roomState]);
 
-  // 实时计算游戏统计（必须在所有 early return 之前）
+  // 實時計算遊戲統計（必須在所有 early return 之前）
   const gameStats = useMemo(() => {
     const gs = roomState?.gameState;
     if (!gs) return null;
     return calculateGameStats(gs);
   }, [roomState?.gameState]);
 
-  // 计算各玩家地产数量（供 PlayerList 使用）
+  // 計算各玩家地產數量（供 PlayerList 使用）
   const propertyCounts = useMemo<Record<number, number>>(() => {
     const gs = roomState?.gameState;
     if (!gs) return {};
@@ -257,7 +257,7 @@ const OnlineRoomPage: React.FC = () => {
     return counts;
   }, [roomState?.gameState]);
 
-  // 拉取房间状态（带 playerIndex 心跳 + 断线检测）
+  // 拉取房間狀態（帶 playerIndex 心跳 + 斷線檢測）
   const fetchRoom = useCallback(async () => {
     try {
       const room = await monopoly.monopolyApi.getRoom(roomCode, myPlayerIndex);
@@ -265,7 +265,7 @@ const OnlineRoomPage: React.FC = () => {
       setError(null);
       consecutiveFailuresRef.current = 0;
 
-      // 从 normal 恢复：清除重连状态
+      // 從 normal 恢復：清除重連狀態
       if (connectionStatus !== 'normal') {
         setConnectionStatus('normal');
         setRetryCount(0);
@@ -280,7 +280,7 @@ const OnlineRoomPage: React.FC = () => {
         }
       }
 
-      // 聊天未读计数：优先使用新字段 unreadCount
+      // 聊天未讀計數：優先使用新欄位 unreadCount
       const serverUnread = room.unreadCount;
       if (!showChatPanel && typeof serverUnread === 'number') {
         if (serverUnread > unreadChatCount) {
@@ -294,17 +294,17 @@ const OnlineRoomPage: React.FC = () => {
         }
       }
 
-      // 断线玩家检测（多人模式：使用 disconnectedPlayers 数组）
+      // 斷線玩家檢測（多人模式：使用 disconnectedPlayers 陣列）
       const disconnected = room.disconnectedPlayers || [];
       setDisconnectMap((prev: Record<number, number>) => {
         const next: Record<number, number> = { ...prev };
-        // 清除已恢复的玩家
+        // 清除已恢復的玩家
         for (const idx of Object.keys(next).map(Number)) {
           if (!disconnected.includes(idx)) {
             delete next[idx];
           }
         }
-        // 新增断线玩家
+        // 新增斷線玩家
         for (const idx of disconnected) {
           if (next[idx] === undefined) {
             next[idx] = Date.now();
@@ -313,12 +313,12 @@ const OnlineRoomPage: React.FC = () => {
         return next;
       });
     } catch (err) {
-      logger.error('获取房间失败', { error: String(err) });
+      logger.error('獲取房間失敗', { error: String(err) });
 
       const errAny = err as { response?: { status?: number } };
       const status = errAny.response?.status;
 
-      // 404 / 403：房间不存在或已被踢，直接停止轮询并显示错误页
+      // 404 / 403：房間不存在或已被踢，直接停止輪詢並顯示錯誤頁
       if (status === 404 || status === 403) {
         setError('房間不存在或已解散');
         setRoomNotFound(true);
@@ -332,7 +332,7 @@ const OnlineRoomPage: React.FC = () => {
       setError('無法取得房間資訊。聯機功能於靜態版不可用，部署後端後即可使用。');
       consecutiveFailuresRef.current += 1;
 
-      // 连续3次失败进入重连状态
+      // 連續3次失敗進入重連狀態
       if (consecutiveFailuresRef.current >= 3 && connectionStatus === 'normal') {
         setConnectionStatus('reconnecting');
         setRetryCount(0);
@@ -342,7 +342,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   }, [roomCode, myPlayerIndex, connectionStatus, showChatPanel, audio, unreadChatCount]);
 
-  // 初始加载 + 轮询（动态间隔适配重连）
+  // 初始載入 + 輪詢（動態間隔適配重連）
   useEffect(() => {
     if (!roomCode) return;
     fetchRoom();
@@ -352,17 +352,17 @@ const OnlineRoomPage: React.FC = () => {
     };
   }, [roomCode, fetchRoom]);
 
-  // 心跳定时器（每 5 秒一次，用于更新 lastSeen）
+  // 心跳定時器（每 5 秒一次，用於更新 lastSeen）
   useEffect(() => {
     if (!roomCode) return;
     const doHeartbeat = async () => {
       try {
         await monopoly.monopolyApi.sendHeartbeat(roomCode, myPlayerIndex);
       } catch (err) {
-        logger.error('心跳失败', { error: String(err) });
+        logger.error('心跳失敗', { error: String(err) });
       }
     };
-    // 立即发一次
+    // 立即發一次
     void doHeartbeat();
     heartbeatRef.current = setInterval(doHeartbeat, 5000);
     return () => {
@@ -370,7 +370,7 @@ const OnlineRoomPage: React.FC = () => {
     };
   }, [roomCode, myPlayerIndex]);
 
-  // 倒计时刷新 tick（每 1 秒更新一次用于显示）
+  // 倒計時重新整理 tick（每 1 秒更新一次用於顯示）
   useEffect(() => {
     const hasDisconnect = Object.keys(disconnectMap).length > 0;
     if (!hasDisconnect) {
@@ -393,7 +393,7 @@ const OnlineRoomPage: React.FC = () => {
     };
   }, [disconnectMap]);
 
-  // 重连节奏控制：reconnecting 状态下调整重试间隔
+  // 重連節奏控制：reconnecting 狀態下調整重試間隔
   useEffect(() => {
     if (connectionStatus !== 'reconnecting') {
       if (reconnectTimerRef.current) {
@@ -406,7 +406,7 @@ const OnlineRoomPage: React.FC = () => {
     const doRetry = () => {
       setRetryCount((prev: number) => {
         const next = prev + 1;
-        // 前5次：2秒；6-10次：5秒；超过10次：failed
+        // 前5次：2秒；6-10次：5秒；超過10次：failed
         if (next <= 5) {
           pollIntervalRef.current = 2000;
         } else if (next <= 10) {
@@ -416,14 +416,14 @@ const OnlineRoomPage: React.FC = () => {
           if (pollRef.current) clearInterval(pollRef.current);
           return next;
         }
-        // 重置轮询间隔
+        // 重置輪詢間隔
         if (pollRef.current) clearInterval(pollRef.current);
         pollRef.current = setInterval(fetchRoom, pollIntervalRef.current);
         return next;
       });
     };
 
-    // 每次连接状态变为 reconnecting 时启动节奏计时
+    // 每次連線狀態變為 reconnecting 時啟動節奏計時
     const interval = retryCount <= 5 ? 2000 : 5000;
     reconnectTimerRef.current = setTimeout(doRetry, interval);
 
@@ -435,7 +435,7 @@ const OnlineRoomPage: React.FC = () => {
     };
   }, [connectionStatus, retryCount, fetchRoom]);
 
-  // 进入房间保存 sessionStorage
+  // 進入房間儲存 sessionStorage
   useEffect(() => {
     if (!roomCode) return;
     try {
@@ -448,11 +448,11 @@ const OnlineRoomPage: React.FC = () => {
         }),
       );
     } catch {
-      // 忽略存储失败
+      // 忽略儲存失敗
     }
   }, [roomCode, myPlayerIndex, roomState?.maxPlayers]);
 
-  // 游戏结束 / 主动离开时清除 sessionStorage
+  // 遊戲結束 / 主動離開時清除 sessionStorage
   const clearRoomSession = useCallback(() => {
     try {
       sessionStorage.removeItem('monopoly_online_room');
@@ -461,7 +461,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   }, []);
 
-  // 组件卸载时清理所有定时器
+  // 元件解除安裝時清理所有定時器
   useEffect(() => {
     return () => {
       if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
@@ -471,57 +471,57 @@ const OnlineRoomPage: React.FC = () => {
     };
   }, []);
 
-  // 聊天面板打开/关闭切换
+  // 聊天面板開啟/關閉切換
   const handleToggleChat = useCallback(() => {
     setShowChatPanel((prev: boolean) => !prev);
   }, []);
 
-  // 标记聊天已读
+  // 標記聊天已讀
   const handleMarkChatRead = useCallback(async () => {
     try {
       await monopoly.monopolyApi.markChatRead(roomCode, myPlayerIndex);
       setUnreadChatCount(0);
     } catch (err) {
-      logger.error('标记已读失败', { error: String(err) });
+      logger.error('標記已讀失敗', { error: String(err) });
     }
   }, [roomCode, myPlayerIndex]);
 
-  // 发送聊天消息
+  // 傳送聊天訊息
   const handleSendChat = useCallback(async (content: string) => {
     try {
       await monopoly.monopolyApi.sendChat(roomCode, myPlayerIndex, content);
       audio.playSfx('click');
-      // 立即拉取一次最新状态
+      // 立即拉取一次最新狀態
       await fetchRoom();
     } catch (err) {
-      logger.error('发送聊天消息失败', { error: String(err) });
-      setError('訊息發送失敗');
+      logger.error('傳送聊天訊息失敗', { error: String(err) });
+      setError('訊息傳送失敗');
     }
   }, [roomCode, myPlayerIndex, audio, fetchRoom]);
 
-  // 判定断线对方负（多人模式下暂保留为单对手兼容）
+  // 判定斷線對方負（多人模式下暫保留為單對手相容）
   const handleSurrenderDisconnected = useCallback(async () => {
     try {
       await monopoly.monopolyApi.surrenderDisconnected(roomCode, myPlayerIndex);
-      // 立即拉取最新状态
+      // 立即拉取最新狀態
       await fetchRoom();
     } catch (err) {
-      logger.error('判定断线对方负失败', { error: String(err) });
+      logger.error('判定斷線對方負失敗', { error: String(err) });
       setError('操作失敗，請重試');
     }
   }, [roomCode, myPlayerIndex, fetchRoom]);
 
-  // 继续重连
+  // 繼續重連
   const handleContinueRetry = useCallback(() => {
     setConnectionStatus('reconnecting');
-    setRetryCount(5); // 从第6次节奏开始（5秒间隔）
+    setRetryCount(5); // 從第6次節奏開始（5秒間隔）
     consecutiveFailuresRef.current = 3;
     pollIntervalRef.current = 5000;
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(fetchRoom, 5000);
   }, [fetchRoom]);
 
-  // 命运卡展示检测
+  // 命運卡展示檢測
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) return;
@@ -535,7 +535,7 @@ const OnlineRoomPage: React.FC = () => {
     return () => clearTimeout(t);
   }, [roomState?.gameState?.phase, roomState?.gameState?.pendingFateCard?.id]);
 
-  // 机会卡展示检测
+  // 機會卡展示檢測
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) return;
@@ -549,7 +549,7 @@ const OnlineRoomPage: React.FC = () => {
     return () => clearTimeout(t);
   }, [roomState?.gameState?.phase, roomState?.gameState?.pendingChanceCard?.id]);
 
-  // 游戏结束检测
+  // 遊戲結束檢測
   useEffect(() => {
     if (roomState?.status === 'ended' || roomState?.gameState?.phase === 'ended') {
       setShowEndModal(true);
@@ -557,7 +557,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   }, [roomState?.status, roomState?.gameState?.phase]);
 
-  // 收到交易请求检测
+  // 收到交易請求檢測
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) return;
@@ -569,7 +569,7 @@ const OnlineRoomPage: React.FC = () => {
     setShowTradeModal(true);
   }, [roomState?.gameState?.pendingTrade?.id, myPlayerIndex]);
 
-  // 全局事件展示检测
+  // 全域性事件展示檢測
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) return;
@@ -584,7 +584,7 @@ const OnlineRoomPage: React.FC = () => {
     audio.playGlobalEvent();
   }, [roomState?.gameState?.currentGlobalEvent, audio]);
 
-  // 成就检测
+  // 成就檢測
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) return;
@@ -603,7 +603,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   }, [roomState?.gameState, myPlayerIndex, unlockAchievements, toastAchievement, audio]);
 
-  // 成就 toast 关闭，显示下一个
+  // 成就 toast 關閉，顯示下一個
   const handleAchievementToastClose = useCallback(() => {
     const next = toastQueueRef.current.shift();
     if (next) {
@@ -614,7 +614,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   }, [audio]);
 
-  // 监听日志变化播放音效
+  // 監聽日誌變化播放音效
   useEffect(() => {
     const gs = roomState?.gameState;
     if (!gs) {
@@ -633,19 +633,19 @@ const OnlineRoomPage: React.FC = () => {
     for (const log of newLogs) {
       const txt = log.text;
       if (log.type === 'player1' || log.type === 'player2') {
-        if (txt.includes('掷出')) {
+        if (txt.includes('擲出')) {
           audio.playDiceRoll();
-        } else if (txt.includes('购得') || txt.includes('购买')) {
+        } else if (txt.includes('購得') || txt.includes('購買')) {
           audio.playBuy();
-        } else if (txt.includes('支付过路费')) {
+        } else if (txt.includes('支付過路費')) {
           audio.playToll();
-        } else if (txt.includes('进入') && txt.includes('禁闭区')) {
+        } else if (txt.includes('進入') && txt.includes('禁閉區')) {
           audio.playDetention();
-        } else if (txt.includes('出狱') || txt.includes('释放')) {
+        } else if (txt.includes('出獄') || txt.includes('釋放')) {
           audio.playRelease();
-        } else if (txt.includes('建造') || txt.includes('升级')) {
+        } else if (txt.includes('建造') || txt.includes('升級')) {
           audio.playBuild();
-        } else if (txt.includes('抵押') || txt.includes('赎回')) {
+        } else if (txt.includes('抵押') || txt.includes('贖回')) {
           audio.playMortgage();
         }
       } else if (log.type === 'fate') {
@@ -656,13 +656,13 @@ const OnlineRoomPage: React.FC = () => {
         audio.playTrade();
       } else if (log.type === 'auction') {
         audio.playAuction();
-      } else if (log.type === 'system' && txt.includes('破产')) {
+      } else if (log.type === 'system' && txt.includes('破產')) {
         audio.playBankruptcy();
       }
     }
   }, [roomState?.gameState?.logs.length, roomState?.gameState, audio]);
 
-  // 开始游戏
+  // 開始遊戲
   const handleStartGame = async () => {
     if (!isHost) return;
     if (actionLoading) return;
@@ -681,7 +681,7 @@ const OnlineRoomPage: React.FC = () => {
     }
   };
 
-  // 掷骰子
+  // 擲骰子
   const handleRollDice = async () => {
     if (actionLoading) return;
     if (!roomState?.gameState) return;
@@ -703,7 +703,7 @@ const OnlineRoomPage: React.FC = () => {
         setDiceValues(room.gameState.lastDiceValues);
       }
     } catch (err) {
-      logger.error('掷骰子失败', { error: String(err) });
+      logger.error('擲骰子失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
@@ -738,10 +738,10 @@ const OnlineRoomPage: React.FC = () => {
   };
 
   const handleDiceComplete = () => {
-    // 骰子动画结束后的回调（联机模式棋子移动由服务器状态同步驱动）
+    // 骰子動畫結束後的回撥（聯機模式棋子移動由伺服器狀態同步驅動）
   };
 
-  // 购买决策
+  // 購買決策
   const handleBuy = async (buy: boolean) => {
     if (actionLoading) return;
     if (!roomState?.gameState) return;
@@ -751,14 +751,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.buyProperty(roomCode, myPlayerIndex, buy);
       setRoomState(room);
     } catch (err) {
-      logger.error('购买操作失败', { error: String(err) });
+      logger.error('購買操作失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 地块点击
+  // 地塊點選
   const handleCellClick = (cellId: number) => {
     if (!roomState?.gameState) return;
     if (!isMyTurn) return;
@@ -777,14 +777,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.buildHouse(roomCode, myPlayerIndex, selectedCellId);
       setRoomState(room);
     } catch (err) {
-      logger.error('建造失败', { error: String(err) });
+      logger.error('建造失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 拆除建筑
+  // 拆除建築
   const handleDemolish = async () => {
     if (actionLoading || selectedCellId === null) return;
     setActionLoading(true);
@@ -792,14 +792,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.demolishBuilding(roomCode, myPlayerIndex, selectedCellId);
       setRoomState(room);
     } catch (err) {
-      logger.error('拆除失败', { error: String(err) });
+      logger.error('拆除失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 抵押地块
+  // 抵押地塊
   const handleMortgage = async () => {
     if (actionLoading || selectedCellId === null) return;
     setActionLoading(true);
@@ -807,14 +807,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.mortgageProperty(roomCode, myPlayerIndex, selectedCellId);
       setRoomState(room);
     } catch (err) {
-      logger.error('抵押失败', { error: String(err) });
+      logger.error('抵押失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 赎回地块
+  // 贖回地塊
   const handleRedeem = async () => {
     if (actionLoading || selectedCellId === null) return;
     setActionLoading(true);
@@ -822,7 +822,7 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.redeemProperty(roomCode, myPlayerIndex, selectedCellId);
       setRoomState(room);
     } catch (err) {
-      logger.error('赎回失败', { error: String(err) });
+      logger.error('贖回失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
@@ -836,14 +836,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.buyInsurance(roomCode, myPlayerIndex, selectedCellId);
       setRoomState(room);
     } catch (err) {
-      logger.error('购买保险失败', { error: String(err) });
+      logger.error('購買保險失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 发起交易（多人模式需要选择目标）
+  // 發起交易（多人模式需要選擇目標）
   const handleOpenTrade = () => {
     if (!roomState?.gameState) return;
     setTradeTargetIndex(null);
@@ -870,7 +870,7 @@ const OnlineRoomPage: React.FC = () => {
       setShowTradeModal(false);
       setTradeTargetIndex(null);
     } catch (err) {
-      logger.error('发起交易失败', { error: String(err) });
+      logger.error('發起交易失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
@@ -886,14 +886,14 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
       setShowTradeModal(false);
     } catch (err) {
-      logger.error('接受交易失败', { error: String(err) });
+      logger.error('接受交易失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 拒绝交易
+  // 拒絕交易
   const handleRejectTrade = async () => {
     if (actionLoading) return;
     setActionLoading(true);
@@ -902,14 +902,14 @@ const OnlineRoomPage: React.FC = () => {
       setRoomState(room);
       setShowTradeModal(false);
     } catch (err) {
-      logger.error('拒绝交易失败', { error: String(err) });
+      logger.error('拒絕交易失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 选择职业
+  // 選擇職業
   const handleSelectProfession = async () => {
     if (actionLoading || !selectedProfession) return;
     setActionLoading(true);
@@ -921,14 +921,14 @@ const OnlineRoomPage: React.FC = () => {
       );
       setRoomState(room);
     } catch (err) {
-      logger.error('选择职业失败', { error: String(err) });
+      logger.error('選擇職業失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 发起拍卖
+  // 發起拍賣
   const handleStartAuction = async () => {
     if (actionLoading) return;
     setActionLoading(true);
@@ -936,14 +936,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.startAuction(roomCode, myPlayerIndex);
       setRoomState(room);
     } catch (err) {
-      logger.error('发起拍卖失败', { error: String(err) });
+      logger.error('發起拍賣失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 拍卖出价
+  // 拍賣出價
   const handleAuctionBid = async (bidAmount: number) => {
     if (actionLoading) return;
     setActionLoading(true);
@@ -951,14 +951,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.auctionBid(roomCode, myPlayerIndex, bidAmount);
       setRoomState(room);
     } catch (err) {
-      logger.error('拍卖出价失败', { error: String(err) });
+      logger.error('拍賣出價失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 拍卖放弃
+  // 拍賣放棄
   const handleAuctionPass = async () => {
     if (actionLoading) return;
     setActionLoading(true);
@@ -966,14 +966,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.auctionPass(roomCode, myPlayerIndex);
       setRoomState(room);
     } catch (err) {
-      logger.error('放弃拍卖失败', { error: String(err) });
+      logger.error('放棄拍賣失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 买入股票
+  // 買入股票
   const handleBuyStock = async (symbol: StockSymbol, quantity: number) => {
     if (actionLoading) return;
     if (!roomState?.gameState) return;
@@ -985,14 +985,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.buyStock(roomCode, myPlayerIndex, symbol, quantity);
       setRoomState(room);
     } catch (err) {
-      logger.error('买入股票失败', { error: String(err) });
+      logger.error('買入股票失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 卖出股票
+  // 賣出股票
   const handleSellStock = async (symbol: StockSymbol, quantity: number) => {
     if (actionLoading) return;
     if (!roomState?.gameState) return;
@@ -1004,14 +1004,14 @@ const OnlineRoomPage: React.FC = () => {
       const room = await monopoly.monopolyApi.sellStock(roomCode, myPlayerIndex, symbol, quantity);
       setRoomState(room);
     } catch (err) {
-      logger.error('卖出股票失败', { error: String(err) });
+      logger.error('賣出股票失敗', { error: String(err) });
       setError('操作失敗，請重試');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // 复制房间码
+  // 複製房間碼
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(roomCode);
@@ -1032,13 +1032,13 @@ const OnlineRoomPage: React.FC = () => {
         await monopoly.monopolyApi.leaveRoom(roomCode, myPlayerIndex);
       }
     } catch (e) {
-      // 忽略 leave 失败，仍要跳转
+      // 忽略 leave 失敗，仍要跳轉
     }
     clearRoomSession();
     navigate('/');
   };
 
-  // 检测是否为重连进入
+  // 檢測是否為重連進入
   const isReconnectEntry = useMemo(() => {
     try {
       const raw = sessionStorage.getItem('monopoly_online_room');
@@ -1089,13 +1089,13 @@ const OnlineRoomPage: React.FC = () => {
     return 'selectTarget';
   })();
 
-  // 其他断线玩家（排除自己）
+  // 其他斷線玩家（排除自己）
   const otherDisconnected = Object.entries(disconnectMap)
     .map(([idx, time]) => ({ index: Number(idx), time }))
     .filter((d) => d.index !== myPlayerIndex);
   const hasOtherDisconnect = otherDisconnected.length > 0;
 
-  // 等待中界面
+  // 等待中介面
   if (isWaiting) {
     const playerCount = (roomState.players ?? []).length;
     const maxPlayers = roomState.maxPlayers || 2;
@@ -1152,7 +1152,7 @@ const OnlineRoomPage: React.FC = () => {
               <Copy className="w-4 h-4 text-text-muted" />
             </div>
             <div className="text-text-muted text-xs mt-2 text-center">
-              {copySuccess ? '已複製' : '點擊複製房間碼'}
+              {copySuccess ? '已複製' : '點選複製房間碼'}
             </div>
           </div>
 
@@ -1204,13 +1204,13 @@ const OnlineRoomPage: React.FC = () => {
                         </span>
                       )}
                       {player.ready && !isHostPlayer && (
-                        <span className="text-neon-green text-xs font-cyber">已就绪</span>
+                        <span className="text-neon-green text-xs font-cyber">已就緒</span>
                       )}
                     </div>
                   </div>
                 );
               })}
-              {/* 空座位占位 */}
+              {/* 空座位佔位 */}
               {Array.from({ length: maxPlayers - playerCount }).map((_, i) => (
                 <div
                   key={`empty-${i}`}
@@ -1223,7 +1223,7 @@ const OnlineRoomPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 房主：模式选择 + 开始按钮 */}
+          {/* 房主：模式選擇 + 開始按鈕 */}
           {isHost && (
             <div className="mb-4">
               <div className="text-text-secondary text-xs font-cyber mb-2">遊戲模式</div>
@@ -1253,7 +1253,7 @@ const OnlineRoomPage: React.FC = () => {
                 className="cyber-btn cyber-btn-pink w-full py-3 font-cyber tracking-wider"
               >
                 {actionLoading
-                  ? '加载中...'
+                  ? '載入中...'
                   : canStart
                     ? '開始遊戲'
                     : playerCount < 2
@@ -1267,13 +1267,13 @@ const OnlineRoomPage: React.FC = () => {
           {!isHost && (
             <div className="text-center text-text-secondary text-sm mb-4 flex items-center justify-center gap-2">
               <div className="w-2 h-2 rounded-full bg-neon-cyan pulse-glow animate-pulse" />
-              房主正在准备，请耐心等待...
+              房主正在準備，請耐心等待...
             </div>
           )}
 
           <button onClick={handleBackToMenu} className="cyber-btn w-full py-2 text-sm flex items-center justify-center gap-2">
             <LogOut className="w-4 h-4" />
-            {isHost ? '返回主選單' : '退出房间'}
+            {isHost ? '返回主選單' : '退出房間'}
           </button>
 
           {error && (
@@ -1297,7 +1297,7 @@ const OnlineRoomPage: React.FC = () => {
     );
   }
 
-  // ==================== 游戏中 / 已结束界面 ====================
+  // ==================== 遊戲中 / 已結束介面 ====================
   const currentCell = gs && currentPlayer ? CELLS[currentPlayer.position] : null;
   const buyPrice = gs && myPlayer ? getCellPrice(myPlayer.position, gs.mode) : 0;
   const canAffordBuy = myPlayer ? myPlayer.money >= buyPrice : false;
@@ -1307,7 +1307,7 @@ const OnlineRoomPage: React.FC = () => {
   const auctionCellId = auctionState?.cellId ?? 0;
   const auctionCellName = auctionState ? CELLS[auctionCellId]?.name || '' : '';
   const auctionCellPrice = auctionState ? getCellPrice(auctionCellId, gs.mode) : 0;
-  // activeBidderIndex 是 activeBidders 数组中的索引，需要转换为玩家索引
+  // activeBidderIndex 是 activeBidders 陣列中的索引，需要轉換為玩家索引
   const auctionActiveBidderPlayerIndex = auctionState
     ? auctionState.activeBidders[auctionState.activeBidderIndex] ?? 0
     : 0;
@@ -1319,7 +1319,7 @@ const OnlineRoomPage: React.FC = () => {
 
   return (
     <div className="min-h-screen p-3 md:p-6 flex flex-col relative">
-      {/* 右上角控制区 */}
+      {/* 右上角控制區 */}
       <div className="absolute top-3 right-3 md:top-6 md:right-6 z-30 flex items-center gap-2">
         <button
           onClick={() => setShowPlayerList((p) => !p)}
@@ -1352,7 +1352,7 @@ const OnlineRoomPage: React.FC = () => {
         <VolumeControl onFirstInteract={() => { audio.init(); audio.startBGM(); }} />
       </div>
 
-      {/* 桌面端左侧玩家列表 */}
+      {/* 桌面端左側玩家列表 */}
       <div className="hidden lg:block fixed left-4 top-20 w-56 z-20">
         {gs && (
           <PlayerList
@@ -1364,7 +1364,7 @@ const OnlineRoomPage: React.FC = () => {
         )}
       </div>
 
-      {/* 移动端玩家列表弹层 */}
+      {/* 移動端玩家列表彈層 */}
       {showPlayerList && gs && (
         <div className="lg:hidden fixed inset-0 bg-black/60 z-40 flex items-start justify-center pt-16 p-4" onClick={() => setShowPlayerList(false)}>
           <div className="w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
@@ -1378,7 +1378,7 @@ const OnlineRoomPage: React.FC = () => {
         </div>
       )}
 
-      {/* 棋盘 */}
+      {/* 棋盤 */}
       <div className="flex-1 flex flex-col items-center justify-center mb-3 md:mb-4 lg:ml-60">
         {/* 觀戰中標籤 */}
         {isSpectatorMode && gs && (
@@ -1419,7 +1419,7 @@ const OnlineRoomPage: React.FC = () => {
           <div className="w-full max-w-[560px] mt-3">
             <DanmakuInput
               onSend={handleSendDanmaku}
-              placeholder="發送彈幕..."
+              placeholder="傳送彈幕..."
               selectedColor={danmakuColor}
               onColorChange={setDanmakuColor}
             />
@@ -1427,7 +1427,7 @@ const OnlineRoomPage: React.FC = () => {
         )}
       </div>
 
-      {/* 底部操作区（觀戰模式下禁用操作按鈕） */}
+      {/* 底部操作區（觀戰模式下禁用操作按鈕） */}
       <div className={`cyber-card p-3 md:p-4 lg:ml-60 ${isSpectatorMode ? 'opacity-60' : ''}`}>
         <div className="flex flex-col md:flex-row gap-3 md:gap-6">
           {/* 我的面板 + 操作 */}
@@ -1500,13 +1500,13 @@ const OnlineRoomPage: React.FC = () => {
                         {actionLoading
                           ? '操作中...'
                           : myPlayer?.isInDetention
-                            ? '监禁摇骰'
-                            : '掷骰子'}
+                            ? '監禁搖骰'
+                            : '擲骰子'}
                       </button>
                     </div>
                   ) : gs.phase === 'rolling' && !isMyTurn && !isEnded ? (
                     <div className="text-neon-pink text-xs md:text-sm font-cyber pulse-glow">
-                      {currentPlayer?.name || '对手'} 思考中...
+                      {currentPlayer?.name || '對手'} 思考中...
                     </div>
                   ) : gs.phase === 'buying' && isMyTurn ? (
                     <div className="text-neon-cyan text-xs md:text-sm font-cyber">
@@ -1588,14 +1588,14 @@ const OnlineRoomPage: React.FC = () => {
             </div>
           )}
 
-          {/* 游戏日志 */}
+          {/* 遊戲日誌 */}
           <div className="md:w-72 lg:w-80 h-32 md:h-40 overflow-hidden">
             {gs && <GameLog logs={gs.logs as LogEntry[]} />}
           </div>
         </div>
       </div>
 
-      {/* 购买弹窗 - 仅自己回合显示操作 */}
+      {/* 購買彈窗 - 僅自己回合顯示操作 */}
       {myPlayer && gs && (
         <BuyModal
           isOpen={!!showBuyModal}
@@ -1609,7 +1609,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 职业选择弹窗 */}
+      {/* 職業選擇彈窗 */}
       {myPlayer && gs && !myPlayer.profession && (
         <ProfessionSelectModal
           isOpen={isPlaying}
@@ -1623,7 +1623,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 拍卖弹窗 */}
+      {/* 拍賣彈窗 */}
       {myPlayer && gs && auctionState && showAuction && (
         <AuctionModal
           isOpen={true}
@@ -1640,7 +1640,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 地块操作弹窗 */}
+      {/* 地塊操作彈窗 */}
       {gs && selectedCellId !== null && (
         <PropertyActionModal
           isOpen={showPropertyAction}
@@ -1657,7 +1657,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 交易弹窗（多人模式支持选目标） */}
+      {/* 交易彈窗（多人模式支援選目標） */}
       {gs && (
         <TradeModal
           mode={tradeMode}
@@ -1676,10 +1676,10 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 骰子覆盖层 */}
+      {/* 骰子覆蓋層 */}
       <DiceOverlay isRolling={isRolling} values={diceValues} onComplete={handleDiceComplete} />
 
-      {/* 命运卡弹窗 */}
+      {/* 命運卡彈窗 */}
       {gs && gs.pendingFateCard && (
         <FateCardModal
           isOpen={showFateModal}
@@ -1688,7 +1688,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 机会卡弹窗 */}
+      {/* 機會卡彈窗 */}
       {gs && gs.pendingChanceCard && (
         <ChanceCardModal
           isOpen={showChanceModal}
@@ -1697,7 +1697,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 断线提示条（多人模式） */}
+      {/* 斷線提示條（多人模式） */}
       {hasOtherDisconnect && (
         <div
           className="fixed top-0 left-0 right-0 z-30 py-2 px-4 text-center text-sm font-cyber tracking-wide"
@@ -1712,13 +1712,13 @@ const OnlineRoomPage: React.FC = () => {
             <AlertTriangle className="w-4 h-4" />
             <span>
               {otherDisconnected.map((d) => gs.players[d.index]?.name || `玩家${d.index + 1}`).join('、')}
-              {' '}断线，等待重连中...
+              {' '}斷線，等待重連中...
             </span>
           </div>
         </div>
       )}
 
-      {/* 重连中遮罩 */}
+      {/* 重連中遮罩 */}
       {connectionStatus === 'reconnecting' && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="cyber-card border-neon-cyan p-6 md:p-8 max-w-sm w-full text-center">
@@ -1744,10 +1744,10 @@ const OnlineRoomPage: React.FC = () => {
               className="text-neon-cyan font-cyber text-xl mb-2 pulse-glow"
               style={{ color: 'var(--cyan)', textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
             >
-              网络中断
+              網路中斷
             </h2>
-            <p className="text-text-secondary text-sm mb-2">正在重连...</p>
-            <p className="text-text-muted text-xs">重试次数：{retryCount} / 10</p>
+            <p className="text-text-secondary text-sm mb-2">正在重連...</p>
+            <p className="text-text-muted text-xs">重試次數：{retryCount} / 10</p>
           </div>
           <style>{`
             @keyframes spin {
@@ -1762,7 +1762,7 @@ const OnlineRoomPage: React.FC = () => {
         </div>
       )}
 
-      {/* 重连失败遮罩 */}
+      {/* 重連失敗遮罩 */}
       {connectionStatus === 'failed' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="cyber-card border-neon-pink p-6 md:p-8 max-w-sm w-full text-center">
@@ -1770,17 +1770,17 @@ const OnlineRoomPage: React.FC = () => {
               className="font-cyber text-2xl mb-4 pulse-glow"
               style={{ color: 'var(--pink)', textShadow: '0 0 10px rgba(255, 107, 157, 0.5)' }}
             >
-              重连失败
+              重連失敗
             </h2>
             <p className="text-text-secondary text-sm mb-6">
-              网络连接不稳定，请检查网络后重试
+              網路連線不穩定，請檢查網路後重試
             </p>
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleContinueRetry}
                 className="cyber-btn cyber-btn-pink w-full py-3"
               >
-                继续重试
+                繼續重試
               </button>
               <button
                 onClick={handleBackToMenu}
@@ -1793,7 +1793,7 @@ const OnlineRoomPage: React.FC = () => {
         </div>
       )}
 
-      {/* 房间不存在遮罩 */}
+      {/* 房間不存在遮罩 */}
       {roomNotFound && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="cyber-card border-neon-pink p-6 md:p-8 max-w-sm w-full text-center">
@@ -1804,7 +1804,7 @@ const OnlineRoomPage: React.FC = () => {
               房間不存在
             </h2>
             <p className="text-text-secondary text-sm mb-6">
-              房間可能已解散或你已被移出房间
+              房間可能已解散或你已被移出房間
             </p>
             <button
               onClick={handleBackToMenu}
@@ -1816,7 +1816,7 @@ const OnlineRoomPage: React.FC = () => {
         </div>
       )}
 
-      {/* 重连成功 toast */}
+      {/* 重連成功 toast */}
       {showReconnectToast && (
         <div
           className="fixed top-20 left-1/2 -translate-x-1/2 z-50 cyber-card px-4 py-2 text-sm font-cyber tracking-wide"
@@ -1832,7 +1832,7 @@ const OnlineRoomPage: React.FC = () => {
         </div>
       )}
 
-      {/* 游戏结束弹窗 - 仅当统计面板关闭时显示 */}
+      {/* 遊戲結束彈窗 - 僅當統計面板關閉時顯示 */}
       {showEndModal && winner && !showStatsPanel && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="cyber-card border-neon-cyan p-6 md:p-8 max-w-md w-full text-center">
@@ -1845,7 +1845,7 @@ const OnlineRoomPage: React.FC = () => {
                    恭喜獲勝！
                 </div>
                 <div className="text-text-secondary text-sm mb-6">
-                  你取得了最终胜利
+                  你取得了最終勝利
                 </div>
               </>
             ) : (
@@ -1854,7 +1854,7 @@ const OnlineRoomPage: React.FC = () => {
                    挑戰失敗
                 </div>
                 <div className="text-text-secondary text-sm mb-6">
-                  {winner.name} 取得胜利
+                  {winner.name} 取得勝利
                 </div>
               </>
             )}
@@ -1879,7 +1879,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 全局事件弹窗 */}
+      {/* 全域性事件彈窗 */}
       <GlobalEventModal
         isOpen={globalEventToShow !== null}
         eventType={globalEventToShow}
@@ -1893,7 +1893,7 @@ const OnlineRoomPage: React.FC = () => {
         unlockedAchievements={unlockedAchievements}
       />
 
-      {/* 成就解锁 toast */}
+      {/* 成就解鎖 toast */}
       {toastAchievement && (
         <AchievementToast
           achievementId={toastAchievement}
@@ -1901,7 +1901,7 @@ const OnlineRoomPage: React.FC = () => {
         />
       )}
 
-      {/* 游戏统计面板 */}
+      {/* 遊戲統計面板 */}
       <StatsPanel
         isOpen={showStatsPanel}
         onClose={() => setShowStatsPanel(false)}

@@ -9,6 +9,7 @@ import type {
   TaskStatus,
 } from '@shared/api.interface';
 import { safeGetJSON, safeSetJSON } from '@client/src/utils/safeStorage';
+import { addAccountXp } from '@client/src/utils/playerLevel';
 
 export interface TaskReward {
   coins?: number;
@@ -30,6 +31,9 @@ const lastClaimed: ClaimedReward[] = [];
 const DAILY_KEY = 'cyber_monopoly_daily_tasks';
 const WEEKLY_KEY = 'cyber_monopoly_weekly_tasks';
 const CHECKIN_KEY = 'cyber_monopoly_checkin';
+const REFRESH_KEY = 'cyber_monopoly_daily_refresh';
+const MAX_DAILY_REFRESH = 1;
+const REFRESH_BONUS_XP = 50;
 
 function getDateKey(): string {
   const d = new Date();
@@ -167,10 +171,20 @@ function readCheckInStore(): CheckInStore {
   return raw;
 }
 
+function readRefreshStore(): number {
+  const today = getDateKey();
+  const raw = safeGetJSON<{ date: string; count: number } | null>(REFRESH_KEY, null);
+  if (raw && raw.date === today && typeof raw.count === 'number') {
+    return Number.isFinite(raw.count) ? Math.max(0, Math.floor(raw.count)) : 0;
+  }
+  return 0;
+}
+
 export function useDailyChallenge() {
   const [dailyStore, setDailyStore] = useState<TaskStore>(() => readDailyStore());
   const [weeklyStore, setWeeklyStore] = useState<TaskStore>(() => readWeeklyStore());
   const [checkInStore, setCheckInStore] = useState<CheckInStore>(() => readCheckInStore());
+  const [refreshCount, setRefreshCount] = useState<number>(() => readRefreshStore());
 
   const today = getDateKey();
 
@@ -280,6 +294,9 @@ export function useDailyChallenge() {
       };
       lastClaimed.unshift(entry);
       if (lastClaimed.length > 10) lastClaimed.length = 10;
+
+      // v4.0.0：任務經驗獎勵實際寫入帳號 XP
+      if (reward.exp) addAccountXp(reward.exp);
 
       if (reward.coins) logger.info(`[Task] 領取金幣獎勵 +${reward.coins}`, { taskId });
       if (reward.exp) logger.info(`[Task] 領取經驗獎勵 +${reward.exp}`, { taskId });
@@ -461,6 +478,24 @@ export function useDailyChallenge() {
     return lastClaimed.shift() ?? null;
   }, []);
 
+  /** v4.0.0：每日免費重新整理（每日 MAX_DAILY_REFRESH 次），重新整理補給送帳號 XP */
+  const refreshDailyTasks = useCallback((): { success: boolean; remaining: number; bonusXp: number } => {
+    if (refreshCount >= MAX_DAILY_REFRESH) {
+      return { success: false, remaining: 0, bonusXp: 0 };
+    }
+    const nextCount = refreshCount + 1;
+    try {
+      safeSetJSON(REFRESH_KEY, { date: getDateKey(), count: nextCount });
+      setRefreshCount(nextCount);
+      addAccountXp(REFRESH_BONUS_XP);
+      logger.info(`[Task] 每日任務重新整理，獲得重新整理補給 +${REFRESH_BONUS_XP} XP`);
+      return { success: true, remaining: MAX_DAILY_REFRESH - nextCount, bonusXp: REFRESH_BONUS_XP };
+    } catch (err) {
+      logger.error('[DailyChallenge] 重新整理任務失敗', err);
+      return { success: false, remaining: MAX_DAILY_REFRESH - refreshCount, bonusXp: 0 };
+    }
+  }, [refreshCount]);
+
   const streakMilestones = useMemo(() => [
     { days: 7, reward: '連續簽到 7 天：1000 金幣', reached: checkInStore.streak >= 7 },
     { days: 14, reward: '連續簽到 14 天：稀有頭像框', reached: checkInStore.streak >= 14 },
@@ -483,5 +518,7 @@ export function useDailyChallenge() {
     performCheckIn,
     performRetroCheckIn,
     popLastClaimed,
+    refreshDailyTasks,
+    dailyRefreshRemaining: Math.max(0, MAX_DAILY_REFRESH - refreshCount),
   };
 }

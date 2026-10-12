@@ -50,7 +50,7 @@ export function LinkToolbarButton() {
       disabled={!editor.can().toggleLink({ href: '' })}
     >
       <LinkIcon className="size-4" />
-      <span className="sr-only">链接</span>
+      <span className="sr-only">連結</span>
     </Button>
   );
 
@@ -69,7 +69,7 @@ export function LinkToolbarButton() {
           </TooltipTrigger>
           {!open && (
             <TooltipContent>
-              <p>链接</p>
+              <p>連結</p>
             </TooltipContent>
           )}
         </Tooltip>

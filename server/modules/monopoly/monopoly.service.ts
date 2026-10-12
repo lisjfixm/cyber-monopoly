@@ -97,18 +97,18 @@ const MAX_CHAT_MESSAGES = 50;
 const DISCONNECT_THRESHOLD_MS = 30_000;
 const FORFEIT_THRESHOLD_MS = 60_000;
 
-// 观战配置
+// 觀戰配置
 const MAX_SPECTATORS = 50;
 const MAX_DANMAKU = 100;
 const DANMAKU_MAX_LENGTH = 50;
 
-// 新聊天/断线系统（独立列存储）
+// 新聊天/斷線系統（獨立列儲存）
 const MAX_MESSAGES = 100;
-const DISCONNECT_THRESHOLD_SECONDS = 15; // 15秒未心跳判定断线
-const HEARTBEAT_DISCONNECT_SECONDS = 10; // 心跳接口检测阈值10秒
-const SURRENDER_THRESHOLD_SECONDS = 60;   // 60秒断线可判负
+const DISCONNECT_THRESHOLD_SECONDS = 15; // 15秒未心跳判定斷線
+const HEARTBEAT_DISCONNECT_SECONDS = 10; // 心跳介面檢測閾值10秒
+const SURRENDER_THRESHOLD_SECONDS = 60;   // 60秒斷線可判負
 
-// 玩家颜色（按索引顺序分配，最多6人）
+// 玩家顏色（按索引順序分配，最多6人）
 const PLAYER_COLORS: PlayerColor[] = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
 const VALID_MAX_PLAYERS = [2, 4, 6];
 
@@ -124,10 +124,10 @@ interface GameStateWithMeta extends GameState {
   hostLastActiveAt: number;
   guestLastActiveAt: number;
   disconnectStatus: DisconnectStatus | null;
-  // 语音聊天
+  // 語音聊天
   voiceActive: boolean;
   voiceParticipants: number[];
-  // 观战模式
+  // 觀戰模式
   spectators: Spectator[];
   danmaku: DanmakuMessage[];
 }
@@ -185,7 +185,7 @@ function parsePlayerLastSeen(raw: unknown): (string | null)[] {
 export class MonopolyService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(MonopolyService.name);
 
-  // SSE 房间状态流：key=roomCode, value=Subject<RoomState>
+  // SSE 房間狀態流：key=roomCode, value=Subject<RoomState>
   private readonly roomStreams = new Map<string, Subject<RoomState>>();
   private disconnectScanTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -211,10 +211,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     this.roomStreams.clear();
   }
 
-  // ========== SSE 实时推送 ==========
+  // ========== SSE 實時推送 ==========
 
   /**
-   * 取得使用者存檔資料（跨平台同步用）。
+   * 取得使用者存檔資料（跨平臺同步用）。
    * 若表不存在或無記錄則返回 null。
    */
   async getSaveData(visitorId: string): Promise<UserSaveData | null> {
@@ -361,10 +361,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
   /**
 
   /**
-   * 获取房间状态的 Observable，用于 SSE 推送。
-   * 房间不存在时返回 null。
-   * 注意：Subject 是懒创建的，第一个订阅者到来时才建立。
-   * 调用方应先确认房间存在（如调用 getRoom）。
+   * 獲取房間狀態的 Observable，用於 SSE 推送。
+   * 房間不存在時返回 null。
+   * 注意：Subject 是懶建立的，第一個訂閱者到來時才建立。
+   * 呼叫方應先確認房間存在（如呼叫 getRoom）。
    */
   getRoomStream(roomCode: string): Observable<RoomState> {
     if (!this.roomStreams.has(roomCode)) {
@@ -374,7 +374,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * 向所有订阅该房间的 SSE 客户端推送最新状态。
+   * 向所有訂閱該房間的 SSE 使用者端推送最新狀態。
    */
   private notifyRoomUpdate(roomCode: string, roomState: RoomState): void {
     const subject = this.roomStreams.get(roomCode);
@@ -383,7 +383,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // ========== 房间管理 ==========
+  // ========== 房間管理 ==========
 
   async createRoom(params: {
     hostName: string;
@@ -405,7 +405,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       defaultAuctionMode,
       turnTimeLimit,
     } = params;
-    // 合作模式 / 合作打Boss 强制4人
+    // 合作模式 / 合作打Boss 強制4人
     const forcedMax = (gameMode === 'coop2v2' || gameMode === 'coop_boss') ? 4 : rawMax;
     const maxPlayers = VALID_MAX_PLAYERS.includes(forcedMax) ? forcedMax : 2;
 
@@ -443,7 +443,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         unreadHost: 0,
         unreadGuest: 0,
         hostLastSeen: now,
-        // 新字段（多人）
+        // 新欄位（多人）
         maxPlayers,
         playerNames: JSON.stringify(playerNames) as unknown as Record<string, unknown>,
         hostIndex: 0,
@@ -472,8 +472,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     password?: string,
   ): Promise<{ room: RoomState; playerIndex: number }> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
-    if (room.status !== 'waiting') throw new BadRequestException('房间已开始游戏');
+    if (!room) throw new NotFoundException('房間不存在');
+    if (room.status !== 'waiting') throw new BadRequestException('房間已開始遊戲');
 
     const roomMeta = this.getRoomMeta(room);
     if (roomMeta.password && roomMeta.password.length > 0) {
@@ -491,7 +491,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     }
 
     if (playerNames.length >= maxPlayers) {
-      throw new BadRequestException('房间已满');
+      throw new BadRequestException('房間已滿');
     }
 
     const playerIndex = playerNames.length;
@@ -526,10 +526,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .returning();
 
     if (updated.length === 0) {
-      throw new BadRequestException('房间已满');
+      throw new BadRequestException('房間已滿');
     }
 
-    await this.addSystemMessageToColumn(roomCode, `玩家 ${playerName} 加入了房间`);
+    await this.addSystemMessageToColumn(roomCode, `玩家 ${playerName} 加入了房間`);
 
     const roomState = this.toRoomState(updated[0], playerIndex);
     this.notifyRoomUpdate(roomCode, roomState);
@@ -545,7 +545,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     visitorId?: string,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     const playerNames = this.getPlayerNames(room);
     const playerLastSeen = this.getPlayerLastSeen(room);
@@ -583,7 +583,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .returning();
 
-    await this.addSystemMessageToColumn(roomCode, `玩家 ${removedName} 离开了房间`);
+    await this.addSystemMessageToColumn(roomCode, `玩家 ${removedName} 離開了房間`);
 
     const roomState = this.toRoomState(updated[0]);
     this.notifyRoomUpdate(roomCode, roomState);
@@ -597,7 +597,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     toPlayerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     const playerNames = this.getPlayerNames(room);
     const hostIndex = this.getHostIndex(room);
@@ -639,30 +639,30 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     challenge?: string,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
-    if (room.status === 'playing') throw new BadRequestException('游戏已开始');
-    if (room.status === 'ended') throw new BadRequestException('游戏已结束');
+    if (!room) throw new NotFoundException('房間不存在');
+    if (room.status === 'playing') throw new BadRequestException('遊戲已開始');
+    if (room.status === 'ended') throw new BadRequestException('遊戲已結束');
 
     const actualHostIndex = this.getHostIndex(room);
     if (hostIndex !== actualHostIndex) {
-      throw new BadRequestException('只有房主可以开始游戏');
+      throw new BadRequestException('只有房主可以開始遊戲');
     }
 
     const playerNames = this.getPlayerNames(room);
     if (playerNames.length < 2) {
-      throw new BadRequestException('至少需要2名玩家才能开始游戏');
+      throw new BadRequestException('至少需要2名玩家才能開始遊戲');
     }
-    // 合作模式强制4人
+    // 合作模式強制4人
     if (gameMode === 'coop2v2' && playerNames.length !== 4) {
       throw new BadRequestException('合作模式 2v2 需要4名玩家');
     }
-    // 大逃杀模式 4-6 人
+    // 大逃殺模式 4-6 人
     if (gameMode === 'battle_royale') {
       if (playerNames.length < 4 || playerNames.length > 6) {
-        throw new BadRequestException('大逃杀模式需要4-6名玩家');
+        throw new BadRequestException('大逃殺模式需要4-6名玩家');
       }
     }
-    // 合作打Boss模式：4名人类玩家 + 1名Boss AI（Boss不计入房间人数上限）
+    // 合作打Boss模式：4名人類玩家 + 1名Boss AI（Boss不計入房間人數上限）
     if (gameMode === 'coop_boss' && playerNames.length !== 4) {
       throw new BadRequestException('合作打Boss模式需要4名玩家');
     }
@@ -673,7 +673,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       isAI: false,
     }));
 
-    // 合作打Boss模式：在末尾注入 Boss AI 玩家
+    // 合作打Boss模式：在末尾註入 Boss AI 玩家
     if (gameMode === 'coop_boss') {
       playerConfigs.push({
         name: '終極Boss',
@@ -705,7 +705,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       : undefined;
     const gameState = createInitialState(gameMode, playerConfigs, customRules, challengeType);
 
-    // 設置回合時間限制
+    // 設定回合時間限制
     if (turnTimeLimitVal && turnTimeLimitVal > 0) {
       gameState.turnTimeLimit = turnTimeLimitVal;
       gameState.turnStartTime = Date.now();
@@ -741,7 +741,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .returning();
 
-    await this.addSystemMessageToColumn(roomCode, '游戏开始！');
+    await this.addSystemMessageToColumn(roomCode, '遊戲開始！');
 
     const roomState = this.toRoomState(updated[0]);
     this.notifyRoomUpdate(roomCode, roomState);
@@ -756,7 +756,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const { gameMode, maxPlayers, status } = filter ?? {};
 
     const conditions = [];
-    // 公开房间：gameState->_roomMeta->isPublic 为 true 或不存在（默认公开）
+    // 公開房間：gameState->_roomMeta->isPublic 為 true 或不存在（預設公開）
     conditions.push(
       sql`coalesce((${monopolyRoom.gameState}->'_roomMeta'->'isPublic')::boolean, true) = true`,
     );
@@ -777,7 +777,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .orderBy(desc(monopolyRoom.createdAt))
       .limit(50);
 
-    // 列表返回时去除 password，仅保留 hasPassword 标记
+    // 列表返回時去除 password，僅保留 hasPassword 標記
     return rows.map((row: typeof monopolyRoom.$inferSelect) => {
       const state = this.toRoomState(row);
       const meta = this.getRoomMeta(row);
@@ -791,7 +791,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
   async getRoom(roomCode: string, playerIndex?: number): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     // 心跳更新：僅當距上次 lastSeen 超過 10 秒才寫入，降低寫庫壓力
     if (playerIndex !== undefined && playerIndex >= 0) {
@@ -804,7 +804,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    // 懒检测：游戏中时检查断线
+    // 懶檢測：遊戲中時檢查斷線
     if (room.status === 'playing' && room.gameState) {
       const state = enrichGameState(room.gameState as unknown as GameState);
       const playerNames = this.getPlayerNames(room);
@@ -831,7 +831,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     }
 
     const state = this.toRoomState(room);
-    // getRoom 返回时去除实际密码，仅保留 hasPassword 标记
+    // getRoom 返回時去除實際密碼，僅保留 hasPassword 標記
     const meta = this.getRoomMeta(room);
     return {
       ...state,
@@ -840,7 +840,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  // ========== 游戏操作 ==========
+  // ========== 遊戲操作 ==========
 
   async rollDice(roomCode: string, playerIndex: number): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
@@ -916,9 +916,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     targetPlayerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -932,9 +932,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -948,9 +948,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -964,9 +964,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -982,9 +982,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     bidAmount: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -998,9 +998,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     const state = room.gameState as unknown as GameState;
@@ -1017,21 +1017,21 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     moneyAmount: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase !== 'rolling') throw new BadRequestException('当前不能发起交易');
+    if (state.phase !== 'rolling') throw new BadRequestException('當前不能發起交易');
     if (state.currentPlayerIndex !== playerIndex) {
       throw new BadRequestException('不是你的回合');
     }
-    if (state.pendingTrade) throw new BadRequestException('已有待处理的交易');
+    if (state.pendingTrade) throw new BadRequestException('已有待處理的交易');
 
-    // 确定交易对手：默认为下一个玩家（简单起见，双人模式就是 1 - playerIndex）
-    // 多人模式下找一个有地产的对手；这里简化为下一个未破产玩家
+    // 確定交易對手：預設為下一個玩家（簡單起見，雙人模式就是 1 - playerIndex）
+    // 多人模式下找一個有地產的對手；這裡簡化為下一個未破產玩家
     let toPlayer = -1;
     for (let i = 1; i < state.players.length; i++) {
       const idx = (playerIndex + i) % state.players.length;
@@ -1041,7 +1041,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       }
     }
     if (toPlayer < 0) {
-      throw new BadRequestException('没有可交易的对手');
+      throw new BadRequestException('沒有可交易的對手');
     }
 
     let newState = engineProposeTrade(state, playerIndex, toPlayer, {
@@ -1050,7 +1050,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       moneyAmount,
     });
 
-    // 如果接收方是AI，自动判断是否接受
+    // 如果接收方是AI，自動判斷是否接受
     if (newState.pendingTrade && newState.players[newState.pendingTrade.toPlayer].isAI) {
       if (aiShouldAcceptTrade(newState, newState.pendingTrade)) {
         newState = engineAcceptTrade(newState);
@@ -1072,14 +1072,14 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     accept: boolean,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (!state.pendingTrade) throw new BadRequestException('没有待处理的交易');
+    if (!state.pendingTrade) throw new BadRequestException('沒有待處理的交易');
     if (state.pendingTrade.toPlayer !== playerIndex) {
       throw new BadRequestException('你不是交易接收方');
     }
@@ -1101,16 +1101,16 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     profession: Profession,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+    if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
     if (state.players[playerIndex]?.profession) {
-      throw new BadRequestException('职业已选择');
+      throw new BadRequestException('職業已選擇');
     }
 
     const newState = {
@@ -1123,10 +1123,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     newState.logs = [...state.logs, {
       id: state.logs.length > 0 ? state.logs[state.logs.length - 1].id + 1 : 1,
       type: logType,
-      text: `${newState.players[playerIndex].name} 选择了职业：${profession}`,
+      text: `${newState.players[playerIndex].name} 選擇了職業：${profession}`,
     }];
 
-    // 如果有AI玩家还没选职业，为它们随机选
+    // 如果有AI玩家還沒選職業，為它們隨機選
     const aiProfessions: Profession[] = ['engineer', 'banker', 'speculator', 'tycoon', 'hacker', 'doctor'];
     for (let i = 0; i < newState.players.length; i++) {
       if (newState.players[i].isAI && !newState.players[i].profession) {
@@ -1136,7 +1136,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         newState.logs.push({
           id: newState.logs[newState.logs.length - 1].id + 1,
           type: aiLogType,
-          text: `${newState.players[i].name} 选择了职业：${aiProfession}`,
+          text: `${newState.players[i].name} 選擇了職業：${aiProfession}`,
         });
       }
     }
@@ -1162,26 +1162,26 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     bidAmount: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase !== 'auction') throw new BadRequestException('不是拍卖阶段');
+    if (state.phase !== 'auction') throw new BadRequestException('不是拍賣階段');
     if (!state.auction || !state.auction.active) {
-      throw new BadRequestException('没有进行中的拍卖');
+      throw new BadRequestException('沒有進行中的拍賣');
     }
 
     const activeBidderIndex = state.auction.activeBidderIndex;
     const currentBidder = state.auction.activeBidders[activeBidderIndex];
     if (currentBidder !== playerIndex) {
-      throw new BadRequestException('还没轮到你出价');
+      throw new BadRequestException('還沒輪到你出價');
     }
 
     if (bidAmount < state.auction.minIncrement) {
-      throw new BadRequestException(`加价不能低于 ${state.auction.minIncrement} 元`);
+      throw new BadRequestException(`加價不能低於 ${state.auction.minIncrement} 元`);
     }
 
     let newState = enginePlaceBid(state, playerIndex, bidAmount);
@@ -1199,22 +1199,22 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase !== 'auction') throw new BadRequestException('不是拍卖阶段');
+    if (state.phase !== 'auction') throw new BadRequestException('不是拍賣階段');
     if (!state.auction || !state.auction.active) {
-      throw new BadRequestException('没有进行中的拍卖');
+      throw new BadRequestException('沒有進行中的拍賣');
     }
 
     const activeBidderIndex = state.auction.activeBidderIndex;
     const currentBidder = state.auction.activeBidders[activeBidderIndex];
     if (currentBidder !== playerIndex) {
-      throw new BadRequestException('还没轮到你出价');
+      throw new BadRequestException('還沒輪到你出價');
     }
 
     let newState = enginePassAuction(state, playerIndex);
@@ -1227,7 +1227,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     return this.saveGameState(roomCode, newState, room);
   }
 
-  // ========== NPC 系统 ==========
+  // ========== NPC 系統 ==========
 
   async npcBuyItem(
     roomCode: string,
@@ -1235,18 +1235,18 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     itemType: string,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
     if (!state.pendingNpcInteraction) {
-      throw new BadRequestException('没有进行中的NPC交互');
+      throw new BadRequestException('沒有進行中的NPC互動');
     }
     if (state.pendingNpcInteraction.playerIndex !== playerIndex) {
-      throw new BadRequestException('不是你的NPC交互');
+      throw new BadRequestException('不是你的NPC互動');
     }
 
     let newState = engineBuyFromMerchant(state, playerIndex, itemType as ItemType);
@@ -1264,19 +1264,19 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     targetPlayerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
     this.validatePlayerIndex(room, targetPlayerIndex);
 
     const state = room.gameState as unknown as GameState;
     if (!state.pendingNpcInteraction) {
-      throw new BadRequestException('没有进行中的NPC交互');
+      throw new BadRequestException('沒有進行中的NPC互動');
     }
     if (state.pendingNpcInteraction.playerIndex !== playerIndex) {
-      throw new BadRequestException('不是你的NPC交互');
+      throw new BadRequestException('不是你的NPC互動');
     }
 
     let newState = engineHireHacker(state, playerIndex, targetPlayerIndex);
@@ -1293,15 +1293,15 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
     if (!state.pendingNpcInteraction) {
-      throw new BadRequestException('没有进行中的NPC交互');
+      throw new BadRequestException('沒有進行中的NPC互動');
     }
 
     let newState = engineCloseNpcInteraction(state, playerIndex);
@@ -1313,7 +1313,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     return this.saveGameState(roomCode, newState, room);
   }
 
-  // ========== 暗拍系统 ==========
+  // ========== 暗拍系統 ==========
 
   async submitBlindBid(
     roomCode: string,
@@ -1321,25 +1321,25 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     bidAmount: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase !== 'auction') throw new BadRequestException('不是拍卖阶段');
+    if (state.phase !== 'auction') throw new BadRequestException('不是拍賣階段');
     if (!state.auction || !state.auction.active) {
-      throw new BadRequestException('没有进行中的拍卖');
+      throw new BadRequestException('沒有進行中的拍賣');
     }
     if (!state.auction.isBlind) {
-      throw new BadRequestException('当前不是暗拍模式');
+      throw new BadRequestException('當前不是暗拍模式');
     }
     if (state.auction.revealed) {
-      throw new BadRequestException('暗拍已揭晓');
+      throw new BadRequestException('暗拍已揭曉');
     }
 
-    if (bidAmount <= 0) throw new BadRequestException('出价必须大于0');
+    if (bidAmount <= 0) throw new BadRequestException('出價必須大於0');
 
     let newState = engineSubmitBlindBid(state, playerIndex, bidAmount);
     newState = this.runAIAuctionTurn(newState);
@@ -1355,21 +1355,21 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     roomCode: string,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
 
     const state = room.gameState as unknown as GameState;
-    if (state.phase !== 'auction') throw new BadRequestException('不是拍卖阶段');
+    if (state.phase !== 'auction') throw new BadRequestException('不是拍賣階段');
     if (!state.auction || !state.auction.active) {
-      throw new BadRequestException('没有进行中的拍卖');
+      throw new BadRequestException('沒有進行中的拍賣');
     }
     if (!state.auction.isBlind) {
-      throw new BadRequestException('当前不是暗拍模式');
+      throw new BadRequestException('當前不是暗拍模式');
     }
     if (state.auction.revealed) {
-      throw new BadRequestException('暗拍已揭晓');
+      throw new BadRequestException('暗拍已揭曉');
     }
 
     let newState = engineRevealBlindBids(state);
@@ -1388,8 +1388,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     quantity: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (quantity <= 0) throw new BadRequestException('数量必须大于0');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (quantity <= 0) throw new BadRequestException('數量必須大於0');
       return engineBuyStock(state, playerIndex, symbol as StockSymbol, quantity);
     });
   }
@@ -1401,8 +1401,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     quantity: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (quantity <= 0) throw new BadRequestException('数量必须大于0');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (quantity <= 0) throw new BadRequestException('數量必須大於0');
       return engineSellStock(state, playerIndex, symbol as StockSymbol, quantity);
     });
   }
@@ -1415,8 +1415,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     cellId: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('无效的地块ID');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('無效的地塊ID');
       return engineForceAcquireProperty(state, playerIndex, cellId);
     });
   }
@@ -1429,8 +1429,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     cellId: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('无效的地块ID');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('無效的地塊ID');
       return engineBribeBank(state, playerIndex, cellId);
     });
   }
@@ -1444,10 +1444,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     direction: 'up' | 'down',
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       const validSymbols = ['NEON', 'QNTM', 'DATA', 'CYBR'];
-      if (!validSymbols.includes(symbol)) throw new BadRequestException('无效的股票代码');
-      if (direction !== 'up' && direction !== 'down') throw new BadRequestException('无效的方向');
+      if (!validSymbols.includes(symbol)) throw new BadRequestException('無效的股票程式碼');
+      if (direction !== 'up' && direction !== 'down') throw new BadRequestException('無效的方向');
       return engineCallShareholderMeeting(state, playerIndex, symbol as StockSymbol, direction);
     });
   }
@@ -1460,13 +1460,13 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     cellId: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('无效的地块ID');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('無效的地塊ID');
       return engineUndergroundMarketBuy(state, playerIndex, cellId);
     });
   }
 
-  // ========== 道具系统 ==========
+  // ========== 道具系統 ==========
 
   async buyItem(
     roomCode: string,
@@ -1474,7 +1474,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     itemType: ItemType,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       return engineBuyItem(state, playerIndex, itemType);
     });
   }
@@ -1483,7 +1483,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
   async payBail(roomCode: string, playerIndex: number): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       const player = state.players[playerIndex];
       if (!player?.isInDetention) throw new BadRequestException('玩家不在監禁中');
       return enginePayBailRelease(state, playerIndex);
@@ -1497,29 +1497,29 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     targetCellId?: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       return engineUseItem(state, playerIndex, itemId, targetCellId);
     });
   }
 
-  // ========== 迷你游戏系统 ==========
+  // ========== 迷你遊戲系統 ==========
 
   async startMiniGame(
     roomCode: string,
     playerIndex: number,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
     const normalizedState = normalizeGameState(state);
-    if (normalizedState.phase === 'ended') throw new BadRequestException('游戏已结束');
+    if (normalizedState.phase === 'ended') throw new BadRequestException('遊戲已結束');
     if (!normalizedState.pendingMiniGame || normalizedState.pendingMiniGame.playerIndex !== playerIndex) {
-      throw new BadRequestException('没有进行中的迷你游戏');
+      throw new BadRequestException('沒有進行中的迷你遊戲');
     }
 
     let newState = engineStartMiniGame(normalizedState, playerIndex);
@@ -1538,17 +1538,17 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     data?: unknown,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
     const normalizedState = normalizeGameState(state);
-    if (normalizedState.phase === 'ended') throw new BadRequestException('游戏已结束');
+    if (normalizedState.phase === 'ended') throw new BadRequestException('遊戲已結束');
     if (!normalizedState.pendingMiniGame || normalizedState.pendingMiniGame.playerIndex !== playerIndex) {
-      throw new BadRequestException('没有进行中的迷你游戏');
+      throw new BadRequestException('沒有進行中的迷你遊戲');
     }
 
     let newState = engineMiniGameAction(normalizedState, playerIndex, action, data);
@@ -1580,7 +1580,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
-  // ========== 保险系统 ==========
+  // ========== 保險系統 ==========
 
   async buyInsurance(
     roomCode: string,
@@ -1588,13 +1588,13 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     cellId: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('地块ID无效');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('地塊ID無效');
       return engineBuyInsurance(state, playerIndex, cellId);
     });
   }
 
-  // ========== 债券系统 ==========
+  // ========== 債券系統 ==========
 
   async upgradeSkill(
     roomCode: string,
@@ -1602,7 +1602,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     skillId: string,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       return engineUpgradeSkill(state, playerIndex, skillId as import('@shared/api.interface').SkillId);
     });
   }
@@ -1614,7 +1614,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     buildingType: string,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('地块ID无效');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('地塊ID無效');
       return engineBuildSpecialBuilding(
         state,
         playerIndex,
@@ -1630,12 +1630,12 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     cellId: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, 'rolling', (state) => {
-      if (cellId < 0 || cellId > 35) throw new BadRequestException('地块ID无效');
+      if (cellId < 0 || cellId > 35) throw new BadRequestException('地塊ID無效');
       return engineDemolishSpecialBuilding(state, playerIndex, cellId);
     });
   }
 
-  // ========== 债券系统 ==========
+  // ========== 債券系統 ==========
 
   async issueBond(
     roomCode: string,
@@ -1645,7 +1645,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     turns: number,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
       return engineIssueBond(state, playerIndex, amount, interestRate, turns);
     });
   }
@@ -1656,13 +1656,13 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     bondId: string,
   ): Promise<RoomState> {
     return this.withTurnValidation(roomCode, playerIndex, null, (state) => {
-      if (state.phase === 'ended') throw new BadRequestException('游戏已结束');
-      if (!bondId) throw new BadRequestException('债券ID不能为空');
+      if (state.phase === 'ended') throw new BadRequestException('遊戲已結束');
+      if (!bondId) throw new BadRequestException('債券ID不能為空');
       return engineSubscribeBond(state, playerIndex, bondId);
     });
   }
 
-  // ========== 聊天系统 ==========
+  // ========== 聊天系統 ==========
 
   async sendChatMessage(
     roomCode: string,
@@ -1670,11 +1670,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     content: string,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     const trimmed = content.trim();
-    if (!trimmed) throw new BadRequestException('消息内容不能为空');
-    if (trimmed.length > 200) throw new BadRequestException('消息长度不能超过200字');
+    if (!trimmed) throw new BadRequestException('訊息內容不能為空');
+    if (trimmed.length > 200) throw new BadRequestException('訊息長度不能超過200字');
 
     this.validatePlayerIndex(room, playerIndex);
 
@@ -1730,11 +1730,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     type: 'player' | 'voice' = 'player',
   ): Promise<{ success: boolean; messageId: number }> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     const trimmed = content.trim();
-    if (!trimmed) throw new BadRequestException('消息内容不能为空');
-    if (trimmed.length > 500) throw new BadRequestException('消息长度不能超过500字');
+    if (!trimmed) throw new BadRequestException('訊息內容不能為空');
+    if (trimmed.length > 500) throw new BadRequestException('訊息長度不能超過500字');
 
     this.validatePlayerIndex(room, playerIndex);
 
@@ -1772,7 +1772,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .execute();
 
-    // 聊天消息也推送给 SSE 订阅者
+    // 聊天訊息也推送給 SSE 訂閱者
     const refreshed = await this.findByCode(roomCode);
     if (refreshed) {
       this.notifyRoomUpdate(roomCode, this.toRoomState(refreshed, playerIndex));
@@ -1786,17 +1786,17 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<{ success: boolean }> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     this.validatePlayerIndex(room, playerIndex);
 
-    // 顺便更新 lastSeen
+    // 順便更新 lastSeen
     const now = new Date();
     await this.updatePlayerLastSeenRaw(roomCode, playerIndex, now);
 
     return { success: true };
   }
 
-  // ========== 语音聊天 ==========
+  // ========== 語音聊天 ==========
 
   async toggleVoice(
     roomCode: string,
@@ -1832,7 +1832,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     state.voiceActive = newVoiceParticipants.length > 0;
     state.voiceParticipants = newVoiceParticipants;
 
-    // 添加系統消息
+    // 新增系統訊息
     const action = muted ? '關閉了麥克風' : '開啟了麥克風';
     await this.addSystemMessageToColumn(roomCode, `${playerName} ${action}`);
 
@@ -2055,14 +2055,14 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     return roomState;
   }
 
-  // ========== 心跳与断线重连 ==========
+  // ========== 心跳與斷線重連 ==========
 
   async playerHeartbeat(
     roomCode: string,
     playerIndex: number,
   ): Promise<{ success: boolean; disconnectedPlayers: number[]; disconnectedPlayer: number | null }> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     this.validatePlayerIndex(room, playerIndex);
 
     const now = new Date();
@@ -2075,7 +2075,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const newLastSeen: (string | null)[] = [...lastSeen];
     newLastSeen[playerIndex] = nowIso;
 
-    // 找出超时断线的玩家（心跳发起者不算）
+    // 找出超時斷線的玩家（心跳發起者不算）
     const timedOutIndices: number[] = [];
     for (let i = 0; i < playerNames.length; i++) {
       if (i === playerIndex) continue;
@@ -2087,7 +2087,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    // 如果游戏未开始，超时玩家直接从房间移除；房主断线则转移房主
+    // 如果遊戲未開始，超時玩家直接從房間移除；房主斷線則轉移房主
     if (room.status === 'waiting' && timedOutIndices.length > 0) {
       const newPlayerNames: PlayerNameEntry[] = [...playerNames];
       const nextLastSeen: (string | null)[] = [...newLastSeen];
@@ -2095,7 +2095,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       let newStatus = room.status;
       const messages: string[] = [];
 
-      // 按索引从大到小删除，避免索引偏移
+      // 按索引從大到小刪除，避免索引偏移
       const sortedToRemove = [...timedOutIndices].sort((a, b) => b - a);
       for (const idx of sortedToRemove) {
         const removedName = newPlayerNames[idx]?.name ?? `玩家${idx + 1}`;
@@ -2106,14 +2106,14 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         } else if (idx === newHostIndex) {
           newHostIndex = 0;
         }
-        messages.push(`玩家 ${removedName} 因断线离开了房间`);
+        messages.push(`玩家 ${removedName} 因斷線離開了房間`);
       }
 
       if (newPlayerNames.length === 0) {
         newStatus = 'closed';
       }
 
-      // 兼容字段（host/guest name & lastSeen）
+      // 相容欄位（host/guest name & lastSeen）
       const compat: Record<string, unknown> = {};
       if (newPlayerNames[0]) {
         compat.hostName = newPlayerNames[0].name;
@@ -2149,12 +2149,12 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       const roomState = this.toRoomState(updated[0]);
       this.notifyRoomUpdate(roomCode, roomState);
 
-      // 返回仍然断线的玩家（相对于当前剩余玩家列表）
+      // 返回仍然斷線的玩家（相對於當前剩餘玩家列表）
       const remainingDisconnected: number[] = [];
       return { success: true, disconnectedPlayers: remainingDisconnected, disconnectedPlayer: null };
     }
 
-    // 向后兼容旧字段
+    // 向後相容舊欄位
     const compatPatch = playerIndex === 0
       ? { hostLastSeen: now }
       : playerIndex === 1
@@ -2170,7 +2170,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .execute();
 
-    // 计算断线玩家
+    // 計算斷線玩家
     const disconnectedPlayers: number[] = [];
     for (let i = 0; i < playerNames.length; i++) {
       if (i === playerIndex) continue;
@@ -2274,11 +2274,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
             this.notifyRoomUpdate(room.roomCode, roomState);
           }
         } catch {
-          // 单个房间处理失败不影响其他房间
+          // 單個房間處理失敗不影響其他房間
         }
       }
     } catch {
-      // 定时器整体异常吞掉，避免进程崩溃
+      // 定時器整體異常吞掉，避免程序崩潰
     }
   }
 
@@ -2287,9 +2287,9 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
   ): Promise<{ success: boolean; reason: string }> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing') {
-      throw new BadRequestException('游戏未开始或已结束');
+      throw new BadRequestException('遊戲未開始或已結束');
     }
     this.validatePlayerIndex(room, playerIndex);
 
@@ -2297,7 +2297,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const playerNames = this.getPlayerNames(room);
     const now = new Date();
 
-    // 检查是否所有其他玩家都断线超过60秒
+    // 檢查是否所有其他玩家都斷線超過60秒
     const allOthersDisconnected = playerNames.every((_p: PlayerNameEntry, i: number) => {
       if (i === playerIndex) return true;
       const seen = lastSeen[i];
@@ -2307,7 +2307,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     });
 
     if (!allOthersDisconnected) {
-      // 找还在线的玩家中最短的剩余时间
+      // 找還線上的玩家中最短的剩餘時間
       let minRemaining = Infinity;
       for (let i = 0; i < playerNames.length; i++) {
         if (i === playerIndex) continue;
@@ -2320,14 +2320,14 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       }
       if (minRemaining < Infinity) {
         const remaining = Math.ceil(minRemaining);
-        return { success: false, reason: `还有玩家未断线，请再等待 ${remaining} 秒` };
+        return { success: false, reason: `還有玩家未斷線，請再等待 ${remaining} 秒` };
       }
-      return { success: false, reason: '还有玩家在线' };
+      return { success: false, reason: '還有玩家線上' };
     }
 
-    // 判负：所有其他玩家认输，当前玩家获胜
+    // 判負：所有其他玩家認輸，當前玩家獲勝
     if (!room.gameState || typeof room.gameState !== 'object') {
-      throw new BadRequestException('游戏状态异常');
+      throw new BadRequestException('遊戲狀態異常');
     }
 
     const state = room.gameState as unknown as GameState;
@@ -2335,7 +2335,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     newState.phase = 'ended';
     newState.winner = playerIndex;
 
-    // 添加系统消息
+    // 新增系統訊息
     const messages: ChatMessage[] = Array.isArray(room.messages)
       ? [...(room.messages as unknown as ChatMessage[])]
       : [];
@@ -2343,8 +2343,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const sysMsg: ChatMessage = {
       id: messages.length > 0 ? messages[messages.length - 1].id + 1 : 1,
       sender: -1,
-      senderName: '系统',
-      content: `${winnerName} 获胜！其他玩家因断线判负`,
+      senderName: '系統',
+      content: `${winnerName} 獲勝！其他玩家因斷線判負`,
       type: 'system',
       timestamp: now.toISOString(),
     };
@@ -2363,18 +2363,18 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .returning();
 
-    // 记录排行榜数据（异步 fire-and-forget）
+    // 記錄排行榜資料（非同步 fire-and-forget）
     void this.tryRecordGameResult(room, newState);
 
-    // 通知 SSE 订阅者
+    // 通知 SSE 訂閱者
     if (updated.length > 0) {
       this.notifyRoomUpdate(roomCode, this.toRoomState(updated[0], playerIndex));
     }
 
-    return { success: true, reason: '其他玩家断线超过60秒，判定对方认输' };
+    return { success: true, reason: '其他玩家斷線超過60秒，判定對方認輸' };
   }
 
-  // ========== 私有辅助方法 ==========
+  // ========== 私有輔助方法 ==========
 
   private async withTurnValidation(
     roomCode: string,
@@ -2383,16 +2383,16 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     handler: (state: GameState) => GameState,
   ): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
     if (room.status !== 'playing' || !room.gameState) {
-      throw new BadRequestException('游戏未开始');
+      throw new BadRequestException('遊戲未開始');
     }
     this.validatePlayerIndex(room, playerIndex);
 
     const state = room.gameState as unknown as GameState;
     const normalizedState = normalizeGameState(state);
     if (expectedPhase && normalizedState.phase !== expectedPhase) {
-      throw new BadRequestException(`不是${this.phaseLabel(expectedPhase)}阶段`);
+      throw new BadRequestException(`不是${this.phaseLabel(expectedPhase)}階段`);
     }
     if (normalizedState.currentPlayerIndex !== playerIndex) {
       throw new BadRequestException('不是你的回合');
@@ -2400,7 +2400,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
     let newState = handler(normalizedState);
 
-    // 命运/机会卡循环
+    // 命運/機會卡迴圈
     let cardLoop = 0;
     while ((newState.phase === 'fate' || newState.phase === 'chance') && cardLoop < 5) {
       if (newState.phase === 'fate') {
@@ -2430,11 +2430,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
   private phaseLabel(phase: string): string {
     const labels: Record<string, string> = {
-      rolling: '行动',
-      buying: '购买',
-      fate: '命运',
-      chance: '机会',
-      auction: '拍卖',
+      rolling: '行動',
+      buying: '購買',
+      fate: '命運',
+      chance: '機會',
+      auction: '拍賣',
     };
     return labels[phase] ?? phase;
   }
@@ -2454,7 +2454,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .update(monopolyRoom)
       .set({
         gameState: JSON.stringify(newState) as unknown as Record<string, unknown>,
-      })
+        updatedAt: new Date(),
+      } as unknown as Record<string, unknown>)
       .where(
         and(
           eq(monopolyRoom.roomCode, roomCode),
@@ -2485,7 +2486,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       playerIndex >= playerNames.length ||
       playerIndex >= maxPlayers
     ) {
-      throw new BadRequestException('无效的玩家索引');
+      throw new BadRequestException('無效的玩家索引');
     }
   }
 
@@ -2503,7 +2504,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const raw = room.playerNames;
     const parsed = parsePlayerNames(raw);
     if (parsed.length > 0) return parsed;
-    // 向后兼容：从旧字段构造
+    // 向後相容：從舊欄位構造
     const names: PlayerNameEntry[] = [];
     if (room.hostName) {
       names.push({ name: room.hostName, color: PLAYER_COLORS[0], ready: false });
@@ -2533,7 +2534,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const raw = room.playerLastSeen;
     const parsed = parsePlayerLastSeen(raw);
     if (parsed.length > 0) return parsed;
-    // 向后兼容：从旧字段构造
+    // 向後相容：從舊欄位構造
     const result: (string | null)[] = [];
     if (room.hostName) {
       result.push(room.hostLastSeen ? new Date(room.hostLastSeen).toISOString() : null);
@@ -2549,7 +2550,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     playerIndex: number,
     now: Date,
   ): Promise<void> {
-    // 用原生 SQL 更新 player_last_seen 数组的指定索引
+    // 用原生 SQL 更新 player_last_seen 陣列的指定索引
     const nowIso = now.toISOString();
     await this.db.execute(sql`
       UPDATE monopoly_room
@@ -2564,7 +2565,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       WHERE room_code = ${roomCode}
     `);
 
-    // 向后兼容
+    // 向後相容
     if (playerIndex === 0) {
       await this.db.execute(sql`
         UPDATE monopoly_room SET host_last_seen = CURRENT_TIMESTAMP WHERE room_code = ${roomCode}
@@ -2595,7 +2596,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const msg: ChatMessage = {
       id: nextId,
       sender: -1,
-      senderName: '系统',
+      senderName: '系統',
       content,
       type: 'system',
       timestamp: new Date().toISOString(),
@@ -2641,8 +2642,8 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const sysMsg: ChatMessage = {
       id: nextId,
       sender: -1,
-      senderName: '系统',
-      content: `游戏结束，${winnerName} 获胜！`,
+      senderName: '系統',
+      content: `遊戲結束，${winnerName} 獲勝！`,
       type: 'system',
       timestamp: new Date().toISOString(),
     };
@@ -2662,7 +2663,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       .where(eq(monopolyRoom.roomCode, roomCode))
       .returning();
 
-    // 记录排行榜数据（异步 fire-and-forget，不阻塞响应）
+    // 記錄排行榜資料（非同步 fire-and-forget，不阻塞響應）
     void this.tryRecordGameResult(room, finalState);
 
     const roomState = this.toRoomState(updated[0]);
@@ -2672,21 +2673,21 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
   async heartbeat(roomCode: string, playerIndex: number): Promise<RoomState> {
     const room = await this.findByCode(roomCode);
-    if (!room) throw new NotFoundException('房间不存在');
+    if (!room) throw new NotFoundException('房間不存在');
 
     const now = new Date();
 
-    // 更新 player_last_seen 数组
+    // 更新 player_last_seen 陣列
     const lastSeen = this.getPlayerLastSeen(room);
     const playerNames = this.getPlayerNames(room);
     const newLastSeen: (string | null)[] = [...lastSeen];
-    // 填充到玩家数量
+    // 填充到玩家數量
     while (newLastSeen.length < playerNames.length) {
       newLastSeen.push(null);
     }
     newLastSeen[playerIndex] = now.toISOString();
 
-    // 兼容旧字段
+    // 相容舊欄位
     const compatPatch = playerIndex === 0
       ? { hostLastSeen: now }
       : playerIndex === 1
@@ -2701,7 +2702,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
     this.updatePlayerActivity(meta, playerIndex);
 
-    // 游戏中时顺便检查对方是否断线
+    // 遊戲中時順便檢查對方是否斷線
     let newStatus = room.status;
     if (room.status === 'playing') {
       const checked = this.checkDisconnection(meta, playerNames);
@@ -2741,7 +2742,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
 
     if (phase === 'ended') return null;
 
-    // 旧版二元检测（基于 hostLastActiveAt/guestLastActiveAt）
+    // 舊版二元檢測（基於 hostLastActiveAt/guestLastActiveAt）
     const hostIdle = now - meta.hostLastActiveAt;
     const guestIdle = now - meta.guestLastActiveAt;
 
@@ -2766,11 +2767,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const idleTime = disconnectedPlayer === 0 ? hostIdle : guestIdle;
     const disconnectedName = playerNames[disconnectedPlayer]?.name ?? `玩家${disconnectedPlayer + 1}`;
 
-    // 超过60秒判负
+    // 超過60秒判負
     if (idleTime > FORFEIT_THRESHOLD_MS) {
       if (meta.disconnectStatus?.result === 'forfeit') return null;
 
-      // 找胜者：第一个非断线且未破产的玩家
+      // 找勝者：第一個非斷線且未破產的玩家
       const state = meta as unknown as GameState;
       let winner: number | null = null;
       for (let i = 0; i < state.players.length; i++) {
@@ -2787,11 +2788,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         result: 'forfeit',
       };
 
-      this.addSystemMessage(meta, `${disconnectedName} 因断线判负`);
+      this.addSystemMessage(meta, `${disconnectedName} 因斷線判負`);
       return { status: 'ended', gameState: meta };
     }
 
-    // 30-60秒之间：标记为等待重连
+    // 30-60秒之間：標記為等待重連
     if (!meta.disconnectStatus || meta.disconnectStatus.disconnectedPlayer !== disconnectedPlayer) {
       meta.disconnectStatus = {
         disconnectedPlayer,
@@ -2820,7 +2821,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         : 1,
       type: 'system',
       sender: -1,
-      senderName: '系统',
+      senderName: '系統',
       content,
       timestamp: new Date().toISOString(),
     };
@@ -2830,7 +2831,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // ========== AI 逻辑 ==========
+  // ========== AI 邏輯 ==========
 
   private runAIAuctionTurn(state: GameState): GameState {
     let current = state;
@@ -2885,12 +2886,12 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const maxSteps = 30;
     let step = 0;
 
-    // AI回合开始时（rolling阶段），先尝试股票交易、建房、抵押、发起交易
+    // AI回合開始時（rolling階段），先嚐試股票交易、建房、抵押、發起交易
     if (current.phase === 'rolling') {
-      // 1. AI进行股票交易
+      // 1. AI進行股票交易
       current = aiStockTrade(current, aiIndex);
 
-      // 2. 尝试建房
+      // 2. 嘗試建房
       let buildLoop = 0;
       while (buildLoop < 10) {
         const decision = aiBuildDecision(current);
@@ -2899,17 +2900,17 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         buildLoop += 1;
       }
 
-      // 3. 现金紧张时自动抵押地产
+      // 3. 現金緊張時自動抵押地產
       const mortgageTargets = aiMortgageDecision(current);
       for (const cellId of mortgageTargets) {
         current = engineMortgageProperty(current, aiIndex, cellId);
       }
 
-      // 4. 偶尔发起交易
+      // 4. 偶爾發起交易
       if (Math.random() < 0.3) {
         const tradeOffer = aiProposeTrade(current);
         if (tradeOffer) {
-          // 找一个对手（AI模式下）
+          // 找一個對手（AI模式下）
           let aiOpponent = -1;
           for (let j = 0; j < current.players.length; j++) {
             if (j !== aiIndex && current.players[j]?.isAI) {
@@ -2918,7 +2919,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
             }
           }
           if (aiOpponent < 0) {
-            // 找任意非破产对手
+            // 找任意非破產對手
             for (let j = 0; j < current.players.length; j++) {
               if (j !== aiIndex && !current.players[j]?.isBankrupt) {
                 aiOpponent = j;
@@ -2932,7 +2933,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
               receivedProperties: tradeOffer.receivedProperties,
               moneyAmount: tradeOffer.moneyAmount,
             });
-            // 如果对方也是AI，自动响应
+            // 如果對方也是AI，自動響應
             if (current.pendingTrade) {
               const toIdx = current.pendingTrade.toPlayer;
               if (current.players[toIdx]?.isAI) {
@@ -2947,7 +2948,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         }
       }
 
-      // 5. AI 购买道具
+      // 5. AI 購買道具
       current = aiBuyItemIfNeeded(current, aiIndex);
 
       // 6. AI 使用道具
@@ -2961,7 +2962,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     ) {
       step += 1;
       if (current.phase === 'rolling') {
-        // 先處理 NPC 交互（如有）
+        // 先處理 NPC 互動（如有）
         if (current.pendingNpcInteraction && current.pendingNpcInteraction.playerIndex === aiIndex) {
           const npcType = current.pendingNpcInteraction.npcType;
           let accept = false;
@@ -2975,7 +2976,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
           current = resolveNpcInteraction(current, aiIndex, accept);
           continue;
         }
-        // 如果有待处理的迷你游戏，先结算
+        // 如果有待處理的迷你遊戲，先結算
         if (current.pendingMiniGame && current.pendingMiniGame.playerIndex === aiIndex) {
           current = aiResolveMiniGame(current, aiIndex);
           continue;
@@ -3013,7 +3014,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     return current;
   }
 
-  // ========== 排行榜集成 ==========
+  // ========== 排行榜整合 ==========
 
   private async tryRecordGameResult(
     room: typeof monopolyRoom.$inferSelect,
@@ -3025,7 +3026,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         .filter((p: PlayerNameEntry) => p.visitorId && p.visitorId.length > 0)
         .map((p: PlayerNameEntry) => p.visitorId!);
 
-      // 至少需要2个有 visitorId 的玩家才记录排行榜
+      // 至少需要2個有 visitorId 的玩家才記錄排行榜
       if (visitorIds.length < 2) return;
 
       const winnerIdx = finalState.winner;
@@ -3034,7 +3035,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       const winnerEntry = playerNames[winnerIdx];
       if (!winnerEntry?.visitorId) return;
 
-      // 计算每个玩家的总资产
+      // 計算每個玩家的總資產
       const highestAssetsPerPlayer: Record<string, number> = {};
       for (const entry of playerNames) {
         if (!entry.visitorId) continue;
@@ -3054,11 +3055,11 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
         highestAssetsPerPlayer,
       );
     } catch (err) {
-      this.logger.error(`记录排行榜失败: ${err instanceof Error ? err.message : String(err)}`);
+      this.logger.error(`記錄排行榜失敗: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 
-  // ========== 底层查询与映射 ==========
+  // ========== 底層查詢與對映 ==========
 
   private async findByCode(roomCode: string) {
     const rows = await this.db
@@ -3093,7 +3094,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
     const playerNames = this.getPlayerNames(row);
     const playerLastSeen = this.getPlayerLastSeen(row);
 
-    // 计算断线玩家（基于 player_last_seen 数组）
+    // 計算斷線玩家（基於 player_last_seen 陣列）
     const now = new Date();
     const disconnectedPlayers: number[] = [];
     if (row.status === 'playing') {
@@ -3107,7 +3108,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    // 构造 players 数组
+    // 構造 players 陣列
     const players: RoomPlayer[] = playerNames.map((p: PlayerNameEntry, i: number) => ({
       name: p.name,
       color: p.color,
@@ -3116,10 +3117,10 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       visitorId: p.visitorId,
     }));
 
-    // 向后兼容：unread 简化（不精确追踪每人，前端靠消息列表长度判断）
+    // 向後相容：unread 簡化（不精確追蹤每人，前端靠訊息列表長度判斷）
     const unreadCount = 0;
 
-    // 兼容旧断线字段
+    // 相容舊斷線欄位
     let disconnectedPlayer: number | null = null;
     if (row.disconnectedPlayer !== null && row.disconnectedPlayer !== undefined) {
       disconnectedPlayer = Number(row.disconnectedPlayer);
@@ -3133,7 +3134,7 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       id: row.id,
       roomCode: row.roomCode,
       gameMode: row.gameMode as GameMode,
-      // 多人新字段
+      // 多人新欄位
       maxPlayers,
       isPublic: roomMeta.isPublic,
       hasPassword: Boolean(roomMeta.password && roomMeta.password.length > 0),
@@ -3145,13 +3146,13 @@ export class MonopolyService implements OnModuleInit, OnModuleDestroy {
       messages,
       unreadCount,
       disconnectedPlayers,
-      // 语音聊天
+      // 語音聊天
       voiceActive: meta.voiceActive,
       voiceParticipants: meta.voiceParticipants,
-      // 观战模式
+      // 觀戰模式
       spectators: meta.spectators,
       danmaku: meta.danmaku,
-      // ===== 向后兼容字段 =====
+      // ===== 向後相容欄位 =====
       hostName: row.hostName,
       guestName: row.guestName,
       unreadHost: row.unreadHost ?? 0,

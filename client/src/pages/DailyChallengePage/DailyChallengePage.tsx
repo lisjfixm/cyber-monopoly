@@ -15,6 +15,7 @@ import {
   Star,
   ChevronRight,
   Clock,
+  RefreshCw,
 } from 'lucide-react';
 import { useDailyChallenge } from '@client/src/hooks/useDailyChallenge';
 import { usePlayerIdentity } from '@client/src/hooks/usePlayerIdentity';
@@ -155,6 +156,8 @@ const DailyChallengePage = () => {
     claimTask,
     performCheckIn,
     incrementTask,
+    refreshDailyTasks,
+    dailyRefreshRemaining,
   } = useDailyChallenge();
 
   // 領取/簽到競態鎖，避免快速連點重複發放
@@ -196,6 +199,15 @@ const DailyChallengePage = () => {
   const handleBack = useCallback(() => {
     navigate('/');
   }, [navigate]);
+
+  const handleRefresh = useCallback(() => {
+    const res = refreshDailyTasks();
+    if (res.success) {
+      toast.success(`重新整理成功，獲得補給 +${res.bonusXp} XP`);
+    } else {
+      toast.info('今日免費重新整理已用完，明天再來');
+    }
+  }, [refreshDailyTasks]);
 
   const handleStartChallenge = useCallback(() => {
     const params = new URLSearchParams();
@@ -323,6 +335,23 @@ const DailyChallengePage = () => {
                 <span className="text-xs text-[var(--text-muted)]">
                   {dailyDoneCount}/{dailyTasks.length}
                 </span>
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  disabled={dailyRefreshRemaining <= 0}
+                  className="ml-auto cyber-btn px-2.5 py-1.5 text-xs font-cyber tracking-wider flex items-center gap-1 min-h-[36px]"
+                  style={{
+                    borderColor: 'var(--cyan)',
+                    color: 'var(--cyan)',
+                    opacity: dailyRefreshRemaining > 0 ? 1 : 0.4,
+                    cursor: dailyRefreshRemaining > 0 ? 'pointer' : 'not-allowed',
+                  }}
+                  aria-label="重新整理每日任務"
+                  title={dailyRefreshRemaining > 0 ? `今日剩餘免費重新整理 ${dailyRefreshRemaining} 次` : '今日免費重新整理已用完'}
+                >
+                  <RefreshCw size={12} />
+                  重新整理{dailyRefreshRemaining > 0 ? `(${dailyRefreshRemaining})` : ''}
+                </button>
               </div>
               {dailyTasks.length === 0 && (
                 <div className="text-center text-sm text-[var(--text-muted)] py-8">

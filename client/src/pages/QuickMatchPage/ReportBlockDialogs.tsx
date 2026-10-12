@@ -251,7 +251,7 @@ const ReportBlockDialogs = ({
                   backgroundColor: 'rgba(255, 77, 109, 0.05)',
                 }}
               >
-                <div className="text-xs text-[var(--text-muted)] mb-1">拉黑對象</div>
+                <div className="text-xs text-[var(--text-muted)] mb-1">拉黑物件</div>
                 <div className="font-cyber text-[var(--text-primary)]">
                   {opponentNickname}
                 </div>

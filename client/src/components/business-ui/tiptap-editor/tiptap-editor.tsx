@@ -19,18 +19,18 @@ import { Separator } from '@/components/ui/separator';
 export interface TiptapEditorProps extends React.ComponentProps<'div'> {
   /** 受控 value (HTML)。 */
   value?: string;
-  /** 默认值 (HTML)。 */
+  /** 預設值 (HTML)。 */
   defaultValue?: string;
-  /** 当编辑器更新时，触发并传递最新的 HTML。 */
+  /** 當編輯器更新時，觸發並傳遞最新的 HTML。 */
   onValueChange?: (value: string) => void;
   children?: React.ReactNode;
   className?: string;
   /**
-   * 自定义 Tiptap 扩展。
+   * 自定義 Tiptap 擴充套件。
    * @default [CompleteKit]
    */
   extensions?: Extensions;
-  /** 是否为只读模式。 */
+  /** 是否為只讀模式。 */
   readOnly?: boolean;
   asChild?: boolean;
 }
@@ -76,7 +76,7 @@ export function TiptapEditor({
     if (!editor || value === undefined) return;
     valueRef.current = value;
 
-    // Tiptap 内部会使用 flushSync，因此我们将内容更新延迟到微任务队列
+    // Tiptap 內部會使用 flushSync，因此我們將內容更新延遲到微任務佇列
     queueMicrotask(() => {
       const current = editor.getHTML();
       if (valueRef.current !== current) {

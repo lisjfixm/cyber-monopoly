@@ -169,21 +169,21 @@ export class GmService {
     @Inject(DRIZZLE_DATABASE) private readonly db: PostgresJsDatabase,
   ) {}
 
-  // ====== GM 登录 ======
+  // ====== GM 登入 ======
 
   async login(password: string): Promise<{ token: string; expiresAt: string }> {
     if (password !== GM_PASSWORD) {
-      throw new UnauthorizedException('密码错误');
+      throw new UnauthorizedException('密碼錯誤');
     }
     const { token, expiresAt } = generateGmToken(GM_ID);
-    this.logger.log('GM 登录成功');
+    this.logger.log('GM 登入成功');
     return {
       token,
       expiresAt: expiresAt.toISOString(),
     };
   }
 
-  // ====== GM 操作日志 ======
+  // ====== GM 操作日誌 ======
 
   private async writeLog(
     action: string,
@@ -199,12 +199,12 @@ export class GmService {
       });
     } catch (err) {
       this.logger.error(
-        `写入 GM 日志失败: action=${action}, error=${JSON.stringify(err)}`,
+        `寫入 GM 日誌失敗: action=${action}, error=${JSON.stringify(err)}`,
       );
     }
   }
 
-  // ====== 用户搜索 ======
+  // ====== 使用者搜尋 ======
 
   async searchUsers(
     keyword?: string,
@@ -222,10 +222,10 @@ export class GmService {
       : DEFAULT_PAGE_SIZE;
 
     if (Number.isNaN(page) || page < 1) {
-      throw new BadRequestException('page 必须是正整数');
+      throw new BadRequestException('page 必須是正整數');
     }
     if (Number.isNaN(pageSize) || pageSize < 1) {
-      throw new BadRequestException('pageSize 必须是正整数');
+      throw new BadRequestException('pageSize 必須是正整數');
     }
 
     const whereClause = keyword
@@ -264,7 +264,7 @@ export class GmService {
     };
   }
 
-  // ====== 获取单个用户 ======
+  // ====== 獲取單個使用者 ======
 
   async getUserById(id: string): Promise<Record<string, unknown>> {
     const rows = await this.db
@@ -274,7 +274,7 @@ export class GmService {
       .limit(1);
 
     if (rows.length === 0) {
-      throw new NotFoundException('用户不存在');
+      throw new NotFoundException('使用者不存在');
     }
 
     const base = rowToGmUserDetail(rows[0]);
@@ -285,7 +285,7 @@ export class GmService {
     };
   }
 
-  // ====== 修改用户 ======
+  // ====== 修改使用者 ======
 
   async updateUser(
     id: string,
@@ -308,7 +308,7 @@ export class GmService {
     }
 
     if (Object.keys(patch).length === 0) {
-      throw new BadRequestException('未提供可更新字段');
+      throw new BadRequestException('未提供可更新欄位');
     }
 
     patch.updatedAt = new Date();
@@ -320,7 +320,7 @@ export class GmService {
       .returning();
 
     if (updated.length === 0) {
-      throw new NotFoundException('用户不存在');
+      throw new NotFoundException('使用者不存在');
     }
 
     await this.writeLog('update_user', id, patch);
@@ -328,7 +328,7 @@ export class GmService {
     return rowToGmUserDetail(updated[0]);
   }
 
-  // ====== 发放奖励 ======
+  // ====== 發放獎勵 ======
 
   async sendReward(
     id: string,
@@ -341,7 +341,7 @@ export class GmService {
       .limit(1);
 
     if (userRows.length === 0) {
-      throw new NotFoundException('用户不存在');
+      throw new NotFoundException('使用者不存在');
     }
 
     const user = userRows[0];
@@ -363,7 +363,7 @@ export class GmService {
         (inv.items as Record<string, number> | undefined) ?? {};
       const mergedItems: Record<string, number> = { ...currentItems };
       for (const [itemKey, qty] of Object.entries(dto.items)) {
-        // 僅接受有限的正整數數量，避免 GM 後台誤操作導致背包變負數或 NaN
+        // 僅接受有限的正整數數量，避免 GM 後臺誤操作導致揹包變負數或 NaN
         if (typeof qty !== 'number' || !Number.isFinite(qty)) continue;
         const safeQty = Math.floor(qty);
         if (safeQty <= 0) continue;
@@ -376,7 +376,7 @@ export class GmService {
     }
 
     if (Object.keys(patch).length === 0) {
-      throw new BadRequestException('未提供有效奖励内容');
+      throw new BadRequestException('未提供有效獎勵內容');
     }
 
     patch.updatedAt = new Date();
@@ -397,7 +397,7 @@ export class GmService {
     return rowToGmUserDetail(updated[0]);
   }
 
-  // ====== 重置用户 ======
+  // ====== 重置使用者 ======
 
   async resetUser(id: string): Promise<Record<string, unknown>> {
     const updated = await this.db
@@ -414,7 +414,7 @@ export class GmService {
       .returning();
 
     if (updated.length === 0) {
-      throw new NotFoundException('用户不存在');
+      throw new NotFoundException('使用者不存在');
     }
 
     await this.writeLog('reset_user', id, {});
@@ -487,7 +487,7 @@ export class GmService {
     return rowToGmUserDetail(updated[0]);
   }
 
-  // ====== GM 儀表板總覽 ======
+  // ====== GM 儀錶板總覽 ======
 
   async getDashboard(): Promise<Record<string, number | string>> {
     const [accountCount] = await this.db
@@ -529,16 +529,16 @@ export class GmService {
     return rows.map(rowToAnnouncement);
   }
 
-  // ====== 创建公告 ======
+  // ====== 建立公告 ======
 
   async createAnnouncement(
     dto: GmCreateAnnouncementRequest,
   ): Promise<Announcement> {
     if (!dto.title?.trim()) {
-      throw new BadRequestException('标题不能为空');
+      throw new BadRequestException('標題不能為空');
     }
     if (!dto.content?.trim()) {
-      throw new BadRequestException('内容不能为空');
+      throw new BadRequestException('內容不能為空');
     }
 
     const inserted = await this.db
@@ -577,7 +577,7 @@ export class GmService {
     if (dto.isActive !== undefined) patch.isActive = dto.isActive;
 
     if (Object.keys(patch).length === 0) {
-      throw new BadRequestException('未提供可更新字段');
+      throw new BadRequestException('未提供可更新欄位');
     }
 
     patch.updatedAt = new Date();
@@ -600,7 +600,7 @@ export class GmService {
     return rowToAnnouncement(updated[0]);
   }
 
-  // ====== 删除公告 ======
+  // ====== 刪除公告 ======
 
   async deleteAnnouncement(id: string): Promise<void> {
     const deleted = await this.db
@@ -615,7 +615,7 @@ export class GmService {
     await this.writeLog('delete_announcement', null, { announcementId: id });
   }
 
-  // ====== 活动列表 ======
+  // ====== 活動列表 ======
 
   async listEvents(): Promise<GlobalEventConfig[]> {
     const rows = await this.db
@@ -626,7 +626,7 @@ export class GmService {
     return rows.map(rowToGlobalEvent);
   }
 
-  // ====== 创建活动 ======
+  // ====== 建立活動 ======
 
   async createEvent(dto: {
     eventType: string;
@@ -638,10 +638,10 @@ export class GmService {
     endsAt?: string;
   }): Promise<GlobalEventConfig> {
     if (!dto.eventType?.trim()) {
-      throw new BadRequestException('活动类型不能为空');
+      throw new BadRequestException('活動型別不能為空');
     }
     if (!dto.name?.trim()) {
-      throw new BadRequestException('活动名称不能为空');
+      throw new BadRequestException('活動名稱不能為空');
     }
 
     const inserted = await this.db
@@ -666,7 +666,7 @@ export class GmService {
     return rowToGlobalEvent(inserted[0]);
   }
 
-  // ====== 更新活动 ======
+  // ====== 更新活動 ======
 
   async updateEvent(
     id: string,
@@ -697,7 +697,7 @@ export class GmService {
     }
 
     if (Object.keys(patch).length === 0) {
-      throw new BadRequestException('未提供可更新字段');
+      throw new BadRequestException('未提供可更新欄位');
     }
 
     patch.updatedAt = new Date();
@@ -709,7 +709,7 @@ export class GmService {
       .returning();
 
     if (updated.length === 0) {
-      throw new NotFoundException('活动不存在');
+      throw new NotFoundException('活動不存在');
     }
 
     await this.writeLog('update_event', null, {
@@ -720,7 +720,7 @@ export class GmService {
     return rowToGlobalEvent(updated[0]);
   }
 
-  // ====== 删除活动 ======
+  // ====== 刪除活動 ======
 
   async deleteEvent(id: string): Promise<void> {
     const deleted = await this.db
@@ -729,13 +729,13 @@ export class GmService {
       .returning({ id: monopolyGlobalEvent.id });
 
     if (deleted.length === 0) {
-      throw new NotFoundException('活动不存在');
+      throw new NotFoundException('活動不存在');
     }
 
     await this.writeLog('delete_event', null, { eventId: id });
   }
 
-  // ====== 在线用户 ======
+  // ====== 線上使用者 ======
 
   async getOnlineUsers(): Promise<
     Array<{ id: string; nickname: string; elo: number }>

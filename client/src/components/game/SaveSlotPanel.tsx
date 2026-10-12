@@ -68,13 +68,13 @@ const SaveSlotPanel: FC<SaveSlotPanelProps> = ({
           type="button"
           onClick={onClose}
           className="absolute top-3 right-3 text-text-secondary hover:text-neon-cyan transition-colors"
-          aria-label="关闭"
+          aria-label="關閉"
         >
           <X className="w-5 h-5" />
         </button>
 
         <h2 className="text-neon-cyan font-cyber text-xl md:text-2xl mb-5 tracking-wider pulse-glow">
-          {mode === 'save' ? '保存遊戲' : '讀取存檔'}
+          {mode === 'save' ? '儲存遊戲' : '讀取存檔'}
         </h2>
 
         <div className="flex flex-col gap-3">
@@ -157,7 +157,7 @@ const SaveSlotPanel: FC<SaveSlotPanelProps> = ({
                               ? 'rgba(0, 255, 128, 0.08)'
                               : 'rgba(0, 255, 255, 0.08)',
                         }}
-                        aria-label={mode === 'save' ? '保存到此槽位' : '读取此存档'}
+                        aria-label={mode === 'save' ? '儲存到此槽位' : '讀取此存檔'}
                       >
                         {mode === 'save' ? (
                           <Save className="w-4 h-4" />
@@ -178,7 +178,7 @@ const SaveSlotPanel: FC<SaveSlotPanelProps> = ({
                             color: 'var(--pink)',
                             background: 'rgba(255, 107, 157, 0.08)',
                           }}
-                          aria-label="删除存档"
+                          aria-label="刪除存檔"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -192,7 +192,7 @@ const SaveSlotPanel: FC<SaveSlotPanelProps> = ({
         </div>
 
         <div className="mt-5 text-text-muted text-xs font-cyber tracking-wider text-center">
-          共 {slots.filter((s) => s !== null).length} / {slots.length} 个存档
+          共 {slots.filter((s) => s !== null).length} / {slots.length} 個存檔
         </div>
       </div>
     </div>

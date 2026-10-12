@@ -43,7 +43,7 @@ const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }
   const lastIdRef = useRef<string | null>(null);
   const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 輪詢 localStorage 檢查新消息
+  // 輪詢 localStorage 檢查新訊息
   const checkNewMessages = useCallback(() => {
     const all = loadMessages();
     const mine = all.filter(
@@ -51,7 +51,7 @@ const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }
     );
     if (mine.length === 0) return;
 
-    // 取最早的未處理消息
+    // 取最早的未處理訊息
     const next = mine.sort(
       (a: MentorMessage, b: MentorMessage) => a.timestamp - b.timestamp,
     )[0];
@@ -88,7 +88,7 @@ const MentorCard: React.FC<MentorCardProps> = ({ playerIndex, playerNames = [] }
     [pending, checkNewMessages],
   );
 
-  // 組件卸載時清除待處理的計時器
+  // 元件解除安裝時清除待處理的計時器
   useEffect(() => {
     return () => {
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);

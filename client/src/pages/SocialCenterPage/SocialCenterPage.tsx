@@ -16,14 +16,14 @@ const SocialCenterPage: React.FC<SocialCenterPageProps> = () => {
     {
       icon: Users,
       title: '好友中心',
-      desc: '管理好友、查看上線狀態、發起私聊',
+      desc: '管理好友、檢視上線狀態、發起私聊',
       color: 'var(--cyan)',
       onClick: () => navigate('/friends'),
     },
     {
       icon: Shield,
       title: '戰隊公會',
-      desc: '加入或創建戰隊，與隊友並肩作戰',
+      desc: '加入或建立戰隊，與隊友並肩作戰',
       color: 'var(--pink)',
       onClick: () => navigate('/guild'),
     },
@@ -44,14 +44,14 @@ const SocialCenterPage: React.FC<SocialCenterPageProps> = () => {
     {
       icon: Trophy,
       title: '排行榜',
-      desc: '查看個人、戰隊各項排名',
+      desc: '檢視個人、戰隊各項排名',
       color: 'var(--yellow, #ffd700)',
       onClick: () => navigate('/leaderboard'),
     },
      {
        icon: UserPlus,
        title: '尋找玩家',
-       desc: '搜尋並添加新的小夥伴',
+       desc: '搜尋並新增新的小夥伴',
        color: 'var(--purple, #a855f7)',
        onClick: () => navigate('/friends'),
      },
@@ -64,7 +64,7 @@ const SocialCenterPage: React.FC<SocialCenterPageProps> = () => {
      },
      {
        icon: Map,
-       title: '社區地圖',
+       title: '社群地圖',
        desc: '玩家創意地圖分享、評分與收藏',
        color: 'var(--pink)',
        onClick: () => navigate('/community-maps'),
@@ -144,7 +144,7 @@ const SocialCenterPage: React.FC<SocialCenterPageProps> = () => {
             style={{ borderColor: 'var(--green)', color: 'var(--green)' }}
           >
             <MessageSquare size={14} className="inline mr-1.5" />
-            打開聊天
+            開啟聊天
           </button>
           <button
             type="button"

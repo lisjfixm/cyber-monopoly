@@ -1,20 +1,20 @@
-// 错误统一响应
+// 錯誤統一響應
 export interface ApiErrorResponse {
-  /** 错误详情 */
+  /** 錯誤詳情 */
   error: {
-    /** 错误代码 */
+    /** 錯誤程式碼 */
     code: string;
-    /** 错误消息 */
+    /** 錯誤訊息 */
     message: string;
-    /** 错误详情 */
+    /** 錯誤詳情 */
     details?: string;
-    /** 字段验证错误 */
+    /** 欄位驗證錯誤 */
     fieldErrors?: Record<string, string[]>;
-    /** 调用栈（仅开发环境） */
+    /** 呼叫棧（僅開發環境） */
     stack?: string;
-    /** 错误原因 */
+    /** 錯誤原因 */
     cause?: string;
-    /** 错误发生时间 */
+    /** 錯誤發生時間 */
     timestamp?: number;
   };
 }

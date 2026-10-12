@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 /**
- * 处理点击外部关闭浮层的 Hook
- * 仅在 search 模式下使用
+ * 處理點選外部關閉浮層的 Hook
+ * 僅在 search 模式下使用
  */
 export function usePopoverOutsideClick(
   open: boolean,

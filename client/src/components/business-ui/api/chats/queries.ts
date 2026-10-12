@@ -25,14 +25,14 @@ export const chatQueries = {
 };
 
 /**
- * 批量获取群组信息的 hook
+ * 批次獲取群組資訊的 hook
  */
 export function useChatsByIds(chatIds: string[]) {
   return useQuery(chatQueries.byIds(chatIds));
 }
 
 /**
- * 清除群组缓存
+ * 清除群組快取
  */
 export function clearChatCache(queryClient: QueryClient): void {
   queryClient.invalidateQueries({ queryKey: chatQueries.all() });

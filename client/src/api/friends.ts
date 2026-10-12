@@ -53,7 +53,7 @@ export const friendsApi = {
       'GET',
     ),
 
-  // 發送訊息
+  // 傳送訊息
   sendMessage: (toUserId: string, content: string) =>
     request<{ item: FriendMessage }>('/api/friends/messages', 'POST', {
       toUserId,

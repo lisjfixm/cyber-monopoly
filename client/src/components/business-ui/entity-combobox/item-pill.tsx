@@ -18,7 +18,7 @@ import { Badge } from '@client/src/components/ui/badge';
 
 export type ItemPillProps = {
   /**
-   * 显示的文本
+   * 顯示的文字
    */
   label: string;
 
@@ -29,24 +29,24 @@ export type ItemPillProps = {
   size?: ComboboxSize;
 
   /**
-   * 头像 URL
+   * 頭像 URL
    */
   avatarUrl?: string;
 
   /**
-   * 头像内容（用于自定义头像显示）
+   * 頭像內容（用於自定義頭像顯示）
    */
   avatar?: React.ReactNode;
 
   /**
-   * 是否显示头像占位符（当没有头像 URL 时显示）
+   * 是否顯示頭像佔位符（當沒有頭像 URL 時顯示）
    * @default false
    *
    */
   avatarFallback?: boolean;
 
   /**
-   * 自定义样式
+   * 自定義樣式
    */
   className?: string;
   /**
@@ -54,32 +54,32 @@ export type ItemPillProps = {
    */
   disabled?: boolean;
   /**
-   * 最大文本长度
+   * 最大文字長度
    */
   maxTextLength?: number;
 
   /**
-   * 后缀
+   * 字尾
    */
   suffix?: React.ReactNode;
 };
 
-// 检查是否是 16 进制 RGB 颜色（如 #RRGGBB 或 #RGB）
+// 檢查是否是 16 進位制 RGB 顏色（如 #RRGGBB 或 #RGB）
 export const isHexColor = (str?: string): boolean => {
   if (!str) return false;
   return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(str);
 };
 
 /**
- * renderPillAvatar 的参数类型
+ * renderPillAvatar 的引數型別
  */
 export type RenderPillAvatarOptions = {
   /**
-   * 头像 URL
+   * 頭像 URL
    */
   avatarUrl?: string;
   /**
-   * 显示的文本（用于 fallback 首字母）
+   * 顯示的文字（用於 fallback 首字母）
    */
   label: string;
   /**
@@ -88,15 +88,15 @@ export type RenderPillAvatarOptions = {
    */
   size?: ComboboxSize;
   /**
-   * 是否显示头像占位符（当没有头像 URL 时显示）
+   * 是否顯示頭像佔位符（當沒有頭像 URL 時顯示）
    * @default true
    */
   avatarFallback?: boolean;
 };
 
 /**
- * 渲染 Pill 头像的辅助函数
- * 可被其他组件复用（如 UserPill）
+ * 渲染 Pill 頭像的輔助函式
+ * 可被其他元件複用（如 UserPill）
  */
 export const renderPillAvatar = ({
   avatarUrl,
@@ -105,7 +105,7 @@ export const renderPillAvatar = ({
   avatarFallback = true,
 }: RenderPillAvatarOptions): React.ReactNode => {
   if (avatarUrl) {
-    // 如果是 16 进制颜色，渲染带背景色的头像和用户名首字
+    // 如果是 16 進位制顏色，渲染帶背景色的頭像和使用者名稱首字
     if (isHexColor(avatarUrl)) {
       return (
         <Avatar className={tagAvatarVariants({ size })}>
@@ -168,9 +168,9 @@ export const ItemPill: React.FC<ItemPillProps> = ({
         className,
       )}
     >
-      {/* 头像 */}
+      {/* 頭像 */}
       {avatarElement}
-      {/* 文本 */}
+      {/* 文字 */}
       <span className={itemPillTextVariants({ size })}>{displayLabel}</span>
 
       {suffix}

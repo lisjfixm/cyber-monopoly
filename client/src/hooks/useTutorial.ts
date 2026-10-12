@@ -86,7 +86,7 @@ export interface UseTutorialReturn {
 }
 
 interface UseTutorialOptions {
-  /** 当完成最后一步时调用，用于解锁成就等 */
+  /** 當完成最後一步時呼叫，用於解鎖成就等 */
   onComplete?: () => void;
 }
 
@@ -100,7 +100,7 @@ export function useTutorial(options: UseTutorialOptions = {}): UseTutorialReturn
   const onCompleteRef = useRef(options.onComplete);
   onCompleteRef.current = options.onComplete;
 
-  // 初始化：读取存储状态
+  // 初始化：讀取儲存狀態
   useEffect(() => {
     setHasCompleted(readDone());
     setHasPrompted(readPrompted());
@@ -125,7 +125,7 @@ export function useTutorial(options: UseTutorialOptions = {}): UseTutorialReturn
   const nextStep = useCallback(() => {
     const next = currentStep + 1;
     if (next >= TUTORIAL_STEPS.length) {
-      // 完成教学：所有副作用都在 updater 外執行，避免 StrictMode 下重複觸發
+      // 完成教學：所有副作用都在 updater 外執行，避免 StrictMode 下重複觸發
       clearActive();
       setIsActive(false);
       writeDone(true);
@@ -148,7 +148,7 @@ export function useTutorial(options: UseTutorialOptions = {}): UseTutorialReturn
   const skipTutorial = useCallback(() => {
     clearActive();
     setIsActive(false);
-    // 跳过不标记完成，不解锁成就
+    // 跳過不標記完成，不解鎖成就
   }, []);
 
   const closeTutorial = useCallback(() => {

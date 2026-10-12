@@ -99,7 +99,7 @@ const StockPanel: FC<StockPanelProps> = ({
                 textShadow: '0 0 10px var(--cyan), 0 0 20px var(--cyan)',
               }}
             >
-              股票市场
+              股票市場
             </h2>
           </div>
           <button
@@ -115,7 +115,7 @@ const StockPanel: FC<StockPanelProps> = ({
         <div className="px-4 md:px-5 py-3 border-b" style={{ borderColor: 'var(--border-neon-cyan)' }}>
           <div className="flex items-center justify-between">
             <span className="text-xs md:text-sm font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-              可用资金
+              可用資金
             </span>
             <span
               className="font-cyber text-lg md:text-xl tracking-wider"
@@ -323,7 +323,7 @@ const StockPanel: FC<StockPanelProps> = ({
                         backgroundColor: 'rgba(0, 255, 128, 0.08)',
                       }}
                     >
-                      买入
+                      買入
                     </button>
                     <button
                       onClick={() => handleSell(symbol)}
@@ -335,7 +335,7 @@ const StockPanel: FC<StockPanelProps> = ({
                         backgroundColor: 'rgba(255, 77, 109, 0.08)',
                       }}
                     >
-                      卖出
+                      賣出
                     </button>
                   </div>
                 </div>
@@ -348,7 +348,7 @@ const StockPanel: FC<StockPanelProps> = ({
         <div className="p-4 md:p-5 border-t" style={{ borderColor: 'var(--border-neon-cyan)' }}>
           <div className="flex items-center justify-between">
             <span className="text-sm md:text-base font-cyber tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-              总市值
+              總市值
             </span>
             <span
               className="font-cyber text-xl md:text-2xl tracking-wider"

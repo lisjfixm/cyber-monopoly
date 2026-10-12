@@ -20,7 +20,7 @@ export class RankingController {
     @Body() dto: GetOrCreatePlayerRequest,
   ): Promise<ApiResponse<{ player: PlayerProfile; isNew: boolean }>> {
     if (!dto.visitorId?.trim()) {
-      throw new BadRequestException('访客ID不能为空');
+      throw new BadRequestException('訪客ID不能為空');
     }
     const result = await this.rankingService.getOrCreatePlayer(
       dto.visitorId.trim(),
@@ -34,7 +34,7 @@ export class RankingController {
     @Body() dto: UpdateNicknameRequest,
   ): Promise<ApiResponse<{ success: boolean; player: PlayerProfile }>> {
     if (!dto.visitorId?.trim()) {
-      throw new BadRequestException('访客ID不能为空');
+      throw new BadRequestException('訪客ID不能為空');
     }
     const result = await this.rankingService.updateNickname(
       dto.visitorId.trim(),
@@ -48,7 +48,7 @@ export class RankingController {
     @Param('visitorId') visitorId: string,
   ): Promise<ApiResponse<{ player: PlayerProfile; ranks: PlayerRankInfo }>> {
     if (!visitorId?.trim()) {
-      throw new BadRequestException('访客ID不能为空');
+      throw new BadRequestException('訪客ID不能為空');
     }
     const result = await this.rankingService.getPlayer(visitorId.trim());
     return { code: 0, message: 'ok', data: result };
@@ -66,7 +66,7 @@ export class RankingController {
 
     const parsedLimit = limit !== undefined ? parseInt(limit, 10) : undefined;
     if (parsedLimit !== undefined && (isNaN(parsedLimit) || parsedLimit <= 0)) {
-      throw new BadRequestException('limit 必须是正整数');
+      throw new BadRequestException('limit 必須是正整數');
     }
 
     const result = await this.rankingService.getLeaderboard(boardType, parsedLimit);

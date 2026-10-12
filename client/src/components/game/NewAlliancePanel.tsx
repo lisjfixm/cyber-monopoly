@@ -272,7 +272,7 @@ const NewAlliancePanel: FC<NewAlliancePanelProps> = ({
                       <span style={{ color: "var(--text-secondary)" }}>可邀請結盟</span>
                     )}
                     {status === "broken" && (
-                      <span style={{ color: "var(--red)" }}>本局限時無法結盟</span>
+                      <span style={{ color: "var(--red)" }}>本侷限時無法結盟</span>
                     )}
                   </div>
                 </div>
@@ -466,9 +466,9 @@ const NewAlliancePanel: FC<NewAlliancePanelProps> = ({
                   boxShadow: "0 0 10px color-mix(in srgb, var(--green) 30%, transparent)",
                 }}
                 onClick={() => handleSendInvite(inviteTarget)}
-                aria-label="發送邀請"
+                aria-label="傳送邀請"
               >
-                發送邀請
+                傳送邀請
               </button>
             </div>
           </div>

@@ -65,10 +65,10 @@ async function request<T>(url: string, method: string, data?: unknown): Promise<
   const response = await axiosForBackend({ url, method, data });
   const result = response.data as ApiResponse<T>;
   if (result.code !== 0) {
-    throw new Error(result.message || '请求失败');
+    throw new Error(result.message || '請求失敗');
   }
   if (result.data === null || result.data === undefined) {
-    throw new Error('伺服器返回空数据');
+    throw new Error('伺服器返回空資料');
   }
   return result.data;
 }
@@ -222,7 +222,7 @@ export const monopolyApi = {
       playerIndex,
     } as AuctionPassRequest),
 
-  // ===== NPC 系统 =====
+  // ===== NPC 系統 =====
   npcBuyItem: (roomCode: string, playerIndex: number, itemType: string) =>
     request<RoomState>('/api/monopoly/npc/buy-item', 'POST', {
       roomCode,
@@ -243,7 +243,7 @@ export const monopolyApi = {
       playerIndex,
     } as NpcCloseRequest),
 
-  // ===== 暗拍系统 =====
+  // ===== 暗拍系統 =====
   submitBlindBid: (roomCode: string, playerIndex: number, bidAmount: number) =>
     request<RoomState>('/api/monopoly/auction/blind-bid', 'POST', {
       roomCode,
@@ -359,7 +359,7 @@ export const monopolyApi = {
       type,
     } as SendChatMessageRequest),
 
-  // 新聊天接口
+  // 新聊天介面
   sendChat: (roomCode: string, playerIndex: number, content: string, type?: 'player' | 'voice') =>
     request<SendChatResponse>('/api/monopoly/chat', 'POST', {
       roomCode,
@@ -374,7 +374,7 @@ export const monopolyApi = {
       playerIndex,
     } as MarkChatReadRequest),
 
-  // 心跳与断线
+  // 心跳與斷線
   sendHeartbeat: (roomCode: string, playerIndex: number) =>
     request<HeartbeatResponse>('/api/monopoly/heartbeat', 'POST', {
       roomCode,
@@ -387,7 +387,7 @@ export const monopolyApi = {
       playerIndex,
     } as SurrenderDisconnectedRequest),
 
-  // ===== 道具系统 =====
+  // ===== 道具系統 =====
   buyItem: (roomCode: string, playerIndex: number, itemType: ItemType) =>
     request<RoomState>('/api/monopoly/item/buy', 'POST', {
       roomCode,
@@ -409,7 +409,7 @@ export const monopolyApi = {
       playerIndex,
     } as PayBailRequest),
 
-  // ===== 迷你游戏 =====
+  // ===== 迷你遊戲 =====
   startMiniGame: (roomCode: string, playerIndex: number) =>
     request<RoomState>('/api/monopoly/minigame/start', 'POST', {
       roomCode,
@@ -424,7 +424,7 @@ export const monopolyApi = {
       data,
     } as MiniGameActionRequest),
 
-  // ===== 贷款系统 =====
+  // ===== 貸款系統 =====
   takeLoan: (roomCode: string, playerIndex: number, amount: number) =>
     request<RoomState>('/api/monopoly/loan/take', 'POST', {
       roomCode,
@@ -439,7 +439,7 @@ export const monopolyApi = {
       amount,
     }),
 
-  // ===== 保险系统 =====
+  // ===== 保險系統 =====
   buyInsurance: (roomCode: string, playerIndex: number, cellId: number) =>
     request<RoomState>('/api/monopoly/insurance/buy', 'POST', {
       roomCode,
@@ -447,7 +447,7 @@ export const monopolyApi = {
       cellId,
     }),
 
-  // ===== 债券系统 =====
+  // ===== 債券系統 =====
   issueBond: (
     roomCode: string,
     playerIndex: number,
@@ -508,7 +508,7 @@ export const monopolyApi = {
       color,
     } as DanmakuRequest),
 
-  // ===== 跨平台存檔同步 =====
+  // ===== 跨平臺存檔同步 =====
   getSaveData: (visitorId: string) =>
     request<UserSaveData | null>(`/api/monopoly/save?visitorId=${encodeURIComponent(visitorId)}`, 'GET'),
 

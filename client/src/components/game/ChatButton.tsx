@@ -24,7 +24,7 @@ const ChatButton: React.FC<ChatButtonProps> = ({ hasNewMessage, onClick, message
       >
         <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
 
-        {/* 未读消息红点 / 数字 */}
+        {/* 未讀訊息紅點 / 數字 */}
         {hasNewMessage && (
           <span
             className="absolute -top-1 -right-1 flex items-center justify-center rounded-full text-xs font-bold"

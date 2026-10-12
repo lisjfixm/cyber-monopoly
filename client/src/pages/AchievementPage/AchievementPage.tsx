@@ -40,6 +40,22 @@ import {
   RotateCcw,
   XCircle,
   Crosshair,
+  Theater,
+  Bot,
+  Repeat,
+  Bitcoin,
+  Rocket,
+  Umbrella,
+  ShieldAlert,
+  Atom,
+  Brain,
+  Plane,
+  Eye,
+  Cpu,
+  Search,
+  Building,
+  FileSearch,
+  HeartHandshake,
 } from 'lucide-react';
 import { useAchievements } from '@client/src/hooks/useAchievements';
 import { ACHIEVEMENTS, ACHIEVEMENT_IDS } from '@shared/game-config';
@@ -117,7 +133,7 @@ const AchievementPage = () => {
       </div>
 
       <div className="max-w-5xl w-full mx-auto space-y-6">
-        {/* 顶部汇总 */}
+        {/* 頂部彙總 */}
         <section
           className="cyber-card p-4 md:p-6"
           style={{
@@ -166,7 +182,7 @@ const AchievementPage = () => {
           </div>
         </section>
 
-        {/* 分类 Tab */}
+        {/* 分類 Tab */}
         <div className="flex gap-2 overflow-x-auto pb-2">
           <button
             type="button"
@@ -214,7 +230,7 @@ const AchievementPage = () => {
           })}
         </div>
 
-        {/* 成就网格 */}
+        {/* 成就網格 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {filteredIds.map((id) => {
             const ach = ACHIEVEMENTS[id];
@@ -298,7 +314,7 @@ const AchievementPage = () => {
                   </div>
                 </div>
 
-                {/* 进度条 */}
+                {/* 進度條 */}
                 {ach.target && ach.target > 1 && (
                   <div className="mt-3">
                     <div className="flex justify-between text-xs mb-1">
@@ -385,6 +401,22 @@ function getAchievementIcon(iconName: string) {
     RotateCcw,
     XCircle,
     Crosshair,
+    Mask: Theater,
+    Bot,
+    Repeat,
+    Bitcoin,
+    Rocket,
+    Umbrella,
+    ShieldAlert,
+    Atom,
+    Brain,
+    Plane,
+    Eye,
+    Cpu,
+    Search,
+    Building,
+    FileSearch,
+    HeartHandshake,
   };
   return iconMap[iconName] || Trophy;
 }

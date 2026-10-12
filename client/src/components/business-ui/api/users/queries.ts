@@ -17,7 +17,7 @@ export const userQueries = {
 };
 
 /**
- * 批量获取用户信息的 hook
+ * 批次獲取使用者資訊的 hook
  */
 export function useUsersByIds(
   userIds: string[],
@@ -27,7 +27,7 @@ export function useUsersByIds(
 }
 
 /**
- * 清除用户缓存
+ * 清除使用者快取
  */
 export function clearUserCache(queryClient: QueryClient): void {
   queryClient.invalidateQueries({ queryKey: userQueries.all() });
