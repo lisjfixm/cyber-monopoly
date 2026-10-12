@@ -19,7 +19,7 @@ sed -i \
   -e 's|\.\./favicon.svg|./favicon.svg|g' \
   "$INDEX"
 # 標題與 favicon 的 hbs 佔位在靜態環境不會被填充，改為固定值
-sed -i 's|<title>{{appName}}</title>|<title>赛博大富翁</title>|' "$INDEX"
+sed -i 's|<title>{{appName}}</title>|<title>賽博大富翁</title>|' "$INDEX"
 sed -i 's|rel="icon" href="{{appAvatar}}"|rel="icon" href="./favicon.svg"|' "$INDEX"
 
 # 其餘 hbs 佔位（內嵌 window 設定、__platform__、og/meta 標籤）在靜態環境
@@ -42,7 +42,7 @@ repl = {
     '{{environment}}': '',
     '{{basename}}': '',
     '{{currentUrl}}': '',
-    '{{appName}}': '赛博大富翁',
+    '{{appName}}': '賽博大富翁',
     '{{appAvatar}}': './favicon.svg',
     '{{appDescription}}': desc,
 }
